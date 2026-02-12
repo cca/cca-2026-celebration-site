@@ -1,0 +1,72 @@
+---
+import Header from '../components/global/Header.astro';
+import Footer from '../components/global/Footer.astro';
+import '../styles/fonts.css';
+import '../styles/global.css';
+import '../styles/themes.css';
+import '../styles/grid.css';
+import '../styles/animations.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  themeKey?: string;
+}
+
+const { title, description, themeKey } = Astro.props;
+const pageTitle = `${title} | CCA 2026`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content="website" />
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/merriweather-regular-webfont.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <Header />
+    {themeKey ? (
+      <div data-theme={themeKey}>
+        <main id="main">
+          <slot />
+        </main>
+      </div>
+    ) : (
+      <main id="main">
+        <slot />
+      </main>
+    )}
+    <Footer />
+
+    <script src="../scripts/scroll-reveal.ts"></script>
+    <script src="../scripts/header-scroll.ts"></script>
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-accent);
+    color: var(--color-bg);
+    z-index: 100;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .skip-link:focus {
+    top: var(--space-4);
+  }
+</style>
