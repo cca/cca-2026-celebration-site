@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from "astro:content";
+import WorkCard from "./WorkCard.astro";
+
+interface Props {
+  works: CollectionEntry<"works">[];
+  studentMap?: Map<string, string>;
+}
+
+const { works, studentMap } = Astro.props;
+---
+
+<div class="grid-cards">
+  {works.map((work) => {
+    const studentNames = studentMap
+      ? work.data.students.map((ref) => studentMap.get(ref.id) ?? ref.id)
+      : [];
+    return <WorkCard work={work} studentNames={studentNames} />;
+  })}
+</div>

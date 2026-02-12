@@ -1,0 +1,145 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  work: {
+    data: {
+      title: string;
+      slug: string;
+      students: Array<{ id: string }>;
+      events: Array<{ id: string }>;
+      medium?: string;
+      dimensions?: string;
+      year: number;
+      description?: string;
+      artistStatement?: string;
+      media: Array<{
+        type: 'image' | 'video' | 'audio' | 'embed';
+        src: string;
+        alt?: string;
+        thumbnail?: string;
+        caption?: string;
+      }>;
+    };
+  };
+}
+
+const { work } = Astro.props;
+---
+
+<BaseLayout title={work.data.title}>
+  <article class="work-detail container">
+    <header class="work-header reveal">
+      <h1>{work.data.title}</h1>
+      <div class="work-meta">
+        {work.data.medium && <span class="medium">{work.data.medium}</span>}
+        {work.data.dimensions && <span class="dimensions">{work.data.dimensions}</span>}
+        <span class="year">{work.data.year}</span>
+      </div>
+    </header>
+
+    <div class="work-media">
+      <slot name="media" />
+      {work.data.media.map(item => (
+        item.type === 'image' ? (
+          <figure class="media-item">
+            <img src={item.src} alt={item.alt ?? work.data.title} loading="lazy" />
+            {item.caption && <figcaption>{item.caption}</figcaption>}
+          </figure>
+        ) : item.type === 'video' ? (
+          <figure class="media-item">
+            <video src={item.src} controls preload="metadata">
+              <track kind="captions" />
+            </video>
+            {item.caption && <figcaption>{item.caption}</figcaption>}
+          </figure>
+        ) : null
+      ))}
+    </div>
+
+    {work.data.description && (
+      <section class="work-description">
+        <p>{work.data.description}</p>
+      </section>
+    )}
+
+    {work.data.artistStatement && (
+      <section class="work-statement">
+        <h2>Artist Statement</h2>
+        <p>{work.data.artistStatement}</p>
+      </section>
+    )}
+
+    <slot name="artists" />
+
+    <nav class="work-nav">
+      <slot name="navigation" />
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .work-detail {
+    padding-block: var(--space-12);
+  }
+
+  .work-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .work-header h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .work-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .work-meta span:not(:last-child)::after {
+    content: "\00b7";
+    margin-left: var(--space-2);
+  }
+
+  .work-media {
+    margin-bottom: var(--space-10);
+  }
+
+  .media-item {
+    margin-bottom: var(--space-6);
+  }
+
+  .media-item img,
+  .media-item video {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .media-item figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .work-description {
+    margin-bottom: var(--space-8);
+  }
+
+  .work-statement {
+    margin-bottom: var(--space-8);
+  }
+
+  .work-statement h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .work-nav {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+</style>
