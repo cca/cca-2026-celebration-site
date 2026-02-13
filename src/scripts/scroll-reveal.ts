@@ -5,7 +5,7 @@
  */
 
 function initScrollReveal() {
-  const reveals = document.querySelectorAll('.reveal');
+  const reveals = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-clip');
   if (!reveals.length) return;
 
   // Respect prefers-reduced-motion
@@ -23,7 +23,7 @@ function initScrollReveal() {
           el.classList.add('is-visible');
 
           // Apply stagger delays to grid children if this is a grid container
-          const gridParent = el.closest('.grid-cards, .grid');
+          const gridParent = el.closest('.grid-cards, .grid, .bento-grid');
           if (gridParent) {
             const siblings = Array.from(gridParent.querySelectorAll('.reveal'));
             const index = siblings.indexOf(el);

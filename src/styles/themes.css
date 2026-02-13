@@ -48,11 +48,32 @@
 
   /* Base theme colors — CCA warm palette */
   --color-bg: #FDFAF5;
-  --color-text: #222222;
+  --color-text: #1a1a1a;
   --color-accent: #00BFB3;
-  --color-surface: #F7F3E9;
-  --color-border: #E2DDD3;
+  --color-surface: #F5F0E5;
+  --color-border: #DDD7CA;
   --color-muted: #6A737C;
+
+  /* RGB channels + semantic overlays */
+  --color-bg-rgb: 253, 250, 245;
+  --color-accent-rgb: 0, 191, 179;
+  --color-header-bg: rgba(var(--color-bg-rgb), 0.85);
+  --color-dropdown-bg: rgba(var(--color-bg-rgb), 0.92);
+  --color-mobile-bg: rgba(var(--color-bg-rgb), 0.95);
+  --color-accent-tint: rgba(var(--color-accent-rgb), 0.15);
+  --color-accent-shadow: rgba(var(--color-accent-rgb), 0.15);
+
+  /* Shimmer tokens */
+  --color-shimmer-base: #FFC845;
+  --color-shimmer-highlight: #fff8e0;
+  --color-shimmer-warm: #E57200;
+
+  /* Scheme hint + radius + shadow */
+  --theme-scheme: light;
+  --radius-card: 6px;
+  --radius-sm: 4px;
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
 
   /* Celebration accent spectrum */
   --color-celebration-primary: #00BFB3;
@@ -81,36 +102,53 @@
   --heading-transform: none;
   --heading-tracking: -0.01em;
 
+  /* Grid background tokens */
+  --grid-dot-color: var(--color-text);
+  --grid-line-color: var(--color-accent);
+  --grid-opacity: 0.06;
+
+  /* Motion design tokens */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
   /* Theme gradient (default) */
   --theme-gradient: linear-gradient(135deg, #00BFB3, #005776);
 }
 
 /* --------------------------------------------------------------------------
-   Commencement — Undergraduate
-   Formal, golden ceremony
+   Commencement — Unified dark navy + teal + gold palette
+   Both old selectors retained as aliases for content JSON compatibility
    -------------------------------------------------------------------------- */
-[data-theme="commencement-undergrad"] {
-  --color-bg: #1A1A2E;
-  --color-text: #f5f0e8;
-  --color-accent: #FFC845;
-  --color-surface: #252542;
-  --color-border: #3a3a5c;
-  --color-muted: #9998ac;
-  --theme-gradient: linear-gradient(135deg, #FFC845, #E57200);
-}
-
-/* --------------------------------------------------------------------------
-   Commencement — Graduate
-   Elegant, platinum
-   -------------------------------------------------------------------------- */
+[data-theme="commencement"],
+[data-theme="commencement-undergrad"],
 [data-theme="commencement-grad"] {
-  --color-bg: #0F0F1A;
+  --theme-scheme: dark;
+  --color-bg: #0C2340;
   --color-text: #f5f0e8;
-  --color-accent: #C0C0D0;
-  --color-surface: #1a1a2e;
-  --color-border: #2e2e48;
-  --color-muted: #8a8998;
-  --theme-gradient: linear-gradient(135deg, #C0C0D0, #8a8998);
+  --color-accent: #3DD6C9;
+  --color-surface: #122D4D;
+  --color-border: #1E3A5F;
+  --color-muted: #8DA3B8;
+  --color-bg-rgb: 12, 35, 64;
+  --color-accent-rgb: 61, 214, 201;
+  --color-gold: #E8A830;
+  --color-header-bg: rgba(12, 35, 64, 0.88);
+  --color-dropdown-bg: rgba(12, 35, 64, 0.94);
+  --color-mobile-bg: rgba(12, 35, 64, 0.96);
+  --color-accent-tint: rgba(61, 214, 201, 0.15);
+  --color-accent-shadow: rgba(61, 214, 201, 0.20);
+  --color-shimmer-base: #E8A830;
+  --color-shimmer-highlight: #F5D68A;
+  --color-shimmer-warm: #C4891E;
+  --theme-gradient: linear-gradient(135deg, #3DD6C9, #E8A830);
+  --gradient-prismatic: linear-gradient(var(--gradient-angle, 135deg), #3DD6C9, #0C2340, #E8A830);
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --grid-opacity: 0.10;
 }
 
 /* --------------------------------------------------------------------------
@@ -124,6 +162,21 @@
   --color-surface: #F7F3E9;
   --color-border: #E2DDD3;
   --color-muted: #6A737C;
+  --color-bg-rgb: 253, 250, 245;
+  --color-accent-rgb: 229, 114, 0;
+  --color-header-bg: rgba(253, 250, 245, 0.85);
+  --color-dropdown-bg: rgba(253, 250, 245, 0.92);
+  --color-mobile-bg: rgba(253, 250, 245, 0.95);
+  --color-accent-tint: rgba(229, 114, 0, 0.15);
+  --color-accent-shadow: rgba(229, 114, 0, 0.15);
+  --color-shimmer-base: #E57200;
+  --color-shimmer-highlight: #FFC845;
+  --color-shimmer-warm: #CC6600;
+  --theme-scheme: light;
+  --radius-card: 6px;
+  --radius-sm: 4px;
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
   --theme-gradient: linear-gradient(135deg, #E57200, #FFC845);
 }
 
@@ -138,19 +191,99 @@
   --color-surface: #FDFAF5;
   --color-border: #E2DDD3;
   --color-muted: #6A737C;
+  --color-bg-rgb: 247, 243, 233;
+  --color-accent-rgb: 0, 191, 179;
+  --color-header-bg: rgba(247, 243, 233, 0.85);
+  --color-dropdown-bg: rgba(247, 243, 233, 0.92);
+  --color-mobile-bg: rgba(247, 243, 233, 0.95);
+  --color-accent-tint: rgba(0, 191, 179, 0.15);
+  --color-accent-shadow: rgba(0, 191, 179, 0.15);
+  --color-shimmer-base: #FFC845;
+  --color-shimmer-highlight: #fff8e0;
+  --color-shimmer-warm: #E57200;
+  --theme-scheme: light;
+  --radius-card: 6px;
+  --radius-sm: 4px;
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
   --theme-gradient: linear-gradient(135deg, #00BFB3, #005776);
 }
 
 /* --------------------------------------------------------------------------
    Thesis — Graduate
-   Ethereal
+   Ethereal, dark
    -------------------------------------------------------------------------- */
 [data-theme="thesis-grad"] {
+  --theme-scheme: dark;
   --color-bg: #1A0A2E;
   --color-text: #f0e8f5;
   --color-accent: #563D82;
   --color-surface: #251540;
   --color-border: #3d2660;
   --color-muted: #8a7a9e;
+  --color-bg-rgb: 26, 10, 46;
+  --color-accent-rgb: 86, 61, 130;
+  --color-header-bg: rgba(26, 10, 46, 0.88);
+  --color-dropdown-bg: rgba(26, 10, 46, 0.94);
+  --color-mobile-bg: rgba(26, 10, 46, 0.96);
+  --color-accent-tint: rgba(86, 61, 130, 0.15);
+  --color-accent-shadow: rgba(86, 61, 130, 0.20);
+  --color-shimmer-base: #563D82;
+  --color-shimmer-highlight: #8a7a9e;
+  --color-shimmer-warm: #3d2660;
+  --radius-card: 6px;
+  --radius-sm: 4px;
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3);
   --theme-gradient: linear-gradient(135deg, #563D82, #1A0A2E);
+  --grid-opacity: 0.10;
 }
+
+/* --------------------------------------------------------------------------
+   Special Celebrations
+   Warm, inclusive, vibrant
+   -------------------------------------------------------------------------- */
+[data-theme="celebration"] {
+  --color-bg: #FDFAF5;
+  --color-text: #222222;
+  --color-accent: #00BFB3;
+  --color-surface: #F7F3E9;
+  --color-border: #E2DDD3;
+  --color-muted: #6A737C;
+  --color-bg-rgb: 253, 250, 245;
+  --color-accent-rgb: 0, 191, 179;
+  --color-header-bg: rgba(253, 250, 245, 0.85);
+  --color-dropdown-bg: rgba(253, 250, 245, 0.92);
+  --color-mobile-bg: rgba(253, 250, 245, 0.95);
+  --color-accent-tint: rgba(0, 191, 179, 0.15);
+  --color-accent-shadow: rgba(0, 191, 179, 0.15);
+  --color-shimmer-base: #FFC845;
+  --color-shimmer-highlight: #fff8e0;
+  --color-shimmer-warm: #E57200;
+  --theme-scheme: light;
+  --radius-card: 6px;
+  --radius-sm: 4px;
+  --shadow-card-rest: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --theme-gradient: linear-gradient(135deg, #00BFB3, #563D82);
+}
+
+/* --------------------------------------------------------------------------
+   Theme Extension Guide
+
+   To add a new theme, define a [data-theme="your-theme"] block with:
+
+   REQUIRED TOKENS:
+   - Core palette: --color-bg, --color-text, --color-accent, --color-surface,
+     --color-border, --color-muted
+   - RGB channels: --color-bg-rgb (R, G, B), --color-accent-rgb (R, G, B)
+   - Overlays: --color-header-bg, --color-dropdown-bg, --color-mobile-bg
+     (use rgba with --color-bg-rgb at 0.85/0.92/0.95 for light, 0.88/0.94/0.96 for dark)
+   - Tints: --color-accent-tint, --color-accent-shadow
+   - Gradients: --theme-gradient, optionally override --gradient-prismatic
+   - Shimmer: --color-shimmer-base, --color-shimmer-highlight, --color-shimmer-warm
+   - Scheme: --theme-scheme (light | dark)
+   - Layout: --radius-card (6px), --radius-sm (4px)
+   - Elevation: --shadow-card-rest, --shadow-card-hover
+     (dark themes use higher opacity shadows)
+   -------------------------------------------------------------------------- */

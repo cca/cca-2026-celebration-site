@@ -37,6 +37,41 @@
   50% { transform: translateY(6px); opacity: 1; }
 }
 
+/* View Transition keyframes */
+@keyframes fade-out-up {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::view-transition-old(root) {
+  animation: 180ms cubic-bezier(0.76, 0, 0.24, 1) both fade-out-up;
+}
+
+::view-transition-new(root) {
+  animation: 180ms cubic-bezier(0.76, 0, 0.24, 1) both fade-in-up;
+}
+
+/* Constellation grid keyframes */
+@keyframes grid-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes grid-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(12px, 8px); }
+}
+
+@keyframes grid-stroke-pulse {
+  0%, 100% { stroke-opacity: 0.2; }
+  50% { stroke-opacity: 0.6; }
+}
+
 /* --------------------------------------------------------------------------
    Reveal System — Fade-up entrance animation
    -------------------------------------------------------------------------- */
@@ -44,13 +79,62 @@
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
 }
 
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Reveal variant: scale */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Reveal variant: slide from left */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Reveal variant: slide from right */
+.reveal-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Reveal variant: clip-path wipe */
+.reveal-clip {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--duration-slow) var(--ease-in-out-quint);
+}
+
+.reveal-clip.is-visible {
+  clip-path: inset(0 0 0 0);
 }
 
 /* Stagger delays for grid children */
@@ -67,15 +151,15 @@
    Decorative animation classes
    -------------------------------------------------------------------------- */
 
-/* Gold shimmer text effect */
+/* Gold shimmer text effect — colors adapt per-theme via tokens */
 .shimmer-text {
   background: linear-gradient(
     90deg,
-    #FFC845 0%,
-    #fff8e0 25%,
-    #FFC845 50%,
-    #E57200 75%,
-    #FFC845 100%
+    var(--color-shimmer-base) 0%,
+    var(--color-shimmer-highlight) 25%,
+    var(--color-shimmer-base) 50%,
+    var(--color-shimmer-warm) 75%,
+    var(--color-shimmer-base) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -114,9 +198,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .reveal-scale,
+  .reveal-left,
+  .reveal-right {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .reveal-clip {
+    clip-path: none;
     transition: none;
   }
 
@@ -133,7 +225,7 @@
 
   .shimmer-text {
     animation: none;
-    background: var(--gradient-gold);
+    background: linear-gradient(90deg, var(--color-shimmer-base), var(--color-shimmer-warm));
     background-size: 100% auto;
     -webkit-background-clip: text;
     background-clip: text;

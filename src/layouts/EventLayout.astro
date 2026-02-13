@@ -18,7 +18,7 @@ const pageTitle = title ?? event.data.title;
 ---
 
 <BaseLayout title={pageTitle} description={event.data.description} themeKey={event.data.themeKey}>
-  <div class="event-page" data-theme={event.data.themeKey}>
+  <div class="event-page">
     <slot />
   </div>
 </BaseLayout>

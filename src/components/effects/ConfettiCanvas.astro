@@ -27,7 +27,14 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const COLORS = ['#00BFB3', '#563D82', '#FFC845', '#E57200', '#005776'];
+  const style = getComputedStyle(document.documentElement);
+  const COLORS = [
+    style.getPropertyValue('--color-celebration-primary').trim() || '#00BFB3',
+    style.getPropertyValue('--color-celebration-secondary').trim() || '#563D82',
+    style.getPropertyValue('--color-celebration-warm').trim() || '#FFC845',
+    style.getPropertyValue('--color-celebration-energy').trim() || '#E57200',
+    style.getPropertyValue('--color-celebration-deep').trim() || '#005776',
+  ];
   const PARTICLE_COUNT = 70;
 
   interface Particle {

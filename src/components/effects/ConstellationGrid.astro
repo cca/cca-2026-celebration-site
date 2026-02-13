@@ -1,0 +1,79 @@
+---
+/**
+ * ConstellationGrid — Fixed SVG dot-grid background with subtle animated
+ * breathing and drifting connector lines. Evokes "stars aligning" while
+ * feeling modern and digital. Colors adapt via theme tokens.
+ */
+---
+
+<div class="constellation-grid" aria-hidden="true">
+  <svg class="grid-dots" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+      <pattern id="dot-grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+        <circle cx="30" cy="30" r="1.5" fill="var(--grid-dot-color, currentColor)" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#dot-grid)" />
+  </svg>
+
+  <svg class="grid-lines" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <!-- Decorative diagonal connector lines -->
+    <line class="connector connector-1" x1="10%" y1="15%" x2="30%" y2="35%" />
+    <line class="connector connector-2" x1="65%" y1="10%" x2="85%" y2="30%" />
+    <line class="connector connector-3" x1="20%" y1="60%" x2="45%" y2="80%" />
+    <line class="connector connector-4" x1="70%" y1="55%" x2="90%" y2="75%" />
+    <line class="connector connector-5" x1="40%" y1="20%" x2="55%" y2="45%" />
+  </svg>
+</div>
+
+<style>
+  .constellation-grid {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--grid-opacity, 0.06);
+  }
+
+  .grid-dots,
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .connector {
+    stroke: var(--grid-line-color, var(--color-accent));
+    stroke-width: 1;
+    stroke-opacity: 0.4;
+    fill: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .grid-dots {
+      animation: grid-breathe 10s ease-in-out infinite;
+    }
+
+    .grid-lines {
+      animation: grid-drift 60s ease-in-out infinite alternate;
+    }
+
+    .connector {
+      animation: grid-stroke-pulse 25s ease-in-out infinite;
+    }
+
+    .connector-2 { animation-delay: -5s; }
+    .connector-3 { animation-delay: -10s; }
+    .connector-4 { animation-delay: -15s; }
+    .connector-5 { animation-delay: -20s; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid-dots,
+    .grid-lines,
+    .connector {
+      animation: none;
+    }
+  }
+</style>

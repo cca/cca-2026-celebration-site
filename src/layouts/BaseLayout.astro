@@ -1,6 +1,8 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
+import ConstellationGrid from '../components/effects/ConstellationGrid.astro';
 import '../styles/fonts.css';
 import '../styles/global.css';
 import '../styles/themes.css';
@@ -11,10 +13,15 @@ interface Props {
   title: string;
   description?: string;
   themeKey?: string;
+  minimalHeader?: boolean;
+  ogImage?: string;
 }
 
-const { title, description, themeKey } = Astro.props;
+const { title, description, themeKey, minimalHeader = false, ogImage } = Astro.props;
 const pageTitle = `${title} | CCA 2026`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://2026.cca.edu');
+const defaultDescription = "Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.";
+const metaDescription = description ?? defaultDescription;
 ---
 
 <!doctype html>
@@ -23,29 +30,32 @@ const pageTitle = `${title} | CCA 2026`;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonicalUrl.href} />
+
     <meta property="og:title" content={pageTitle} />
-    {description && <meta property="og:description" content={description} />}
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl.href} />
+    <meta property="og:site_name" content="CCA 2026 Celebrations" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={metaDescription} />
 
     <!-- Preload critical fonts -->
     <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/merriweather-regular-webfont.woff2" as="font" type="font/woff2" crossorigin />
+    <ViewTransitions />
   </head>
-  <body>
+  <body data-theme={themeKey}>
+    <ConstellationGrid />
     <a class="skip-link" href="#main">Skip to main content</a>
-    <Header />
-    {themeKey ? (
-      <div data-theme={themeKey}>
-        <main id="main">
-          <slot />
-        </main>
-      </div>
-    ) : (
-      <main id="main">
-        <slot />
-      </main>
-    )}
+    <Header minimal={minimalHeader} transition:animate="none" />
+    <main id="main">
+      <slot />
+    </main>
     <Footer />
 
     <script src="../scripts/scroll-reveal.ts"></script>
