@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import EventLayout from '../../layouts/EventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventDetails from '../../components/events/EventDetails.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  const celebrations = events.filter(e => e.data.type === 'celebration');
+  return celebrations.map(event => ({
+    params: { slug: event.data.slug },
+    props: { event },
+  }));
+}
+
+const { event } = Astro.props;
+---
+
+<EventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Commencement', href: '/commencement/' },
+      { label: event.data.title },
+    ]} />
+  </div>
+
+  <EventHero event={event} />
+
+  <div class="container">
+    <EventDetails event={event} />
+  </div>
+</EventLayout>

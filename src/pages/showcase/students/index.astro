@@ -1,18 +1,28 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import StudentGrid from '../../components/students/StudentGrid.astro';
-import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import StudentGrid from '../../../components/students/StudentGrid.astro';
+import FilterChips from '../../../components/ui/FilterChips.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
 
 const students = await getCollection('students');
 const programs = await getCollection('programs');
 const programMap = new Map(programs.map(p => [p.id, p.data.name]));
+
+const programChips = [
+  { label: 'All', href: '/showcase/students/', active: true },
+  ...programs.map(p => ({
+    label: p.data.name,
+    href: `/showcase/students/program/${p.data.slug}/`,
+  })),
+];
 ---
 
 <BaseLayout title="Students">
   <div class="container">
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
+      { label: 'Student Showcase', href: '/showcase/' },
       { label: 'Students' },
     ]} />
 
@@ -20,6 +30,8 @@ const programMap = new Map(programs.map(p => [p.id, p.data.name]));
       <h1>Students</h1>
       <p>Meet the talented artists, designers, and makers of CCA's Class of 2026.</p>
     </section>
+
+    <FilterChips items={programChips} />
 
     <section class="students-grid-section reveal">
       <StudentGrid students={students} programMap={programMap} />

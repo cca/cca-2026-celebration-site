@@ -1,0 +1,124 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import StudentLayout from '../../../layouts/StudentLayout.astro';
+import WorkGrid from '../../../components/works/WorkGrid.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import { getWorksByStudent } from '../../../lib/utils/collections';
+import { fullName, formatDate } from '../../../lib/utils/format';
+
+export async function getStaticPaths() {
+  const students = await getCollection('students');
+  return students.map(student => ({
+    params: { slug: student.data.slug },
+    props: { student },
+  }));
+}
+
+const { student } = Astro.props;
+
+const works = await getWorksByStudent(student.id);
+const allStudents = await getCollection('students');
+const studentMap = new Map(allStudents.map(s => [s.id, fullName(s)]));
+const name = fullName(student);
+
+// Resolve ceremony references
+const ceremonyEntries = student.data.ceremonies
+  ? await Promise.all(student.data.ceremonies.map((ref: { id: string }) => getEntry('events', ref.id)))
+  : [];
+const ceremonies = ceremonyEntries.filter(Boolean);
+
+function getCeremonyHref(event: { data: { type: string; slug: string } }) {
+  if (event.data.type === 'commencement') {
+    return `/commencement/${event.data.slug.replace('commencement-', '')}/`;
+  }
+  return `/commencement/${event.data.slug}/`;
+}
+---
+
+<StudentLayout student={student}>
+  <Breadcrumb items={[
+    { label: 'Home', href: '/' },
+    { label: 'Student Showcase', href: '/showcase/' },
+    { label: 'Students', href: '/showcase/students/' },
+    { label: name },
+  ]} />
+
+  {ceremonies.length > 0 && (
+    <section class="student-ceremonies-section reveal">
+      <h2>Ceremonies</h2>
+      <ul class="ceremony-list">
+        {ceremonies.map(event => (
+          <li>
+            <a href={getCeremonyHref(event!)} class="ceremony-link">
+              <span class="ceremony-title">{event!.data.title}</span>
+              <span class="ceremony-meta">{formatDate(event!.data.date)} &middot; {event!.data.time}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {works.length > 0 && (
+    <section class="student-works-section reveal">
+      <h2>Works</h2>
+      <WorkGrid works={works} studentMap={studentMap} />
+    </section>
+  )}
+</StudentLayout>
+
+<style>
+  .student-ceremonies-section {
+    padding-block: var(--space-4) var(--space-2);
+  }
+
+  .student-ceremonies-section h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .ceremony-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .ceremony-link {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .ceremony-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+
+  .ceremony-title {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+  }
+
+  .ceremony-meta {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .student-works-section {
+    padding-block: var(--space-4) var(--space-12);
+  }
+
+  .student-works-section h2 {
+    margin-bottom: var(--space-6);
+  }
+</style>

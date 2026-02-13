@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EmailSignup from '../components/sections/EmailSignup.astro';
+---
+
+<BaseLayout title="Subscribe" description="Sign up for the CCA 2026 Celebrations mailing list to receive event updates and RSVP reminders." minimalHeader>
+  <div class="subscribe-page">
+    <div class="subscribe-layout">
+
+      <div class="subscribe-visual" aria-hidden="true">
+        <div class="visual-content">
+          <span class="visual-year">2026</span>
+          <span class="visual-label">CCA Celebrations</span>
+          <div class="visual-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="subscribe-main">
+        <h1 class="subscribe-title">Stay Updated</h1>
+        <p class="subscribe-intro">
+          Join the CCA 2026 Celebrations mailing list. We'll send you event announcements, schedule changes, RSVP reminders, and other important updates as commencement, showcases, and thesis exhibitions approach.
+        </p>
+        <EmailSignup heading="" description="" />
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subscribe-page {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 60px); /* fill below header */
+  }
+
+  .subscribe-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    flex: 1;
+  }
+
+  /* ---- Decorative left panel ---- */
+  .subscribe-visual {
+    display: none;
+    background: var(--gradient-hero);
+    color: #f5f0e8;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle diagonal texture */
+  .subscribe-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.03) 40px,
+      rgba(255, 255, 255, 0.03) 41px
+    );
+  }
+
+  /* Prismatic accent bar along the right edge */
+  .subscribe-visual::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gradient-prismatic);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .subscribe-visual::after {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  .visual-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: var(--space-10);
+    gap: var(--space-3);
+  }
+
+  .visual-year {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 6vw, 6rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #f5f0e8 20%, #E8A830 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .visual-label {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+  }
+
+  .visual-dots {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .visual-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .visual-dots span:nth-child(2) {
+    background: var(--color-celebration-primary);
+  }
+
+  /* ---- Right / main column ---- */
+  .subscribe-main {
+    padding: var(--space-10) var(--space-8);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .subscribe-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .subscribe-intro {
+    color: var(--color-muted);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-8);
+    max-width: 55ch;
+    margin-inline: auto;
+  }
+
+  /* Flatten the EmailSignup card when embedded here */
+  .subscribe-main :global(.signup-section) {
+    padding-block: 0;
+  }
+
+  .subscribe-main :global(.signup-section > .container) {
+    padding-inline: 0;
+  }
+
+  .subscribe-main :global(.signup-card) {
+    max-width: none;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    text-align: inherit;
+  }
+
+  .subscribe-main :global(.signup-card::before) {
+    display: none;
+  }
+
+  .subscribe-main :global(.signup-fields) {
+    justify-content: flex-start;
+  }
+
+  /* ---- Desktop two-column ---- */
+  @media (min-width: 768px) {
+    .subscribe-layout {
+      grid-template-columns: 5fr 7fr;
+    }
+
+    .subscribe-visual {
+      display: block;
+    }
+
+    .subscribe-main {
+      text-align: left;
+      padding: var(--space-16) clamp(var(--space-10), 5vw, var(--space-24));
+    }
+
+    .subscribe-intro {
+      margin-inline: 0;
+    }
+  }
+</style>

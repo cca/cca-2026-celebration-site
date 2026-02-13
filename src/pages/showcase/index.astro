@@ -1,49 +1,109 @@
 ---
-import { getEntry, getCollection } from 'astro:content';
-import EventLayout from '../../layouts/EventLayout.astro';
-import EventHero from '../../components/events/EventHero.astro';
-import EventDetails from '../../components/events/EventDetails.astro';
-import WorkGrid from '../../components/works/WorkGrid.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
-import { getWorksByEvent } from '../../lib/utils/collections';
+import WorkCard from '../../components/works/WorkCard.astro';
+import StudentGrid from '../../components/students/StudentGrid.astro';
+import FilterChips from '../../components/ui/FilterChips.astro';
+import Button from '../../components/ui/Button.astro';
 import { fullName } from '../../lib/utils/format';
 
-const event = await getEntry('events', 'showcase');
-if (!event) throw new Error('Event showcase not found');
-
-const works = await getWorksByEvent('showcase');
+const works = (await getCollection('works')).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 const students = await getCollection('students');
+const programs = await getCollection('programs');
+const programMap = new Map(programs.map(p => [p.id, p.data.name]));
 const studentMap = new Map(students.map(s => [s.id, fullName(s)]));
+
+const featuredWorks = works.filter(w => w.data.featured).slice(0, 6);
+
+const programChips = programs.map(p => ({
+  label: p.data.name,
+  href: `/showcase/students/program/${p.data.slug}/`,
+}));
 ---
 
-<EventLayout event={event}>
+<BaseLayout title="Student Showcase" description="Explore creative works and meet the talented artists, designers, and makers of CCA's Class of 2026.">
   <div class="container">
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
-      { label: 'Showcase' },
+      { label: 'Student Showcase' },
     ]} />
-  </div>
 
-  <EventHero event={event} />
+    <section class="showcase-intro reveal">
+      <h1>Student Showcase</h1>
+      <p>Explore creative works and meet the talented artists, designers, and makers of CCA's Class of 2026.</p>
+    </section>
 
-  <div class="container">
-    <EventDetails event={event} />
-
-    {works.length > 0 && (
-      <section class="works-section reveal">
+    {featuredWorks.length > 0 && (
+      <section class="featured-works-section reveal">
         <h2>Featured Works</h2>
-        <WorkGrid works={works} studentMap={studentMap} />
+        <div class="works-grid">
+          {featuredWorks.map(work => {
+            const names = work.data.students?.map(ref => studentMap.get(ref.id)).filter(Boolean) as string[] ?? [];
+            return <WorkCard work={work} studentNames={names} />;
+          })}
+        </div>
+        <div class="section-cta">
+          <Button href="/showcase/works/" variant="outline">View All Works</Button>
+        </div>
       </section>
     )}
+
+    <section class="programs-section reveal">
+      <h2>Browse by Program</h2>
+      <FilterChips items={programChips} />
+    </section>
+
+    <section class="students-section reveal">
+      <h2>Students</h2>
+      <StudentGrid students={students} programMap={programMap} />
+      <div class="section-cta">
+        <Button href="/showcase/students/" variant="outline">View All Students</Button>
+      </div>
+    </section>
   </div>
-</EventLayout>
+</BaseLayout>
 
 <style>
-  .works-section {
-    padding-block: var(--space-8) var(--space-12);
+  .showcase-intro {
+    padding-block: var(--space-10) var(--space-6);
   }
 
-  .works-section h2 {
+  .showcase-intro h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .showcase-intro p {
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+
+  .featured-works-section,
+  .programs-section,
+  .students-section {
+    padding-block: var(--space-6);
+  }
+
+  .featured-works-section h2,
+  .programs-section h2,
+  .students-section h2 {
     margin-bottom: var(--space-6);
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .section-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-10);
+  }
+
+  .students-section {
+    padding-bottom: var(--space-16);
   }
 </style>

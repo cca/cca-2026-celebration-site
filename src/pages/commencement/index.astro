@@ -1,15 +1,28 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import StickyTocLayout from '../../components/ui/StickyTocLayout.astro';
+import ContactBlock from '../../components/ui/ContactBlock.astro';
 import { formatDate } from '../../lib/utils/format';
+import { getCelebrationEvents } from '../../lib/utils/collections';
 
 const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
+const celebrations = await getCelebrationEvents();
+const info = await getEntry('commencement-info', 'current');
+
+const tocItems = [
+  { label: 'Ceremonies', href: '#ceremonies' },
+  { label: 'Special Celebrations', href: '#celebrations' },
+  { label: 'Preparation Guides', href: '#info-guides' },
+  { label: 'Recap', href: '#recap' },
+  { label: 'Contact', href: '#contact' },
+];
 ---
 
-<BaseLayout title="Commencement" themeKey="commencement-undergrad">
+<BaseLayout title="Commencement" themeKey="commencement">
   <div class="container">
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
@@ -17,31 +30,85 @@ const gradEvent = events.find(e => e.id === 'commencement-graduate');
     ]} />
 
     <section class="commencement-intro reveal">
-      <h1>Commencement</h1>
+      <h1 class="commencement-title">Commencement</h1>
       <p>Join us as we celebrate the Class of 2026. CCA's commencement ceremonies honor the dedication and creative accomplishments of our graduating students.</p>
     </section>
 
-    <section class="ceremony-cards">
-      {undergradEvent && (
-        <a href="/commencement/undergraduate/" class="ceremony-card reveal" data-theme={undergradEvent.data.themeKey}>
-          <h2>{undergradEvent.data.title}</h2>
-          <time>{formatDate(undergradEvent.data.date)}</time>
-          <p class="time">{undergradEvent.data.time}</p>
-          <p class="location">{undergradEvent.data.location}</p>
-          <p class="desc">{undergradEvent.data.description}</p>
-        </a>
+    <StickyTocLayout items={tocItems}>
+      <section id="ceremonies" class="page-section">
+        <h2 class="section-heading reveal">Ceremonies</h2>
+        <div class="ceremony-features">
+          {undergradEvent && (
+            <a href="/commencement/undergraduate/" class="ceremony-feature reveal">
+              <span class="ceremony-label">UNDERGRADUATE</span>
+              <h3 class="ceremony-name">{undergradEvent.data.title}</h3>
+              <time class="ceremony-date">{formatDate(undergradEvent.data.date)}</time>
+              <p class="ceremony-meta">{undergradEvent.data.time} &middot; {undergradEvent.data.location}</p>
+              <p class="ceremony-desc">{undergradEvent.data.description}</p>
+            </a>
+          )}
+
+          {gradEvent && (
+            <a href="/commencement/graduate/" class="ceremony-feature reveal">
+              <span class="ceremony-label">GRADUATE</span>
+              <h3 class="ceremony-name">{gradEvent.data.title}</h3>
+              <time class="ceremony-date">{formatDate(gradEvent.data.date)}</time>
+              <p class="ceremony-meta">{gradEvent.data.time} &middot; {gradEvent.data.location}</p>
+              <p class="ceremony-desc">{gradEvent.data.description}</p>
+            </a>
+          )}
+        </div>
+      </section>
+
+      {celebrations.length > 0 && (
+        <section id="celebrations" class="page-section">
+          <h2 class="section-heading reveal">Special Celebrations</h2>
+          <p class="section-desc reveal">Pre-commencement celebrations for all graduating students.</p>
+          <div class="celebration-rows">
+            {celebrations.map((event) => (
+              <a href={`/commencement/${event.data.slug}/`} class="celebration-row reveal">
+                <span class="celebration-name">{event.data.title}</span>
+                <span class="celebration-details">
+                  {formatDate(event.data.date)} &middot; {event.data.time} &middot; {event.data.location}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
       )}
 
-      {gradEvent && (
-        <a href="/commencement/graduate/" class="ceremony-card reveal" data-theme={gradEvent.data.themeKey}>
-          <h2>{gradEvent.data.title}</h2>
-          <time>{formatDate(gradEvent.data.date)}</time>
-          <p class="time">{gradEvent.data.time}</p>
-          <p class="location">{gradEvent.data.location}</p>
-          <p class="desc">{gradEvent.data.description}</p>
-        </a>
+      {info && (
+        <>
+          <section id="info-guides" class="page-section">
+            <h2 class="section-heading reveal">Prepare for Commencement</h2>
+            <div class="info-cards">
+              <a id="for-students" href="/commencement/for-students/" class="info-card reveal">
+                <h3 class="info-card-heading">{info.data.forStudents.heading}</h3>
+                <p class="info-card-summary">{info.data.forStudents.summary}</p>
+                <span class="info-card-link">View guide &rarr;</span>
+              </a>
+              <a id="for-families" href="/commencement/for-families/" class="info-card reveal">
+                <h3 class="info-card-heading">{info.data.forFamilies.heading}</h3>
+                <p class="info-card-summary">{info.data.forFamilies.summary}</p>
+                <span class="info-card-link">View guide &rarr;</span>
+              </a>
+            </div>
+          </section>
+
+          <section id="recap" class="page-section info-section">
+            <h2 class="section-heading reveal">Commencement Recap</h2>
+            <p class="info-summary reveal">Relive the ceremony with video highlights, photos, statistics, honorary doctorate recipients, and downloadable programs.</p>
+            <a href="/commencement/recap/" class="info-link reveal">View Recap &rarr;</a>
+          </section>
+
+          <section id="contact" class="page-section">
+            <h2 class="section-heading reveal">Contact</h2>
+            <p class="section-desc reveal">Questions about commencement? We're here to help.</p>
+            <ContactBlock email={info.data.contact.email} phone={info.data.contact.phone} />
+          </section>
+        </>
       )}
-    </section>
+    </StickyTocLayout>
   </div>
 </BaseLayout>
 
@@ -50,8 +117,13 @@ const gradEvent = events.find(e => e.id === 'commencement-graduate');
     padding-block: var(--space-10) var(--space-6);
   }
 
-  .commencement-intro h1 {
+  .commencement-title {
     margin-bottom: var(--space-4);
+    background: var(--theme-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
   }
 
   .commencement-intro p {
@@ -59,59 +131,228 @@ const gradEvent = events.find(e => e.id === 'commencement-graduate');
     color: var(--color-muted);
   }
 
-  .ceremony-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr));
-    gap: var(--grid-gutter);
-    padding-block: var(--space-6) var(--space-12);
+  .page-section {
+    padding-block: var(--space-8);
   }
 
-  .ceremony-card {
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .section-desc {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    margin-bottom: var(--space-6);
+    max-width: 60ch;
+  }
+
+  /* Ceremonies */
+
+  .ceremony-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .ceremony-features {
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .ceremony-feature:first-child {
+      border-right: 1px solid var(--color-border);
+      padding-right: var(--space-8);
+    }
+
+    .ceremony-feature:last-child {
+      padding-left: var(--space-8);
+    }
+  }
+
+  .ceremony-feature {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: var(--space-4) var(--space-2);
+    border-radius: var(--radius-card);
+    transition: background-color 0.15s ease;
+  }
+
+  .ceremony-feature:hover {
+    background-color: var(--color-surface);
+  }
+
+  .ceremony-label {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .ceremony-name {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-3);
+    line-height: 1.2;
+  }
+
+  .ceremony-date {
+    display: block;
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .ceremony-meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .ceremony-desc {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    max-width: 50ch;
+    line-height: 1.6;
+  }
+
+  /* Celebrations */
+
+  .celebration-rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .celebration-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-text);
+    border-radius: 2px;
+    transition: background-color 0.15s ease;
+  }
+
+  .celebration-row:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .celebration-row:hover {
+    background-color: var(--color-surface);
+  }
+
+  .celebration-name {
+    font-weight: 600;
+    font-size: var(--text-base);
+    flex-shrink: 0;
+  }
+
+  .celebration-details {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-align: right;
+  }
+
+  @media (max-width: 640px) {
+    .celebration-row {
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .celebration-details {
+      text-align: left;
+    }
+  }
+
+  /* Info sections */
+
+  .info-section {
+    padding-block: var(--space-6);
+  }
+
+  .info-section .section-heading {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .info-summary {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    max-width: 60ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+  }
+
+  .info-link {
+    display: inline-block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .info-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Info guide cards */
+
+  .info-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .info-cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .info-card {
     display: block;
     text-decoration: none;
     color: var(--color-text);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-left: 4px solid var(--color-accent);
-    border-radius: 4px;
+    border-radius: var(--radius-card);
     padding: var(--space-6);
+    box-shadow: var(--shadow-card-rest);
     transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
 
-  .ceremony-card:hover {
-    transform: translateY(-4px);
+  .info-card:hover {
+    transform: translateY(-2px);
     box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 15%, transparent);
   }
 
-  .ceremony-card h2 {
-    font-size: var(--text-xl);
+  .info-card-heading {
+    font-size: var(--text-lg);
     margin-bottom: var(--space-2);
   }
 
-  .ceremony-card time {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-accent);
-    margin-bottom: var(--space-1);
-  }
-
-  .time {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
+  .info-card-summary {
+    font-size: var(--text-base);
     color: var(--color-muted);
-    margin-bottom: var(--space-1);
-  }
-
-  .location {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-muted);
+    line-height: 1.6;
     margin-bottom: var(--space-3);
   }
 
-  .desc {
+  .info-card-link {
     font-size: var(--text-sm);
-    color: var(--color-muted);
+    font-weight: 600;
+    color: var(--color-accent);
   }
 </style>

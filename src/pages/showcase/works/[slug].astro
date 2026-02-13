@@ -1,8 +1,8 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import WorkLayout from '../../layouts/WorkLayout.astro';
-import Breadcrumb from '../../components/ui/Breadcrumb.astro';
-import { fullName } from '../../lib/utils/format';
+import WorkLayout from '../../../layouts/WorkLayout.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import { fullName } from '../../../lib/utils/format';
 
 export async function getStaticPaths() {
   const works = await getCollection('works');
@@ -26,7 +26,7 @@ const events = eventEntries.filter(Boolean);
 
 const typeMap: Record<string, string> = {
   commencement: '/commencement/',
-  showcase: '/showcase/',
+  showcase: '/thesis/showcase/',
   'thesis-exhibition': '/thesis/',
 };
 
@@ -40,7 +40,8 @@ function getEventHref(event: { data: { type: string; degreeLevel: string } }) {
   <div class="container" slot="media">
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
-      { label: 'Works' },
+      { label: 'Student Showcase', href: '/showcase/' },
+      { label: 'Works', href: '/showcase/works/' },
       { label: work.data.title },
     ]} />
   </div>
@@ -50,7 +51,7 @@ function getEventHref(event: { data: { type: string; degreeLevel: string } }) {
     <ul class="artist-list">
       {students.map(student => (
         <li>
-          <a href={`/students/${student!.data.slug}/`}>{fullName(student!)}</a>
+          <a href={`/showcase/students/${student!.data.slug}/`}>{fullName(student!)}</a>
           <span class="artist-degree">{student!.data.degreeType}</span>
         </li>
       ))}
@@ -72,7 +73,7 @@ function getEventHref(event: { data: { type: string; degreeLevel: string } }) {
         <h3>Tags</h3>
         <ul class="tag-list">
           {work.data.tags.map(tag => (
-            <li class="tag">{tag}</li>
+            <li><a href={`/showcase/works/tag/${tag}/`} class="tag">{tag}</a></li>
           ))}
         </ul>
       </div>
@@ -123,10 +124,19 @@ function getEventHref(event: { data: { type: string; degreeLevel: string } }) {
   }
 
   .tag {
+    display: inline-block;
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     padding: var(--space-1) var(--space-3);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-muted);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tag:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 </style>

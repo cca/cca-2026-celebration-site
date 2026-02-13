@@ -1,0 +1,304 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import StickyTocLayout from '../../components/ui/StickyTocLayout.astro';
+import VideoEmbed from '../../components/ui/VideoEmbed.astro';
+import QuoteBlock from '../../components/ui/QuoteBlock.astro';
+import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
+import PersonGrid from '../../components/people/PersonGrid.astro';
+import InMemoriam from '../../components/sections/InMemoriam.astro';
+import DownloadLink from '../../components/ui/DownloadLink.astro';
+import SocialFeed from '../../components/sections/SocialFeed.astro';
+import { getPeopleByRole } from '../../lib/utils/collections';
+
+const recapData = await getEntry('recap', 'current');
+if (!recapData) throw new Error('Recap data not found');
+
+const {
+  commencementNumber,
+  videoUrl,
+  videoCaption,
+  presidentQuote,
+  statistics,
+  downloadableAssets,
+  inMemoriam,
+  ceremonies,
+} = recapData.data;
+
+const honoraryDoctors = await getPeopleByRole('honorary-doctorate');
+const professorsEmeriti = await getPeopleByRole('professor-emeritus');
+
+const events = await getCollection('events');
+const eventMap = new Map(events.map(e => [e.id, e.data]));
+
+const people = await getCollection('people');
+const peopleMap = new Map(people.map(p => [p.id, p.data]));
+
+// Build dynamic TOC
+const tocItems: Array<{ label: string; href: string }> = [];
+if (videoUrl) tocItems.push({ label: 'Video', href: '#video' });
+tocItems.push({ label: "President's Message", href: '#president-message' });
+tocItems.push({ label: 'By the Numbers', href: '#statistics' });
+if (honoraryDoctors.length > 0) tocItems.push({ label: 'Honorary Doctorates', href: '#honorary-doctorates' });
+if (professorsEmeriti.length > 0) tocItems.push({ label: 'Professors Emeriti', href: '#professors-emeriti' });
+tocItems.push({ label: 'Ceremony Highlights', href: '#highlights' });
+if (downloadableAssets && downloadableAssets.length > 0) tocItems.push({ label: 'Downloads', href: '#downloads' });
+if (inMemoriam.length > 0) tocItems.push({ label: 'In Memoriam', href: '#in-memoriam' });
+tocItems.push({ label: 'Social', href: '#social' });
+---
+
+<BaseLayout title="Commencement Recap" themeKey="commencement">
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Commencement', href: '/commencement/' },
+      { label: 'Recap' },
+    ]} />
+
+    <section class="recap-hero reveal">
+      <p class="recap-number stagger-1">{commencementNumber}</p>
+      <h1 class="recap-title stagger-2">Commencement</h1>
+      <p class="recap-subtitle stagger-3">California College of the Arts &middot; Class of 2026</p>
+    </section>
+
+    <StickyTocLayout items={tocItems}>
+      {videoUrl && (
+        <section id="video" class="recap-section reveal">
+          <VideoEmbed url={videoUrl} caption={videoCaption} />
+        </section>
+      )}
+
+      <section id="president-message" class="recap-section reveal">
+        <QuoteBlock text={presidentQuote.text} attribution={presidentQuote.attribution} />
+      </section>
+
+      <section id="statistics" class="recap-section">
+        <h2 class="section-heading reveal">By the Numbers</h2>
+        <StatisticsGrid statistics={statistics} />
+      </section>
+
+      {honoraryDoctors.length > 0 && (
+        <section id="honorary-doctorates">
+          <PersonGrid
+            heading="Honorary Doctorates"
+            people={honoraryDoctors.map(p => p.data)}
+          />
+        </section>
+      )}
+
+      {professorsEmeriti.length > 0 && (
+        <section id="professors-emeriti" class="recap-section">
+          <h2 class="section-heading reveal">Professors Emeriti</h2>
+          <ul class="emeriti-list">
+            {professorsEmeriti.map(p => (
+              <li class="emeriti-item reveal">
+                <span class="emeriti-name">{p.data.name}</span>
+                {p.data.title && <span class="emeriti-title">{p.data.title}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section id="highlights" class="recap-section">
+        <h2 class="section-heading reveal">Ceremony Highlights</h2>
+        {ceremonies.map((ceremony) => {
+          const eventData = eventMap.get(ceremony.event.id);
+          const alumniData = ceremony.distinguishedAlumni
+            ? peopleMap.get(ceremony.distinguishedAlumni.id)
+            : null;
+
+          return (
+            <div class="ceremony-recap reveal">
+              <h3 class="ceremony-name">{eventData?.title ?? 'Ceremony'}</h3>
+
+              <div class="speaker-block">
+                <p class="speaker-label">Student Speaker</p>
+                <p class="speaker-name">{ceremony.studentSpeaker.name}</p>
+                <p class="speaker-program">{ceremony.studentSpeaker.program}</p>
+                {ceremony.studentSpeaker.speechHighlights && (
+                  <p class="speaker-highlights">{ceremony.studentSpeaker.speechHighlights}</p>
+                )}
+              </div>
+
+              {alumniData && (
+                <div class="alumni-block">
+                  <p class="speaker-label">Distinguished Alumni Award</p>
+                  <p class="speaker-name">{alumniData.name}</p>
+                  {alumniData.title && <p class="speaker-program">{alumniData.title}</p>}
+                </div>
+              )}
+
+              {ceremony.candidatesListUrl && (
+                <a href={ceremony.candidatesListUrl} class="candidates-link">
+                  View Candidates List &rarr;
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </section>
+
+      {downloadableAssets && downloadableAssets.length > 0 && (
+        <section id="downloads" class="recap-section">
+          <h2 class="section-heading reveal">Downloads</h2>
+          <div class="downloads-grid">
+            {downloadableAssets.map((asset) => (
+              <DownloadLink label={asset.label} url={asset.url} description={asset.description} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {inMemoriam.length > 0 && (
+        <section id="in-memoriam">
+          <InMemoriam entries={inMemoriam} />
+        </section>
+      )}
+
+      <section id="social">
+        <SocialFeed />
+      </section>
+    </StickyTocLayout>
+  </div>
+</BaseLayout>
+
+<style>
+  .recap-hero {
+    padding-block: var(--space-12) var(--space-8);
+    text-align: center;
+  }
+
+  .recap-number {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .recap-title {
+    font-family: var(--font-display);
+    font-size: var(--text-5xl);
+    background: var(--theme-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--space-4);
+  }
+
+  .recap-subtitle {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .recap-section {
+    padding-block: var(--space-8);
+  }
+
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .emeriti-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .emeriti-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .emeriti-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .emeriti-name {
+    font-weight: 600;
+    font-size: var(--text-base);
+  }
+
+  .emeriti-title {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .ceremony-recap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .ceremony-name {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .speaker-block,
+  .alumni-block {
+    margin-bottom: var(--space-4);
+  }
+
+  .speaker-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .speaker-name {
+    font-weight: 600;
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-1);
+  }
+
+  .speaker-program {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .speaker-highlights {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .candidates-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .candidates-link:hover {
+    opacity: 0.8;
+  }
+
+  .downloads-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--grid-gutter);
+  }
+</style>
