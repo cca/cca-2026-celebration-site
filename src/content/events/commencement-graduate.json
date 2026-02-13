@@ -4,11 +4,39 @@
   "shortTitle": "Grad Commencement",
   "type": "commencement",
   "degreeLevel": "graduate",
-  "themeKey": "commencement-grad",
+  "themeKey": "commencement",
   "date": "2026-05-16",
   "time": "3:00 PM",
   "location": "Yerba Buena Center for the Arts",
   "address": "701 Mission St, San Francisco, CA 94103",
   "description": "Celebrate with our graduate students as they complete their advanced degrees and embark on the next chapter.",
+  "longDescription": "The afternoon ceremony of CCA's 119th Commencement honors our graduate Class of 2026 — scholars, researchers, and practitioners who have pushed the boundaries of art, design, architecture, and writing at the highest level. This celebration recognizes their dedication to advanced study and the impact their work will have on communities worldwide.",
+  "rsvpUrl": "https://cca.edu/commencement/rsvp",
+  "livestreamUrl": "https://cca.edu/commencement/livestream",
+  "image": {
+    "src": "/images/events/commencement-graduate.jpg",
+    "alt": "Graduate students celebrating at commencement"
+  },
+  "schedule": [
+    { "time": "1:30 PM", "label": "Doors Open" },
+    { "time": "2:00 PM", "label": "Guest Seating Begins" },
+    { "time": "2:30 PM", "label": "Graduate Processional Line-Up" },
+    { "time": "2:50 PM", "label": "Academic Processional" },
+    { "time": "3:00 PM", "label": "Ceremony Begins" },
+    { "time": "3:15 PM", "label": "Welcome & Opening Remarks" },
+    { "time": "3:30 PM", "label": "Distinguished Alumni Address" },
+    { "time": "3:45 PM", "label": "Student Speaker Address" },
+    { "time": "4:15 PM", "label": "Conferral of Degrees" },
+    { "time": "5:00 PM", "label": "Reception" }
+  ],
+  "ceremonyProgram": {
+    "studentSpeaker": {
+      "name": "Jordan Rivera",
+      "program": "MFA Writing",
+      "speechHighlights": "Jordan will speak on the role of speculative practice in shaping resilient futures, drawing on their thesis research in climate fiction."
+    },
+    "distinguishedAlumni": "david-kim-distinguished",
+    "candidatesListUrl": "/downloads/graduate-candidates-2026.pdf"
+  },
   "order": 2
 }

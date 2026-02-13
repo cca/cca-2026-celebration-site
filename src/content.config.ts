@@ -67,6 +67,7 @@ const students = defineCollection({
         }),
       )
       .optional(),
+    ceremonies: z.array(reference("events")).optional(),
   }),
 });
 
@@ -76,7 +77,7 @@ const events = defineCollection({
     title: z.string(),
     slug: z.string(),
     shortTitle: z.string(),
-    type: z.enum(["commencement", "showcase", "thesis-exhibition"]),
+    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration"]),
     degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
     themeKey: z.string(),
     date: z.string(),
@@ -94,6 +95,30 @@ const events = defineCollection({
         alt: z.string(),
       })
       .optional(),
+    schedule: z
+      .array(
+        z.object({
+          time: z.string(),
+          label: z.string(),
+        }),
+      )
+      .optional(),
+    ceremonyProgram: z
+      .object({
+        studentSpeaker: z
+          .object({
+            student: reference("students").optional(),
+            name: z.string(),
+            program: z.string(),
+            speechHighlights: z.string().optional(),
+          })
+          .optional(),
+        distinguishedAlumni: reference("people").optional(),
+        candidatesListUrl: z.string().optional(),
+      })
+      .optional(),
+    videoUrl: z.string().optional(),
+    videoCaption: z.string().optional(),
     order: z.number(),
   }),
 });
@@ -125,4 +150,114 @@ const works = defineCollection({
   }),
 });
 
-export const collections = { programs, students, events, works };
+const people = defineCollection({
+  loader: glob({ pattern: "*.json", base: "src/content/people" }),
+  schema: z.object({
+    name: z.string(),
+    slug: z.string(),
+    role: z.enum([
+      "honorary-doctorate",
+      "professor-emeritus",
+      "distinguished-alumni",
+      "other",
+    ]),
+    photo: z
+      .object({
+        src: z.string(),
+        alt: z.string(),
+      })
+      .optional(),
+    title: z.string().optional(),
+    bio: z.string().optional(),
+    ccaConnection: z.string().optional(),
+    ceremony: reference("events").optional(),
+    order: z.number().optional(),
+  }),
+});
+
+const commencementInfo = defineCollection({
+  loader: glob({ pattern: "*.json", base: "src/content/commencement-info" }),
+  schema: z.object({
+    year: z.number(),
+    commencementNumber: z.string(),
+    contact: z.object({
+      email: z.string(),
+      phone: z.string().optional(),
+    }),
+    forStudents: z.object({
+      heading: z.string(),
+      summary: z.string(),
+      content: z.string(),
+    }),
+    forFamilies: z.object({
+      heading: z.string(),
+      summary: z.string(),
+      content: z.string(),
+    }),
+  }),
+});
+
+const recap = defineCollection({
+  loader: glob({ pattern: "*.json", base: "src/content/recap" }),
+  schema: z.object({
+    year: z.number(),
+    commencementNumber: z.string(),
+    heroImage: z
+      .object({
+        src: z.string(),
+        alt: z.string(),
+      })
+      .optional(),
+    videoUrl: z.string().optional(),
+    videoCaption: z.string().optional(),
+    presidentQuote: z.object({
+      text: z.string(),
+      attribution: z.string(),
+    }),
+    statistics: z.array(
+      z.object({
+        label: z.string(),
+        value: z.string(),
+        detail: z.string().optional(),
+      }),
+    ),
+    downloadableAssets: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string(),
+          description: z.string().optional(),
+        }),
+      )
+      .optional(),
+    inMemoriam: z.array(
+      z.object({
+        name: z.string(),
+        role: z.string().optional(),
+        years: z.string().optional(),
+      }),
+    ),
+    ceremonies: z.array(
+      z.object({
+        event: reference("events"),
+        studentSpeaker: z.object({
+          name: z.string(),
+          program: z.string(),
+          speechHighlights: z.string().optional(),
+        }),
+        distinguishedAlumni: reference("people").optional(),
+        candidatesListUrl: z.string().optional(),
+      }),
+    ),
+  }),
+});
+
+export const collections = {
+  programs,
+  students,
+  events,
+  works,
+  people,
+  "commencement-info": commencementInfo,
+  recap,
+};

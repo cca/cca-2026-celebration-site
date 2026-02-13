@@ -11,5 +11,6 @@
   "degreeLevel": "undergraduate",
   "degreeType": "BFA",
   "expectedGraduation": "Spring 2026",
-  "bio": "Jordan Brooks explores the intersection of design, technology, and social systems, creating interactive experiences that question how we navigate digital spaces."
+  "bio": "Jordan Brooks explores the intersection of design, technology, and social systems, creating interactive experiences that question how we navigate digital spaces.",
+  "ceremonies": ["commencement-undergraduate"]
 }

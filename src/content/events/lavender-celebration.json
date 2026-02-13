@@ -1,0 +1,23 @@
+{
+  "title": "Lavender Celebration",
+  "slug": "lavender-celebration",
+  "shortTitle": "Lavender",
+  "type": "celebration",
+  "degreeLevel": "all",
+  "themeKey": "celebration",
+  "date": "2026-05-15",
+  "time": "4:00 PM",
+  "location": "CCA San Francisco Campus",
+  "address": "1111 Eighth St, San Francisco, CA 94107",
+  "description": "A celebration recognizing and honoring LGBTQIA+ graduates and their achievements. An affirming space to celebrate identity, community, and accomplishment.",
+  "longDescription": "The Lavender Celebration is a pre-commencement ceremony that recognizes and honors the achievements of CCA's LGBTQIA+ graduates. This affirming event celebrates the intersections of identity, creativity, and community. Graduates, allies, families, and friends are all welcome to join in this meaningful gathering.",
+  "rsvpUrl": "https://cca.edu/commencement/rsvp",
+  "schedule": [
+    { "time": "4:00 PM", "label": "Gathering & Welcome" },
+    { "time": "4:30 PM", "label": "Opening Remarks" },
+    { "time": "5:00 PM", "label": "Graduate Recognition Ceremony" },
+    { "time": "5:45 PM", "label": "Keynote & Reflections" },
+    { "time": "6:15 PM", "label": "Reception & Celebration" }
+  ],
+  "order": 7
+}

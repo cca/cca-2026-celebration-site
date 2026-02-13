@@ -1,0 +1,57 @@
+{
+  "year": 2026,
+  "commencementNumber": "119th",
+  "heroImage": {
+    "src": "/images/recap/hero.jpg",
+    "alt": "CCA Class of 2026 graduates celebrating at commencement"
+  },
+  "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+  "videoCaption": "Relive the highlights from CCA's 119th Commencement",
+  "presidentQuote": {
+    "text": "Today we celebrate not just the completion of your degrees, but the beginning of your extraordinary contributions to the world. You leave CCA as artists, designers, architects, and writers — ready to shape the future with creativity and purpose.",
+    "attribution": "Tamara Lackey, President, California College of the Arts"
+  },
+  "statistics": [
+    { "label": "Graduates", "value": "462", "detail": "Class of 2026" },
+    { "label": "Countries", "value": "38", "detail": "Represented" },
+    { "label": "Degree Programs", "value": "22" },
+    { "label": "Honorary Doctorates", "value": "2", "detail": "Awarded" }
+  ],
+  "downloadableAssets": [
+    {
+      "label": "DIY Celebration Kit",
+      "url": "/downloads/cca-2026-diy-kit.pdf",
+      "description": "Printable decorations, social media frames, and more"
+    },
+    {
+      "label": "Commencement Program",
+      "url": "/downloads/cca-2026-program.pdf",
+      "description": "Official ceremony program booklet"
+    }
+  ],
+  "inMemoriam": [
+    { "name": "Professor James Whitfield", "role": "Faculty, Architecture Division", "years": "1978–2025" },
+    { "name": "Rosa Alvarez", "role": "Staff, Student Services", "years": "1995–2025" }
+  ],
+  "ceremonies": [
+    {
+      "event": "commencement-undergraduate",
+      "studentSpeaker": {
+        "name": "Maya Chen",
+        "program": "BFA Painting and Drawing",
+        "speechHighlights": "Maya spoke about the power of creative communities and how CCA taught her that art is not made in isolation but in conversation with the world around us."
+      },
+      "candidatesListUrl": "/downloads/undergraduate-candidates-2026.pdf"
+    },
+    {
+      "event": "commencement-graduate",
+      "studentSpeaker": {
+        "name": "Alex Kim",
+        "program": "MArch Architecture",
+        "speechHighlights": "Alex reflected on the responsibility architects carry to design spaces that serve all people, drawing on lessons learned through CCA's community-engaged studios."
+      },
+      "distinguishedAlumni": "david-kim-distinguished",
+      "candidatesListUrl": "/downloads/graduate-candidates-2026.pdf"
+    }
+  ]
+}
