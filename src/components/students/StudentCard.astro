@@ -8,7 +8,7 @@ interface Props {
 
 const { student, programName } = Astro.props;
 const { firstName, lastName, slug, photo, degreeType } = student.data;
-const href = `/students/${slug}/`;
+const href = `/showcase/students/${slug}/`;
 ---
 
 <a href={href} class="student-card reveal">
@@ -31,13 +31,14 @@ const href = `/students/${slug}/`;
     color: var(--color-text);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
-    border-radius: 4px;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-rest);
     overflow: hidden;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
 
   .student-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-4px);
   }
 

@@ -1,0 +1,227 @@
+---
+import Button from '../ui/Button.astro';
+
+interface Props {
+  heading?: string;
+  description?: string;
+  action?: string;
+  successMessage?: string;
+  buttonText?: string;
+}
+
+const {
+  heading = "Stay in the Loop",
+  description = "Sign up for the CCA 2026 Celebrations mailing list to get event updates, RSVP reminders, and more.",
+  action = "#subscribe",
+  successMessage = "You're on the list! We'll be in touch soon.",
+  buttonText = "Subscribe",
+} = Astro.props;
+---
+
+<section class="signup-section reveal" aria-labelledby={heading ? "signup-heading" : undefined}>
+  <div class="container">
+    <div class="signup-card">
+      {heading && <h2 id="signup-heading" class="signup-heading">{heading}</h2>}
+      {description && <p class="signup-description">{description}</p>}
+
+      <form class="signup-form" action={action} method="POST" aria-label="Email signup">
+        {/* Honeypot field — hidden from real users */}
+        <div class="signup-hp" aria-hidden="true">
+          <label for="signup-website">Website</label>
+          <input type="text" id="signup-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="signup-fields">
+          <label for="signup-email" class="sr-only">Email address</label>
+          <input
+            type="email"
+            id="signup-email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            autocomplete="email"
+          />
+          <Button type="submit" variant="primary">{buttonText}</Button>
+        </div>
+        <p class="signup-privacy">We respect your privacy. Unsubscribe anytime.</p>
+      </form>
+
+      <div class="signup-success" role="status" aria-live="polite" hidden data-message={successMessage}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <p>{successMessage}</p>
+      </div>
+
+      <div class="signup-error" role="alert" aria-live="assertive" hidden>
+        <p>Something went wrong. Please try again.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector('.signup-form') as HTMLFormElement | null;
+  const successEl = document.querySelector('.signup-success') as HTMLElement | null;
+  const errorEl = document.querySelector('.signup-error') as HTMLElement | null;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const honeypot = form.querySelector<HTMLInputElement>('[name="website"]');
+    if (honeypot?.value) return; // bot detected
+
+    const emailInput = form.querySelector<HTMLInputElement>('[name="email"]');
+    if (!emailInput?.value) return;
+
+    const submitBtn = form.querySelector<HTMLButtonElement>('[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    try {
+      // Placeholder: simulate a network request.
+      // Replace this with a real fetch() call when a backend is ready:
+      // const res = await fetch(form.action, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email: emailInput.value }),
+      // });
+      // if (!res.ok) throw new Error('Request failed');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      form.hidden = true;
+      if (successEl) successEl.hidden = false;
+    } catch {
+      if (errorEl) errorEl.hidden = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = form.dataset.buttonText ?? 'Subscribe';
+      }
+    }
+  });
+</script>
+
+<style>
+  .signup-section {
+    padding-block: var(--space-16);
+  }
+
+  .signup-card {
+    position: relative;
+    max-width: 600px;
+    margin-inline: auto;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-8);
+    text-align: center;
+    box-shadow: var(--shadow-card-rest);
+  }
+
+  /* Prismatic gradient top border */
+  .signup-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-prismatic);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .signup-card::before {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  .signup-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .signup-description {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-6);
+    max-width: 50ch;
+    margin-inline: auto;
+  }
+
+  /* Honeypot — must be invisible but not display:none for bot compat */
+  .signup-hp {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .signup-fields {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: center;
+  }
+
+  .signup-fields input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .signup-fields input[type="email"]:focus {
+    border-color: var(--color-accent);
+  }
+
+  .signup-privacy {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    margin-top: var(--space-3);
+  }
+
+  .signup-success,
+  .signup-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .signup-success svg {
+    color: var(--color-accent);
+  }
+
+  .signup-success p,
+  .signup-error p {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .signup-error p {
+    color: #e53e3e;
+  }
+
+  /* Stack vertically on small screens */
+  @media (max-width: 480px) {
+    .signup-card {
+      padding: var(--space-6);
+    }
+
+    .signup-fields {
+      flex-direction: column;
+    }
+  }
+</style>

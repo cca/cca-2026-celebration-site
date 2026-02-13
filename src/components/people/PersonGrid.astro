@@ -1,0 +1,38 @@
+---
+import PersonCard from "./PersonCard.astro";
+
+interface Props {
+  people: Array<{
+    name: string;
+    slug: string;
+    role: string;
+    photo?: { src: string; alt: string };
+    title?: string;
+    bio?: string;
+    ccaConnection?: string;
+  }>;
+  heading?: string;
+}
+
+const { people, heading } = Astro.props;
+---
+
+<section class="person-grid-section">
+  {heading && <h2 class="section-heading">{heading}</h2>}
+  <div class="grid-cards">
+    {people.map((person) => (
+      <PersonCard person={person} />
+    ))}
+  </div>
+</section>
+
+<style>
+  .person-grid-section {
+    padding-block: var(--space-8);
+  }
+
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+</style>

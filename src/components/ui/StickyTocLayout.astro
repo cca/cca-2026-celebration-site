@@ -1,0 +1,50 @@
+---
+import TableOfContents from './TableOfContents.astro';
+
+interface Props {
+  items: Array<{ label: string; href: string }>;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="toc-layout">
+  <div class="toc-main">
+    <slot />
+  </div>
+  <aside class="toc-sidebar">
+    <TableOfContents items={items} />
+  </aside>
+</div>
+
+<style>
+  .toc-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .toc-sidebar {
+    order: -1; /* Mobile: appear above main content */
+  }
+
+  .toc-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .toc-layout {
+      flex-direction: row;
+      gap: var(--space-10);
+    }
+
+    .toc-sidebar {
+      order: 0; /* Desktop: natural DOM order = right side */
+      flex: 0 0 220px;
+      position: sticky;
+      top: calc(60px + var(--space-8));
+      align-self: flex-start;
+    }
+  }
+</style>

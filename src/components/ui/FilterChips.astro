@@ -1,0 +1,64 @@
+---
+interface Props {
+  items: Array<{ label: string; href: string; active?: boolean }>;
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="filter-chips" aria-label="Filter">
+  <ul role="list">
+    {items.map(item => (
+      <li>
+        <a
+          href={item.href}
+          class:list={["chip", { "chip--active": item.active }]}
+          aria-current={item.active ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .filter-chips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .chip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-muted);
+    background: transparent;
+    transition: color var(--duration-fast) var(--ease-out-expo),
+                background var(--duration-fast) var(--ease-out-expo),
+                border-color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .chip:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .chip--active {
+    color: #fff;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .chip--active:hover {
+    color: #fff;
+  }
+</style>

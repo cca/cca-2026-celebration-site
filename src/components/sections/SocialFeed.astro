@@ -1,0 +1,76 @@
+---
+interface Props {
+  heading?: string;
+}
+
+const { heading = "Follow Along" } = Astro.props;
+---
+
+<section class="social-feed reveal">
+  <h2 class="social-heading">{heading}</h2>
+  <a
+    href="https://www.instagram.com/california_college_of_the_arts/"
+    class="instagram-card"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <div class="instagram-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <circle cx="12" cy="12" r="5" />
+        <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+      </svg>
+    </div>
+    <span class="instagram-label">Follow us on Instagram</span>
+    <span class="instagram-handle">@california_college_of_the_arts</span>
+  </a>
+</section>
+
+<style>
+  .social-feed {
+    padding-block: var(--space-8);
+  }
+
+  .social-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .instagram-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-8);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .instagram-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+
+  .instagram-icon {
+    color: var(--color-accent);
+  }
+
+  .instagram-label {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .instagram-card:hover .instagram-label {
+    color: var(--color-accent);
+  }
+
+  .instagram-handle {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+</style>

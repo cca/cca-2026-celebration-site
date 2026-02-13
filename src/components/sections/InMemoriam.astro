@@ -1,0 +1,68 @@
+---
+interface Props {
+  entries: Array<{ name: string; role?: string; years?: string }>;
+}
+
+const { entries } = Astro.props;
+---
+
+<section class="in-memoriam reveal">
+  <h2 class="memoriam-heading">In Memoriam</h2>
+  <ul class="memoriam-list">
+    {entries.map((entry) => (
+      <li class="memoriam-entry">
+        <span class="entry-name">{entry.name}</span>
+        {entry.role && <span class="entry-role">{entry.role}</span>}
+        {entry.years && <span class="entry-years">{entry.years}</span>}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .in-memoriam {
+    padding-block: var(--space-8);
+  }
+
+  .memoriam-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .memoriam-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .memoriam-entry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .memoriam-entry:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .entry-name {
+    font-weight: 600;
+    font-size: var(--text-base);
+  }
+
+  .entry-role {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .entry-years {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+</style>

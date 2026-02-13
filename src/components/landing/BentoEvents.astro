@@ -1,0 +1,118 @@
+---
+/**
+ * BentoEvents — Asymmetric bento box grid for homepage events section.
+ * Mixes sized event cards with decorative shape cells.
+ */
+import type { CollectionEntry } from "astro:content";
+import BentoEventCard from "./BentoEventCard.astro";
+import DecorativeCell from "./DecorativeCell.astro";
+
+interface Props {
+  events: CollectionEntry<"events">[];
+}
+
+const { events } = Astro.props;
+
+// Map events by slug for explicit grid placement
+const bySlug = Object.fromEntries(events.map(e => [e.data.slug, e]));
+
+// Grid layout definition: slug → { size, gridArea }
+const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area: string }[] = [
+  { slug: "commencement-undergraduate", size: "large",   area: "ug-comm" },
+  { slug: "commencement-graduate",      size: "tall",    area: "g-comm"  },
+  { slug: "showcase",                   size: "compact", area: "show"    },
+  { slug: "thesis-undergraduate",       size: "wide",    area: "ug-thesis" },
+  { slug: "thesis-graduate",            size: "tall",    area: "g-thesis" },
+  { slug: "multicultural-celebration",  size: "compact", area: "multi"   },
+  { slug: "lavender-celebration",       size: "compact", area: "lav"     },
+];
+---
+
+<div class="bento-grid">
+  {layout.map(({ slug, size, area }) => {
+    const event = bySlug[slug];
+    return event ? (
+      <div class="bento-grid__cell" style={`grid-area: ${area}`}>
+        <BentoEventCard event={event} size={size} />
+      </div>
+    ) : null;
+  })}
+
+  {/* Decorative cells — visible on desktop only */}
+  <DecorativeCell shape="circle"  class="bento-grid__deco bento-grid__deco--circle" />
+  <DecorativeCell shape="blob"    class="bento-grid__deco bento-grid__deco--blob" />
+  <DecorativeCell shape="diamond" class="bento-grid__deco bento-grid__deco--diamond" />
+</div>
+
+<style>
+  /* ---- Mobile: single column stack ---- */
+  .bento-grid {
+    display: grid;
+    gap: var(--grid-gutter);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "ug-comm"
+      "g-comm"
+      "show"
+      "ug-thesis"
+      "g-thesis"
+      "multi"
+      "lav";
+  }
+
+  .bento-grid__cell {
+    min-width: 0;
+  }
+
+  /* Cards fill their grid cell */
+  .bento-grid__cell :global(.bento-card) {
+    height: 100%;
+  }
+
+  /* Decorative cells hidden below desktop */
+  .bento-grid__deco {
+    display: none;
+  }
+
+  /* ---- Tablet: 2 columns ---- */
+  @media (min-width: 768px) {
+    .bento-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "ug-comm  ug-comm"
+        "g-comm   show"
+        "ug-thesis ug-thesis"
+        "g-thesis multi"
+        "lav      lav";
+    }
+  }
+
+  /* ---- Desktop: 4 columns, explicit bento layout ---- */
+  @media (min-width: 1024px) {
+    .bento-grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(180px, auto);
+      grid-template-areas:
+        "ug-comm  ug-comm  deco-circle g-comm"
+        "ug-comm  ug-comm  show        g-comm"
+        "deco-blob ug-thesis ug-thesis  g-thesis"
+        "multi    lav      deco-diamond g-thesis";
+    }
+
+    .bento-grid__deco {
+      display: grid;
+    }
+
+    .bento-grid__deco--circle {
+      grid-area: deco-circle;
+    }
+
+    .bento-grid__deco--blob {
+      grid-area: deco-blob;
+    }
+
+    .bento-grid__deco--diamond {
+      grid-area: deco-diamond;
+    }
+  }
+</style>

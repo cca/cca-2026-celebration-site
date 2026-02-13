@@ -1,0 +1,68 @@
+---
+interface Props {
+  label: string;
+  url: string;
+  description?: string;
+}
+
+const { label, url, description } = Astro.props;
+---
+
+<a href={url} class="download-link reveal" download>
+  <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </svg>
+  <div class="download-content">
+    <span class="download-label">{label}</span>
+    {description && <span class="download-description">{description}</span>}
+  </div>
+</a>
+
+<style>
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .download-link:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .download-icon {
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  .download-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .download-label {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .download-link:hover .download-label {
+    color: var(--color-accent);
+  }
+
+  .download-description {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+</style>

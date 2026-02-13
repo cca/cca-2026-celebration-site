@@ -1,0 +1,94 @@
+---
+/**
+ * DecorativeCell — CSS-only decorative shapes for the bento grid.
+ * Purely visual, hidden from assistive technology and below 1024px.
+ */
+interface Props {
+  shape: 'circle' | 'blob' | 'diamond';
+  class?: string;
+}
+
+const { shape, class: className } = Astro.props;
+---
+
+<div class:list={['deco-cell', `deco-cell--${shape}`, className]} aria-hidden="true">
+  <div class="deco-cell__shape"></div>
+</div>
+
+<style>
+  .deco-cell {
+    display: none;
+    place-items: center;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    .deco-cell {
+      display: grid;
+    }
+  }
+
+  .deco-cell__shape {
+    width: 70%;
+    aspect-ratio: 1;
+  }
+
+  /* Circle */
+  .deco-cell--circle .deco-cell__shape {
+    border-radius: 50%;
+    background: var(--color-celebration-primary);
+    opacity: 0.15;
+  }
+
+  /* Blob */
+  .deco-cell--blob .deco-cell__shape {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    background: var(--gradient-prismatic);
+    opacity: 0.18;
+  }
+
+  /* Diamond */
+  .deco-cell--diamond .deco-cell__shape {
+    width: 55%;
+    border-radius: 4px;
+    background: var(--gradient-gold);
+    opacity: 0.2;
+    transform: rotate(45deg);
+  }
+
+  /* Subtle animations (motion-safe only) */
+  @media (prefers-reduced-motion: no-preference) {
+    .deco-cell--circle .deco-cell__shape {
+      animation: deco-breathe 4s ease-in-out infinite;
+    }
+
+    .deco-cell--blob .deco-cell__shape {
+      animation: deco-rotate 20s linear infinite;
+    }
+
+    .deco-cell--diamond .deco-cell__shape {
+      animation: deco-breathe 5s ease-in-out infinite;
+    }
+  }
+
+  @keyframes deco-breathe {
+    0%, 100% { transform: scale(1); opacity: 0.15; }
+    50% { transform: scale(1.08); opacity: 0.22; }
+  }
+
+  @keyframes deco-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Override breathe for diamond since it has a base rotation */
+  .deco-cell--diamond .deco-cell__shape {
+    animation-name: deco-diamond-breathe;
+  }
+
+  @keyframes deco-diamond-breathe {
+    0%, 100% { transform: rotate(45deg) scale(1); opacity: 0.2; }
+    50% { transform: rotate(45deg) scale(1.1); opacity: 0.28; }
+  }
+</style>

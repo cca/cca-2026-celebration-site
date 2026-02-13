@@ -1,0 +1,338 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import EventLayout from '../../layouts/EventLayout.astro';
+import EventHero from './EventHero.astro';
+import EventDetails from './EventDetails.astro';
+import CeremonySchedule from './CeremonySchedule.astro';
+import SpeakerFeature from './SpeakerFeature.astro';
+import WorkGrid from '../works/WorkGrid.astro';
+import Breadcrumb from '../ui/Breadcrumb.astro';
+import TableOfContents from '../ui/TableOfContents.astro';
+import VideoEmbed from '../ui/VideoEmbed.astro';
+import QuoteBlock from '../ui/QuoteBlock.astro';
+import DownloadLink from '../ui/DownloadLink.astro';
+import ContactBlock from '../ui/ContactBlock.astro';
+import PersonGrid from '../people/PersonGrid.astro';
+import PersonCard from '../people/PersonCard.astro';
+import StatisticsGrid from '../sections/StatisticsGrid.astro';
+import { getWorksByEvent, getPeopleByCeremony } from '../../lib/utils/collections';
+import { fullName } from '../../lib/utils/format';
+
+interface Props {
+  eventId: string;
+  breadcrumbLabel: string;
+}
+
+const { eventId, breadcrumbLabel } = Astro.props;
+
+// --- Data fetching ---
+const event = await getEntry('events', eventId);
+if (!event) throw new Error(`Event ${eventId} not found`);
+
+const people = await getPeopleByCeremony(eventId);
+const works = await getWorksByEvent(eventId);
+const students = await getCollection('students');
+const studentMap = new Map(students.map(s => [s.id, fullName(s)]));
+
+const commencementInfo = await getEntry('commencement-info', 'current');
+const recap = await getEntry('recap', 'current');
+
+// Resolve ceremony program refs
+const { ceremonyProgram, schedule, longDescription, videoUrl, videoCaption } = event.data;
+
+let studentSpeakerEntry = null;
+if (ceremonyProgram?.studentSpeaker?.student) {
+  studentSpeakerEntry = await getEntry('students', ceremonyProgram.studentSpeaker.student.id);
+}
+
+let distinguishedAlumniEntry = null;
+if (ceremonyProgram?.distinguishedAlumni) {
+  distinguishedAlumniEntry = await getEntry('people', ceremonyProgram.distinguishedAlumni.id);
+}
+
+// --- Build dynamic TOC ---
+const tocItems: Array<{ label: string; href: string }> = [];
+
+tocItems.push({ label: 'Venue & Location', href: '#details' });
+if (schedule && schedule.length > 0) tocItems.push({ label: 'Schedule', href: '#schedule' });
+if (commencementInfo?.data.forStudents) tocItems.push({ label: 'For Students', href: '#for-students' });
+if (commencementInfo?.data.forFamilies) tocItems.push({ label: 'For Families', href: '#for-families' });
+if (people.length > 0) tocItems.push({ label: 'Honorees', href: '#honorees' });
+if (ceremonyProgram?.studentSpeaker) tocItems.push({ label: 'Student Speaker', href: '#student-speaker' });
+if (distinguishedAlumniEntry) tocItems.push({ label: 'Distinguished Alumni', href: '#distinguished-alumni' });
+if (recap?.data.statistics) tocItems.push({ label: 'By the Numbers', href: '#statistics' });
+if (works.length > 0) tocItems.push({ label: 'Student Works', href: '#works' });
+if (videoUrl) tocItems.push({ label: 'Ceremony Video', href: '#video' });
+if (recap?.data.presidentQuote) tocItems.push({ label: "President's Message", href: '#president-message' });
+if (ceremonyProgram?.candidatesListUrl || recap?.data.downloadableAssets) tocItems.push({ label: 'Downloads', href: '#downloads' });
+if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#contact' });
+---
+
+<EventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Commencement', href: '/commencement/' },
+      { label: breadcrumbLabel },
+    ]} />
+  </div>
+
+  <EventHero event={event} />
+
+  <div class="container">
+    <div class="ceremony-layout">
+      <div class="ceremony-main">
+        {/* Details & Location */}
+        <section id="details">
+          <EventDetails event={event} />
+        </section>
+
+        {/* Ceremony Schedule */}
+        {schedule && schedule.length > 0 && (
+          <section id="schedule" class="ceremony-section reveal">
+            <h2 class="section-heading">Ceremony Schedule</h2>
+            <CeremonySchedule schedule={schedule} />
+          </section>
+        )}
+
+        {/* For Students / For Families summary cards */}
+        {commencementInfo?.data.forStudents && (
+          <section id="for-students" class="ceremony-section reveal">
+            <a href="/commencement/for-students/" class="info-summary-card">
+              <h2 class="section-heading">{commencementInfo.data.forStudents.heading}</h2>
+              <p>{commencementInfo.data.forStudents.summary}</p>
+              <span class="info-summary-link">Learn more &rarr;</span>
+            </a>
+          </section>
+        )}
+
+        {commencementInfo?.data.forFamilies && (
+          <section id="for-families" class="ceremony-section reveal">
+            <a href="/commencement/for-families/" class="info-summary-card">
+              <h2 class="section-heading">{commencementInfo.data.forFamilies.heading}</h2>
+              <p>{commencementInfo.data.forFamilies.summary}</p>
+              <span class="info-summary-link">Learn more &rarr;</span>
+            </a>
+          </section>
+        )}
+
+        {/* Honorees */}
+        {people.length > 0 && (
+          <section id="honorees">
+            <PersonGrid people={people.map(p => p.data)} heading="Honorees" />
+          </section>
+        )}
+
+        {/* Student Speaker */}
+        {ceremonyProgram?.studentSpeaker && (
+          <section id="student-speaker" class="ceremony-section reveal">
+            <h2 class="section-heading">Student Speaker</h2>
+            <SpeakerFeature
+              speaker={ceremonyProgram.studentSpeaker}
+              student={studentSpeakerEntry}
+            />
+          </section>
+        )}
+
+        {/* Distinguished Alumni */}
+        {distinguishedAlumniEntry && (
+          <section id="distinguished-alumni" class="ceremony-section reveal">
+            <h2 class="section-heading">Distinguished Alumni</h2>
+            <div class="alumni-card-wrapper">
+              <PersonCard person={distinguishedAlumniEntry.data} />
+            </div>
+          </section>
+        )}
+
+        {/* By the Numbers */}
+        {recap?.data.statistics && (
+          <section id="statistics" class="ceremony-section reveal">
+            <h2 class="section-heading">By the Numbers</h2>
+            <StatisticsGrid statistics={recap.data.statistics} />
+          </section>
+        )}
+
+        {/* Student Works */}
+        {works.length > 0 && (
+          <section id="works" class="ceremony-section reveal">
+            <h2 class="section-heading">Student Works</h2>
+            <WorkGrid works={works} studentMap={studentMap} />
+          </section>
+        )}
+
+        {/* Ceremony Video */}
+        {videoUrl && (
+          <section id="video" class="ceremony-section reveal">
+            <h2 class="section-heading">Ceremony Video</h2>
+            <VideoEmbed url={videoUrl} caption={videoCaption} />
+          </section>
+        )}
+
+        {/* President's Message */}
+        {recap?.data.presidentQuote && (
+          <section id="president-message" class="ceremony-section reveal">
+            <h2 class="section-heading">President's Message</h2>
+            <QuoteBlock
+              text={recap.data.presidentQuote.text}
+              attribution={recap.data.presidentQuote.attribution}
+            />
+          </section>
+        )}
+
+        {/* Compact footer: Downloads + Contact side-by-side */}
+        <div class="ceremony-footer">
+          {/* Downloads */}
+          {(ceremonyProgram?.candidatesListUrl || recap?.data.downloadableAssets) && (
+            <section id="downloads" class="ceremony-section reveal">
+              <h2 class="section-heading">Downloads</h2>
+              <div class="downloads-list">
+                {ceremonyProgram?.candidatesListUrl && (
+                  <DownloadLink
+                    label="List of Candidates"
+                    url={ceremonyProgram.candidatesListUrl}
+                    description="PDF — Graduating candidates for this ceremony"
+                  />
+                )}
+                {recap?.data.downloadableAssets?.map(asset => (
+                  <DownloadLink
+                    label={asset.label}
+                    url={asset.url}
+                    description={asset.description}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Contact */}
+          {commencementInfo?.data.contact && (
+            <section id="contact" class="ceremony-section">
+              <ContactBlock
+                email={commencementInfo.data.contact.email}
+                phone={commencementInfo.data.contact.phone}
+              />
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* Sticky sidebar TOC (desktop right) / inline TOC (mobile top) */}
+      <aside class="ceremony-sidebar">
+        <TableOfContents items={tocItems} />
+      </aside>
+    </div>
+  </div>
+</EventLayout>
+
+<style>
+  .ceremony-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .ceremony-sidebar {
+    order: -1; /* Mobile: appear above main content */
+  }
+
+  .ceremony-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .ceremony-layout {
+      flex-direction: row;
+      gap: var(--space-10);
+    }
+
+    .ceremony-sidebar {
+      order: 0; /* Desktop: natural DOM order = right side */
+      flex: 0 0 220px;
+      position: sticky;
+      top: calc(60px + var(--space-8));
+      align-self: flex-start;
+    }
+  }
+
+  .ceremony-section {
+    padding-block: var(--space-6);
+  }
+
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .alumni-card-wrapper {
+    max-width: 360px;
+  }
+
+  .downloads-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ceremony-footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .ceremony-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .info-summary-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-gold, var(--color-accent));
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-rest);
+    padding: var(--space-6);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .info-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  }
+
+  .info-summary-card p {
+    color: var(--color-muted);
+    font-size: var(--text-base);
+    margin-top: var(--space-2);
+    max-width: 60ch;
+  }
+
+  .info-summary-link {
+    display: inline-block;
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  /* Commencement gold accent on section borders */
+  :global([data-theme^="commencement"]) .section-heading {
+    position: relative;
+    display: inline-block;
+  }
+
+  :global([data-theme^="commencement"]) .section-heading::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--color-gold, var(--color-accent));
+    margin-top: var(--space-2);
+  }
+</style>

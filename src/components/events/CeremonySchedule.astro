@@ -1,0 +1,105 @@
+---
+interface Props {
+  schedule: Array<{ time: string; label: string }>;
+}
+
+const { schedule } = Astro.props;
+---
+
+<div class="ceremony-schedule reveal">
+  <ol class="timeline" role="list">
+    {schedule.map((item, i) => (
+      <li class="timeline-item">
+        <span class="timeline-time">{item.time}</span>
+        <span class="timeline-dot" aria-hidden="true" />
+        <span class="timeline-label">{item.label}</span>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .ceremony-schedule {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-rest);
+    padding: var(--space-6) var(--space-8);
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 6rem auto 1fr;
+    align-items: center;
+    gap: var(--space-4);
+    position: relative;
+    padding-block: var(--space-3);
+  }
+
+  /* Vertical line connecting dots */
+  .timeline-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(6rem + var(--space-4) + 4px);
+    top: calc(50% + 4px + var(--space-3));
+    bottom: calc(-50% + 4px + var(--space-3));
+    width: 2px;
+    background: var(--color-border);
+  }
+
+  .timeline-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-label {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    color: var(--color-text);
+  }
+
+  @media (max-width: 480px) {
+    .timeline-item {
+      grid-template-columns: 5rem auto 1fr;
+      gap: var(--space-3);
+    }
+
+    .timeline-item:not(:last-child)::after {
+      left: calc(5rem + var(--space-3) + 4px);
+    }
+
+    .timeline-time {
+      font-size: var(--text-xs);
+    }
+
+    .timeline-label {
+      font-size: var(--text-sm);
+    }
+
+    .ceremony-schedule {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+</style>

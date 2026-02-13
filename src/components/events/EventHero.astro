@@ -1,25 +1,68 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { formatDate, formatDateRange } from "../../lib/utils/format";
+import { generateIcsDataUri } from "../../lib/utils/calendar";
+import Button from "../ui/Button.astro";
 
 interface Props {
   event: CollectionEntry<"events">;
 }
 
 const { event } = Astro.props;
-const { title, date, endDate, time, location } = event.data;
+const { title, date, endDate, time, location, address, description, image, rsvpUrl, livestreamUrl } = event.data;
 const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
+const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, address, description });
 ---
 
-<section class="event-hero reveal">
+<section class:list={["event-hero", "reveal", { "has-image": !!image }]}>
   <div class="container">
-    <h1 class="hero-title stagger-1">{title}</h1>
-    <div class="hero-meta stagger-2">
-      <time class="hero-date">{dateDisplay}</time>
-      <span class="hero-separator" aria-hidden="true">&#9670;</span>
-      <span class="hero-time">{time}</span>
-      <span class="hero-separator" aria-hidden="true">&#9670;</span>
-      <span class="hero-location">{location}</span>
+    <div class="hero-layout">
+      <div class="hero-content">
+        <h1 class="hero-title stagger-1">{title}</h1>
+        <div class="hero-meta stagger-2">
+          <time class="hero-date">{dateDisplay}</time>
+          <span class="hero-separator" aria-hidden="true">&#9670;</span>
+          <span class="hero-time">{time}</span>
+          <span class="hero-separator" aria-hidden="true">&#9670;</span>
+          <span class="hero-location">{location}</span>
+        </div>
+        {description && (
+          <p class="hero-description stagger-3">{description}</p>
+        )}
+        <div class="hero-actions stagger-4">
+          {rsvpUrl && (
+            <Button href={rsvpUrl} variant="primary" target="_blank" rel="noopener noreferrer">
+              RSVP
+            </Button>
+          )}
+          {livestreamUrl && (
+            <Button href={livestreamUrl} variant="outline" target="_blank" rel="noopener noreferrer">
+              Watch Livestream
+            </Button>
+          )}
+          <a href={calendarUrl} download={`${event.data.slug}.ics`} class="calendar-link">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="12" height="12" rx="1" />
+              <line x1="2" y1="7" x2="14" y2="7" />
+              <line x1="5" y1="1" x2="5" y2="4" />
+              <line x1="11" y1="1" x2="11" y2="4" />
+            </svg>
+            Add to Calendar
+          </a>
+          <button class="share-link" data-share-title={title} data-share-url={Astro.url.pathname}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1" />
+              <path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1" />
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+      {image && (
+        <div class="hero-image stagger-3">
+          <img src={image.src} alt={image.alt} loading="eager" />
+        </div>
+      )}
     </div>
   </div>
 </section>
@@ -39,7 +82,7 @@ const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0, 191, 179, 0.06), transparent 70%);
+    background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 70%);
     pointer-events: none;
   }
 
@@ -88,4 +131,122 @@ const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
     opacity: 0.5;
     font-size: 0.6em;
   }
+
+  /* Hero layout */
+  .hero-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-description {
+    max-width: 60ch;
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin-top: var(--space-6);
+    font-size: var(--text-base);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .calendar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .calendar-link:hover {
+    color: var(--color-accent);
+  }
+
+  .share-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-muted);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s ease;
+  }
+
+  .share-link:hover {
+    color: var(--color-accent);
+  }
+
+  .hero-image {
+    margin-top: var(--space-10);
+  }
+
+  .hero-image img {
+    width: 100%;
+    border-radius: var(--radius-card);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 0.25);
+  }
+
+  /* Split layout with image at desktop */
+  @media (min-width: 1024px) {
+    .has-image .hero-layout {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-10);
+    }
+
+    .has-image .hero-content {
+      flex: 0 0 58%;
+    }
+
+    .has-image .hero-image {
+      flex: 0 0 38%;
+      margin-top: 0;
+    }
+  }
+
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.share-link').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const title = btn.dataset.shareTitle ?? '';
+      const url = new URL(btn.dataset.shareUrl ?? '', window.location.origin).href;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+          return;
+        } catch {
+          // User cancelled or share failed — fall through to clipboard
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = '';
+          // Reconstruct with icon
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1" /><path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1" /></svg> Share`;
+        }, 2000);
+      } catch {
+        // Clipboard not available
+      }
+    });
+  });
+</script>

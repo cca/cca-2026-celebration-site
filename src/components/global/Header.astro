@@ -1,43 +1,62 @@
 ---
+interface Props {
+  minimal?: boolean;
+}
+
+const { minimal = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 
-const commencementItems = [
+const commencementItems: Array<{ label: string; href?: string }> = [
   { label: "Undergraduate Ceremony", href: "/commencement/undergraduate/" },
   { label: "Graduate Ceremony", href: "/commencement/graduate/" },
+  { label: "Multicultural Celebration", href: "/commencement/multicultural-celebration/" },
+  { label: "Lavender Celebration", href: "/commencement/lavender-celebration/" },
+  { label: "separator" },
+  { label: "For Students", href: "/commencement/for-students/" },
+  { label: "For Families & Friends", href: "/commencement/for-families/" },
+  { label: "separator" },
+  { label: "Recap", href: "/commencement/recap/" },
 ];
 
-const thesisItems = [
+const thesisEventsItems: Array<{ label: string; href?: string }> = [
+  { label: "End of Year Showcase", href: "/thesis/showcase/" },
+  { label: "separator" },
   { label: "BFA Fine Arts", href: "/thesis/undergraduate/" },
   { label: "MFA Fine Arts", href: "/thesis/graduate/" },
+];
+
+const showcaseItems: Array<{ label: string; href?: string }> = [
+  { label: "Graduating Students", href: "/showcase/students/" },
+  { label: "Thesis Work", href: "/showcase/works/" },
 ];
 
 const isCommencementActive = currentPath.startsWith("/commencement/");
 const isShowcaseActive = currentPath.startsWith("/showcase/");
 const isThesisActive = currentPath.startsWith("/thesis/");
+const isSubscribeActive = currentPath.startsWith("/subscribe");
 
-// Mobile menu still uses grouped event data
+// Mobile menu still uses grouped event data — filter out separators
+const mobileCommencementItems = commencementItems.filter(item => item.label !== "separator") as Array<{ label: string; href: string }>;
 const eventGroups = [
   {
     label: "Commencement",
     href: "/commencement/",
-    items: commencementItems,
+    items: mobileCommencementItems,
   },
   {
-    label: "Showcase",
-    href: "/showcase/",
+    label: "Thesis Events",
+    href: "/thesis/showcase/",
     items: [
-      { label: "End of Year Showcase", href: "/showcase/" },
+      { label: "End of Year Showcase", href: "/thesis/showcase/" },
+      { label: "BFA Fine Arts", href: "/thesis/undergraduate/" },
+      { label: "MFA Fine Arts", href: "/thesis/graduate/" },
     ],
-  },
-  {
-    label: "Thesis Exhibitions",
-    href: "/thesis/",
-    items: thesisItems,
   },
 ];
 ---
 
-<header class="site-header">
+<header class:list={["site-header", { "site-header--minimal": minimal }]}>
+  <div class="scroll-progress" aria-hidden="true"></div>
   <div class="header-inner container">
     <a href="/" class="site-logo">
       <span class="logo-cca">CCA</span>
@@ -45,100 +64,139 @@ const eventGroups = [
     </a>
 
     {/* ── Desktop nav ── */}
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <ul class="nav-list" role="list">
-        <li class="has-dropdown">
-          <button
-            class="nav-link dropdown-trigger"
-            aria-expanded="false"
-            aria-haspopup="true"
-            data-active={isCommencementActive ? "true" : undefined}
-          >
-            Commencement
-            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-              <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="nav-dropdown" role="menu">
-            <ul role="list">
-              {commencementItems.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    role="menuitem"
-                    aria-current={currentPath === item.href ? "page" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </li>
+    {!minimal && (
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <ul class="nav-list" role="list">
+          <li class="has-dropdown">
+            <a
+              href="/commencement/"
+              class="nav-link dropdown-trigger"
+              aria-expanded="false"
+              aria-haspopup="true"
+              data-active={isCommencementActive ? "true" : undefined}
+              aria-current={currentPath === "/commencement/" ? "page" : undefined}
+            >
+              Commencement
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown" role="menu">
+              <ul role="list">
+                {commencementItems.map((item) =>
+                  item.label === "separator" ? (
+                    <li class="dropdown-separator" role="separator"><hr /></li>
+                  ) : (
+                    <li>
+                      <a
+                        href={item.href}
+                        role="menuitem"
+                        aria-current={currentPath === item.href ? "page" : undefined}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          </li>
 
-        <li>
-          <a
-            href="/showcase/"
-            class="nav-link"
-            data-active={isShowcaseActive ? "true" : undefined}
-            aria-current={currentPath === "/showcase/" ? "page" : undefined}
-          >
-            Showcase
-          </a>
-        </li>
+          <li class="has-dropdown">
+            <a
+              href="/thesis/showcase/"
+              class="nav-link dropdown-trigger"
+              aria-expanded="false"
+              aria-haspopup="true"
+              data-active={isThesisActive ? "true" : undefined}
+            >
+              Thesis Events
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown" role="menu">
+              <ul role="list">
+                {thesisEventsItems.map((item) =>
+                  item.label === "separator" ? (
+                    <li class="dropdown-separator" role="separator"><hr /></li>
+                  ) : (
+                    <li>
+                      <a
+                        href={item.href}
+                        role="menuitem"
+                        aria-current={currentPath === item.href ? "page" : undefined}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          </li>
 
-        <li class="has-dropdown">
-          <button
-            class="nav-link dropdown-trigger"
-            aria-expanded="false"
-            aria-haspopup="true"
-            data-active={isThesisActive ? "true" : undefined}
-          >
-            Thesis Exhibitions
-            <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-              <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <div class="nav-dropdown" role="menu">
-            <ul role="list">
-              {thesisItems.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    role="menuitem"
-                    aria-current={currentPath === item.href ? "page" : undefined}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </nav>
+          <li class="has-dropdown">
+            <a
+              href="/showcase/"
+              class="nav-link dropdown-trigger"
+              aria-expanded="false"
+              aria-haspopup="true"
+              data-active={isShowcaseActive ? "true" : undefined}
+              aria-current={currentPath === "/showcase/" ? "page" : undefined}
+            >
+              Student Showcase
+              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <div class="nav-dropdown" role="menu">
+              <ul role="list">
+                {showcaseItems.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      role="menuitem"
+                      aria-current={currentPath === item.href ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
 
-    {/* ── Hamburger ── */}
-    <button
-      class="hamburger"
-      aria-label="Open menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <span class="hamburger-bar"></span>
-      <span class="hamburger-bar"></span>
-      <span class="hamburger-bar"></span>
-    </button>
+        </ul>
+      </nav>
+    )}
+
+    <div class="header-actions">
+      {!minimal && <a href="/subscribe/" class="nav-cta">Subscribe</a>}
+
+      {/* ── Hamburger ── */}
+      <button
+        class="hamburger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
   </div>
 
   {/* ── Mobile drawer ── */}
-  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" hidden>
+  <div class="mobile-backdrop" aria-hidden="true"></div>
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true" inert>
     <ul class="mobile-nav-list" role="list">
       <li class="mobile-section">
         <span class="mobile-section-label">Events</span>
         {eventGroups.map((group, gi) => (
           <div class="mobile-group">
-            <span class="mobile-group-label">{group.label}</span>
+            <a href={group.href} class="mobile-group-label" aria-current={currentPath === group.href ? "page" : undefined}>{group.label}</a>
             <ul role="list">
               {group.items.map((item, ii) => (
                 <li class="mobile-nav-item" style={`--stagger-delay: ${(gi * 2 + ii + 1) * 60}ms`}>
@@ -154,13 +212,26 @@ const eventGroups = [
           </div>
         ))}
       </li>
-      <li class="mobile-nav-item" style="--stagger-delay: 420ms">
+      <li class="mobile-section" style="--stagger-delay: 420ms">
+        <div class="mobile-group">
+          <a href="/showcase/" class="mobile-group-label" aria-current={currentPath === "/showcase/" ? "page" : undefined}>Student Showcase</a>
+          <ul role="list">
+            <li class="mobile-nav-item" style="--stagger-delay: 480ms">
+              <a href="/showcase/students/" aria-current={currentPath === "/showcase/students/" ? "page" : undefined}>Graduating Students</a>
+            </li>
+            <li class="mobile-nav-item" style="--stagger-delay: 540ms">
+              <a href="/showcase/works/" aria-current={currentPath === "/showcase/works/" ? "page" : undefined}>Thesis Work</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="mobile-nav-item" style="--stagger-delay: 600ms">
         <a
-          href="/students/"
+          href="/subscribe/"
           class="mobile-top-link"
-          aria-current={currentPath.startsWith("/students/") ? "page" : undefined}
+          aria-current={isSubscribeActive ? "page" : undefined}
         >
-          Students
+          Subscribe
         </a>
       </li>
     </ul>
@@ -168,90 +239,132 @@ const eventGroups = [
 </header>
 
 <script>
-  // ── Hamburger toggle ──
-  const hamburger = document.querySelector(".hamburger") as HTMLButtonElement;
-  const mobileMenu = document.getElementById("mobile-menu") as HTMLElement;
+  function initHeaderNav() {
+    // ── Hamburger toggle ──
+    const hamburger = document.querySelector(".hamburger") as HTMLButtonElement;
+    const mobileMenu = document.getElementById("mobile-menu") as HTMLElement;
+    const backdrop = document.querySelector(".mobile-backdrop") as HTMLElement;
 
-  hamburger?.addEventListener("click", () => {
-    const isOpen = hamburger.getAttribute("aria-expanded") === "true";
-    hamburger.setAttribute("aria-expanded", String(!isOpen));
-    hamburger.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
-    mobileMenu.hidden = isOpen;
-    document.body.style.overflow = isOpen ? "" : "hidden";
-  });
+    if (!hamburger || !mobileMenu) return;
 
-  // ── Desktop dropdowns ──
-  const dropdownContainers = document.querySelectorAll<HTMLElement>(".has-dropdown");
+    // Reset mobile menu state after navigation
+    mobileMenu.classList.remove("is-open");
+    backdrop?.classList.remove("is-open");
+    hamburger.setAttribute("aria-expanded", "false");
+    hamburger.setAttribute("aria-label", "Open menu");
+    mobileMenu.setAttribute("aria-hidden", "true");
+    mobileMenu.setAttribute("inert", "");
+    document.body.style.overflow = "";
 
-  dropdownContainers.forEach((container) => {
-    const trigger = container.querySelector(".dropdown-trigger") as HTMLButtonElement;
-    const dropdown = container.querySelector(".nav-dropdown") as HTMLElement;
-    let closeTimeout: ReturnType<typeof setTimeout>;
+    function openDrawer() {
+      mobileMenu.classList.add("is-open");
+      backdrop.classList.add("is-open");
+      mobileMenu.removeAttribute("inert");
+      mobileMenu.setAttribute("aria-hidden", "false");
+      hamburger.setAttribute("aria-expanded", "true");
+      hamburger.setAttribute("aria-label", "Close menu");
+      document.body.style.overflow = "hidden";
+      const firstLink = mobileMenu.querySelector("a");
+      firstLink?.focus({ preventScroll: true });
+    }
 
-    function openDropdown() {
-      clearTimeout(closeTimeout);
-      // Close other open dropdowns first
-      dropdownContainers.forEach((other) => {
-        if (other !== container) {
-          other.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+    function closeDrawer() {
+      mobileMenu.classList.remove("is-open");
+      backdrop.classList.remove("is-open");
+      hamburger.setAttribute("aria-expanded", "false");
+      hamburger.setAttribute("aria-label", "Open menu");
+      document.body.style.overflow = "";
+
+      function onTransitionEnd(e: TransitionEvent) {
+        if (e.propertyName !== "transform") return;
+        mobileMenu.removeEventListener("transitionend", onTransitionEnd);
+        if (!mobileMenu.classList.contains("is-open")) {
+          mobileMenu.setAttribute("aria-hidden", "true");
+          mobileMenu.setAttribute("inert", "");
+        }
+      }
+      mobileMenu.addEventListener("transitionend", onTransitionEnd);
+
+      hamburger.focus();
+    }
+
+    hamburger.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.contains("is-open");
+      isOpen ? closeDrawer() : openDrawer();
+    });
+
+    backdrop?.addEventListener("click", closeDrawer);
+
+    // ── Desktop dropdowns ──
+    const dropdownContainers = document.querySelectorAll<HTMLElement>(".has-dropdown");
+
+    dropdownContainers.forEach((container) => {
+      const trigger = container.querySelector(".dropdown-trigger") as HTMLAnchorElement;
+      const dropdown = container.querySelector(".nav-dropdown") as HTMLElement;
+      let closeTimeout: ReturnType<typeof setTimeout>;
+
+      function openDropdown() {
+        clearTimeout(closeTimeout);
+        dropdownContainers.forEach((other) => {
+          if (other !== container) {
+            other.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+          }
+        });
+        trigger?.setAttribute("aria-expanded", "true");
+      }
+
+      function closeDropdown() {
+        closeTimeout = setTimeout(() => {
+          trigger?.setAttribute("aria-expanded", "false");
+        }, 150);
+      }
+
+      trigger?.addEventListener("click", (e) => {
+        const isOpen = trigger.getAttribute("aria-expanded") === "true";
+        if (!isOpen) {
+          e.preventDefault();
+          openDropdown();
         }
       });
-      trigger?.setAttribute("aria-expanded", "true");
-    }
 
-    function closeDropdown() {
-      closeTimeout = setTimeout(() => {
-        trigger?.setAttribute("aria-expanded", "false");
-      }, 150);
-    }
+      container.addEventListener("mouseenter", openDropdown);
+      container.addEventListener("mouseleave", closeDropdown);
 
-    trigger?.addEventListener("click", () => {
-      const isOpen = trigger.getAttribute("aria-expanded") === "true";
-      if (isOpen) {
-        trigger.setAttribute("aria-expanded", "false");
-      } else {
-        openDropdown();
-      }
-    });
-
-    container.addEventListener("mouseenter", openDropdown);
-    container.addEventListener("mouseleave", closeDropdown);
-
-    dropdown?.addEventListener("focusin", openDropdown);
-    dropdown?.addEventListener("focusout", closeDropdown);
-    trigger?.addEventListener("focusout", (e) => {
-      if (!container.contains((e as FocusEvent).relatedTarget as Node)) {
-        closeDropdown();
-      }
-    });
-  });
-
-  // Close all dropdowns on Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      dropdownContainers.forEach((container) => {
-        container.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+      dropdown?.addEventListener("focusin", openDropdown);
+      dropdown?.addEventListener("focusout", closeDropdown);
+      trigger?.addEventListener("focusout", (e) => {
+        if (!container.contains((e as FocusEvent).relatedTarget as Node)) {
+          closeDropdown();
+        }
       });
-      if (!mobileMenu.hidden) {
-        hamburger.setAttribute("aria-expanded", "false");
-        hamburger.setAttribute("aria-label", "Open menu");
-        mobileMenu.hidden = true;
-        document.body.style.overflow = "";
+    });
+
+    // Close all dropdowns on Escape
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdownContainers.forEach((container) => {
+          container.querySelector(".dropdown-trigger")?.setAttribute("aria-expanded", "false");
+        });
+        if (mobileMenu.classList.contains("is-open")) {
+          closeDrawer();
+        }
+      }
+    });
+
+    // ── Scroll-based header styling ──
+    const header = document.querySelector(".site-header") as HTMLElement;
+    function onScroll() {
+      if (window.scrollY > 10) {
+        header?.classList.add("scrolled");
+      } else {
+        header?.classList.remove("scrolled");
       }
     }
-  });
-
-  // ── Scroll-based header styling ──
-  const header = document.querySelector(".site-header") as HTMLElement;
-  function onScroll() {
-    if (window.scrollY > 10) {
-      header?.classList.add("scrolled");
-    } else {
-      header?.classList.remove("scrolled");
-    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+
+  document.addEventListener('astro:page-load', initHeaderNav);
 </script>
 
 <style>
@@ -262,11 +375,14 @@ const eventGroups = [
     z-index: 100;
     background: transparent;
     border-bottom: 1px solid transparent;
-    transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    overflow-x: clip;
+    transition: background var(--duration-base) var(--ease-out-expo),
+                border-color var(--duration-base) var(--ease-out-expo),
+                backdrop-filter var(--duration-base) var(--ease-out-expo);
   }
 
   .site-header.scrolled {
-    background: rgba(253, 250, 245, 0.85);
+    background: var(--color-header-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom-color: var(--color-border);
@@ -314,7 +430,7 @@ const eventGroups = [
     align-items: center;
     gap: 0.35em;
     padding: 0;
-    transition: color 0.2s ease;
+    transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .nav-link:hover,
@@ -327,7 +443,7 @@ const eventGroups = [
     display: inline;
     width: 10px;
     height: 6px;
-    transition: transform 0.2s ease;
+    transition: transform var(--duration-fast) var(--ease-out-expo);
   }
 
   .dropdown-trigger[aria-expanded="true"] .chevron {
@@ -348,6 +464,36 @@ const eventGroups = [
     margin: 0;
   }
 
+  /* ── Header actions (RSVP + hamburger) ── */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  /* ── RSVP CTA button ── */
+  .nav-cta {
+    display: inline-block;
+    padding: var(--space-2) var(--space-5);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-decoration: none;
+    color: #fff;
+    background: var(--color-accent);
+    border-radius: var(--radius-card);
+    transition: background var(--duration-fast) var(--ease-out-expo),
+                transform var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .nav-cta:hover {
+    background: color-mix(in srgb, var(--color-accent) 85%, #000);
+  }
+
+  .nav-cta:active {
+    transform: scale(0.97);
+  }
+
   /* ── Nav dropdown ── */
   .has-dropdown {
     position: relative;
@@ -359,7 +505,7 @@ const eventGroups = [
     left: 0;
     z-index: 200;
     min-width: 200px;
-    background: rgba(253, 250, 245, 0.92);
+    background: var(--color-dropdown-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--color-border);
@@ -372,7 +518,9 @@ const eventGroups = [
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    transition: opacity var(--duration-fast) var(--ease-out-expo),
+                transform var(--duration-fast) var(--ease-out-expo),
+                visibility var(--duration-fast);
   }
 
   .dropdown-trigger[aria-expanded="true"] + .nav-dropdown {
@@ -396,12 +544,18 @@ const eventGroups = [
     white-space: nowrap;
     color: var(--color-muted);
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .nav-dropdown ul a:hover,
   .nav-dropdown ul a[aria-current="page"] {
     color: var(--color-accent);
+  }
+
+  .dropdown-separator hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-2) 0;
   }
 
   /* ── Hamburger ── */
@@ -424,7 +578,8 @@ const eventGroups = [
     height: 2px;
     background: var(--color-text);
     border-radius: 1px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform var(--duration-base) var(--ease-in-out-quint),
+                opacity var(--duration-base) var(--ease-in-out-quint);
     transform-origin: center;
   }
 
@@ -439,15 +594,47 @@ const eventGroups = [
     transform: translateY(-7px) rotate(-45deg);
   }
 
+  /* ── Mobile backdrop overlay ── */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--duration-slow) var(--ease-out-expo),
+                visibility var(--duration-slow);
+  }
+
+  .mobile-backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
   /* ── Mobile drawer ── */
   .mobile-menu {
-    background: rgba(253, 250, 245, 0.95);
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 151;
+    height: 100dvh;
+    width: min(85vw, 400px);
+    background: var(--color-mobile-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
     padding: var(--space-6) var(--grid-gutter);
-    max-height: calc(100dvh - 60px);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform var(--duration-slow) var(--ease-in-out-quint),
+                visibility var(--duration-slow);
+  }
+
+  .mobile-menu.is-open {
+    transform: translateX(0);
+    visibility: visible;
   }
 
   .mobile-nav-list {
@@ -463,11 +650,12 @@ const eventGroups = [
   .mobile-nav-item {
     opacity: 0;
     transform: translateY(12px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity var(--duration-base) var(--ease-out-expo),
+                transform var(--duration-base) var(--ease-out-expo);
     transition-delay: var(--stagger-delay, 0ms);
   }
 
-  .mobile-menu:not([hidden]) .mobile-nav-item {
+  .mobile-menu.is-open .mobile-nav-item {
     opacity: 1;
     transform: translateY(0);
   }
@@ -492,7 +680,14 @@ const eventGroups = [
     font-weight: 600;
     font-size: var(--text-sm);
     color: var(--color-text);
+    text-decoration: none;
     margin-bottom: var(--space-2);
+    transition: color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .mobile-group-label:hover,
+  .mobile-group-label[aria-current="page"] {
+    color: var(--color-accent);
   }
 
   .mobile-group ul {
@@ -510,7 +705,7 @@ const eventGroups = [
     line-height: 1.2;
     color: var(--color-muted);
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .mobile-group ul a:hover,
@@ -527,7 +722,7 @@ const eventGroups = [
     text-decoration: none;
     padding-bottom: var(--space-2);
     border-bottom: 1px solid var(--color-border);
-    transition: color 0.15s ease;
+    transition: color var(--duration-fast) var(--ease-out-expo);
   }
 
   .mobile-top-link:hover,
@@ -535,10 +730,52 @@ const eventGroups = [
     color: var(--color-accent);
   }
 
-  /* ── Responsive: show desktop nav at 768px+, hamburger stays visible ── */
+  /* ── Reduced motion: collapse drawer transitions ── */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu,
+    .mobile-backdrop,
+    .mobile-nav-item {
+      transition: none;
+    }
+  }
+
+  /* ── Responsive: show desktop nav at 768px+, hide hamburger ── */
   @media (min-width: 768px) {
     .desktop-nav {
       display: block;
+    }
+
+    .hamburger {
+      display: none;
+    }
+
+    /* Minimal header: keep hamburger visible on desktop */
+    .site-header--minimal .hamburger {
+      display: flex;
+    }
+  }
+
+  /* ── Scroll progress line ── */
+  .scroll-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--theme-gradient);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .scroll-progress {
+      animation: scroll-progress-grow linear both;
+      animation-timeline: scroll();
+    }
+
+    @keyframes scroll-progress-grow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
     }
   }
 </style>

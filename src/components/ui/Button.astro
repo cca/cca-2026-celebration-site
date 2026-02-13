@@ -23,57 +23,40 @@ const Tag = href ? "a" : "button";
     text-decoration: none;
     text-align: center;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-card);
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform var(--duration-fast) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo),
+                background var(--duration-base) var(--ease-out-expo);
   }
 
   .btn:active {
     transform: scale(0.97);
   }
 
-  /* ── Primary: prismatic gradient ── */
+  /* ── Primary: solid accent ── */
   .btn-primary {
-    background: var(--gradient-prismatic);
-    background-size: 200% auto;
+    background: var(--color-accent);
     color: #fff;
   }
 
   .btn-primary:hover {
-    background-position: right center;
-    box-shadow: 0 4px 16px rgba(0, 191, 179, 0.25);
+    background: color-mix(in srgb, var(--color-accent) 85%, #FFC845);
+    box-shadow: 0 4px 24px rgba(var(--color-accent-rgb), 0.3);
   }
 
-  /* ── Secondary: transparent with gradient border ── */
+  /* ── Secondary: accent border ── */
   .btn-secondary {
     background: transparent;
     color: var(--color-accent);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-  }
-
-  .btn-secondary::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    z-index: -1;
-    background: var(--gradient-prismatic);
-    border-radius: inherit;
-  }
-
-  .btn-secondary::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--color-bg);
-    border-radius: 2px;
+    border: 2px solid var(--color-accent);
   }
 
   .btn-secondary:hover {
-    color: var(--color-celebration-secondary);
+    color: color-mix(in srgb, var(--color-accent) 80%, #000);
+    border-color: color-mix(in srgb, var(--color-accent) 80%, #000);
   }
 
   /* ── Outline: solid accent border, fill on hover ── */
@@ -90,7 +73,7 @@ const Tag = href ? "a" : "button";
     background: var(--color-accent);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.3s ease;
+    transition: transform var(--duration-base) var(--ease-out-expo);
     z-index: -1;
   }
 
