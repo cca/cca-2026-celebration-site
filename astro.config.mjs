@@ -4,12 +4,7 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  redirects: {
-    "/students/": "/showcase/students/",
-    "/students/[...slug]": "/showcase/students/[...slug]",
-    "/works/": "/showcase/works/",
-    "/works/[...slug]": "/showcase/works/[...slug]",
-  },
+  redirects: {},
   build: {
     format: "directory",
   },
