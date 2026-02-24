@@ -1,7 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ConfettiCanvas from '../../components/effects/ConfettiCanvas.astro';
 import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import QuoteBlock from '../../components/ui/QuoteBlock.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
@@ -29,7 +28,6 @@ const isPostEvent = new Date() > latestDate;
 <BaseLayout title="Commencement" themeKey="commencement">
   {/* ── Hero ── */}
   <section class="comm-hero" data-cursor-scope>
-    <ConfettiCanvas />
     <div class="comm-hero__seal" aria-hidden="true"></div>
     <div class="comm-hero__inner">
       <div class="comm-hero__content">
@@ -178,7 +176,6 @@ const isPostEvent = new Date() > latestDate;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: var(--color-bg);
   }
 
   .comm-hero__inner {

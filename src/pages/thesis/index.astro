@@ -1,7 +1,6 @@
 ---
 import { getEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ConfettiCanvas from '../../components/effects/ConfettiCanvas.astro';
 import WorkGrid from '../../components/works/WorkGrid.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import BentoEvents from '../../components/landing/BentoEvents.astro';
@@ -27,7 +26,6 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">
   {/* ── Hero ── */}
   <section class="showcase-hero" data-cursor-scope>
-    <ConfettiCanvas />
     <div class="showcase-hero__seal" aria-hidden="true"></div>
     <div class="showcase-hero__collage" aria-hidden="true">
       <img
@@ -207,7 +205,6 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: var(--color-bg);
   }
 
   .showcase-hero__content {
