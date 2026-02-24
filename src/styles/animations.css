@@ -213,7 +213,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .shimmer-text {
-    animation: shimmer 3s ease-in-out infinite;
+    animation: shimmer 6s ease-in-out infinite;
   }
 
   .prismatic-border::before {

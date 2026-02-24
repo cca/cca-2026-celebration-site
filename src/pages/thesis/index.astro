@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ConfettiCanvas from '../../components/effects/ConfettiCanvas.astro';
 import WorkGrid from '../../components/works/WorkGrid.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
+import BentoEvents from '../../components/landing/BentoEvents.astro';
 import Button from '../../components/ui/Button.astro';
 import { getWorksByEvent } from '../../lib/utils/collections';
 import { fullName, formatDateRange } from '../../lib/utils/format';
@@ -15,7 +16,7 @@ const works = await getWorksByEvent('showcase');
 const students = await getCollection('students');
 const studentMap = new Map(students.map(s => [s.id, fullName(s)]));
 
-const events = await getCollection('events');
+const events = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
 const undergradEvent = events.find(e => e.id === 'thesis-undergraduate');
 const gradEvent = events.find(e => e.id === 'thesis-graduate');
 
@@ -177,6 +178,18 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
       </div>
     </section>
   )}
+
+  {/* ── All Celebration Events ── */}
+  <section class="all-events-section">
+    <div class="container">
+      <span class="section-label reveal">Class of 2026</span>
+      <h2 class="section-heading reveal">All Celebration Events</h2>
+      <p class="all-events-desc reveal">
+        From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
+      </p>
+      <BentoEvents events={events} />
+    </div>
+  </section>
 
   {/* ── Email Signup ── */}
   <EmailSignup />
@@ -581,5 +594,19 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
 
   .exhibition-card:hover .exhibition-card__cta {
     letter-spacing: 0.05em;
+  }
+
+  /* ── All Events ── */
+  .all-events-section {
+    padding-block: var(--space-20);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .all-events-desc {
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+    max-width: 60ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-10);
   }
 </style>

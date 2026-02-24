@@ -7,7 +7,10 @@ const year = new Date().getFullYear();
   <div class="footer-content container">
     <div class="footer-main">
       <div class="footer-brand">
-        <CcaSeal size="44px" color="var(--color-accent)" opacity={0.7} />
+        <div class="footer-brand__lockup">
+          <CcaSeal size="44px" color="var(--color-accent)" opacity={0.7} />
+          <span class="footer-brand__year shimmer-text">2026</span>
+        </div>
         <p class="footer-tagline">
           Celebrate the achievements of <a href="/">CCA's Class of 2026</a> at commencement ceremonies, exhibitions, and showcases.
         </p>
@@ -106,8 +109,19 @@ const year = new Date().getFullYear();
     max-width: 320px;
   }
 
-  .footer-brand :global(.cca-seal) {
+  .footer-brand__lockup {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     margin-bottom: var(--space-3);
+  }
+
+  .footer-brand__year {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
   }
 
   .footer-tagline {
