@@ -96,7 +96,7 @@ const events = defineCollection({
     title: z.string(),
     slug: z.string(),
     shortTitle: z.string(),
-    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration"]),
+    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase"]),
     degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
     themeKey: z.string(),
     date: z.string(),
@@ -106,6 +106,7 @@ const events = defineCollection({
     address: z.string(),
     description: z.string(),
     longDescription: z.string().optional(),
+    externalUrl: z.string().optional(),
     rsvpUrl: z.string().optional(),
     livestreamUrl: z.string().optional(),
     image: z

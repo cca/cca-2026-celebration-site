@@ -1,0 +1,19 @@
+{
+  "title": "Animation Senior Showcase at The Roxie",
+  "slug": "animation-senior-showcase",
+  "shortTitle": "Animation Showcase",
+  "type": "screening",
+  "degreeLevel": "undergraduate",
+  "themeKey": "animation",
+  "date": "2026-05-06",
+  "time": "6:00 PM – 9:00 PM",
+  "location": "Roxie Theater",
+  "address": "3117 16th St, San Francisco, CA 94103",
+  "description": "A screening of animated short films and senior projects by CCA's graduating Animation students.",
+  "image": {
+    "src": "/images/events/roxie.jpg",
+    "alt": "The Roxie Theater marquee for CCA Animation Senior Showcase"
+  },
+  "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/spring-2026-animation-senior-showcase-roxie/",
+  "order": 9
+}
