@@ -11,7 +11,7 @@ const event = await getEntry('events', 'showcase');
 if (!event) throw new Error('Event showcase not found');
 
 const allEvents = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
-const events = allEvents.filter(e => e.data.type !== 'commencement');
+const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
 // Determine if showcase has passed
 const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date);
 ---
