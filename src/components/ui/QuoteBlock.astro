@@ -2,47 +2,120 @@
 interface Props {
   text: string;
   attribution: string;
+  variant?: 'default' | 'gradient';
 }
 
-const { text, attribution } = Astro.props;
+const { text, attribution, variant = 'default' } = Astro.props;
+
+// Split attribution into name and role on first comma
+const commaIndex = attribution.indexOf(',');
+const name = commaIndex > -1 ? attribution.slice(0, commaIndex).trim() : attribution;
+const role = commaIndex > -1 ? attribution.slice(commaIndex + 1).trim() : '';
 ---
 
-<blockquote class="quote-block reveal">
-  <p class="quote-text">{text}</p>
-  <footer class="quote-attribution">&mdash; {attribution}</footer>
-</blockquote>
+<section class:list={['quote-block', 'reveal', { 'quote-block--gradient': variant === 'gradient' }]}>
+  {variant === 'gradient' && <div class="quote-block__seal" aria-hidden="true"></div>}
+  <div class="container">
+    <blockquote class="quote-block__quote">
+      <p class="quote-block__text">
+        &ldquo;{text}&rdquo;
+      </p>
+      <footer class="quote-block__attribution">
+        <span class="quote-block__name">{name}</span>
+        {role && <span class="quote-block__role">{role}</span>}
+      </footer>
+    </blockquote>
+  </div>
+</section>
 
 <style>
+  /* ── Default: minimal, bordered ── */
   .quote-block {
-    margin: 0;
-    padding: var(--space-6) var(--space-8);
-    border-left: 3px solid var(--color-accent);
     position: relative;
+    padding-block: var(--space-20);
+    margin: 0;
+    border-block: 1px solid var(--color-border);
+    overflow: hidden;
   }
 
-  .quote-block::before {
-    content: "\201C";
-    position: absolute;
-    top: var(--space-2);
-    left: var(--space-3);
+  .quote-block__quote {
+    position: relative;
+    text-align: center;
+    max-width: 750px;
+    margin-inline: auto;
+  }
+
+  .quote-block__text {
     font-family: var(--font-display);
-    font-size: var(--text-5xl);
-    line-height: 1;
-    color: var(--color-border);
+    font-size: var(--text-2xl);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+
+  .quote-block__attribution {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-6);
+  }
+
+  .quote-block__name {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .quote-block__role {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+
+  /* ── Gradient variant: dark full-bleed section ── */
+  .quote-block--gradient {
+    background: var(--gradient-hero);
+    border-block: none;
+    padding-block: var(--space-24);
+  }
+
+  .quote-block--gradient .quote-block__text {
+    color: #fff;
+  }
+
+  .quote-block--gradient .quote-block__name {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .quote-block--gradient .quote-block__role {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .quote-block__seal {
+    position: absolute;
+    top: 50%;
+    right: -5%;
+    transform: translateY(-50%);
+    width: clamp(250px, 50vw, 600px);
+    aspect-ratio: 1;
+    background: white;
+    opacity: 0.05;
+    mask-image: url('/images/cca-seal.svg');
+    -webkit-mask-image: url('/images/cca-seal.svg');
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
     pointer-events: none;
   }
 
-  .quote-text {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    line-height: 1.6;
-    color: var(--color-text);
-    margin-bottom: var(--space-4);
-  }
-
-  .quote-attribution {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    color: var(--color-muted);
+  @media (prefers-reduced-motion: no-preference) {
+    .quote-block__seal {
+      animation: seal-hero-breathe 12s ease-in-out infinite;
+    }
   }
 </style>

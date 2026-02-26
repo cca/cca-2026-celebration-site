@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EmailSignup from '../components/sections/EmailSignup.astro';
+import QuoteBlock from '../components/ui/QuoteBlock.astro';
 import Button from '../components/ui/Button.astro';
 import { formatDateRange } from '../lib/utils/format';
 
@@ -86,7 +87,7 @@ const isPostEvent = new Date() > latestDate;
       </p>
       <div class="hero__ctas stagger-5">
         {isPostEvent ? (
-          <Button href="/commencement/recap/" variant="primary">Relive the Celebrations</Button>
+          <Button href="/commencement/" variant="primary">Commencement</Button>
           <Button href="#events" variant="outline">Browse Events</Button>
         ) : (
           <Button href="#events" variant="primary">Explore Events</Button>
@@ -158,20 +159,11 @@ const isPostEvent = new Date() > latestDate;
   )}
 
   <!-- 5. Quote -->
-  <section class="quote-section reveal">
-    <div class="quote-section__seal" aria-hidden="true"></div>
-    <div class="container">
-      <blockquote class="quote-section__quote">
-        <p class="quote-section__text">
-          &ldquo;Our graduates leave CCA not just as skilled artists and designers, but as creative leaders ready to shape a more just and joyful world.&rdquo;
-        </p>
-        <footer class="quote-section__attribution">
-          <span class="quote-section__name">Tamara Alvarado</span>
-          <span class="quote-section__role">President, California College of the Arts</span>
-        </footer>
-      </blockquote>
-    </div>
-  </section>
+  <QuoteBlock
+    text="Our graduates leave CCA not just as skilled artists and designers, but as creative leaders ready to shape a more just and joyful world."
+    attribution="Tamara Alvarado, President, California College of the Arts"
+    variant="gradient"
+  />
 
   <!-- 5. Graduation Exhibitions -->
   {showcaseEntry && (
@@ -597,71 +589,6 @@ const isPostEvent = new Date() > latestDate;
       aspect-ratio: 16 / 9;
     }
   }
-
-  /* ---- Quote Section ---- */
-  .quote-section {
-    position: relative;
-    background: var(--gradient-hero);
-    padding-block: var(--space-24);
-    overflow: hidden;
-  }
-
-  .quote-section__seal {
-    position: absolute;
-    top: 50%;
-    right: -5%;
-    transform: translateY(-50%);
-    width: clamp(200px, 40vw, 500px);
-    aspect-ratio: 1;
-    background: white;
-    opacity: 0.04;
-    mask-image: url('/images/cca-seal.svg');
-    -webkit-mask-image: url('/images/cca-seal.svg');
-    mask-size: contain;
-    -webkit-mask-size: contain;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    pointer-events: none;
-  }
-
-  .quote-section__quote {
-    position: relative;
-    text-align: center;
-    max-width: 800px;
-    margin-inline: auto;
-  }
-
-  .quote-section__text {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    font-style: italic;
-    font-weight: 400;
-    line-height: 1.4;
-    color: #fff;
-  }
-
-  .quote-section__attribution {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    margin-top: var(--space-8);
-  }
-
-  .quote-section__name {
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
-  }
-
-  .quote-section__role {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.5);
-  }
-
 
   /* ---- Email Signup Section ---- */
   .signup-section {

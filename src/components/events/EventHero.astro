@@ -14,63 +14,67 @@ const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
 const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, address, description });
 ---
 
-<section class:list={["event-hero", "reveal", { "has-image": !!image }]}>
-  <div class="container">
-    <div class="hero-layout">
-      <div class="hero-content">
-        <h1 class="hero-title stagger-1">{title}</h1>
-        <div class="hero-meta stagger-2">
-          <time class="hero-date">{dateDisplay}</time>
-          <span class="hero-separator" aria-hidden="true">&#9670;</span>
-          <span class="hero-time">{time}</span>
-          <span class="hero-separator" aria-hidden="true">&#9670;</span>
-          <span class="hero-location">{location}</span>
-        </div>
-        {description && (
-          <p class="hero-description stagger-3">{description}</p>
-        )}
-        <div class="hero-actions stagger-4">
-          {rsvpUrl && (
-            <Button href={rsvpUrl} variant="primary" target="_blank" rel="noopener noreferrer">
-              RSVP
-            </Button>
-          )}
-          {livestreamUrl && (
-            <Button href={livestreamUrl} variant="outline" target="_blank" rel="noopener noreferrer">
-              Watch Livestream
-            </Button>
-          )}
-          <a href={calendarUrl} download={`${event.data.slug}.ics`} class="calendar-link">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="2" y="3" width="12" height="12" rx="1" />
-              <line x1="2" y1="7" x2="14" y2="7" />
-              <line x1="5" y1="1" x2="5" y2="4" />
-              <line x1="11" y1="1" x2="11" y2="4" />
-            </svg>
-            Add to Calendar
-          </a>
-          <button class="share-link" data-share-title={title} data-share-url={Astro.url.pathname}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1" />
-              <path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1" />
-            </svg>
-            Share
-          </button>
-        </div>
+<section class="event-hero reveal">
+  <div class="hero-seal" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1 class="hero-title stagger-1">{title}</h1>
+      <div class="hero-meta stagger-2">
+        <time class="hero-date">{dateDisplay}</time>
+        <span class="hero-separator" aria-hidden="true">&#9670;</span>
+        <span class="hero-time">{time}</span>
+        <span class="hero-separator" aria-hidden="true">&#9670;</span>
+        <span class="hero-location">{location}</span>
       </div>
-      {image && (
-        <div class="hero-image stagger-3">
+      {description && (
+        <p class="hero-description stagger-3">{description}</p>
+      )}
+      <div class="hero-actions stagger-4">
+        {rsvpUrl && (
+          <Button href={rsvpUrl} variant="primary" target="_blank" rel="noopener noreferrer">
+            RSVP
+          </Button>
+        )}
+        {livestreamUrl && (
+          <Button href={livestreamUrl} variant="outline" target="_blank" rel="noopener noreferrer">
+            Watch Livestream
+          </Button>
+        )}
+        <a href={calendarUrl} download={`${event.data.slug}.ics`} class="calendar-link">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="3" width="12" height="12" rx="1" />
+            <line x1="2" y1="7" x2="14" y2="7" />
+            <line x1="5" y1="1" x2="5" y2="4" />
+            <line x1="11" y1="1" x2="11" y2="4" />
+          </svg>
+          Add to Calendar
+        </a>
+        <button class="share-link" data-share-title={title} data-share-url={Astro.url.pathname}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5l-1 1" />
+            <path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5l1-1" />
+          </svg>
+          Share
+        </button>
+      </div>
+    </div>
+    {image && (
+      <div class="hero-media stagger-3">
+        <div class="hero-frame">
           <img src={image.src} alt={image.alt} loading="eager" />
         </div>
-      )}
-    </div>
+      </div>
+    )}
   </div>
 </section>
 
 <style>
   .event-hero {
-    padding-block: var(--space-12) var(--space-8);
     position: relative;
+    min-height: 80vh;
+    min-height: 80dvh;
+    display: flex;
+    align-items: center;
     overflow: hidden;
   }
 
@@ -86,13 +90,13 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     pointer-events: none;
   }
 
-  /* Decorative seal accent — top-right corner */
-  .event-hero::after {
-    content: "";
+  /* Decorative seal — centered behind content */
+  .hero-seal {
     position: absolute;
-    top: -10%;
-    right: -5%;
-    width: clamp(200px, 30vw, 350px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(280px, 50vw, 500px);
     aspect-ratio: 1;
     background: var(--color-accent);
     opacity: 0.04;
@@ -103,20 +107,66 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
     pointer-events: none;
+    z-index: 0;
   }
 
-  :global([data-theme="commencement"]) .event-hero::after,
-  :global([data-theme="thesis-grad"]) .event-hero::after {
+  :global([data-theme="commencement"]) .hero-seal,
+  :global([data-theme="thesis-grad"]) .hero-seal {
     opacity: 0.06;
   }
 
-  .event-hero .container {
+  @media (min-width: 768px) {
+    .hero-seal {
+      left: 65%;
+      width: clamp(200px, 35vw, 400px);
+      opacity: 0.05;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-seal {
+      animation: seal-hero-breathe 12s ease-in-out infinite;
+    }
+  }
+
+  .hero-inner {
     position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: var(--space-8);
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-16) var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .hero-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+      padding-inline: var(--space-10);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: 55fr 45fr;
+      padding-inline: var(--space-12);
+    }
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
   }
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: var(--text-4xl);
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.1;
     margin-bottom: var(--space-4);
     position: relative;
     display: inline-block;
@@ -141,9 +191,15 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     align-items: center;
     gap: var(--space-3);
     font-family: var(--font-mono);
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     color: var(--color-muted);
     margin-top: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .hero-meta {
+      font-size: var(--text-lg);
+    }
   }
 
   .hero-date {
@@ -156,14 +212,8 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     font-size: 0.6em;
   }
 
-  /* Hero layout */
-  .hero-layout {
-    display: flex;
-    flex-direction: column;
-  }
-
   .hero-description {
-    max-width: 60ch;
+    max-width: 55ch;
     color: var(--color-muted);
     line-height: 1.7;
     margin-top: var(--space-6);
@@ -214,34 +264,42 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     color: var(--color-accent);
   }
 
-  .hero-image {
-    margin-top: var(--space-10);
+  /* ── Hero image ── */
+  .hero-media {
+    display: flex;
+    justify-content: center;
   }
 
-  .hero-image img {
-    width: 100%;
+  .hero-frame {
     border-radius: var(--radius-card);
-    box-shadow: 0 8px 32px rgb(0 0 0 / 0.25);
+    padding: 3px;
+    background: var(--gradient-prismatic);
+    background-size: 200% 200%;
+    width: 95%;
+    max-width: 560px;
   }
 
-  /* Split layout with image at desktop */
-  @media (min-width: 1024px) {
-    .has-image .hero-layout {
-      flex-direction: row;
-      align-items: center;
-      gap: var(--space-10);
-    }
-
-    .has-image .hero-content {
-      flex: 0 0 58%;
-    }
-
-    .has-image .hero-image {
-      flex: 0 0 38%;
-      margin-top: 0;
+  @media (min-width: 768px) {
+    .hero-frame {
+      width: 100%;
+      max-width: none;
     }
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-frame {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  .hero-frame img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: calc(var(--radius-card) - 2px);
+  }
 </style>
 
 <script>

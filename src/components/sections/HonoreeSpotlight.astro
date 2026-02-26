@@ -1,0 +1,557 @@
+---
+interface Honoree {
+  name: string;
+  role: string;
+  photo?: { src: string; alt: string };
+  title?: string;
+  bio?: string;
+  detail?: string;
+}
+
+interface Props {
+  honorees: Honoree[];
+}
+
+const { honorees } = Astro.props;
+---
+
+<section class="spotlight" data-spotlight>
+  <div class="container">
+    <span class="section-label reveal">Honoring</span>
+    <h2 class="section-heading reveal">Celebrating Extraordinary People</h2>
+  </div>
+
+  <div class="spotlight__stage reveal" data-spotlight-stage>
+    <div class="spotlight__cards">
+      {honorees.map((person, i) => (
+        <article
+          class={`spotlight__card ${i === 0 ? 'is-active' : ''}`}
+          data-spotlight-card={i}
+          aria-hidden={i !== 0 ? 'true' : undefined}
+        >
+          <div class="spotlight__photo-col">
+            {person.photo ? (
+              <img
+                src={person.photo.src}
+                alt={person.photo.alt}
+                class="spotlight__photo"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            ) : (
+              <div class="spotlight__photo-placeholder" aria-hidden="true">
+                <span class="spotlight__photo-initial">{person.name.charAt(0)}</span>
+              </div>
+            )}
+          </div>
+          <div class="spotlight__info-col">
+            <span class="spotlight__role-badge">{person.role}</span>
+            <h3 class="spotlight__name">{person.name}</h3>
+            {person.title && <p class="spotlight__title">{person.title}</p>}
+            {person.bio && <p class="spotlight__bio">{person.bio}</p>}
+            {person.detail && <p class="spotlight__detail">{person.detail}</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    {/* Progress bar */}
+    <div class="container">
+      <div class="spotlight__progress" aria-hidden="true">
+        <div class="spotlight__progress-fill" data-spotlight-progress></div>
+      </div>
+    </div>
+  </div>
+
+  {/* Navigation filmstrip */}
+  <div class="container">
+    <nav class="spotlight__nav reveal" data-spotlight-nav aria-label="Honoree navigation">
+      {honorees.map((person, i) => (
+        <button
+          class={`spotlight__nav-item ${i === 0 ? 'is-active' : ''}`}
+          data-spotlight-goto={i}
+          type="button"
+          aria-label={`View ${person.name}`}
+        >
+          <span class="spotlight__nav-pip" aria-hidden="true">
+            {person.photo ? (
+              <img src={person.photo.src} alt="" loading="lazy" />
+            ) : (
+              <span class="spotlight__nav-initial">{person.name.charAt(0)}</span>
+            )}
+          </span>
+          <span class="spotlight__nav-name">{person.name}</span>
+          <span class="spotlight__nav-role">{person.role}</span>
+        </button>
+      ))}
+    </nav>
+  </div>
+</section>
+
+<script>
+function initSpotlight() {
+  document.querySelectorAll<HTMLElement>('[data-spotlight]').forEach((el) => {
+    if (el.dataset.spotlightInit) return;
+    el.dataset.spotlightInit = 'true';
+
+    const cards = el.querySelectorAll<HTMLElement>('[data-spotlight-card]');
+    const navItems = el.querySelectorAll<HTMLButtonElement>('[data-spotlight-goto]');
+    const progressFill = el.querySelector<HTMLElement>('[data-spotlight-progress]');
+    const total = cards.length;
+    if (total === 0) return;
+
+    let current = 0;
+    let paused = false;
+    let hovering = false;
+    const INTERVAL = 6000;
+    let elapsed = 0;
+    let lastTime = 0;
+    let rafId: number;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function goTo(index: number) {
+      if (index === current) return;
+      const prev = current;
+      current = index;
+      elapsed = 0;
+
+      // Crossfade cards
+      cards[prev].classList.remove('is-active');
+      cards[prev].classList.add('is-exiting');
+      cards[prev].setAttribute('aria-hidden', 'true');
+
+      cards[current].classList.add('is-active');
+      cards[current].removeAttribute('aria-hidden');
+
+      setTimeout(() => {
+        cards[prev].classList.remove('is-exiting');
+      }, 600);
+
+      // Update nav
+      navItems.forEach((btn, i) => {
+        btn.classList.toggle('is-active', i === current);
+      });
+    }
+
+    function next() {
+      goTo((current + 1) % total);
+    }
+
+    // Auto-advance with RAF for smooth progress bar
+    function tick(time: number) {
+      if (lastTime) {
+        const dt = time - lastTime;
+        if (!paused && !hovering && !reducedMotion.matches) {
+          elapsed += dt;
+          if (elapsed >= INTERVAL) {
+            next();
+          }
+        }
+      }
+      lastTime = time;
+
+      // Update progress
+      if (progressFill) {
+        const pct = Math.min(elapsed / INTERVAL, 1);
+        progressFill.style.transform = `scaleX(${pct})`;
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    rafId = requestAnimationFrame(tick);
+
+    // Navigation clicks
+    navItems.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.spotlightGoto ?? '0', 10);
+        goTo(idx);
+      });
+    });
+
+    // Keyboard navigation
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        goTo((current + 1) % total);
+      } else if (e.key === 'ArrowLeft') {
+        goTo((current - 1 + total) % total);
+      }
+    });
+
+    // Pause on hover
+    const stage = el.querySelector<HTMLElement>('[data-spotlight-stage]');
+    stage?.addEventListener('mouseenter', () => { hovering = true; });
+    stage?.addEventListener('mouseleave', () => { hovering = false; });
+
+    // Cleanup on page transition
+    document.addEventListener('astro:before-swap', () => {
+      cancelAnimationFrame(rafId);
+    }, { once: true });
+  });
+}
+
+initSpotlight();
+document.addEventListener('astro:page-load', initSpotlight);
+</script>
+
+<style>
+  .spotlight {
+    padding-block: var(--space-20);
+  }
+
+  /* ── Stage ── */
+  .spotlight__stage {
+    position: relative;
+    margin-top: var(--space-8);
+    overflow: hidden;
+  }
+
+  .spotlight__cards {
+    position: relative;
+    min-height: 420px;
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__cards {
+      min-height: 380px;
+    }
+  }
+
+  /* ── Individual card ── */
+  .spotlight__card {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-items: center;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--grid-gutter);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s var(--ease-out-expo),
+                visibility 0.6s;
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__card {
+      grid-template-columns: 280px 1fr;
+      gap: var(--space-10);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .spotlight__card {
+      grid-template-columns: 340px 1fr;
+    }
+  }
+
+  .spotlight__card.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .spotlight__card.is-active .spotlight__photo,
+  .spotlight__card.is-active .spotlight__photo-placeholder {
+    animation: spotlight-photo-in 0.7s var(--ease-out-expo) both;
+  }
+
+  .spotlight__card.is-active .spotlight__role-badge {
+    animation: spotlight-text-in 0.5s var(--ease-out-expo) 0.15s both;
+  }
+
+  .spotlight__card.is-active .spotlight__name {
+    animation: spotlight-text-in 0.5s var(--ease-out-expo) 0.2s both;
+  }
+
+  .spotlight__card.is-active .spotlight__title {
+    animation: spotlight-text-in 0.5s var(--ease-out-expo) 0.25s both;
+  }
+
+  .spotlight__card.is-active .spotlight__bio {
+    animation: spotlight-text-in 0.5s var(--ease-out-expo) 0.3s both;
+  }
+
+  .spotlight__card.is-active .spotlight__detail {
+    animation: spotlight-text-in 0.5s var(--ease-out-expo) 0.35s both;
+  }
+
+  .spotlight__card.is-exiting {
+    opacity: 0;
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotlight__card.is-active .spotlight__photo,
+    .spotlight__card.is-active .spotlight__photo-placeholder,
+    .spotlight__card.is-active .spotlight__role-badge,
+    .spotlight__card.is-active .spotlight__name,
+    .spotlight__card.is-active .spotlight__title,
+    .spotlight__card.is-active .spotlight__bio,
+    .spotlight__card.is-active .spotlight__detail {
+      animation: none;
+    }
+  }
+
+  /* ── Photo column ── */
+  .spotlight__photo-col {
+    display: flex;
+    justify-content: center;
+  }
+
+  .spotlight__photo {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+    border: 2px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__photo {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+    }
+  }
+
+  .spotlight__photo-placeholder {
+    width: 200px;
+    height: 200px;
+    border-radius: var(--radius-card);
+    background: var(--gradient-prismatic);
+    background-size: 200% 200%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__photo-placeholder {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spotlight__photo-placeholder {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  .spotlight__photo-initial {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--color-bg);
+    opacity: 0.5;
+  }
+
+  /* ── Info column ── */
+  .spotlight__info-col {
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__info-col {
+      text-align: left;
+    }
+  }
+
+  .spotlight__role-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    background: var(--color-accent-tint);
+    padding: var(--space-1) var(--space-3);
+    border-radius: 3px;
+    margin-bottom: var(--space-3);
+  }
+
+  .spotlight__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.1;
+    margin-bottom: var(--space-2);
+  }
+
+  .spotlight__title {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .spotlight__bio {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    line-height: 1.65;
+    max-width: 55ch;
+  }
+
+  @media (max-width: 767px) {
+    .spotlight__bio {
+      margin-inline: auto;
+    }
+  }
+
+  .spotlight__detail {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    letter-spacing: 0.03em;
+    margin-top: var(--space-3);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  @media (max-width: 767px) {
+    .spotlight__detail {
+      justify-content: center;
+    }
+  }
+
+  .spotlight__detail::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  /* ── Progress bar ── */
+  .spotlight__progress {
+    height: 2px;
+    background: var(--color-border);
+    border-radius: 1px;
+  }
+
+  .spotlight__progress-fill {
+    height: 100%;
+    background: var(--gradient-prismatic);
+    background-size: 200% 200%;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.1s linear;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spotlight__progress-fill {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  /* ── Nav filmstrip ── */
+  .spotlight__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-8);
+  }
+
+  .spotlight__nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    padding: var(--space-1) var(--space-4) var(--space-1) var(--space-1);
+    cursor: pointer;
+    transition: border-color 0.3s var(--ease-out-expo),
+                background 0.3s var(--ease-out-expo),
+                box-shadow 0.3s var(--ease-out-expo);
+    text-align: left;
+  }
+
+  .spotlight__nav-item:hover {
+    border-color: var(--color-accent);
+  }
+
+  .spotlight__nav-item.is-active {
+    border-color: var(--color-accent);
+    background: var(--color-accent-tint);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .spotlight__nav-pip {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .spotlight__nav-pip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .spotlight__nav-initial {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+
+  .spotlight__nav-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .spotlight__nav-role {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .spotlight__nav-role {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      white-space: nowrap;
+    }
+  }
+
+  /* ── Spotlight entrance keyframes ── */
+  @keyframes spotlight-photo-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes spotlight-text-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

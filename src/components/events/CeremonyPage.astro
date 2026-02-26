@@ -2,18 +2,15 @@
 import { getEntry, getCollection } from 'astro:content';
 import EventLayout from '../../layouts/EventLayout.astro';
 import EventHero from './EventHero.astro';
-import EventDetails from './EventDetails.astro';
-import CeremonySchedule from './CeremonySchedule.astro';
-import SpeakerFeature from './SpeakerFeature.astro';
+
 import WorkGrid from '../works/WorkGrid.astro';
 import Breadcrumb from '../ui/Breadcrumb.astro';
 import TableOfContents from '../ui/TableOfContents.astro';
 import VideoEmbed from '../ui/VideoEmbed.astro';
 import QuoteBlock from '../ui/QuoteBlock.astro';
 import DownloadLink from '../ui/DownloadLink.astro';
-import ContactBlock from '../ui/ContactBlock.astro';
+import Button from '../ui/Button.astro';
 import PersonGrid from '../people/PersonGrid.astro';
-import PersonCard from '../people/PersonCard.astro';
 import StatisticsGrid from '../sections/StatisticsGrid.astro';
 import { getWorksByEvent, getPeopleByCeremony } from '../../lib/utils/collections';
 import { fullName } from '../../lib/utils/format';
@@ -35,37 +32,60 @@ const students = await getCollection('students');
 const studentMap = new Map(students.map(s => [s.id, fullName(s)]));
 
 const commencementInfo = await getEntry('commencement-info', 'current');
-const recap = await getEntry('recap', 'current');
+
+// Build program page URL from eventId (e.g. "commencement-graduate" → "/commencement/graduate/program/")
+const ceremonySlug = eventId.replace('commencement-', '');
+const programUrl = `/commencement/${ceremonySlug}/program/`;
 
 // Resolve ceremony program refs
-const { ceremonyProgram, schedule, longDescription, videoUrl, videoCaption } = event.data;
+const { ceremonyProgram, schedule, videoUrl, videoCaption } = event.data;
 
-let studentSpeakerEntry = null;
-if (ceremonyProgram?.studentSpeaker?.student) {
-  studentSpeakerEntry = await getEntry('students', ceremonyProgram.studentSpeaker.student.id);
+// Pull key times from the schedule for the Digital Program section
+const keyTimeLabels = ['Doors Open', 'Ceremony Begins', 'Reception'];
+const keyTimes = (schedule ?? [])
+  .filter((item: { label: string }) => keyTimeLabels.includes(item.label))
+  .map((item: { time: string; label: string }) => ({ time: item.time, label: item.label }));
+
+// Filter downloadable assets: program booklet only appears on the program subpage
+const diyKitAssets = commencementInfo?.data.downloadableAssets?.filter(
+  (a: { label: string }) => a.label !== 'Commencement Program'
+) ?? [];
+
+// Build a person-like object from the student speaker so it renders in the same grid
+let speakerAsPerson = null;
+if (ceremonyProgram?.studentSpeaker) {
+  const sp = ceremonyProgram.studentSpeaker;
+  const studentEntry = sp.student
+    ? await getEntry('students', sp.student.id)
+    : null;
+  speakerAsPerson = {
+    name: sp.name,
+    slug: `speaker-${sp.name.toLowerCase().replace(/\s+/g, '-')}`,
+    role: 'student-speaker',
+    title: sp.program,
+    bio: sp.speechHighlights,
+    photo: studentEntry?.data.photo,
+  };
 }
 
-let distinguishedAlumniEntry = null;
-if (ceremonyProgram?.distinguishedAlumni) {
-  distinguishedAlumniEntry = await getEntry('people', ceremonyProgram.distinguishedAlumni.id);
-}
+// Prepend speaker to people array for a unified grid
+const allFeaturedPeople = [
+  ...(speakerAsPerson ? [speakerAsPerson] : []),
+  ...people.map(p => p.data),
+];
 
 // --- Build dynamic TOC ---
 const tocItems: Array<{ label: string; href: string }> = [];
 
-tocItems.push({ label: 'Venue & Location', href: '#details' });
-if (schedule && schedule.length > 0) tocItems.push({ label: 'Schedule', href: '#schedule' });
-if (commencementInfo?.data.forStudents) tocItems.push({ label: 'For Students', href: '#for-students' });
-if (commencementInfo?.data.forFamilies) tocItems.push({ label: 'For Families', href: '#for-families' });
-if (people.length > 0) tocItems.push({ label: 'Honorees', href: '#honorees' });
-if (ceremonyProgram?.studentSpeaker) tocItems.push({ label: 'Student Speaker', href: '#student-speaker' });
-if (distinguishedAlumniEntry) tocItems.push({ label: 'Distinguished Alumni', href: '#distinguished-alumni' });
-if (recap?.data.statistics) tocItems.push({ label: 'By the Numbers', href: '#statistics' });
+const hasFeaturedPeople = allFeaturedPeople.length > 0;
+if (hasFeaturedPeople) tocItems.push({ label: 'Featured Speakers & Honorees', href: '#featured-people' });
+if (commencementInfo?.data.presidentQuote) tocItems.push({ label: "President's Message", href: '#president-message' });
+if (diyKitAssets.length > 0) tocItems.push({ label: 'DIY Celebration Kit', href: '#diy-kit' });
+if (commencementInfo?.data.statistics) tocItems.push({ label: 'By the Numbers', href: '#statistics' });
 if (works.length > 0) tocItems.push({ label: 'Student Works', href: '#works' });
 if (videoUrl) tocItems.push({ label: 'Ceremony Video', href: '#video' });
-if (recap?.data.presidentQuote) tocItems.push({ label: "President's Message", href: '#president-message' });
-if (ceremonyProgram?.candidatesListUrl || recap?.data.downloadableAssets) tocItems.push({ label: 'Downloads', href: '#downloads' });
-if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#contact' });
+tocItems.push({ label: 'Digital Program', href: '#digital-program' });
+tocItems.push({ label: 'Questions & Contact', href: '#contact' });
 ---
 
 <EventLayout event={event}>
@@ -82,73 +102,46 @@ if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#co
   <div class="container">
     <div class="ceremony-layout">
       <div class="ceremony-main">
-        {/* Details & Location */}
-        <section id="details">
-          <EventDetails event={event} />
-        </section>
-
-        {/* Ceremony Schedule */}
-        {schedule && schedule.length > 0 && (
-          <section id="schedule" class="ceremony-section reveal">
-            <h2 class="section-heading">Ceremony Schedule</h2>
-            <CeremonySchedule schedule={schedule} />
+        {/* Featured Speakers & Honorees */}
+        {hasFeaturedPeople && (
+          <section id="featured-people" class="ceremony-section reveal">
+            <h2 class="section-heading">Featured Speakers & Honorees</h2>
+            <PersonGrid people={allFeaturedPeople} />
           </section>
         )}
 
-        {/* For Students / For Families summary cards */}
-        {commencementInfo?.data.forStudents && (
-          <section id="for-students" class="ceremony-section reveal">
-            <a href="/commencement/for-students/" class="info-summary-card">
-              <h2 class="section-heading">{commencementInfo.data.forStudents.heading}</h2>
-              <p>{commencementInfo.data.forStudents.summary}</p>
-              <span class="info-summary-link">Learn more &rarr;</span>
-            </a>
-          </section>
-        )}
-
-        {commencementInfo?.data.forFamilies && (
-          <section id="for-families" class="ceremony-section reveal">
-            <a href="/commencement/for-families/" class="info-summary-card">
-              <h2 class="section-heading">{commencementInfo.data.forFamilies.heading}</h2>
-              <p>{commencementInfo.data.forFamilies.summary}</p>
-              <span class="info-summary-link">Learn more &rarr;</span>
-            </a>
-          </section>
-        )}
-
-        {/* Honorees */}
-        {people.length > 0 && (
-          <section id="honorees">
-            <PersonGrid people={people.map(p => p.data)} heading="Honorees" />
-          </section>
-        )}
-
-        {/* Student Speaker */}
-        {ceremonyProgram?.studentSpeaker && (
-          <section id="student-speaker" class="ceremony-section reveal">
-            <h2 class="section-heading">Student Speaker</h2>
-            <SpeakerFeature
-              speaker={ceremonyProgram.studentSpeaker}
-              student={studentSpeakerEntry}
+        {/* President's Message */}
+        {commencementInfo?.data.presidentQuote && (
+          <section id="president-message" class="ceremony-section reveal">
+            <QuoteBlock
+              text={commencementInfo.data.presidentQuote.text}
+              attribution={commencementInfo.data.presidentQuote.attribution}
             />
           </section>
         )}
 
-        {/* Distinguished Alumni */}
-        {distinguishedAlumniEntry && (
-          <section id="distinguished-alumni" class="ceremony-section reveal">
-            <h2 class="section-heading">Distinguished Alumni</h2>
-            <div class="alumni-card-wrapper">
-              <PersonCard person={distinguishedAlumniEntry.data} />
+        {/* DIY Celebration Kit */}
+        {diyKitAssets.length > 0 && (
+          <section id="diy-kit" class="ceremony-section reveal">
+            <h2 class="section-heading">DIY Celebration Kit</h2>
+            <p class="diy-kit-intro">Celebrate your way — download printable decorations, social media frames, and more to make the day your own.</p>
+            <div class="downloads-list">
+              {diyKitAssets.map((asset: { label: string; url: string; description?: string }) => (
+                <DownloadLink
+                  label={asset.label}
+                  url={asset.url}
+                  description={asset.description}
+                />
+              ))}
             </div>
           </section>
         )}
 
         {/* By the Numbers */}
-        {recap?.data.statistics && (
+        {commencementInfo?.data.statistics && (
           <section id="statistics" class="ceremony-section reveal">
             <h2 class="section-heading">By the Numbers</h2>
-            <StatisticsGrid statistics={recap.data.statistics} />
+            <StatisticsGrid statistics={commencementInfo.data.statistics} />
           </section>
         )}
 
@@ -168,52 +161,50 @@ if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#co
           </section>
         )}
 
-        {/* President's Message */}
-        {recap?.data.presidentQuote && (
-          <section id="president-message" class="ceremony-section reveal">
-            <h2 class="section-heading">President's Message</h2>
-            <QuoteBlock
-              text={recap.data.presidentQuote.text}
-              attribution={recap.data.presidentQuote.attribution}
-            />
-          </section>
-        )}
+        {/* Digital Program */}
+        <section id="digital-program" class="ceremony-section reveal">
+          <h2 class="section-heading">Digital Program</h2>
+          {keyTimes.length > 0 && (
+            <div class="key-times">
+              {keyTimes.map((item: { time: string; label: string }) => (
+                <div class="key-time">
+                  <span class="key-time-value">{item.time}</span>
+                  <span class="key-time-label">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div class="program-cta-actions">
+            <Button href={programUrl} variant="primary">View Full Program &rarr;</Button>
+          </div>
+        </section>
 
-        {/* Compact footer: Downloads + Contact side-by-side */}
-        <div class="ceremony-footer">
-          {/* Downloads */}
-          {(ceremonyProgram?.candidatesListUrl || recap?.data.downloadableAssets) && (
-            <section id="downloads" class="ceremony-section reveal">
-              <h2 class="section-heading">Downloads</h2>
-              <div class="downloads-list">
-                {ceremonyProgram?.candidatesListUrl && (
-                  <DownloadLink
-                    label="List of Candidates"
-                    url={ceremonyProgram.candidatesListUrl}
-                    description="PDF — Graduating candidates for this ceremony"
-                  />
+        {/* Questions & Contact */}
+        <section id="contact" class="ceremony-section reveal">
+          <h2 class="section-heading">Questions & Contact</h2>
+          <div class="contact-card">
+            <p class="contact-text">For details on regalia, guest tickets, accessibility, parking, and everything else about ceremony day, visit the CCA Commencement Portal.</p>
+            {commencementInfo?.data.intranetUrl && (
+              <a href={commencementInfo.data.intranetUrl} class="contact-portal-link">
+                CCA Commencement Portal &rarr;
+              </a>
+            )}
+            {commencementInfo?.data.contact && (
+              <div class="contact-details">
+                {commencementInfo.data.contact.email && (
+                  <a href={`mailto:${commencementInfo.data.contact.email}`} class="contact-detail">
+                    {commencementInfo.data.contact.email}
+                  </a>
                 )}
-                {recap?.data.downloadableAssets?.map(asset => (
-                  <DownloadLink
-                    label={asset.label}
-                    url={asset.url}
-                    description={asset.description}
-                  />
-                ))}
+                {commencementInfo.data.contact.phone && (
+                  <a href={`tel:${commencementInfo.data.contact.phone.replace(/\D/g, '')}`} class="contact-detail">
+                    {commencementInfo.data.contact.phone}
+                  </a>
+                )}
               </div>
-            </section>
-          )}
-
-          {/* Contact */}
-          {commencementInfo?.data.contact && (
-            <section id="contact" class="ceremony-section">
-              <ContactBlock
-                email={commencementInfo.data.contact.email}
-                phone={commencementInfo.data.contact.phone}
-              />
-            </section>
-          )}
-        </div>
+            )}
+          </div>
+        </section>
       </div>
 
       {/* Sticky sidebar TOC (desktop right) / inline TOC (mobile top) */}
@@ -264,8 +255,46 @@ if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#co
     margin-bottom: var(--space-6);
   }
 
-  .alumni-card-wrapper {
-    max-width: 360px;
+  .key-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .key-time {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-4) var(--space-5);
+    min-width: 140px;
+  }
+
+  .key-time-value {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .key-time-label {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .program-cta-actions {
+    margin-top: var(--space-6);
+  }
+
+  .diy-kit-intro {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    max-width: 60ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
   }
 
   .downloads-list {
@@ -274,50 +303,51 @@ if (commencementInfo?.data.contact) tocItems.push({ label: 'Contact', href: '#co
     gap: var(--space-4);
   }
 
-  .ceremony-footer {
-    display: flex;
-    flex-direction: column;
-  }
-
-  @media (min-width: 768px) {
-    .ceremony-footer {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-8);
-      align-items: start;
-    }
-  }
-
-  .info-summary-card {
-    display: block;
-    text-decoration: none;
-    color: var(--color-text);
+  .contact-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-left: 4px solid var(--color-gold, var(--color-accent));
     border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card-rest);
     padding: var(--space-6);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
 
-  .info-summary-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 15%, transparent);
-  }
-
-  .info-summary-card p {
-    color: var(--color-muted);
+  .contact-text {
     font-size: var(--text-base);
-    margin-top: var(--space-2);
+    color: var(--color-muted);
     max-width: 60ch;
+    line-height: 1.6;
   }
 
-  .info-summary-link {
+  .contact-portal-link {
     display: inline-block;
-    margin-top: var(--space-3);
-    font-size: var(--text-sm);
+    margin-top: var(--space-4);
     font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .contact-portal-link:hover {
+    text-decoration: underline;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .contact-detail {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .contact-detail:hover {
     color: var(--color-accent);
   }
 

@@ -14,7 +14,7 @@
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "/images/events/commencement-undergraduate.jpg",
+    "src": "https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg",
     "alt": "Undergraduate students celebrating at commencement"
   },
   "schedule": [
@@ -29,6 +29,12 @@
     { "time": "12:00 PM", "label": "Reception" }
   ],
   "ceremonyProgram": {
+    "studentSpeaker": {
+      "name": "Priya Anand",
+      "program": "BFA Illustration",
+      "speechHighlights": "Priya will reflect on the power of visual storytelling to bridge cultures, inspired by her thesis project exploring diaspora narratives through sequential art."
+    },
+    "distinguishedAlumni": "sarah-chen-distinguished",
     "candidatesListUrl": "/downloads/undergraduate-candidates-2026.pdf",
     "programItems": [
       { "order": 1, "label": "Grand Marshal", "presenter": "Professor Elena Vasquez, Professor Emerita of Sculpture", "type": "processional" },

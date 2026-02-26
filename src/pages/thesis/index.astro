@@ -117,6 +117,18 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
     </div>
   </section>
 
+  {/* ── All Celebration Events ── */}
+  <section class="all-events-section">
+    <div class="container">
+      <span class="section-label reveal">Class of 2026</span>
+      <h2 class="section-heading reveal">All Celebration Events</h2>
+      <p class="all-events-desc reveal">
+        From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
+      </p>
+      <BentoEvents events={events} />
+    </div>
+  </section>
+
   {/* ── Past Exhibitions Gallery ── */}
   <PastGallery
     label="Past Exhibitions"
@@ -132,18 +144,6 @@ const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date)
       { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Opening night at a previous exhibition' },
     ]}
   />
-
-  {/* ── All Celebration Events ── */}
-  <section class="all-events-section">
-    <div class="container">
-      <span class="section-label reveal">Class of 2026</span>
-      <h2 class="section-heading reveal">All Celebration Events</h2>
-      <p class="all-events-desc reveal">
-        From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
-      </p>
-      <BentoEvents events={events} />
-    </div>
-  </section>
 
   {/* ── Email Signup ── */}
   <EmailSignup />

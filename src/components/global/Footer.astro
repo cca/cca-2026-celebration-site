@@ -36,6 +36,10 @@ const year = new Date().getFullYear();
               San Francisco, CA 94107
             </a>
           </address>
+          <div class="footer-contact">
+            <a href="tel:+18004471278">+1 800-447-1ART</a>
+            <a href="mailto:info@cca.edu">info@cca.edu</a>
+          </div>
           <div class="footer-social">
             <a href="https://www.tiktok.com/@ccaofficial" aria-label="CCA on TikTok" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
@@ -194,6 +198,25 @@ const year = new Date().getFullYear();
   }
 
   .footer-address-street:hover {
+    color: var(--color-accent);
+  }
+
+  /* Contact */
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-4);
+  }
+
+  .footer-contact a {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-contact a:hover {
     color: var(--color-accent);
   }
 

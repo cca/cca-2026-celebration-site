@@ -11,6 +11,51 @@
     "summary": "Everything graduating students need to know — from ordering regalia to ceremony day check-in, accessibility accommodations, and more.",
     "content": "## Preparation\n\nCongratulations on reaching this milestone! Here's what you need to know as you prepare for commencement.\n\n### Regalia\n\nAll graduates are required to wear academic regalia during the ceremony. Regalia can be ordered through the CCA Bookstore. Orders must be placed by **April 15, 2026** to ensure timely delivery.\n\n- Undergraduate regalia includes a cap, gown, and tassel\n- Graduate regalia includes a cap, gown, hood, and tassel\n- Regalia pickup will be available at the bookstore starting **May 1, 2026**\n\n### Ceremony Day Checklist\n\n- Arrive at least **90 minutes** before your ceremony start time\n- Check in at the registration desk to receive your name card\n- Bring your regalia — there will be a robing area on-site\n- Leave valuables at home or with a guest; storage is limited backstage\n- Guests are not permitted in the staging area\n\n### Rehearsal\n\nA brief walkthrough will take place in the staging area prior to each ceremony. Detailed instructions will be emailed to graduating students one week before commencement.\n\n### Name Pronunciation\n\nTo ensure your name is pronounced correctly during the ceremony, you will have the opportunity to submit a phonetic spelling or audio recording. Details will be sent via email in April.\n\n### Diploma Information\n\nDiplomas are not distributed at the ceremony. Official diplomas will be mailed to graduates approximately 8–10 weeks after commencement, once all degree requirements have been verified by the Registrar's Office.\n\n### Accessibility\n\nIf you require accommodations, please contact the Office of Accessibility at accessibility@cca.edu at least two weeks before the ceremony. Accessible seating, sign language interpretation, and other services are available upon request.\n\n### Photography\n\nProfessional photographers will be on-site — individual portraits will be available for purchase after the event. A link to the photo gallery will be emailed to all graduates within two weeks of the ceremony.\n\n### Social Media\n\nShare your commencement experience using **#CCA2026**. Tag us on Instagram at @caaboratory."
   },
+  "presidentQuote": {
+    "text": "You leave CCA as creative leaders ready to shape a more just and joyful world.",
+    "attribution": "Tamara Alvarado, President, California College of the Arts"
+  },
+  "statistics": [
+    { "label": "Graduates", "value": "462", "detail": "Class of 2026" },
+    { "label": "Countries", "value": "38", "detail": "Represented" },
+    { "label": "Degree Programs", "value": "22" },
+    { "label": "Honorary Doctorates", "value": "2", "detail": "Awarded" }
+  ],
+  "downloadableAssets": [
+    {
+      "label": "DIY Celebration Kit",
+      "url": "/downloads/cca-2026-diy-kit.pdf",
+      "description": "Printable decorations, social media frames, and more"
+    },
+    {
+      "label": "Commencement Program",
+      "url": "/downloads/cca-2026-program.pdf",
+      "description": "Official ceremony program booklet"
+    }
+  ],
+  "inMemoriam": [
+    { "name": "Kathan Brown", "role": "MFA Graphic Design 1968, Hon Doc 1985" },
+    { "name": "Jesse Carpio", "role": "BFA Animation 2022" },
+    { "name": "Jane S. Conn", "role": "1968" },
+    { "name": "Margaret M. Croft", "role": "BFA Graphic Design 2000" },
+    { "name": "Eric B. Dyer", "role": "BFA Painting 1971" },
+    { "name": "Edmund M. Enomoto", "role": "BFA Graphic Design 1968" },
+    { "name": "Bella Feldman", "role": "Faculty" },
+    { "name": "Valerie A. Flatt", "role": "BFA Interior Architecture 1970" },
+    { "name": "Douglas C. Gorney", "role": "1980" },
+    { "name": "Margo L. Jacquez", "role": "BFA Interdisciplinary Fine Arts 1977" },
+    { "name": "Donald E. King", "role": "BFA Painting 1966" },
+    { "name": "Edward M. Leaman", "role": "Faculty" },
+    { "name": "Robert W. May", "role": "BFA Industrial Design 1964" },
+    { "name": "Dennis E. Moran", "role": "BAEd Art Education 1961" },
+    { "name": "Christopher Nickel", "role": "BFA Photography 2001" },
+    { "name": "Bruce McGaw", "role": "BFA Painting 1957" },
+    { "name": "Jayne Robbins", "role": "BFA Ceramics 1969" },
+    { "name": "Kent R. Sanctuary", "role": "BFA Graphic Design 1969" },
+    { "name": "Judith Serin", "role": "Faculty" },
+    { "name": "Julie A. Stratton", "role": "1962" },
+    { "name": "Susan Worthman", "role": "Faculty" }
+  ],
   "forFamilies": {
     "heading": "For Families & Friends",
     "summary": "Plan your visit — find details on guest tickets, transportation, livestream, accessibility, and what to expect on ceremony day.",

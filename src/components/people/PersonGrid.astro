@@ -17,18 +17,22 @@ interface Props {
 const { people, heading } = Astro.props;
 ---
 
-<section class="person-grid-section">
+<div class:list={["person-grid-section", { "has-heading": !!heading }]}>
   {heading && <h2 class="section-heading">{heading}</h2>}
   <div class="grid-cards">
     {people.map((person) => (
       <PersonCard person={person} />
     ))}
   </div>
-</section>
+</div>
 
 <style>
-  .person-grid-section {
+  .person-grid-section.has-heading {
     padding-block: var(--space-8);
+  }
+
+  .person-grid-section:not(.has-heading) {
+    padding-top: var(--space-6);
   }
 
   .section-heading {

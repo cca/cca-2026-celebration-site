@@ -10,6 +10,7 @@ import CandidatesList from "../../../components/program/CandidatesList.astro";
 import SpeakerFeature from "../../../components/events/SpeakerFeature.astro";
 import InMemoriam from "../../../components/sections/InMemoriam.astro";
 import Button from "../../../components/ui/Button.astro";
+import DownloadLink from "../../../components/ui/DownloadLink.astro";
 import { getCandidatesGroupedByDivision } from "../../../lib/utils/collections";
 
 const eventId = "commencement-graduate";
@@ -24,9 +25,12 @@ if (ceremonyProgram?.studentSpeaker?.student) {
   studentSpeakerEntry = await getEntry("students", ceremonyProgram.studentSpeaker.student.id);
 }
 
-// Get in memoriam from recap
-const recap = await getEntry("recap", "current");
-const inMemoriam = recap?.data.inMemoriam ?? [];
+// Get in memoriam and program booklet from commencement-info
+const commencementInfo = await getEntry("commencement-info", "current");
+const inMemoriam = commencementInfo?.data.inMemoriam ?? [];
+const programBooklet = commencementInfo?.data.downloadableAssets?.find(
+  (a: { label: string }) => a.label === "Commencement Program"
+);
 
 // Get candidates grouped by division
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
@@ -62,6 +66,15 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
           <section id="program" class="program-section">
             <h2 class="section-heading">Order of Ceremony</h2>
             <ProgramAgenda items={ceremonyProgram.programItems} />
+            {programBooklet && (
+              <div class="program-booklet-download">
+                <DownloadLink
+                  label={programBooklet.label}
+                  url={programBooklet.url}
+                  description={programBooklet.description}
+                />
+              </div>
+            )}
           </section>
         )}
 
@@ -95,6 +108,15 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
             <h2 class="section-heading">Degree Candidates</h2>
+            {ceremonyProgram?.candidatesListUrl && (
+              <div class="candidates-download">
+                <DownloadLink
+                  label="List of Candidates (PDF)"
+                  url={ceremonyProgram.candidatesListUrl}
+                  description="Printable list of all degree candidates"
+                />
+              </div>
+            )}
             <CandidatesList groups={candidateGroups} />
           </section>
         )}
@@ -180,6 +202,14 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
     color: var(--color-muted);
     max-width: 65ch;
     font-style: italic;
+  }
+
+  .program-booklet-download {
+    margin-top: var(--space-6);
+  }
+
+  .candidates-download {
+    margin-bottom: var(--space-6);
   }
 
   .program-back {

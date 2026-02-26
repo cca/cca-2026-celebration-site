@@ -14,7 +14,7 @@
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "/images/events/commencement-graduate.jpg",
+    "src": "https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg",
     "alt": "Graduate students celebrating at commencement"
   },
   "schedule": [

@@ -244,33 +244,17 @@ const commencementInfo = defineCollection({
       content: z.string(),
     }).optional(),
     intranetUrl: z.string().optional(),
-  }),
-});
-
-const recap = defineCollection({
-  loader: glob({ pattern: "*.json", base: "src/content/recap" }),
-  schema: z.object({
-    year: z.number(),
-    commencementNumber: z.string(),
-    heroImage: z
-      .object({
-        src: z.string(),
-        alt: z.string(),
-      })
-      .optional(),
-    videoUrl: z.string().optional(),
-    videoCaption: z.string().optional(),
     presidentQuote: z.object({
       text: z.string(),
       attribution: z.string(),
-    }),
+    }).optional(),
     statistics: z.array(
       z.object({
         label: z.string(),
         value: z.string(),
         detail: z.string().optional(),
       }),
-    ),
+    ).optional(),
     downloadableAssets: z
       .array(
         z.object({
@@ -284,21 +268,8 @@ const recap = defineCollection({
       z.object({
         name: z.string(),
         role: z.string().optional(),
-        years: z.string().optional(),
       }),
-    ),
-    ceremonies: z.array(
-      z.object({
-        event: reference("events"),
-        studentSpeaker: z.object({
-          name: z.string(),
-          program: z.string(),
-          speechHighlights: z.string().optional(),
-        }),
-        distinguishedAlumni: reference("people").optional(),
-        candidatesListUrl: z.string().optional(),
-      }),
-    ),
+    ).optional(),
   }),
 });
 
@@ -323,6 +294,5 @@ export const collections = {
   works,
   people,
   "commencement-info": commencementInfo,
-  recap,
   "video-interviews": videoInterviews,
 };

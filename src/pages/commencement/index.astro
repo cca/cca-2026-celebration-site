@@ -2,21 +2,56 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CelebrationCard from '../../components/events/CelebrationCard.astro';
-import QuoteBlock from '../../components/ui/QuoteBlock.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
-import ContactBlock from '../../components/ui/ContactBlock.astro';
 import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
+import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
 import { formatDate } from '../../lib/utils/format';
-import { getCelebrationEvents } from '../../lib/utils/collections';
+import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
 
 const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
 const celebrations = await getCelebrationEvents();
 const info = await getEntry('commencement-info', 'current');
-const recap = await getEntry('recap', 'current');
+const inMemoriam = info?.data.inMemoriam ?? [];
 
+// Build unified honorees list
+const roleLabels: Record<string, string> = {
+  'honorary-doctorate': 'Honorary Doctorate',
+  'distinguished-alumni': 'Distinguished Alumni',
+  'professor-emeritus': 'Professor Emeritus',
+};
+const allPeople = [
+  ...await getPeopleByRole('honorary-doctorate'),
+  ...await getPeopleByRole('distinguished-alumni'),
+  ...await getPeopleByRole('professor-emeritus'),
+];
+const honorees = [
+  ...allPeople.map(p => ({
+    name: p.data.name,
+    role: roleLabels[p.data.role] ?? p.data.role,
+    photo: p.data.photo,
+    title: p.data.title,
+    bio: p.data.bio,
+    detail: p.data.ccaConnection,
+  })),
+  ...[
+    { event: undergradEvent, placeholder: 'https://images.unsplash.com/photo-1529068755536-a5ade0dcb4e8?w=600&h=600&fit=crop&crop=face' },
+    { event: gradEvent, placeholder: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=600&fit=crop&crop=face' },
+  ]
+    .filter(({ event }) => event?.data.ceremonyProgram?.studentSpeaker)
+    .map(({ event, placeholder }) => {
+      const sp = event!.data.ceremonyProgram!.studentSpeaker!;
+      return {
+        name: sp.name,
+        role: 'Student Speaker',
+        photo: { src: placeholder, alt: sp.name },
+        title: sp.program,
+        bio: sp.speechHighlights,
+      };
+    }),
+];
 // Determine if commencement has passed
 const commencementEvents = events.filter(e => e.data.type === 'commencement');
 const latestDate = commencementEvents.reduce((latest, e) => {
@@ -40,11 +75,7 @@ const isPostEvent = new Date() > latestDate;
             : 'Celebrate the Class of 2026'}
         </p>
         <div class="comm-hero__cta stagger-1">
-          {isPostEvent ? (
-            <Button href="/commencement/recap/" variant="primary">Relive the Celebration</Button>
-          ) : (
-            <Button href="#ceremonies" variant="primary">View Ceremonies</Button>
-          )}
+          <Button href="#ceremonies" variant="primary">View Ceremonies</Button>
         </div>
       </div>
       <div class="comm-hero__media">
@@ -98,21 +129,10 @@ const isPostEvent = new Date() > latestDate;
     </div>
   </section>
 
-  {/* ── Past Commencement Gallery ── */}
-  <PastGallery
-    label="Past Commencements"
-    title="Celebrating Generations of Graduates"
-    images={[
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Graduates celebrating at a previous CCA commencement' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Commencement ceremony processional' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Students receiving their diplomas' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Families and friends at commencement' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Cap toss celebration moment' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Graduate portraits from past years' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Decorated graduation caps' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Celebration with faculty and staff' },
-    ]}
-  />
+  {/* ── Honored People ── */}
+  {honorees.length > 0 && (
+    <HonoreeSpotlight honorees={honorees} />
+  )}
 
   {/* ── Special Celebrations ── */}
   {celebrations.length > 0 && (
@@ -130,55 +150,43 @@ const isPostEvent = new Date() > latestDate;
     </section>
   )}
 
-  {/* ── Quote ── */}
-  {recap?.data.presidentQuote && (
-    <section class="quote-section">
-      <div class="container container--narrow">
-        <QuoteBlock
-          text={recap.data.presidentQuote.text}
-          attribution={recap.data.presidentQuote.attribution}
-        />
+  {/* ── Past Commencement Gallery ── */}
+  <PastGallery
+    label="Past Commencements"
+    title="Celebrating Generations of Graduates"
+    images={[
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Graduates celebrating at a previous CCA commencement' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Commencement ceremony processional' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Students receiving their diplomas' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Families and friends at commencement' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Cap toss celebration moment' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Graduate portraits from past years' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Decorated graduation caps' },
+      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Celebration with faculty and staff' },
+    ]}
+  />
+
+  {/* ── In Memoriam ── */}
+  {inMemoriam.length > 0 && (
+    <section class="memoriam-section">
+      <div class="container">
+        <span class="section-label reveal">In Memoriam</span>
+        <h2 class="section-heading reveal">Remembering Members of Our Community</h2>
+        <p class="memoriam-intro reveal">We honor the members of the CCA community who passed during this academic year. Their contributions continue to inspire us.</p>
+        <ul class="memoriam-list reveal">
+          {inMemoriam.map((person) => (
+            <li class="memoriam-entry">
+              <span class="memoriam-entry__name">{person.name}</span>
+              {person.role && <span class="memoriam-entry__role">{person.role}</span>}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
-  )}
-
-  {/* ── Recap CTA ── */}
-  <section class="recap-section">
-    <div class="container">
-      <div class="recap-card reveal">
-        <div class="recap-card__inner">
-          <span class="section-label">Commencement Recap</span>
-          <h2 class="recap-card__heading">Relive the Celebration</h2>
-          <p class="recap-card__desc">Watch ceremony highlights, browse photos, explore statistics, and download programs from CCA's {info?.data.commencementNumber} Commencement.</p>
-          <Button href="/commencement/recap/" variant="outline">View Recap</Button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* ── Intranet note ── */}
-  {info?.data.intranetUrl && (
-    <aside class="intranet-note">
-      <div class="container">
-        <p class="reveal">
-          Current students and staff can find detailed preparation guides, regalia ordering, and day-of logistics on the <a href={info.data.intranetUrl}>CCA Intranet</a>.
-        </p>
-      </div>
-    </aside>
   )}
 
   {/* ── Email Signup ── */}
   <EmailSignup />
-
-  {/* ── Contact ── */}
-  {info && (
-    <section class="contact-section">
-      <div class="container container--narrow">
-        <h2 class="contact-heading reveal">Questions?</h2>
-        <ContactBlock email={info.data.contact.email} phone={info.data.contact.phone} />
-      </div>
-    </section>
-  )}
 </BaseLayout>
 
 <script src="../../scripts/cursor-track.ts"></script>
@@ -355,9 +363,7 @@ const isPostEvent = new Date() > latestDate;
 
   /* ── Section rhythm ── */
   .ceremonies-section,
-  .celebrations-section,
-  .quote-section,
-  .recap-section {
+  .celebrations-section {
     padding-block: var(--space-20);
   }
 
@@ -484,82 +490,59 @@ const isPostEvent = new Date() > latestDate;
     gap: var(--space-6);
   }
 
-  /* ── Quote section ── */
-  .quote-section {
-    border-block: 1px solid var(--color-border);
+  /* ── In Memoriam ── */
+  .memoriam-section {
+    padding-block: var(--space-20);
   }
 
-  /* ── Recap CTA card ── */
-  .recap-card {
-    position: relative;
-    border-radius: var(--radius-card);
-    padding: 3px;
-    background: var(--gradient-prismatic);
-    background-size: 200% 200%;
+  .memoriam-intro {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    line-height: 1.6;
+    max-width: 50ch;
+    margin-bottom: var(--space-10);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .recap-card {
-      animation: prismatic-shift 6s linear infinite;
+  .memoriam-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    column-count: 1;
+    column-gap: var(--space-8);
+    text-align: left;
+  }
+
+  @media (min-width: 640px) {
+    .memoriam-list {
+      column-count: 2;
     }
   }
 
-  .recap-card__inner {
-    background: var(--color-surface);
-    border-radius: calc(var(--radius-card) - 2px);
-    padding: var(--space-10) var(--space-8);
-    text-align: center;
+  @media (min-width: 1024px) {
+    .memoriam-list {
+      column-count: 3;
+    }
   }
 
-  .recap-card__heading {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    margin-bottom: var(--space-4);
+  .memoriam-entry {
+    break-inside: avoid;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  .recap-card__desc {
+  .memoriam-entry__name {
+    display: block;
     font-size: var(--text-base);
+    font-weight: 600;
+  }
+
+  .memoriam-entry__role {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
     color: var(--color-muted);
-    max-width: 50ch;
-    margin-inline: auto;
-    line-height: 1.6;
-    margin-bottom: var(--space-6);
+    letter-spacing: 0.02em;
+    margin-top: 2px;
   }
 
-  /* ── Intranet note ── */
-  .intranet-note {
-    padding-block: var(--space-8);
-  }
-
-  .intranet-note p {
-    font-size: var(--text-sm);
-    color: var(--color-muted);
-    text-align: center;
-    max-width: 55ch;
-    margin-inline: auto;
-    line-height: 1.6;
-  }
-
-  .intranet-note a {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color 0.15s ease;
-  }
-
-  .intranet-note a:hover {
-    color: color-mix(in srgb, var(--color-accent) 80%, #000);
-  }
-
-  /* ── Contact section ── */
-  .contact-section {
-    padding-block: var(--space-12) var(--space-20);
-  }
-
-  .contact-heading {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xl);
-    margin-bottom: var(--space-6);
-    text-align: center;
-  }
 </style>
