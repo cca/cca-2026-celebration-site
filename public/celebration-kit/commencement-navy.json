@@ -74,6 +74,22 @@
       "type": "rect",
       "x": 40, "y": 1038, "width": 1000, "height": 2,
       "color": "#E8A830", "opacity": 0.4
+    },
+    {
+      "id": "seal-watermark",
+      "type": "seal",
+      "x": 540, "y": 540,
+      "size": 1800,
+      "opacity": 1.0,
+      "color": "#FFFFFF"
+    },
+    {
+      "id": "confetti-scatter",
+      "type": "confetti",
+      "count": 35,
+      "region": { "x": 0, "y": 0, "width": 1080, "height": 1080 },
+      "opacity": 1.0,
+      "seed": 101
     }
   ],
 
@@ -85,7 +101,9 @@
         "program": { "y": 1028 }
       },
       "overlays": {
-        "border-bottom": { "y": 1308 }
+        "border-bottom": { "y": 1308 },
+        "seal-watermark": { "y": 675 },
+        "confetti-scatter": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1350 } }
       }
     },
     "9:16": {
@@ -97,7 +115,9 @@
       "overlays": {
         "cca-wordmark": { "y": 160 },
         "border-top": { "y": 80 },
-        "border-bottom": { "y": 1878 }
+        "border-bottom": { "y": 1878 },
+        "seal-watermark": { "y": 960 },
+        "confetti-scatter": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1920 } }
       }
     }
   }

@@ -160,7 +160,12 @@ function drawPhoto(
 function drawOverlays(ctx: CanvasRenderingContext2D, overlays: Overlay[], scale: number, canvasW: number, canvasH: number) {
   for (const o of overlays) {
     ctx.save();
-    ctx.globalAlpha = o.opacity ?? 1.0;
+
+    // Confetti and seal manage their own globalAlpha internally —
+    // skip the outer opacity so it doesn't compound.
+    if (o.type !== 'confetti' && o.type !== 'seal') {
+      ctx.globalAlpha = o.opacity ?? 1.0;
+    }
 
     if (o.type === 'text' && o.text) {
       const family = FONT_MAP[o.fontFamily ?? 'mono'] ?? FONT_MAP.mono;
@@ -182,6 +187,10 @@ function drawOverlays(ctx: CanvasRenderingContext2D, overlays: Overlay[], scale:
       ctx.fillRect((o.x ?? 0) * scale, (o.y ?? 0) * scale, (o.width ?? 0) * scale, (o.height ?? 0) * scale);
     } else if (o.type === 'decorative-dots') {
       drawDecorativeDots(ctx, o, scale, canvasW, canvasH);
+    } else if (o.type === 'confetti') {
+      drawConfetti(ctx, o, scale);
+    } else if (o.type === 'seal') {
+      drawSeal(ctx, o, scale);
     } else if (o.type === 'image' && o.src) {
       const img = imageCache.get(o.src);
       if (img) {
@@ -200,6 +209,89 @@ function seededRandom(seed: number): () => number {
     s = (s * 16807 + 0) % 2147483647;
     return s / 2147483647;
   };
+}
+
+const CONFETTI_COLORS = ['#00BFB3', '#563D82', '#FFC845', '#E57200', '#005776'];
+const CONFETTI_SHAPES: ('rect' | 'circle' | 'triangle')[] = ['rect', 'circle', 'triangle'];
+
+function drawConfetti(ctx: CanvasRenderingContext2D, o: Overlay, scale: number) {
+  const count = o.count ?? 35;
+  const region = o.region ?? { x: 0, y: 0, width: 1080, height: 1080 };
+  const opacityMul = o.opacity ?? 0.15;
+  const rand = seededRandom(o.seed ?? 42);
+
+  for (let i = 0; i < count; i++) {
+    const px = (region.x + rand() * region.width) * scale;
+    const py = (region.y + rand() * region.height) * scale;
+    const size = (3 + rand() * 5) * scale;
+    const rotation = rand() * Math.PI * 2;
+    const particleOpacity = (0.2 + rand() * 0.4) * opacityMul;
+    const color = CONFETTI_COLORS[Math.floor(rand() * CONFETTI_COLORS.length)];
+    const shape = CONFETTI_SHAPES[Math.floor(rand() * CONFETTI_SHAPES.length)];
+
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(rotation);
+    ctx.globalAlpha = particleOpacity;
+    ctx.fillStyle = color;
+
+    switch (shape) {
+      case 'rect':
+        ctx.fillRect(-size / 2, -size / 2, size, size * 0.6);
+        break;
+      case 'circle':
+        ctx.beginPath();
+        ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+      case 'triangle':
+        ctx.beginPath();
+        ctx.moveTo(0, -size / 2);
+        ctx.lineTo(size / 2, size / 2);
+        ctx.lineTo(-size / 2, size / 2);
+        ctx.closePath();
+        ctx.fill();
+        break;
+    }
+
+    ctx.restore();
+  }
+}
+
+/**
+ * Draw the CCA seal tinted to a specific color.
+ * The seal SVG uses `fill="currentColor"` which renders as black on canvas.
+ * We draw it to an offscreen canvas, then composite a solid color fill
+ * using 'source-in' so only the seal shape gets colored.
+ */
+function drawSeal(ctx: CanvasRenderingContext2D, o: Overlay, scale: number) {
+  const src = o.src ?? '/images/cca-seal.svg';
+  const img = imageCache.get(src);
+  if (!img) return;
+
+  const size = Math.round((o.size ?? 200) * scale);
+  const cx = (o.x ?? 540) * scale;
+  const cy = (o.y ?? 540) * scale;
+  const tint = o.color ?? '#FFFFFF';
+
+  // Render seal to offscreen canvas, then tint it
+  const off = document.createElement('canvas');
+  off.width = size;
+  off.height = size;
+  const oc = off.getContext('2d');
+  if (!oc) return;
+
+  // Draw the black seal shape
+  oc.drawImage(img, 0, 0, size, size);
+  // Tint: fill the color but only where the seal pixels exist
+  oc.globalCompositeOperation = 'source-in';
+  oc.fillStyle = tint;
+  oc.fillRect(0, 0, size, size);
+
+  ctx.save();
+  ctx.globalAlpha = o.opacity ?? 0.15;
+  ctx.drawImage(off, cx - size / 2, cy - size / 2);
+  ctx.restore();
 }
 
 function drawDecorativeDots(ctx: CanvasRenderingContext2D, o: Overlay, scale: number, _cw: number, _ch: number) {
@@ -282,16 +374,24 @@ export function render(opts: RenderOptions): void {
 
   ctx.clearRect(0, 0, w, h);
 
+  // Split overlays: background-layer types (seal, confetti) go behind the photo,
+  // everything else (text, rect, dots, images) goes above it.
+  const bgOverlays = template.overlays.filter(o => o.type === 'seal' || o.type === 'confetti');
+  const fgOverlays = template.overlays.filter(o => o.type !== 'seal' && o.type !== 'confetti');
+
   // 1. Background
   drawBackground(ctx, template.background, w, h, scale);
 
-  // 2. Photo
+  // 2. Background overlays (seal + confetti as texture behind photo)
+  drawOverlays(ctx, bgOverlays, scale, w, h);
+
+  // 3. Photo
   drawPhoto(ctx, template.photo, userImage, scale);
 
-  // 3. Overlays (under text)
-  drawOverlays(ctx, template.overlays, scale, w, h);
+  // 4. Foreground overlays (under text)
+  drawOverlays(ctx, fgOverlays, scale, w, h);
 
-  // 4. Text fields
+  // 5. Text fields
   drawTextFields(ctx, template.textFields, textValues, scale);
 }
 
@@ -307,6 +407,8 @@ export async function preloadTemplateAssets(template: ResolvedTemplate): Promise
   for (const o of template.overlays) {
     if (o.type === 'image' && o.src) {
       urls.push(o.src);
+    } else if (o.type === 'seal') {
+      urls.push(o.src ?? '/images/cca-seal.svg');
     }
   }
 

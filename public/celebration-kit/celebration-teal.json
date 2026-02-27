@@ -71,15 +71,20 @@
       "color": "#00BFB3", "opacity": 0.3
     },
     {
-      "id": "confetti-dots",
-      "type": "decorative-dots",
-      "color1": "#00BFB3",
-      "color2": "#FFC845",
-      "color3": "#563D82",
-      "count": 20,
+      "id": "confetti-shapes",
+      "type": "confetti",
+      "count": 30,
       "region": { "x": 0, "y": 0, "width": 1080, "height": 1080 },
-      "size": 6,
-      "opacity": 0.25
+      "opacity": 1.0,
+      "seed": 202
+    },
+    {
+      "id": "seal-accent",
+      "type": "seal",
+      "x": 920, "y": 920,
+      "size": 180,
+      "opacity": 0.85,
+      "color": "#00BFB3"
     }
   ],
 
@@ -100,7 +105,8 @@
       "overlays": {
         "top-label": { "y": 120 },
         "accent-line-top": { "y": 144 },
-        "confetti-dots": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1920 } }
+        "confetti-shapes": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1920 } },
+        "seal-accent": { "x": 920, "y": 1760 }
       }
     }
   }

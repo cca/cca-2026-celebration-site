@@ -44,7 +44,7 @@ export interface TextField {
 
 export interface Overlay {
   id: string;
-  type?: 'image' | 'text' | 'rect' | 'decorative-dots';
+  type?: 'image' | 'text' | 'rect' | 'decorative-dots' | 'confetti' | 'seal';
   src?: string;
   x?: number;
   y?: number;
@@ -65,6 +65,8 @@ export interface Overlay {
   count?: number;
   region?: { x: number; y: number; width: number; height: number };
   size?: number;
+  // confetti / seal specific
+  seed?: number;
 }
 
 export interface TemplateConfig {

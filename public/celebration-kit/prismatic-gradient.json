@@ -77,6 +77,22 @@
       "color": "rgba(255,255,255,0.9)",
       "align": "center",
       "letterSpacing": 12
+    },
+    {
+      "id": "seal-ghost",
+      "type": "seal",
+      "x": 540, "y": 540,
+      "size": 1600,
+      "opacity": 0.15,
+      "color": "#FFFFFF"
+    },
+    {
+      "id": "confetti-texture",
+      "type": "confetti",
+      "count": 25,
+      "region": { "x": 0, "y": 0, "width": 1080, "height": 1080 },
+      "opacity": 1.0,
+      "seed": 303
     }
   ],
 
@@ -87,6 +103,10 @@
         "name": { "y": 940 },
         "program": { "y": 1006 },
         "year": { "y": 1050 }
+      },
+      "overlays": {
+        "seal-ghost": { "y": 675 },
+        "confetti-texture": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1350 } }
       }
     },
     "9:16": {
@@ -97,7 +117,9 @@
         "year": { "y": 1260 }
       },
       "overlays": {
-        "cca-mark": { "y": 140 }
+        "cca-mark": { "y": 140 },
+        "seal-ghost": { "y": 960 },
+        "confetti-texture": { "region": { "x": 0, "y": 0, "width": 1080, "height": 1920 } }
       }
     }
   }
