@@ -1,7 +1,8 @@
 /**
- * Doodle Antics — Playful Hover & Click Microinteractions
+ * Doodle Antics — Playful Hover, Click & Scroll Microinteractions
  * Assigns a random animation (wiggle, squish, pop, flip) to each .hero__doodle
- * on page load. Hover plays a subtle version, click plays a dramatic burst.
+ * on page load. Scrolling into view plays a mid-intensity entrance, hover plays
+ * a subtle version, and click plays a dramatic burst.
  * Layers on top of existing CSS transforms with composite: 'add'.
  */
 
@@ -94,6 +95,47 @@ const burstAnims: Record<string, AnimDef> = {
   },
 };
 
+// Smooth entrance animations (scroll into view)
+const entranceAnims: Record<string, AnimDef> = {
+  wiggle: {
+    keyframes: [
+      { transform: 'rotate(0deg)' },
+      { transform: 'rotate(-6deg)', offset: 0.3 },
+      { transform: 'rotate(5deg)', offset: 0.6 },
+      { transform: 'rotate(-2deg)', offset: 0.8 },
+      { transform: 'rotate(0deg)' },
+    ],
+    options: { duration: 900, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' },
+  },
+  squish: {
+    keyframes: [
+      { transform: 'scale(1, 1)' },
+      { transform: 'scale(1.12, 0.88)', offset: 0.35 },
+      { transform: 'scale(0.95, 1.06)', offset: 0.65 },
+      { transform: 'scale(1, 1)' },
+    ],
+    options: { duration: 850, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' },
+  },
+  pop: {
+    keyframes: [
+      { transform: 'scale(1)' },
+      { transform: 'scale(1.15)', offset: 0.4 },
+      { transform: 'scale(0.97)', offset: 0.7 },
+      { transform: 'scale(1)' },
+    ],
+    options: { duration: 800, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' },
+  },
+  flip: {
+    keyframes: [
+      { transform: 'perspective(800px) rotateY(0deg)' },
+      { transform: 'perspective(800px) rotateY(18deg)', offset: 0.4 },
+      { transform: 'perspective(800px) rotateY(-6deg)', offset: 0.7 },
+      { transform: 'perspective(800px) rotateY(0deg)' },
+    ],
+    options: { duration: 900, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' },
+  },
+};
+
 const animNames = Object.keys(hoverAnims);
 
 let cleanup: (() => void) | null = null;
@@ -108,6 +150,7 @@ function initDoodleAntics() {
 
   const controllers: AbortController[] = [];
   const activeAnims = new WeakMap<HTMLElement, Animation>();
+  const assignedAnim = new Map<HTMLElement, string>();
 
   function play(el: HTMLElement, anim: AnimDef) {
     const running = activeAnims.get(el);
@@ -124,6 +167,18 @@ function initDoodleAntics() {
     activeAnims.set(el, a);
     a.onfinish = () => activeAnims.delete(el);
   }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        const name = assignedAnim.get(el);
+        if (name) play(el, entranceAnims[name]);
+      });
+    },
+    { threshold: 0.3, rootMargin: '0px 0px -40px 0px' },
+  );
 
   doodles.forEach((el) => {
     const name = animNames[Math.floor(Math.random() * animNames.length)];
@@ -145,10 +200,14 @@ function initDoodleAntics() {
       () => play(el, burst),
       { signal: ac.signal, passive: true },
     );
+
+    assignedAnim.set(el, name);
+    observer.observe(el);
   });
 
   cleanup = () => {
     controllers.forEach((ac) => ac.abort());
+    observer.disconnect();
     cleanup = null;
   };
 }
