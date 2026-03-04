@@ -1,7 +1,16 @@
 /* ==========================================================================
    @font-face Declarations
-   CCA Brand Typography: Lineto Brown, Merriweather, Roboto Mono
+   CCA Brand Typography: Chimera Display, Lineto Brown, Merriweather, Roboto Mono
    ========================================================================== */
+
+/* Chimera Display — Display face (hero titles, ceremonial headings) */
+@font-face {
+  font-family: "Chimera Display";
+  src: url("/fonts/ChimeraDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* Lineto Brown — Primary sans-serif (body, UI, navigation) */
 @font-face {
