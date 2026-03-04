@@ -1,0 +1,72 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Demo Pages" minimalHeader={true}>
+  <main class="demo-index">
+    <h1>Demo Pages</h1>
+    <p class="subtitle">Internal previews of design assets and components.</p>
+
+    <ul class="demo-list">
+      <li>
+        <a href="/demo/scanned-graphics/" class="demo-card">
+          <strong>Scanned Graphics</strong>
+          <span>Arrows, frames, and halftone textures extracted from the AI file.</span>
+        </a>
+      </li>
+    </ul>
+  </main>
+</BaseLayout>
+
+<style>
+  .demo-index {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-4);
+  }
+
+  h1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .subtitle {
+    color: var(--color-muted);
+    margin-bottom: var(--space-8);
+  }
+
+  .demo-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .demo-card {
+    display: block;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: border-color var(--duration-fast) ease;
+  }
+
+  .demo-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .demo-card strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-1);
+  }
+
+  .demo-card span {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+</style>
