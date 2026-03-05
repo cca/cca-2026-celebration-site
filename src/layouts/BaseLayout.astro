@@ -2,7 +2,6 @@
 import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
-import PhaseToolbar from '../components/dev/PhaseToolbar.astro';
 import '../styles/fonts.css';
 import '../styles/global.css';
 import '../styles/themes.css';
@@ -56,8 +55,6 @@ const metaDescription = description ?? defaultDescription;
       <slot />
     </main>
     <Footer />
-    {import.meta.env.DEV && <PhaseToolbar />}
-
     <script src="../scripts/scroll-reveal.ts"></script>
     <script src="../scripts/header-scroll.ts"></script>
   </body>
