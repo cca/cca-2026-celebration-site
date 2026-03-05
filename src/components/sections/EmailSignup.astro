@@ -4,16 +4,12 @@ import Button from '../ui/Button.astro';
 interface Props {
   heading?: string;
   description?: string;
-  action?: string;
-  successMessage?: string;
   buttonText?: string;
 }
 
 const {
   heading = "Stay in the Loop",
   description = "Sign up for the CCA 2026 Celebrations mailing list to get event updates, RSVP reminders, and more.",
-  action = "#subscribe",
-  successMessage = "You're on the list! We'll be in touch soon.",
   buttonText = "Subscribe",
 } = Astro.props;
 ---
@@ -25,19 +21,20 @@ const {
       {heading && <h2 id="signup-heading" class="signup-heading">{heading}</h2>}
       {description && <p class="signup-description">{description}</p>}
 
-      <form class="signup-form" action={action} method="POST" aria-label="Email signup">
-        {/* Honeypot field — hidden from real users */}
+      <form class="signup-form" action="https://cca.us7.list-manage.com/subscribe/post?u=1f736fa8e375bd406f10f81ae&id=080b9b28e9&f_id=0002d4e4f0" method="POST" target="_self" novalidate aria-label="Email signup">
+        {/* Mailchimp bot protection */}
         <div class="signup-hp" aria-hidden="true">
-          <label for="signup-website">Website</label>
-          <input type="text" id="signup-website" name="website" tabindex="-1" autocomplete="off" />
+          <label for="signup-hp">Leave blank</label>
+          <input type="text" id="signup-hp" name="b_1f736fa8e375bd406f10f81ae_080b9b28e9" tabindex="-1" autocomplete="off" />
         </div>
+        <input type="hidden" name="tags" value="8268898" />
 
         <div class="signup-fields">
-          <label for="signup-email" class="sr-only">Email address</label>
+          <label for="mce-EMAIL" class="sr-only">Email address</label>
           <input
             type="email"
-            id="signup-email"
-            name="email"
+            id="mce-EMAIL"
+            name="EMAIL"
             placeholder="you@example.com"
             required
             autocomplete="email"
@@ -46,17 +43,6 @@ const {
         </div>
         <p class="signup-privacy">We respect your privacy. Unsubscribe anytime.</p>
       </form>
-
-      <div class="signup-success" role="status" aria-live="polite" hidden data-message={successMessage}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        <p>{successMessage}</p>
-      </div>
-
-      <div class="signup-error" role="alert" aria-live="assertive" hidden>
-        <p>Something went wrong. Please try again.</p>
-      </div>
     </div>
     </div>
   </div>
@@ -85,9 +71,6 @@ const {
 
 <script src="../../scripts/random-arrows.ts"></script>
 <script>
-  const form = document.querySelector('.signup-form') as HTMLFormElement | null;
-  const successEl = document.querySelector('.signup-success') as HTMLElement | null;
-  const errorEl = document.querySelector('.signup-error') as HTMLElement | null;
   // Find the component's own section (not an outer wrapper that shares the class name)
   const signupSection = document.querySelector('.signup-card-wrapper')?.closest('.signup-section') as HTMLElement | null;
 
@@ -100,50 +83,13 @@ const {
 
   // Click anywhere on the card → focus the email input
   const card = signupSection?.querySelector('.signup-card') as HTMLElement | null;
-  const emailInput = signupSection?.querySelector<HTMLInputElement>('#signup-email');
+  const emailInput = signupSection?.querySelector<HTMLInputElement>('#mce-EMAIL');
 
   card?.addEventListener('click', (e) => {
     // Don't steal focus from interactive elements the user actually clicked
     const target = e.target as HTMLElement;
     if (target.closest('input, button, a, label')) return;
     emailInput?.focus();
-  });
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const honeypot = form.querySelector<HTMLInputElement>('[name="website"]');
-    if (honeypot?.value) return; // bot detected
-
-    const emailInput = form.querySelector<HTMLInputElement>('[name="email"]');
-    if (!emailInput?.value) return;
-
-    const submitBtn = form.querySelector<HTMLButtonElement>('[type="submit"]');
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
-    }
-
-    try {
-      // Placeholder: simulate a network request.
-      // Replace this with a real fetch() call when a backend is ready:
-      // const res = await fetch(form.action, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email: emailInput.value }),
-      // });
-      // if (!res.ok) throw new Error('Request failed');
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      form.hidden = true;
-      if (successEl) successEl.hidden = false;
-    } catch {
-      if (errorEl) errorEl.hidden = false;
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = form.dataset.buttonText ?? 'Subscribe';
-      }
-    }
   });
 </script>
 
@@ -329,9 +275,7 @@ const {
 
   .signup-heading,
   .signup-description,
-  .signup-form,
-  .signup-success,
-  .signup-error {
+  .signup-form {
     position: relative;
     z-index: 1;
   }
@@ -388,28 +332,6 @@ const {
     font-size: var(--text-xs);
     color: var(--color-muted);
     margin-top: var(--space-3);
-  }
-
-  .signup-success,
-  .signup-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .signup-success svg {
-    color: var(--color-accent);
-  }
-
-  .signup-success p,
-  .signup-error p {
-    font-size: var(--text-sm);
-    color: var(--color-muted);
-  }
-
-  .signup-error p {
-    color: #e53e3e;
   }
 
   /* Stack vertically on small screens */
