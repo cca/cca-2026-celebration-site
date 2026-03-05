@@ -173,6 +173,7 @@
   --color-bg: #0C2340;
   --color-text: #f5f0e8;
   --color-accent: #B7BF10;
+  --color-header-logo: var(--color-teal);
   --color-surface: #122D4D;
   --color-border: #1E3A5F;
   --color-muted: #8DA3B8;

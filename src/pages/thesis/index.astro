@@ -88,10 +88,10 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       </p>
       <div class="showcase-hero__cta">
         {isPhaseBefore(phase, 'pre-event') && (
-          <Button href="#about" variant="outline">Learn More</Button>
+          <Button href="#about" variant="primary">Learn More</Button>
         )}
         {isPhaseAtLeast(phase, 'pre-event') && !isPostEvent && (
-          <Button href="https://www.eventbrite.com/" variant="primary">RSVP</Button>
+          <Button href="/subscribe" variant="primary">Subscribe for Updates</Button>
         )}
         {isPhaseAtLeast(phase, 'pre-event') && !isPostEvent && (
           <Button href="#about" variant="outline">Learn More</Button>
@@ -114,25 +114,46 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       <div class="about-grid">
         <div class="about-grid__content">
           <span class="section-label reveal">About the Exhibitions</span>
-          <h2 class="section-heading reveal">Three Days of Art, Design &amp; Making</h2>
+          <h2 class="section-heading reveal">An Evening of Art, Design &amp; Making</h2>
           <p class="about-desc reveal">{event.data.description}</p>
-          <div class="about-details reveal">
-            <div class="about-detail">
-              <span class="about-detail__label">When</span>
-              <span class="about-detail__value">{formatDateRange(event.data.date, event.data.endDate)}</span>
-              {event.data.time && <span class="about-detail__sub">{event.data.time}</span>}
+          {isPhaseAtLeast(phase, 'pre-event') && (
+            <div class="about-details reveal">
+              <div class="about-detail">
+                <span class="about-detail__label">When</span>
+                <span class="about-detail__value">{formatDateRange(event.data.date, event.data.endDate)}</span>
+                {event.data.time && <span class="about-detail__sub">{event.data.time}</span>}
+              </div>
+              <div class="about-detail">
+                <span class="about-detail__label">Where</span>
+                <span class="about-detail__value">{event.data.location}</span>
+                {event.data.address && <span class="about-detail__sub">{event.data.address}</span>}
+              </div>
             </div>
-            <div class="about-detail">
-              <span class="about-detail__label">Where</span>
-              <span class="about-detail__value">{event.data.location}</span>
-              {event.data.address && <span class="about-detail__sub">{event.data.address}</span>}
+          )}
+          <div class="about-subscribe reveal">
+            <Button href="/subscribe" variant="link">Subscribe for Updates</Button>
+          </div>
+        </div>
+        {isPhaseBefore(phase, 'pre-event') ? (
+          <div class="about-grid__sidebar reveal">
+            <div class="about-details">
+              <div class="about-detail">
+                <span class="about-detail__label">When</span>
+                <span class="about-detail__value">{formatDateRange(event.data.date, event.data.endDate)}</span>
+                {event.data.time && <span class="about-detail__sub">{event.data.time}</span>}
+              </div>
+              <div class="about-detail">
+                <span class="about-detail__label">Where</span>
+                <span class="about-detail__value">{event.data.location}</span>
+                {event.data.address && <span class="about-detail__sub">{event.data.address}</span>}
+              </div>
             </div>
           </div>
-          <a href="https://www.eventbrite.com/" class="about-rsvp reveal">RSVP on Eventbrite &rarr;</a>
-        </div>
-        <div class="about-grid__poster reveal">
-          <img src="/images/thesis/poster.png" alt="Graduation Exhibitions 2026 poster" class="about-poster" />
-        </div>
+        ) : (
+          <div class="about-grid__poster reveal">
+            <img src="/images/thesis/poster.png" alt="Graduation Exhibitions 2026 poster" class="about-poster" />
+          </div>
+        )}
       </div>
     </div>
   </section>
@@ -404,20 +425,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     object-fit: cover;
   }
 
-  .about-rsvp {
-    display: inline-block;
-    margin-top: var(--space-6);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    transition: color 0.2s ease;
-  }
-
-  .about-rsvp:hover {
-    color: var(--color-accent, var(--color-muted));
-  }
 
   .about-desc {
     font-size: var(--text-lg);
@@ -435,6 +442,10 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
+  }
+
+  .about-subscribe {
+    margin-top: var(--space-8);
   }
 
   @media (min-width: 640px) {
