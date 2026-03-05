@@ -1,30 +1,65 @@
 ---
+import type { Phase } from '../../config/phases';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isContentVisible } from '../../lib/utils/phase';
+
 interface Props {
   minimal?: boolean;
 }
 
+interface NavSubItem {
+  label: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href: string;
+  hiddenIn?: Phase[];
+  visibleIn?: Phase[];
+  children?: NavSubItem[];
+  activePrefix?: string;
+}
+
 const { minimal = false } = Astro.props;
 const currentPath = Astro.url.pathname;
+const phase = getCurrentPhase(Astro.url);
 
-const commencementItems: Array<{ label: string; href?: string }> = [
-  { label: "Undergraduate Ceremony", href: "/commencement/undergraduate/" },
-  { label: "Graduate Ceremony", href: "/commencement/graduate/" },
-  { label: "Multicultural Celebration", href: "/commencement/multicultural-celebration/" },
-  { label: "Lavender Celebration", href: "/commencement/lavender-celebration/" },
+const allNavItems: NavItem[] = [
+  {
+    label: "Commencement",
+    href: "/commencement/",
+    activePrefix: "/commencement/",
+    children: [
+      { label: "Undergraduate Ceremony", href: "/commencement/undergraduate/" },
+      { label: "Graduate Ceremony", href: "/commencement/graduate/" },
+      { label: "Multicultural Celebration", href: "/commencement/multicultural-celebration/" },
+      { label: "Lavender Celebration", href: "/commencement/lavender-celebration/" },
+    ],
+  },
+  {
+    label: "Graduation Exhibitions",
+    href: "/thesis/",
+    activePrefix: "/thesis/",
+    hiddenIn: ['save-the-date'],
+  },
+  {
+    label: "Student Showcase",
+    href: "/showcase/",
+    activePrefix: "/showcase/",
+    hiddenIn: ['save-the-date'],
+    children: [
+      { label: "Graduating Students", href: "/showcase/students/" },
+      { label: "Thesis Work", href: "/showcase/works/" },
+    ],
+  },
 ];
 
-const showcaseItems: Array<{ label: string; href?: string }> = [
-  { label: "Graduating Students", href: "/showcase/students/" },
-  { label: "Thesis Work", href: "/showcase/works/" },
-];
+const navItems = allNavItems.filter(item =>
+  isContentVisible(phase, item.visibleIn, item.hiddenIn)
+);
 
-const isCommencementActive = currentPath.startsWith("/commencement/");
-const isShowcaseActive = currentPath.startsWith("/showcase/");
-const isThesisActive = currentPath.startsWith("/thesis/");
 const isSubscribeActive = currentPath.startsWith("/subscribe");
-
-// Mobile menu still uses grouped event data — filter out separators
-const mobileCommencementItems = commencementItems.filter(item => item.label !== "separator") as Array<{ label: string; href: string }>;
 ---
 
 <header class:list={["site-header", { "site-header--minimal": minimal }]}>
@@ -39,83 +74,51 @@ const mobileCommencementItems = commencementItems.filter(item => item.label !== 
     {!minimal && (
       <nav class="desktop-nav" aria-label="Main navigation">
         <ul class="nav-list" role="list">
-          <li class="has-dropdown">
-            <a
-              href="/commencement/"
-              class="nav-link dropdown-trigger"
-              aria-expanded="false"
-              aria-haspopup="true"
-              data-active={isCommencementActive ? "true" : undefined}
-              aria-current={currentPath === "/commencement/" ? "page" : undefined}
-            >
-              Commencement
-              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            <div class="nav-dropdown" role="menu">
-              <ul role="list">
-                {commencementItems.map((item) =>
-                  item.label === "separator" ? (
-                    <li class="dropdown-separator" role="separator"><hr /></li>
-                  ) : (
-                    <li>
-                      <a
-                        href={item.href}
-                        role="menuitem"
-                        aria-current={currentPath === item.href ? "page" : undefined}
-                      >
-                        {item.label}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </li>
-
-          <li>
-            <a
-              href="/thesis/"
-              class="nav-link"
-              data-active={isThesisActive ? "true" : undefined}
-              aria-current={currentPath === "/thesis/" ? "page" : undefined}
-            >
-              Graduation Exhibitions
-            </a>
-          </li>
-
-          <li class="has-dropdown">
-            <a
-              href="/showcase/"
-              class="nav-link dropdown-trigger"
-              aria-expanded="false"
-              aria-haspopup="true"
-              data-active={isShowcaseActive ? "true" : undefined}
-              aria-current={currentPath === "/showcase/" ? "page" : undefined}
-            >
-              Student Showcase
-              <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
-                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            <div class="nav-dropdown" role="menu">
-              <ul role="list">
-                {showcaseItems.map((item) => (
-                  <li>
-                    <a
-                      href={item.href}
-                      role="menuitem"
-                      aria-current={currentPath === item.href ? "page" : undefined}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </li>
-
+          {navItems.map((item) =>
+            item.children ? (
+              <li class="has-dropdown">
+                <a
+                  href={item.href}
+                  class="nav-link dropdown-trigger"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  data-active={item.activePrefix && currentPath.startsWith(item.activePrefix) ? "true" : undefined}
+                  aria-current={currentPath === item.href ? "page" : undefined}
+                >
+                  {item.label}
+                  <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                    <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+                <div class="nav-dropdown" role="menu">
+                  <ul role="list">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          role="menuitem"
+                          aria-current={currentPath === child.href ? "page" : undefined}
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  class="nav-link"
+                  data-active={item.activePrefix && currentPath.startsWith(item.activePrefix) ? "true" : undefined}
+                  aria-current={currentPath === item.href ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            )
+          )}
         </ul>
       </nav>
     )}
@@ -141,56 +144,67 @@ const mobileCommencementItems = commencementItems.filter(item => item.label !== 
   <div class="mobile-backdrop" aria-hidden="true"></div>
   <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true" inert>
     <ul class="mobile-nav-list" role="list">
-      <li class="mobile-section">
-        <span class="mobile-section-label">Events</span>
-        <div class="mobile-group">
-          <a href="/commencement/" class="mobile-group-label" aria-current={currentPath === "/commencement/" ? "page" : undefined}>Commencement</a>
-          <ul role="list">
-            {mobileCommencementItems.map((item, i) => (
-              <li class="mobile-nav-item" style={`--stagger-delay: ${(i + 1) * 60}ms`}>
+      {(() => {
+        let staggerIndex = 0;
+        return navItems.map((item) => {
+          if (item.children) {
+            const sectionDelay = staggerIndex * 60;
+            const result = (
+              <li class="mobile-section" style={`--stagger-delay: ${sectionDelay}ms`}>
+                {staggerIndex === 0 && <span class="mobile-section-label">Events</span>}
+                <div class="mobile-group">
+                  <a href={item.href} class="mobile-group-label" aria-current={currentPath === item.href ? "page" : undefined}>{item.label}</a>
+                  <ul role="list">
+                    {item.children.map((child, i) => {
+                      staggerIndex++;
+                      return (
+                        <li class="mobile-nav-item" style={`--stagger-delay: ${staggerIndex * 60}ms`}>
+                          <a
+                            href={child.href}
+                            aria-current={currentPath === child.href ? "page" : undefined}
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </li>
+            );
+            staggerIndex++;
+            return result;
+          } else {
+            staggerIndex++;
+            return (
+              <li class="mobile-nav-item" style={`--stagger-delay: ${staggerIndex * 60}ms`}>
                 <a
                   href={item.href}
+                  class="mobile-top-link"
+                  data-active={item.activePrefix && currentPath.startsWith(item.activePrefix) ? "true" : undefined}
                   aria-current={currentPath === item.href ? "page" : undefined}
                 >
                   {item.label}
                 </a>
               </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-      <li class="mobile-nav-item" style="--stagger-delay: 360ms">
-        <a
-          href="/thesis/"
-          class="mobile-top-link"
-          data-active={isThesisActive ? "true" : undefined}
-          aria-current={currentPath === "/thesis/" ? "page" : undefined}
-        >
-          Graduation Exhibitions
-        </a>
-      </li>
-      <li class="mobile-section" style="--stagger-delay: 420ms">
-        <div class="mobile-group">
-          <a href="/showcase/" class="mobile-group-label" aria-current={currentPath === "/showcase/" ? "page" : undefined}>Student Showcase</a>
-          <ul role="list">
-            <li class="mobile-nav-item" style="--stagger-delay: 480ms">
-              <a href="/showcase/students/" aria-current={currentPath === "/showcase/students/" ? "page" : undefined}>Graduating Students</a>
-            </li>
-            <li class="mobile-nav-item" style="--stagger-delay: 540ms">
-              <a href="/showcase/works/" aria-current={currentPath === "/showcase/works/" ? "page" : undefined}>Thesis Work</a>
-            </li>
-          </ul>
-        </div>
-      </li>
-      <li class="mobile-nav-item" style="--stagger-delay: 600ms">
-        <a
-          href="/subscribe/"
-          class="mobile-top-link"
-          aria-current={isSubscribeActive ? "page" : undefined}
-        >
-          Join Us
-        </a>
-      </li>
+            );
+          }
+        });
+      })()}
+      {(() => {
+        const totalItems = navItems.reduce((sum, item) => sum + 1 + (item.children?.length ?? 0), 0);
+        return (
+          <li class="mobile-nav-item" style={`--stagger-delay: ${(totalItems + 1) * 60}ms`}>
+            <a
+              href="/subscribe/"
+              class="mobile-top-link"
+              aria-current={isSubscribeActive ? "page" : undefined}
+            >
+              Join Us
+            </a>
+          </li>
+        );
+      })()}
     </ul>
   </nav>
 </header>

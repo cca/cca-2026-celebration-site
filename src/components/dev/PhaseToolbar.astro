@@ -1,0 +1,104 @@
+---
+import { PHASES } from '../../config/phases';
+import { getCurrentPhase } from '../../lib/utils/phase';
+
+if (!import.meta.env.DEV) return;
+
+const currentPhase = getCurrentPhase(Astro.url);
+---
+
+<div class="phase-toolbar" id="phase-toolbar">
+  <label class="phase-toolbar__label" for="phase-select">Phase</label>
+  <select class="phase-toolbar__select" id="phase-select">
+    {PHASES.map((phase) => (
+      <option value={phase} selected={phase === currentPhase}>
+        {phase}
+      </option>
+    ))}
+  </select>
+</div>
+
+<script>
+  function initPhaseToolbar() {
+    const select = document.getElementById('phase-select') as HTMLSelectElement | null;
+    if (!select) return;
+
+    select.addEventListener('change', () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('phase', select.value);
+      window.location.href = url.toString();
+    });
+
+    // Preserve ?phase= param on internal link clicks
+    const currentPhase = new URL(window.location.href).searchParams.get('phase');
+    if (currentPhase) {
+      document.addEventListener('click', (e) => {
+        const anchor = (e.target as Element).closest('a[href]') as HTMLAnchorElement | null;
+        if (!anchor) return;
+
+        const href = anchor.getAttribute('href');
+        if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+
+        e.preventDefault();
+        const url = new URL(href, window.location.origin);
+        url.searchParams.set('phase', currentPhase);
+        window.location.href = url.toString();
+      });
+    }
+  }
+
+  initPhaseToolbar();
+  document.addEventListener('astro:page-load', initPhaseToolbar);
+</script>
+
+<style>
+  .phase-toolbar {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-family: ui-monospace, 'SF Mono', monospace;
+    font-size: 12px;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .phase-toolbar__label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+  }
+
+  .phase-toolbar__select {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #fff;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.4rem center;
+  }
+
+  .phase-toolbar__select:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .phase-toolbar__select option {
+    background: #1a1a1a;
+    color: #fff;
+  }
+</style>

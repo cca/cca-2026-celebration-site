@@ -3,8 +3,10 @@ import { getCollection, getEntry } from 'astro:content';
 import WorkLayout from '../../../layouts/WorkLayout.astro';
 import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
 import { fullName } from '../../../lib/utils/format';
+import { CURRENT_PHASE, isPhaseBefore } from '../../../config/phases';
 
 export async function getStaticPaths() {
+  if (isPhaseBefore(CURRENT_PHASE, 'pre-event')) return [];
   const works = await getCollection('works');
   return works.map(work => ({
     params: { slug: work.data.slug },

@@ -7,6 +7,13 @@ import WorkGrid from '../../components/works/WorkGrid.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import { getWorksByEvent } from '../../lib/utils/collections';
 import { fullName } from '../../lib/utils/format';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
 
 const event = await getEntry('events', 'thesis-graduate');
 if (!event) throw new Error('Event thesis-graduate not found');

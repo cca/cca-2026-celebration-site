@@ -1,0 +1,15 @@
+---
+import type { Phase } from '../config/phases';
+import { getCurrentPhase, isContentVisible } from '../lib/utils/phase';
+
+interface Props {
+  visibleIn?: Phase[];
+  hiddenIn?: Phase[];
+}
+
+const { visibleIn, hiddenIn } = Astro.props;
+const phase = getCurrentPhase(Astro.url);
+const visible = isContentVisible(phase, visibleIn, hiddenIn);
+---
+
+{visible && <slot />}

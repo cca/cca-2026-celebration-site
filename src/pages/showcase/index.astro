@@ -6,6 +6,13 @@ import VideoInterviewSection from '../../components/showcase/VideoInterviewSecti
 import PastGallery from '../../components/sections/PastGallery.astro';
 import NewsroomGrid from '../../components/showcase/NewsroomGrid.astro';
 import { fullName } from '../../lib/utils/format';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
 
 // Fetch all collections
 const students = await getCollection('students');

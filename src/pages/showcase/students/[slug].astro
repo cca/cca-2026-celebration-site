@@ -5,8 +5,10 @@ import WorkGrid from '../../../components/works/WorkGrid.astro';
 import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
 import { getWorksByStudent } from '../../../lib/utils/collections';
 import { fullName, formatDate } from '../../../lib/utils/format';
+import { CURRENT_PHASE, isPhaseBefore } from '../../../config/phases';
 
 export async function getStaticPaths() {
+  if (isPhaseBefore(CURRENT_PHASE, 'pre-event')) return [];
   const students = await getCollection('students');
   return students.map(student => ({
     params: { slug: student.data.slug },

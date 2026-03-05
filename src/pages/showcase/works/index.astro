@@ -6,6 +6,13 @@ import WorkGrid from '../../../components/works/WorkGrid.astro';
 import FilterChips from '../../../components/ui/FilterChips.astro';
 import { fullName } from '../../../lib/utils/format';
 import { getAllTags } from '../../../lib/utils/collections';
+import { getCurrentPhase } from '../../../lib/utils/phase';
+import { isPhaseBefore } from '../../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
 
 const works = (await getCollection('works')).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 const students = await getCollection('students');

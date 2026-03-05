@@ -7,6 +7,9 @@ import EmailSignup from '../components/sections/EmailSignup.astro';
 import QuoteBlock from '../components/ui/QuoteBlock.astro';
 import Button from '../components/ui/Button.astro';
 import { formatDateRange } from '../lib/utils/format';
+import PhaseGate from '../components/PhaseGate.astro';
+import { getCurrentPhase } from '../lib/utils/phase';
+import { isPhaseAtLeast } from '../config/phases';
 
 const events = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
 
@@ -16,13 +19,9 @@ const commencementEntry = await getEntry('events', 'commencement-undergraduate')
 // Showcase / Graduation Exhibitions data
 const showcaseEntry = await getEntry('events', 'showcase');
 
-// Determine if commencement has passed (use latest ceremony date)
-const commencementEvents = events.filter(e => e.data.type === 'commencement');
-const latestDate = commencementEvents.reduce((latest, e) => {
-  const d = new Date(e.data.date);
-  return d > latest ? d : latest;
-}, new Date(0));
-const isPostEvent = new Date() > latestDate;
+// Phase-based logic replaces date-computed isPostEvent
+const phase = getCurrentPhase(Astro.url);
+const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="2026 Celebrations" description="Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.">
@@ -177,41 +176,43 @@ const isPostEvent = new Date() > latestDate;
   />
 
   <!-- 5. Graduation Exhibitions -->
-  {showcaseEntry && (
-    <section class="anchor-section anchor-section--exhibitions reveal">
-      <div class="container">
-        <div class="anchor-section__layout anchor-section__layout--reverse">
-          <div class="anchor-section__content">
-            <div class="anchor-section__header">
-              <span class="section-label">May 8–10, 2026</span>
-              <h2 class="anchor-section__title">
-                <span class="anchor-section__number shimmer-text">700<sup>+</sup></span>
-                <span class="anchor-section__name">Graduating Students</span>
-              </h2>
-            </div>
-            <div class="anchor-section__body">
-              <p class="anchor-section__meta">
-                {formatDateRange(showcaseEntry.data.date, showcaseEntry.data.endDate)} &middot; {showcaseEntry.data.location}
-              </p>
-              <p class="anchor-section__desc">{showcaseEntry.data.description}</p>
-              <div class="anchor-section__cta">
-                <Button href="/thesis/" variant="primary">Explore Exhibitions</Button>
+  <PhaseGate hiddenIn={['save-the-date']}>
+    {showcaseEntry && (
+      <section class="anchor-section anchor-section--exhibitions reveal">
+        <div class="container">
+          <div class="anchor-section__layout anchor-section__layout--reverse">
+            <div class="anchor-section__content">
+              <div class="anchor-section__header">
+                <span class="section-label">May 8–10, 2026</span>
+                <h2 class="anchor-section__title">
+                  <span class="anchor-section__number shimmer-text">700<sup>+</sup></span>
+                  <span class="anchor-section__name">Graduating Students</span>
+                </h2>
+              </div>
+              <div class="anchor-section__body">
+                <p class="anchor-section__meta">
+                  {formatDateRange(showcaseEntry.data.date, showcaseEntry.data.endDate)} &middot; {showcaseEntry.data.location}
+                </p>
+                <p class="anchor-section__desc">{showcaseEntry.data.description}</p>
+                <div class="anchor-section__cta">
+                  <Button href="/thesis/" variant="primary">Explore Exhibitions</Button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="anchor-section__image">
-            <img
-              src="https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg"
-              alt="Student work on display at CCA's Graduation Exhibitions"
-              loading="lazy"
-              width="480"
-              height="640"
-            />
+            <div class="anchor-section__image">
+              <img
+                src="https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg"
+                alt="Student work on display at CCA's Graduation Exhibitions"
+                loading="lazy"
+                width="480"
+                height="640"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )}
+  </PhaseGate>
 
   <!-- 7. Email Signup -->
   <section class="signup-section">

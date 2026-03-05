@@ -6,14 +6,23 @@ import BentoEvents from '../../components/landing/BentoEvents.astro';
 import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import { formatDateRange } from '../../lib/utils/format';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore, isPhaseAtLeast } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+
+// Redirect to home if phase is before pre-event (no exhibition content yet)
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
 
 const event = await getEntry('events', 'showcase');
 if (!event) throw new Error('Event showcase not found');
 
 const allEvents = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
 const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
-// Determine if showcase has passed
-const isPostEvent = new Date() > new Date(event.data.endDate ?? event.data.date);
+// Phase-based logic replaces date-computed isPostEvent
+const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">

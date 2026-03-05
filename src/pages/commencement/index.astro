@@ -10,6 +10,9 @@ import PastGallery from '../../components/sections/PastGallery.astro';
 import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
 import { formatDate } from '../../lib/utils/format';
 import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
+import PhaseGate from '../../components/PhaseGate.astro';
+import { getCurrentPhase, isContentVisible } from '../../lib/utils/phase';
+import { isPhaseAtLeast } from '../../config/phases';
 
 const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
@@ -54,13 +57,9 @@ const honorees = [
       };
     }),
 ];
-// Determine if commencement has passed
-const commencementEvents = events.filter(e => e.data.type === 'commencement');
-const latestDate = commencementEvents.reduce((latest, e) => {
-  const d = new Date(e.data.date);
-  return d > latest ? d : latest;
-}, new Date(0));
-const isPostEvent = new Date() > latestDate;
+// Phase-based logic replaces date-computed isPostEvent
+const phase = getCurrentPhase(Astro.url);
+const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="Commencement" themeKey="commencement">
@@ -141,25 +140,29 @@ const isPostEvent = new Date() > latestDate;
   </section>
 
   {/* ── Honored People ── */}
-  {honorees.length > 0 && (
-    <HonoreeSpotlight honorees={honorees} />
-  )}
+  <PhaseGate hiddenIn={['save-the-date']}>
+    {honorees.length > 0 && (
+      <HonoreeSpotlight honorees={honorees} />
+    )}
+  </PhaseGate>
 
   {/* ── Special Celebrations ── */}
-  {celebrations.length > 0 && (
-    <section class="celebrations-section">
-      <div class="container">
-        <span class="section-label reveal">Pre-Commencement</span>
-        <h2 class="section-heading reveal">Special Celebrations</h2>
-        <p class="section-desc reveal">Join us for celebrations honoring all graduating students before the main ceremonies.</p>
-        <div class="celebrations-grid">
-          {celebrations.map((event) => (
-            <CelebrationCard event={event} />
-          ))}
+  <PhaseGate hiddenIn={['save-the-date']}>
+    {celebrations.length > 0 && (
+      <section class="celebrations-section">
+        <div class="container">
+          <span class="section-label reveal">Pre-Commencement</span>
+          <h2 class="section-heading reveal">Special Celebrations</h2>
+          <p class="section-desc reveal">Join us for celebrations honoring all graduating students before the main ceremonies.</p>
+          <div class="celebrations-grid">
+            {celebrations.map((event) => (
+              <CelebrationCard event={event} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )}
+  </PhaseGate>
 
   {/* ── Past Commencement Gallery ── */}
   <PastGallery
