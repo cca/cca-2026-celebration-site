@@ -7,56 +7,71 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     <h1>Demo Pages</h1>
     <p class="subtitle">Internal previews of design assets and components.</p>
 
-    <ul class="demo-list">
-      <li>
-        <a href="/demo/scanned-graphics/" class="demo-card">
-          <strong>Scanned Graphics</strong>
-          <span>Arrows, frames, and halftone textures extracted from the AI file.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/chimera-expanded/" class="demo-card">
-          <strong>Chimera Expanded Shapes</strong>
-          <span>4 decorative shape SVGs from the Chimera Expanded set.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/halftone-mask/" class="demo-card">
-          <strong>Halftone: Color Shift Mask</strong>
-          <span>CSS mask-image over animated gradient — dots as windows into shifting colors.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/halftone-moire/" class="demo-card">
-          <strong>Halftone: Moiré Drift</strong>
-          <span>Stacked halftone layers with CSS transforms creating interference patterns.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/halftone-displacement/" class="demo-card">
-          <strong>Halftone: Liquid Displacement</strong>
-          <span>SVG turbulence + displacement filter for organic wavy distortion.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/halftone-scroll/" class="demo-card">
-          <strong>Halftone: Scroll Displacement</strong>
-          <span>Displacement intensity tied to scroll position — warps more as you scroll.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/particle-field/" class="demo-card">
-          <strong>Particle Field</strong>
-          <span>Canvas-based geometric particle system with scroll-reactive wind gusts.</span>
-        </a>
-      </li>
-      <li>
-        <a href="/demo/particle-field-chimera/" class="demo-card">
-          <strong>Particle Field — Chimera</strong>
-          <span>Chimera Expanded letterform shapes as floating SVG path particles.</span>
-        </a>
-      </li>
-    </ul>
+    <section class="demo-section">
+      <h2 class="section-heading">Assets</h2>
+      <ul class="demo-list">
+        <li>
+          <a href="/demo/scanned-graphics/" class="demo-card">
+            <strong>Scanned Graphics</strong>
+            <span>Arrows, frames, and halftone textures extracted from the AI file.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/chimera-expanded/" class="demo-card">
+            <strong>Chimera Expanded Shapes</strong>
+            <span>4 decorative shape SVGs from the Chimera Expanded set.</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="section-heading">Halftone Effects</h2>
+      <ul class="demo-list">
+        <li>
+          <a href="/demo/halftone-mask/" class="demo-card">
+            <strong>Halftone: Color Shift Mask</strong>
+            <span>CSS mask-image over animated gradient — dots as windows into shifting colors.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/halftone-moire/" class="demo-card">
+            <strong>Halftone: Moiré Drift</strong>
+            <span>Stacked halftone layers with CSS transforms creating interference patterns.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/halftone-displacement/" class="demo-card">
+            <strong>Halftone: Liquid Displacement</strong>
+            <span>SVG turbulence + displacement filter for organic wavy distortion.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/halftone-scroll/" class="demo-card">
+            <strong>Halftone: Scroll Displacement</strong>
+            <span>Displacement intensity tied to scroll position — warps more as you scroll.</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="demo-section">
+      <h2 class="section-heading">Particle Effects</h2>
+      <ul class="demo-list">
+        <li>
+          <a href="/demo/particle-field/" class="demo-card">
+            <strong>Particle Field</strong>
+            <span>Canvas-based geometric particle system with scroll-reactive wind gusts.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/demo/particle-field-chimera/" class="demo-card">
+            <strong>Particle Field — Chimera</strong>
+            <span>Chimera Expanded letterform shapes as floating SVG path particles.</span>
+          </a>
+        </li>
+      </ul>
+    </section>
   </main>
 </BaseLayout>
 
@@ -76,6 +91,19 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   .subtitle {
     color: var(--color-muted);
     margin-bottom: var(--space-8);
+  }
+
+  .demo-section + .demo-section {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
   }
 
   .demo-list {
