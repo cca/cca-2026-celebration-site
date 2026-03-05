@@ -1,12 +1,13 @@
 import { CURRENT_PHASE, PHASES, type Phase } from '../../config/phases';
+import { getPhaseOverride } from '../../integrations/phase-toolbar/state';
 
 /**
- * In dev mode, reads `?phase=` from the URL to allow preview overrides.
- * In production, always returns CURRENT_PHASE.
+ * Returns the active phase. In dev mode, checks the toolbar override first.
+ * The `url` parameter is kept for API compatibility but no longer used for phase detection.
  */
-export function getCurrentPhase(url: URL): Phase {
+export function getCurrentPhase(_url?: URL): Phase {
   if (import.meta.env.DEV) {
-    const override = url.searchParams.get('phase');
+    const override = getPhaseOverride();
     if (override && PHASES.includes(override as Phase)) {
       return override as Phase;
     }
