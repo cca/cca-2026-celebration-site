@@ -2,20 +2,33 @@
 import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
 ---
 
-<DemoEffectLayout title="Arrow Loop — Transform">
+<DemoEffectLayout title="Arrow Loop — Slingshot">
+  <!-- SVG filters for directional motion blur -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="motion-blur-a" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur id="blur-a" in="SourceGraphic" stdDeviation="0 0" />
+      </filter>
+      <filter id="motion-blur-b" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur id="blur-b" in="SourceGraphic" stdDeviation="0 0" />
+      </filter>
+    </defs>
+  </svg>
+
   <div class="stage">
-    <div class="slot" id="slot-a">
+    <div class="slot" id="slot-a" style="filter: url(#motion-blur-a)">
       <img id="img-a" src="" alt="" />
     </div>
-    <div class="slot" id="slot-b">
+    <div class="slot" id="slot-b" style="filter: url(#motion-blur-b)">
       <img id="img-b" src="" alt="" />
     </div>
+    <div class="ghost" id="ghost"></div>
   </div>
 
   <div class="demo-overlay">
     <a href="/demo/" class="back-link">&larr; Demo Pages</a>
-    <h1 class="demo-title">Arrow Loop — Transform</h1>
-    <p class="demo-technique">X-axis only · ScaleX · RotateX · TranslateX · Stationary</p>
+    <h1 class="demo-title">Arrow Loop — Slingshot</h1>
+    <p class="demo-technique">Squash & stretch · Directional motion blur · Vibration chirp · Ghost trail</p>
   </div>
 
   <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle controls" aria-expanded="false">
@@ -32,50 +45,41 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
       <button class="sidebar-close" id="sidebar-close" aria-label="Close controls">&times;</button>
     </div>
     <p class="sidebar-description">
-      Arrows stay centered while X-axis transforms animate continuously —
-      scaleX squashes and stretches, rotateX flips in perspective, and translateX
-      oscillates side to side. Arrows crossfade between each cycle.
+      Arrows slingshot across the screen — squashing as they coil back with increasing vibration,
+      then launching explosively with directional motion blur and a ghost afterimage.
     </p>
     <div class="controls">
       <div class="control-group">
-        <label for="cycle-speed">Cycle Duration: <output id="cycle-speed-val">3s</output></label>
-        <input type="range" id="cycle-speed" min="1" max="8" value="3" step="0.5" />
+        <label for="cycle-duration">Cycle Duration: <output id="cycle-duration-val">3s</output></label>
+        <input type="range" id="cycle-duration" min="1.5" max="6" value="3" step="0.25" />
       </div>
       <div class="control-group">
-        <label for="scale-x-amount">ScaleX Amount: <output id="scale-x-amount-val">0.4</output></label>
-        <input type="range" id="scale-x-amount" min="0" max="1" value="0.4" step="0.05" />
+        <label for="windup-ratio">Wind-up Ratio: <output id="windup-ratio-val">0.50</output></label>
+        <input type="range" id="windup-ratio" min="0.3" max="0.7" value="0.5" step="0.05" />
       </div>
       <div class="control-group">
-        <label for="scale-x-speed">ScaleX Speed: <output id="scale-x-speed-val">1.0</output>x</label>
-        <input type="range" id="scale-x-speed" min="0.2" max="4" value="1.0" step="0.1" />
+        <label for="pullback-dist">Pullback Distance: <output id="pullback-dist-val">10vw</output></label>
+        <input type="range" id="pullback-dist" min="2" max="20" value="10" step="1" />
       </div>
       <div class="control-group">
-        <label for="rotate-x-amount">RotateX Amount: <output id="rotate-x-amount-val">30</output>&deg;</label>
-        <input type="range" id="rotate-x-amount" min="0" max="90" value="30" step="5" />
+        <label for="squash-amount">Squash Amount: <output id="squash-amount-val">0.65</output></label>
+        <input type="range" id="squash-amount" min="0.5" max="0.9" value="0.65" step="0.05" />
       </div>
       <div class="control-group">
-        <label for="rotate-x-speed">RotateX Speed: <output id="rotate-x-speed-val">0.7</output>x</label>
-        <input type="range" id="rotate-x-speed" min="0.1" max="4" value="0.7" step="0.1" />
+        <label for="launch-speed">Launch Speed: <output id="launch-speed-val">0.6s</output></label>
+        <input type="range" id="launch-speed" min="0.2" max="1.2" value="0.6" step="0.05" />
       </div>
       <div class="control-group">
-        <label for="translate-x-amount">TranslateX Amount: <output id="translate-x-amount-val">8</output>vw</label>
-        <input type="range" id="translate-x-amount" min="0" max="30" value="8" step="1" />
+        <label for="blur-max">Motion Blur Max: <output id="blur-max-val">20px</output></label>
+        <input type="range" id="blur-max" min="0" max="40" value="20" step="1" />
       </div>
       <div class="control-group">
-        <label for="translate-x-speed">TranslateX Speed: <output id="translate-x-speed-val">0.5</output>x</label>
-        <input type="range" id="translate-x-speed" min="0.1" max="4" value="0.5" step="0.1" />
+        <label for="vib-intensity">Vibration Intensity: <output id="vib-intensity-val">3px</output></label>
+        <input type="range" id="vib-intensity" min="0" max="8" value="3" step="0.5" />
       </div>
       <div class="control-group">
-        <label for="perspective">Perspective: <output id="perspective-val">800</output>px</label>
-        <input type="range" id="perspective" min="200" max="2000" value="800" step="50" />
-      </div>
-      <div class="control-group">
-        <label for="size-variance">Size Variance: <output id="size-variance-val">0.3</output></label>
+        <label for="size-variance">Size Variance: <output id="size-variance-val">0.30</output></label>
         <input type="range" id="size-variance" min="0" max="0.6" value="0.3" step="0.05" />
-      </div>
-      <div class="control-group">
-        <label for="fade-overlap">Crossfade Overlap: <output id="fade-overlap-val">0.3</output></label>
-        <input type="range" id="fade-overlap" min="0.1" max="0.8" value="0.3" step="0.05" />
       </div>
       <div class="control-group">
         <label>Tint Colors</label>
@@ -104,7 +108,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 800px;
+    overflow: hidden;
   }
 
   .slot {
@@ -116,10 +120,27 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     justify-content: center;
     opacity: 0;
     will-change: opacity, transform;
-    transform-style: preserve-3d;
   }
 
   .slot img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .ghost {
+    position: absolute;
+    width: 40vmin;
+    height: 40vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease-out;
+  }
+
+  .ghost img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -212,6 +233,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
 
   @media (prefers-reduced-motion: reduce) {
     .sidebar { transition: none; }
+    .slot { filter: none !important; }
   }
 
   .sidebar-header {
@@ -264,16 +286,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   .control-group input[type="range"] {
     width: 100%;
     cursor: pointer;
-  }
-
-  .control-group select {
-    width: 100%;
-    padding: var(--space-2);
-    border: 1px solid var(--color-border);
-    border-radius: 0.375rem;
-    background: var(--color-surface);
-    color: var(--color-text);
-    font-size: var(--text-sm);
   }
 
   .toggle-btn {
@@ -336,25 +348,35 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   const slotB = document.getElementById('slot-b') as HTMLElement;
   const imgA = document.getElementById('img-a') as HTMLImageElement;
   const imgB = document.getElementById('img-b') as HTMLImageElement;
+  const ghost = document.getElementById('ghost') as HTMLElement;
+  const blurA = document.getElementById('blur-a') as unknown as SVGFEGaussianBlurElement;
+  const blurB = document.getElementById('blur-b') as unknown as SVGFEGaussianBlurElement;
 
-  const stage = document.querySelector('.stage') as HTMLElement;
-
-  // Transform parameters
+  // Parameters
   let cycleDuration = 3;
-  let scaleXAmount = 0.4;
-  let scaleXSpeed = 1.0;
-  let rotateXAmount = 30;
-  let rotateXSpeed = 0.7;
-  let translateXAmount = 8;
-  let translateXSpeed = 0.5;
+  let windupRatio = 0.5;
+  let pullbackDist = 10;
+  let squashAmount = 0.65;
+  let launchSpeed = 0.6;
+  let blurMax = 20;
+  let vibIntensity = 3;
   let sizeVariance = 0.3;
-  let fadeOverlap = 0.3;
-  let perspectiveVal = 800;
   let paused = false;
-  let index = 0;
-  let colorIdx = 0;
+  let arrowIndex = 0;
+  let colorIndex = 0;
 
-  function tint(hex: string): string {
+  // Easing functions
+  function easeOutBack(t: number): number {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  }
+
+  function cubicOut(t: number): number {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function tintFilter(hex: string): string {
     const r = parseInt(hex.slice(1, 3), 16) / 255;
     const g = parseInt(hex.slice(3, 5), 16) / 255;
     const b = parseInt(hex.slice(5, 7), 16) / 255;
@@ -372,100 +394,162 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   }
 
   function nextArrow(): string {
-    const id = arrowIds[index % arrowIds.length];
-    index++;
+    const id = arrowIds[arrowIndex % arrowIds.length];
+    arrowIndex++;
     return id;
   }
 
   function nextColor(): string {
     if (activeColors.length === 0) return '#231f20';
-    const c = activeColors[colorIdx % activeColors.length];
-    colorIdx++;
+    const c = activeColors[colorIndex % activeColors.length];
+    colorIndex++;
     return c;
   }
 
-  function easeInOut(t: number) {
-    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-  }
+  // Slot state machine
+  type Phase = 'idle' | 'appear' | 'windup' | 'launch';
 
-  // State: two slots crossfade while transforms animate continuously
-  type Phase = 'idle' | 'fade-in' | 'hold' | 'fade-out';
-  const state = [
-    { phase: 'idle' as Phase, start: 0, arrow: '', color: '', sizeMult: 1, phaseOffset: 0 },
-    { phase: 'idle' as Phase, start: 0, arrow: '', color: '', sizeMult: 1, phaseOffset: 0 },
+  type SlotState = {
+    el: HTMLElement;
+    img: HTMLImageElement;
+    blur: SVGFEGaussianBlurElement;
+    phase: Phase;
+    phaseStart: number;
+    arrowId: string;
+    color: string;
+    sizeMult: number;
+  };
+
+  const slots: [SlotState, SlotState] = [
+    { el: slotA, img: imgA, blur: blurA, phase: 'idle', phaseStart: 0, arrowId: '', color: '', sizeMult: 1 },
+    { el: slotB, img: imgB, blur: blurB, phase: 'idle', phaseStart: 0, arrowId: '', color: '', sizeMult: 1 },
   ];
 
-  const els = [
-    { el: slotA, img: imgA },
-    { el: slotB, img: imgB },
-  ];
+  let activeSlot = 0;
 
-  function kick(slot: number, now: number) {
-    state[slot].arrow = nextArrow();
-    state[slot].color = nextColor();
-    state[slot].sizeMult = 1 + (Math.random() * 2 - 1) * sizeVariance;
-    // Random phase offset so each arrow's oscillation starts at a different point
-    state[slot].phaseOffset = Math.random() * Math.PI * 2;
-    els[slot].img.src = `/images/scanned-graphics/arrows/${state[slot].arrow}.svg`;
-    els[slot].img.style.filter = tint(state[slot].color);
-    state[slot].phase = 'fade-in';
-    state[slot].start = now;
+  function kickSlot(slotIdx: number, now: number) {
+    const slot = slots[slotIdx];
+    slot.arrowId = nextArrow();
+    slot.color = nextColor();
+    slot.sizeMult = 1 + (Math.random() * 2 - 1) * sizeVariance;
+    slot.img.src = `/images/scanned-graphics/arrows/${slot.arrowId}.svg`;
+    slot.img.style.filter = tintFilter(slot.color);
+    slot.phase = 'appear';
+    slot.phaseStart = now;
+    slot.blur.setAttribute('stdDeviation', '0 0');
   }
 
-  // Compute the X-axis transforms based on elapsed time
-  function computeTransform(elapsed: number, sizeMult: number, phaseOffset: number): string {
-    const tx = Math.sin(elapsed * translateXSpeed + phaseOffset) * translateXAmount;
-    const sx = 1 + Math.sin(elapsed * scaleXSpeed * 1.3 + phaseOffset) * scaleXAmount;
-    const rx = Math.sin(elapsed * rotateXSpeed * 0.9 + phaseOffset + 1) * rotateXAmount;
-
-    return `translateX(${tx}vw) scaleX(${sx * sizeMult}) rotateX(${rx}deg)`;
+  function spawnGhost(slot: SlotState, tx: number, sx: number, sy: number) {
+    ghost.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = `/images/scanned-graphics/arrows/${slot.arrowId}.svg`;
+    img.style.filter = tintFilter(slot.color);
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '100%';
+    img.style.objectFit = 'contain';
+    ghost.appendChild(img);
+    ghost.style.transform = `translateX(${tx}vw) scaleX(${sx}) scaleY(${sy}) scale(${slot.sizeMult})`;
+    ghost.style.opacity = '0.4';
+    // Force reflow, then fade out
+    ghost.offsetHeight;
+    ghost.style.opacity = '0';
   }
 
-  function tick(now: number) {
-    if (paused) { requestAnimationFrame(tick); return; }
+  const APPEAR_DUR = 0.3;
 
-    for (let i = 0; i < 2; i++) {
-      const s = state[i];
-      const { el } = els[i];
-      if (s.phase === 'idle') continue;
+  function updateSlot(slot: SlotState, now: number) {
+    if (slot.phase === 'idle') return;
 
-      const elapsed = (now - s.start) / 1000;
-      const fadeDur = cycleDuration * fadeOverlap;
-      const holdDur = cycleDuration * (1 - fadeOverlap * 2);
+    const elapsed = (now - slot.phaseStart) / 1000;
 
-      // Transforms animate continuously regardless of phase
-      el.style.transform = computeTransform(elapsed, s.sizeMult, s.phaseOffset);
+    if (slot.phase === 'appear') {
+      const t = Math.min(elapsed / APPEAR_DUR, 1);
+      const eased = easeOutBack(t);
+      const scale = 0.8 + 0.2 * eased;
+      slot.el.style.opacity = String(Math.min(t / 0.6, 1));
+      slot.el.style.transform = `scaleX(${scale * slot.sizeMult}) scaleY(${scale * slot.sizeMult})`;
+      slot.blur.setAttribute('stdDeviation', '0 0');
 
-      if (s.phase === 'fade-in') {
-        const t = Math.min(elapsed / fadeDur, 1);
-        el.style.opacity = String(easeInOut(t));
+      if (t >= 1) {
+        slot.phase = 'windup';
+        slot.phaseStart = now;
+      }
+    } else if (slot.phase === 'windup') {
+      const windupDur = cycleDuration * windupRatio;
+      const t = Math.min(elapsed / windupDur, 1);
 
-        if (t >= 1) {
-          s.phase = 'hold';
-          s.start = now;
-          el.style.opacity = '1';
-        }
-      } else if (s.phase === 'hold') {
-        const t = elapsed / Math.max(holdDur, 0.1);
+      // Smooth ease-in for pullback
+      const pullT = t * t; // quadratic ease-in
 
-        if (t >= 1) {
-          s.phase = 'fade-out';
-          s.start = now;
-          // Kick the next slot
-          const next = i === 0 ? 1 : 0;
-          kick(next, now);
-        }
-      } else if (s.phase === 'fade-out') {
-        const t = Math.min(elapsed / fadeDur, 1);
-        el.style.opacity = String(1 - easeInOut(t));
+      // Pull back on X
+      const tx = -pullbackDist * pullT;
 
-        if (t >= 1) {
-          s.phase = 'idle';
-          el.style.opacity = '0';
-        }
+      // Squash X: 1 -> squashAmount
+      const sx = 1 - (1 - squashAmount) * pullT;
+      // Stretch Y: 1 -> ~1.15 (volume preservation)
+      const stretchY = 1 + (1 / squashAmount - 1) * pullT * 0.4;
+      const sy = Math.min(stretchY, 1.2);
+
+      // Vibration chirp: frequency ramps 15->60, amplitude grows quadratically
+      const freq = 15 + 45 * t;
+      const vibAmp = vibIntensity * t * t;
+      const vibX = Math.sin(elapsed * freq) * vibAmp;
+      const vibY = Math.cos(elapsed * freq * 0.7) * vibAmp * 0.3;
+
+      slot.el.style.opacity = '1';
+      slot.el.style.transform = `translateX(calc(${tx}vw + ${vibX}px)) translateY(${vibY}px) scaleX(${sx * slot.sizeMult}) scaleY(${sy * slot.sizeMult})`;
+      slot.blur.setAttribute('stdDeviation', '0 0');
+
+      if (t >= 1) {
+        // Spawn ghost at current position before launching
+        spawnGhost(slot, tx, sx * slot.sizeMult, sy * slot.sizeMult);
+        slot.phase = 'launch';
+        slot.phaseStart = now;
+        // Kick the next slot into appear
+        const next = activeSlot === 0 ? 1 : 0;
+        activeSlot = next;
+        kickSlot(next, now);
+      }
+    } else if (slot.phase === 'launch') {
+      const t = Math.min(elapsed / launchSpeed, 1);
+      const eased = cubicOut(t);
+
+      // Translate: from pullback position -> off right edge
+      const startTx = -pullbackDist;
+      const endTx = 120;
+      const tx = startTx + (endTx - startTx) * eased;
+
+      // ScaleX stretches: squashAmount -> 2.2
+      const sx = squashAmount + (2.2 - squashAmount) * eased;
+      // ScaleY compresses: ~1.15 -> 0.6
+      const startSy = 1 + (1 / squashAmount - 1) * 0.4;
+      const sy = startSy + (0.6 - startSy) * eased;
+
+      // Opacity fades in second half
+      const opacity = t < 0.5 ? 1 : 1 - (t - 0.5) * 2;
+
+      // Motion blur: peaks early then fades
+      const blurT = t < 0.3 ? t / 0.3 : 1 - (t - 0.3) / 0.7;
+      const blurVal = blurMax * blurT;
+      slot.blur.setAttribute('stdDeviation', `${blurVal} 0`);
+
+      slot.el.style.opacity = String(Math.max(opacity, 0));
+      slot.el.style.transform = `translateX(${tx}vw) scaleX(${sx * slot.sizeMult}) scaleY(${sy * slot.sizeMult})`;
+
+      if (t >= 1) {
+        slot.phase = 'idle';
+        slot.el.style.opacity = '0';
+        slot.blur.setAttribute('stdDeviation', '0 0');
       }
     }
-    requestAnimationFrame(tick);
+  }
+
+  function animate(now: number) {
+    if (!paused) {
+      updateSlot(slots[0], now);
+      updateSlot(slots[1], now);
+    }
+    requestAnimationFrame(animate);
   }
 
   // --- Controls ---
@@ -484,16 +568,14 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   });
 
   const rangeControls: Array<{ id: string; valId: string; suffix: string; setter: (v: number) => void }> = [
-    { id: 'cycle-speed', valId: 'cycle-speed-val', suffix: 's', setter: v => { cycleDuration = v; } },
-    { id: 'scale-x-amount', valId: 'scale-x-amount-val', suffix: '', setter: v => { scaleXAmount = v; } },
-    { id: 'scale-x-speed', valId: 'scale-x-speed-val', suffix: '', setter: v => { scaleXSpeed = v; } },
-    { id: 'rotate-x-amount', valId: 'rotate-x-amount-val', suffix: '', setter: v => { rotateXAmount = v; } },
-    { id: 'rotate-x-speed', valId: 'rotate-x-speed-val', suffix: '', setter: v => { rotateXSpeed = v; } },
-    { id: 'translate-x-amount', valId: 'translate-x-amount-val', suffix: '', setter: v => { translateXAmount = v; } },
-    { id: 'translate-x-speed', valId: 'translate-x-speed-val', suffix: '', setter: v => { translateXSpeed = v; } },
-    { id: 'perspective', valId: 'perspective-val', suffix: '', setter: v => { perspectiveVal = v; stage.style.perspective = `${v}px`; } },
+    { id: 'cycle-duration', valId: 'cycle-duration-val', suffix: 's', setter: v => { cycleDuration = v; } },
+    { id: 'windup-ratio', valId: 'windup-ratio-val', suffix: '', setter: v => { windupRatio = v; } },
+    { id: 'pullback-dist', valId: 'pullback-dist-val', suffix: 'vw', setter: v => { pullbackDist = v; } },
+    { id: 'squash-amount', valId: 'squash-amount-val', suffix: '', setter: v => { squashAmount = v; } },
+    { id: 'launch-speed', valId: 'launch-speed-val', suffix: 's', setter: v => { launchSpeed = v; } },
+    { id: 'blur-max', valId: 'blur-max-val', suffix: 'px', setter: v => { blurMax = v; } },
+    { id: 'vib-intensity', valId: 'vib-intensity-val', suffix: 'px', setter: v => { vibIntensity = v; } },
     { id: 'size-variance', valId: 'size-variance-val', suffix: '', setter: v => { sizeVariance = v; } },
-    { id: 'fade-overlap', valId: 'fade-overlap-val', suffix: '', setter: v => { fadeOverlap = v; } },
   ];
 
   for (const ctrl of rangeControls) {
@@ -527,6 +609,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     pauseBtn.textContent = 'Play';
   }
 
-  kick(0, performance.now());
-  requestAnimationFrame(tick);
+  // --- Init ---
+  kickSlot(0, performance.now());
+  requestAnimationFrame(animate);
 </script>
