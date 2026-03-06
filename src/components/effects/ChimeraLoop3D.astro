@@ -1,0 +1,91 @@
+---
+interface Props {
+  /** Unique ID prefix (must be unique per page) */
+  id: string;
+  /** Cycle duration in seconds */
+  cycleDuration?: number;
+  /** Crossfade overlap (0–0.45) */
+  fadeOverlap?: number;
+  /** Elastic overshoot intensity (0–2) */
+  elasticIntensity?: number;
+  /** Max skew degrees during transitions */
+  skewAmount?: number;
+  /** Drift animation speed multiplier during hold */
+  driftSpeed?: number;
+  /** Size variance per shape (0–1) */
+  sizeVariance?: number;
+  /** Shape tint color (CSS color). Overridden by `colors` if provided. */
+  color?: string;
+  /** Array of colors to cycle through */
+  colors?: string[];
+  /** Delay before starting the loop (seconds) */
+  startDelay?: number;
+  /** CSS class for outer wrapper */
+  class?: string;
+}
+
+const {
+  id,
+  cycleDuration = 4,
+  fadeOverlap = 0.3,
+  elasticIntensity = 1,
+  skewAmount = 15,
+  driftSpeed = 1,
+  sizeVariance = 0.25,
+  color = '#ffffff',
+  colors,
+  startDelay = 0,
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={['chimera-loop-3d', className]}
+  data-chimera-loop
+  data-cycle-duration={cycleDuration}
+  data-fade-overlap={fadeOverlap}
+  data-elastic-intensity={elasticIntensity}
+  data-skew-amount={skewAmount}
+  data-drift-speed={driftSpeed}
+  data-size-variance={sizeVariance}
+  data-colors={colors ? colors.join(',') : color}
+  data-start-delay={startDelay}
+>
+  <div class="chimera-loop-3d__slot" data-slot="a">
+    <div class="chimera-loop-3d__shape" data-shape="a"></div>
+  </div>
+  <div class="chimera-loop-3d__slot" data-slot="b">
+    <div class="chimera-loop-3d__shape" data-shape="b"></div>
+  </div>
+</div>
+
+<style>
+  .chimera-loop-3d {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chimera-loop-3d__slot {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  .chimera-loop-3d__shape {
+    position: absolute;
+    inset: 0;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-mode: alpha;
+    -webkit-mask-mode: alpha;
+  }
+</style>
