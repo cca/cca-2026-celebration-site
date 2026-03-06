@@ -1,5 +1,6 @@
 ---
 import Button from '../ui/Button.astro';
+import ArrowLoop3D from '../effects/ArrowLoop3D.astro';
 
 interface Props {
   heading?: string;
@@ -47,29 +48,50 @@ const {
     </div>
   </div>
   <!-- Doodles after container so they paint on top and receive pointer events -->
-  <img
-    class="floating-img floating-img-behind hero__doodle"
+  <div
+    class="floating-img floating-img-behind"
     data-cursor-track
     data-cursor-strength="0.04"
     data-cursor-max="30"
     data-cursor-lerp="0.08"
-    data-random-arrow
-    alt=""
     aria-hidden="true"
-  />
-  <img
-    class="floating-img floating-img-front hero__doodle"
+  >
+    <ArrowLoop3D
+      id="signup-arrow-1"
+      cycleDuration={3}
+      fadeOverlap={0.15}
+      scaleAmount={0.04}
+      spinDegrees={180}
+      spinAxis="Y"
+      perspective={300}
+      sizeVariance={0.3}
+      color="#ffffff"
+    />
+  </div>
+  <div
+    class="floating-img floating-img-front"
     data-cursor-track
     data-cursor-strength="0.05"
     data-cursor-max="35"
     data-cursor-lerp="0.1"
-    data-random-arrow
-    alt=""
     aria-hidden="true"
-  />
+  >
+    <ArrowLoop3D
+      id="signup-arrow-2"
+      cycleDuration={3}
+      fadeOverlap={0.15}
+      scaleAmount={0.04}
+      spinDegrees={180}
+      spinAxis="Y"
+      perspective={300}
+      sizeVariance={0.3}
+      color="#ffffff"
+      startDelay={1.5}
+    />
+  </div>
 </section>
 
-<script src="../../scripts/random-arrows.ts"></script>
+<script src="../../scripts/arrow-loop-3d.ts"></script>
 <script>
   // Find the component's own section (not an outer wrapper that shares the class name)
   const signupSection = document.querySelector('.signup-card-wrapper')?.closest('.signup-section') as HTMLElement | null;
@@ -157,12 +179,12 @@ const {
     opacity: 1;
     cursor: pointer;
     z-index: 2;
-    object-fit: contain;
     transition: transform 0.4s var(--ease-out-expo);
   }
 
   .floating-img-behind {
     width: clamp(48px, 6vw, 90px);
+    height: clamp(48px, 6vw, 90px);
     bottom: var(--space-16);
     left: calc(50% - 420px);
     transform: rotate(-6deg);
@@ -170,6 +192,7 @@ const {
 
   .floating-img-front {
     width: clamp(36px, 4.5vw, 64px);
+    height: clamp(36px, 4.5vw, 64px);
     top: var(--space-16);
     right: calc(50% - 400px);
     transform: rotate(4deg);

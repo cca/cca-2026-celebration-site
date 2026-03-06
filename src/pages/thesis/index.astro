@@ -8,6 +8,7 @@ import PastGallery from '../../components/sections/PastGallery.astro';
 import FramedImage from '../../components/ui/FramedImage.astro';
 import { formatDateRange } from '../../lib/utils/format';
 import HalftoneDisplacement from '../../components/effects/HalftoneDisplacement.astro';
+import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
 
@@ -64,28 +65,45 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
           uid="thesis-hero-2"
         />
       </div>
-      <img
+      <div
         class="showcase-hero__fragment showcase-hero__doodle showcase-hero__doodle--1"
         data-cursor-track
         data-cursor-strength="0.05"
         data-cursor-max="45"
         data-cursor-lerp="0.12"
-        data-random-arrow
-        alt=""
-        width="70"
-        height="70"
-      />
-      <img
+      >
+        <ArrowLoop3D
+          id="hero-arrow-1"
+          cycleDuration={3}
+          fadeOverlap={0.15}
+          scaleAmount={0.04}
+          spinDegrees={180}
+          spinAxis="Y"
+          perspective={300}
+          sizeVariance={0.3}
+          color="#ffffff"
+        />
+      </div>
+      <div
         class="showcase-hero__fragment showcase-hero__doodle showcase-hero__doodle--2"
         data-cursor-track
         data-cursor-strength="0.038"
         data-cursor-max="32"
         data-cursor-lerp="0.09"
-        data-random-arrow
-        alt=""
-        width="60"
-        height="60"
-      />
+      >
+        <ArrowLoop3D
+          id="hero-arrow-2"
+          cycleDuration={3}
+          fadeOverlap={0.15}
+          scaleAmount={0.04}
+          spinDegrees={180}
+          spinAxis="Y"
+          perspective={300}
+          sizeVariance={0.3}
+          color="#ffffff"
+          startDelay={1.5}
+        />
+      </div>
     </div>
     <div class="showcase-hero__content">
       <span class="showcase-hero__label">CCA 2026</span>
@@ -201,14 +219,9 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
 <script src="../../scripts/cursor-track.ts"></script>
 <script src="../../scripts/doodle-antics.ts"></script>
-<script src="../../scripts/random-arrows.ts"></script>
+<script src="../../scripts/arrow-loop-3d.ts"></script>
 
 <style>
-  /* Invert arrows to white for dark background */
-  :global(.signup-section .floating-img) {
-    filter: brightness(0) invert(1);
-  }
-
   /* ── Hero ── */
   .showcase-hero {
     position: relative;
@@ -294,24 +307,22 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   }
 
   .showcase-hero__doodle {
-    border-radius: 0;
     pointer-events: auto;
     cursor: pointer;
-    filter: brightness(0) invert(1);
   }
 
   .showcase-hero__doodle--1 {
     bottom: 28%;
     right: 7%;
     width: clamp(70px, 9vw, 130px);
-    rotate: 15deg;
+    height: clamp(70px, 9vw, 130px);
   }
 
   .showcase-hero__doodle--2 {
     top: 14%;
     left: 7%;
     width: clamp(50px, 7vw, 100px);
-    rotate: -8deg;
+    height: clamp(50px, 7vw, 100px);
   }
 
   @media (prefers-reduced-motion: no-preference) {

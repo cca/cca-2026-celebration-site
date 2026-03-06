@@ -1,0 +1,545 @@
+---
+import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
+---
+
+<DemoEffectLayout title="Arrow Loop — Crossfade">
+  <div class="stage">
+    <div class="slot" id="slot-a">
+      <img id="img-a" src="" alt="" />
+    </div>
+    <div class="slot" id="slot-b">
+      <img id="img-b" src="" alt="" />
+    </div>
+  </div>
+
+  <div class="demo-overlay">
+    <a href="/demo/" class="back-link">&larr; Demo Pages</a>
+    <h1 class="demo-title">Arrow Loop — Crossfade</h1>
+    <p class="demo-technique">3D rotation · Crossfade · Size variance · Color cycling</p>
+  </div>
+
+  <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle controls" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="6" cy="4" r="1.5"/><line x1="6" y1="5.5" x2="6" y2="18"/>
+      <circle cx="14" cy="10" r="1.5"/><line x1="14" y1="2" x2="14" y2="8.5"/><line x1="14" y1="11.5" x2="14" y2="18"/>
+      <circle cx="10" cy="15" r="1.5"/><line x1="10" y1="2" x2="10" y2="13.5"/><line x1="10" y1="16.5" x2="10" y2="18"/>
+    </svg>
+  </button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Controls</h2>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close controls">&times;</button>
+    </div>
+    <p class="sidebar-description">
+      Arrows spin in through 3D space with a full rotation, hold with a gentle wobble,
+      then spin out as the next arrives. Each arrow gets a random size and celebration color.
+    </p>
+    <div class="controls">
+      <div class="control-group">
+        <label for="cycle-speed">Cycle Duration: <output id="cycle-speed-val">2.5s</output></label>
+        <input type="range" id="cycle-speed" min="1" max="6" value="2.5" step="0.5" />
+      </div>
+      <div class="control-group">
+        <label for="fade-overlap">Crossfade Overlap: <output id="fade-overlap-val">0.4</output></label>
+        <input type="range" id="fade-overlap" min="0.1" max="0.8" value="0.4" step="0.05" />
+      </div>
+      <div class="control-group">
+        <label for="scale-amount">Scale Amount: <output id="scale-amount-val">0.08</output></label>
+        <input type="range" id="scale-amount" min="0" max="0.3" value="0.08" step="0.01" />
+      </div>
+      <div class="control-group">
+        <label for="spin-degrees">3D Spin: <output id="spin-degrees-val">360</output>&deg;</label>
+        <input type="range" id="spin-degrees" min="0" max="720" value="360" step="45" />
+      </div>
+      <div class="control-group">
+        <label for="spin-axis">Spin Axis</label>
+        <select id="spin-axis">
+          <option value="Y" selected>Y (horizontal flip)</option>
+          <option value="X">X (vertical flip)</option>
+          <option value="random">Random per arrow</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="perspective">Perspective: <output id="perspective-val">800</output>px</label>
+        <input type="range" id="perspective" min="200" max="2000" value="800" step="50" />
+      </div>
+      <div class="control-group">
+        <label for="size-variance">Size Variance: <output id="size-variance-val">0.3</output></label>
+        <input type="range" id="size-variance" min="0" max="0.6" value="0.3" step="0.05" />
+      </div>
+      <div class="control-group">
+        <label>Tint Colors</label>
+        <div class="swatch-picker" id="tint-swatches">
+          <button class="swatch active" data-color="#00BFB3" style="background:#00BFB3" title="Teal"></button>
+          <button class="swatch active" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch active" data-color="#E57200" style="background:#E57200" title="Orange"></button>
+          <button class="swatch active" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch active" data-color="#B7BF10" style="background:#B7BF10" title="Lime"></button>
+          <button class="swatch active" data-color="#F1BDC8" style="background:#F1BDC8" title="Pink"></button>
+          <button class="swatch active" data-color="#005776" style="background:#005776" title="Navy"></button>
+        </div>
+        <p class="swatch-hint">Click to toggle colors in the cycle</p>
+      </div>
+      <div class="control-group">
+        <button class="toggle-btn" id="toggle-pause">Pause</button>
+      </div>
+    </div>
+  </aside>
+</DemoEffectLayout>
+
+<style>
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 800px;
+  }
+
+  .slot {
+    position: absolute;
+    width: 40vmin;
+    height: 40vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    will-change: opacity, transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  .slot img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .demo-overlay {
+    position: fixed;
+    top: 5rem;
+    left: var(--space-6);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-2);
+    pointer-events: auto;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 0.25rem;
+  }
+
+  .demo-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-1);
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  .demo-technique {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-right: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background 0.2s ease;
+  }
+
+  .sidebar-toggle:hover {
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.9);
+  }
+
+  .sidebar-toggle[aria-expanded="true"] { display: none; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 30;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid var(--color-border);
+    padding: var(--space-6);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar { transition: none; }
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+
+  .sidebar-header h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+  }
+
+  .sidebar-close {
+    background: none;
+    border: none;
+    font-size: var(--text-xl);
+    cursor: pointer;
+    color: var(--color-muted);
+    padding: var(--space-1);
+    line-height: 1;
+  }
+
+  .sidebar-description {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .control-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .control-group label {
+    display: block;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-1);
+  }
+
+  .control-group output {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .control-group input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .control-group select {
+    width: 100%;
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+  }
+
+  .toggle-btn {
+    width: 100%;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+
+  .toggle-btn:hover { border-color: var(--color-accent); }
+
+  .swatch-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .swatch {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+    opacity: 0.35;
+  }
+
+  .swatch:hover { transform: scale(1.15); }
+
+  .swatch.active {
+    border-color: var(--color-text);
+    opacity: 1;
+  }
+
+  .swatch-hint {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    opacity: 0.7;
+  }
+</style>
+
+<script>
+  const arrowIds = [
+    'arrow-02', 'arrow-03', 'arrow-04', 'arrow-05', 'arrow-06',
+    'arrow-07', 'arrow-08', 'arrow-09', 'arrow-10', 'arrow-11',
+    'arrow-12', 'arrow-13',
+  ];
+
+  const allColors = ['#00BFB3', '#563D82', '#E57200', '#FFC845', '#B7BF10', '#F1BDC8', '#005776'];
+  let activeColors = [...allColors];
+
+  const slotA = document.getElementById('slot-a') as HTMLElement;
+  const slotB = document.getElementById('slot-b') as HTMLElement;
+  const imgA = document.getElementById('img-a') as HTMLImageElement;
+  const imgB = document.getElementById('img-b') as HTMLImageElement;
+
+  const stage = document.querySelector('.stage') as HTMLElement;
+
+  let cycleDuration = 2.5;
+  let fadeOverlap = 0.4;
+  let scaleAmount = 0.08;
+  let spinDegrees = 360;
+  let spinAxis: 'X' | 'Y' | 'random' = 'Y';
+  let sizeVariance = 0.3;
+  let perspectiveVal = 800;
+  let paused = false;
+  let index = 0;
+  let colorIdx = 0;
+
+  function tint(hex: string): string {
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    let h = 0, s = 0;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+      else if (max === g) h = ((b - r) / d + 2) * 60;
+      else h = ((r - g) / d + 4) * 60;
+    }
+    return `brightness(0) saturate(100%) invert(${l > 0.5 ? 1 : 0.5}) sepia(1) saturate(${Math.max(s * 600, 100)}%) hue-rotate(${h}deg) brightness(${0.4 + l * 0.8})`;
+  }
+
+  function nextArrow(): string {
+    const id = arrowIds[index % arrowIds.length];
+    index++;
+    return id;
+  }
+
+  function nextColor(): string {
+    if (activeColors.length === 0) return '#231f20';
+    const c = activeColors[colorIdx % activeColors.length];
+    colorIdx++;
+    return c;
+  }
+
+  function easeInOut(t: number) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  // State machine: two slots alternate
+  // Each cycle: fade-in (0 → overlap), hold (overlap → 1-overlap), fade-out (1-overlap → 1)
+  // Next slot starts its fade-in when current starts fade-out
+
+  type Phase = 'idle' | 'spin-in' | 'hold' | 'spin-out';
+  const state = [
+    { phase: 'idle' as Phase, start: 0, arrow: '', color: '', dir: 1, axis: 'Y' as 'X' | 'Y', sizeMult: 1 },
+    { phase: 'idle' as Phase, start: 0, arrow: '', color: '', dir: 1, axis: 'Y' as 'X' | 'Y', sizeMult: 1 },
+  ];
+
+  const els = [
+    { el: slotA, img: imgA },
+    { el: slotB, img: imgB },
+  ];
+
+  function pickAxis(): 'X' | 'Y' {
+    if (spinAxis === 'random') return Math.random() < 0.5 ? 'X' : 'Y';
+    return spinAxis;
+  }
+
+  function kick(slot: number, now: number) {
+    state[slot].arrow = nextArrow();
+    state[slot].color = nextColor();
+    state[slot].dir = Math.random() < 0.5 ? -1 : 1;
+    state[slot].axis = pickAxis();
+    state[slot].sizeMult = 1 + (Math.random() * 2 - 1) * sizeVariance;
+    els[slot].img.src = `/images/scanned-graphics/arrows/${state[slot].arrow}.svg`;
+    els[slot].img.style.filter = tint(state[slot].color);
+    state[slot].phase = 'spin-in';
+    state[slot].start = now;
+  }
+
+  function spin3d(axis: 'X' | 'Y', degrees: number, scale: number): string {
+    return `rotate${axis}(${degrees}deg) scale(${scale})`;
+  }
+
+  function tick(now: number) {
+    if (paused) { requestAnimationFrame(tick); return; }
+
+    for (let i = 0; i < 2; i++) {
+      const s = state[i];
+      const { el } = els[i];
+      if (s.phase === 'idle') continue;
+
+      const elapsed = (now - s.start) / 1000;
+      const spinDur = cycleDuration * fadeOverlap;
+      const holdDur = cycleDuration * (1 - fadeOverlap * 2);
+
+      if (s.phase === 'spin-in') {
+        const t = Math.min(elapsed / spinDur, 1);
+        const e = easeInOut(t);
+
+        // Spin from full rotation down to 0
+        const deg = (1 - e) * spinDegrees * s.dir;
+        const baseScale = s.sizeMult;
+        const scale = baseScale * ((1 - scaleAmount) + scaleAmount * e);
+
+        // Opacity: fade in quickly in the first half, fully visible by midpoint
+        // This avoids the backface being visible while transparent
+        const opacity = Math.min(e * 2, 1);
+        el.style.opacity = String(opacity);
+        el.style.transform = spin3d(s.axis, deg, scale);
+
+        if (t >= 1) {
+          s.phase = 'hold';
+          s.start = now;
+          el.style.opacity = '1';
+          el.style.transform = `scale(${baseScale})`;
+        }
+      } else if (s.phase === 'hold') {
+        const t = elapsed / Math.max(holdDur, 0.1);
+        const baseScale = s.sizeMult;
+        // Gentle 3D wobble during hold
+        const wobbleY = Math.sin(elapsed * 1.8) * 6;
+        const wobbleX = Math.cos(elapsed * 1.3) * 4;
+        const breathe = Math.sin(elapsed * 2) * scaleAmount * 0.3;
+        el.style.transform = `rotateY(${wobbleY}deg) rotateX(${wobbleX}deg) scale(${baseScale * (1 + breathe)})`;
+
+        if (t >= 1) {
+          s.phase = 'spin-out';
+          s.start = now;
+          const next = i === 0 ? 1 : 0;
+          kick(next, now);
+        }
+      } else if (s.phase === 'spin-out') {
+        const t = Math.min(elapsed / spinDur, 1);
+        const e = easeInOut(t);
+
+        // Spin from 0 out to full rotation (opposite direction)
+        const deg = e * spinDegrees * -s.dir;
+        const baseScale = s.sizeMult;
+        const scale = baseScale * (1 + scaleAmount * e * 0.5);
+
+        // Fade out in the second half of the spin
+        const opacity = Math.max(1 - (e - 0.5) * 2, 0);
+        el.style.opacity = String(opacity);
+        el.style.transform = spin3d(s.axis, deg, scale);
+
+        if (t >= 1) { s.phase = 'idle'; el.style.opacity = '0'; }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // --- Controls ---
+  const toggle = document.getElementById('sidebar-toggle')!;
+  const sidebar = document.getElementById('sidebar')!;
+  const closeBtn = document.getElementById('sidebar-close')!;
+
+  toggle.addEventListener('click', () => {
+    sidebar.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+
+  const rangeControls: Array<{ id: string; valId: string; suffix: string; setter: (v: number) => void }> = [
+    { id: 'cycle-speed', valId: 'cycle-speed-val', suffix: 's', setter: v => { cycleDuration = v; } },
+    { id: 'fade-overlap', valId: 'fade-overlap-val', suffix: '', setter: v => { fadeOverlap = v; } },
+    { id: 'scale-amount', valId: 'scale-amount-val', suffix: '', setter: v => { scaleAmount = v; } },
+    { id: 'spin-degrees', valId: 'spin-degrees-val', suffix: '', setter: v => { spinDegrees = v; } },
+    { id: 'size-variance', valId: 'size-variance-val', suffix: '', setter: v => { sizeVariance = v; } },
+    { id: 'perspective', valId: 'perspective-val', suffix: '', setter: v => { perspectiveVal = v; stage.style.perspective = `${v}px`; } },
+  ];
+
+  for (const ctrl of rangeControls) {
+    const input = document.getElementById(ctrl.id) as HTMLInputElement;
+    const output = document.getElementById(ctrl.valId) as HTMLOutputElement;
+    input.addEventListener('input', () => {
+      output.textContent = input.value + ctrl.suffix;
+      ctrl.setter(parseFloat(input.value));
+    });
+  }
+
+  const axisSelect = document.getElementById('spin-axis') as HTMLSelectElement;
+  axisSelect.addEventListener('change', () => {
+    spinAxis = axisSelect.value as 'X' | 'Y' | 'random';
+  });
+
+  document.getElementById('tint-swatches')!.querySelectorAll('.swatch').forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      swatch.classList.toggle('active');
+      activeColors = [];
+      document.getElementById('tint-swatches')!.querySelectorAll('.swatch.active').forEach(s => {
+        activeColors.push((s as HTMLElement).dataset.color!);
+      });
+      if (activeColors.length === 0) activeColors = ['#231f20'];
+    });
+  });
+
+  const pauseBtn = document.getElementById('toggle-pause') as HTMLButtonElement;
+  pauseBtn.addEventListener('click', () => {
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'Play' : 'Pause';
+  });
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    paused = true;
+    pauseBtn.textContent = 'Play';
+  }
+
+  kick(0, performance.now());
+  requestAnimationFrame(tick);
+</script>
