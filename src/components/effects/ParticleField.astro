@@ -114,7 +114,8 @@ const {
       speed: number;
       drift: number;
       driftPhase: number;
-      shape: 'rect' | 'circle' | 'triangle';
+      shape: 'strip' | 'dot' | 'diamond' | 'sliver' | 'square';
+      aspect: number;
       pathIndex: number;
     }
 
@@ -128,7 +129,7 @@ const {
     function createParticle(cfg: ReturnType<typeof readConfig>): Particle {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const shapes: Particle['shape'][] = ['rect', 'circle', 'triangle'];
+      const shapes: Particle['shape'][] = ['strip', 'dot', 'diamond', 'sliver', 'square'];
       const [minSize, maxSize] = cfg.sizeRange;
       const [minOpacity, maxOpacity] = cfg.opacityRange;
       return {
@@ -138,11 +139,12 @@ const {
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         opacity: minOpacity + Math.random() * (maxOpacity - minOpacity),
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        rotationSpeed: (Math.random() - 0.5) * 0.04,
         speed: 0.15 + Math.random() * 0.35,
         drift: 0.3 + Math.random() * 0.7,
         driftPhase: Math.random() * Math.PI * 2,
         shape: shapes[Math.floor(Math.random() * shapes.length)],
+        aspect: 0.25 + Math.random() * 0.35,
         pathIndex: path2DObjects.length > 0
           ? Math.floor(Math.random() * path2DObjects.length)
           : 0,
@@ -165,22 +167,31 @@ const {
         c.translate(-vw / 2, -vh / 2);
         c.fill(path);
       } else {
+        const s = p.size;
+        const a = p.aspect; // 0.25–0.6 thin ratio
         switch (p.shape) {
-          case 'rect':
-            c.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          case 'strip': // thin rectangular confetti strip
+            c.fillRect(-s / 2, -s * a / 2, s, s * a);
             break;
-          case 'circle':
+          case 'dot': // tiny circle
             c.beginPath();
-            c.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+            c.arc(0, 0, s * 0.35, 0, Math.PI * 2);
             c.fill();
             break;
-          case 'triangle':
+          case 'diamond': // small diamond / rhombus
             c.beginPath();
-            c.moveTo(0, -p.size / 2);
-            c.lineTo(p.size / 2, p.size / 2);
-            c.lineTo(-p.size / 2, p.size / 2);
+            c.moveTo(0, -s / 2);
+            c.lineTo(s * a, 0);
+            c.lineTo(0, s / 2);
+            c.lineTo(-s * a, 0);
             c.closePath();
             c.fill();
+            break;
+          case 'sliver': // very thin ribbon piece
+            c.fillRect(-s / 2, -s * 0.12, s, s * 0.24);
+            break;
+          case 'square': // small square confetti
+            c.fillRect(-s * 0.3, -s * 0.3, s * 0.6, s * 0.6);
             break;
         }
       }

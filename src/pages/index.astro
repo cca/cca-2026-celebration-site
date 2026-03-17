@@ -2,12 +2,12 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
-import { chimeraPaths } from '../data/chimera-paths';
+
 import EmailSignup from '../components/sections/EmailSignup.astro';
 import ChimeraLoop3D from '../components/effects/ChimeraLoop3D.astro';
 import ArrowLoop3D from '../components/effects/ArrowLoop3D.astro';
-import QuoteBlock from '../components/ui/QuoteBlock.astro';
 import Button from '../components/ui/Button.astro';
+import FramedImage from '../components/ui/FramedImage.astro';
 import { getCurrentPhase } from '../lib/utils/phase';
 import { isPhaseAtLeast } from '../config/phases';
 
@@ -27,42 +27,38 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 <BaseLayout title="2026 Celebrations" description="Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.">
 
   <ParticleField
-    mode="svg"
-    svgPaths={chimeraPaths}
     colors={['#00BFB3', '#563D82', '#FFC845', '#E57200', '#005776']}
-    count={35}
-    sizeRange={[14, 40]}
-    opacityRange={[0.08, 0.3]}
+    count={80}
+    sizeRange={[3, 9]}
+    opacityRange={[0.12, 0.45]}
   />
 
   <!-- 1. Hero -->
   <section class="hero" data-cursor-scope>
     <div class="hero__seal" aria-hidden="true"></div>
     <div class="hero__collage" aria-hidden="true">
-      <img
+      <div
         class="hero__fragment hero__fragment--1"
-        data-cursor-track
-        data-cursor-strength="0.02"
-        data-cursor-max="24"
-        data-cursor-lerp="0.05"
-        src="https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg"
-        alt=""
-        loading="eager"
-        width="640"
-        height="480"
-      />
-      <img
-        class="hero__fragment hero__fragment--2"
         data-cursor-track
         data-cursor-strength="0.028"
         data-cursor-max="20"
         data-cursor-lerp="0.07"
-        src="https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg"
-        alt=""
-        loading="eager"
-        width="480"
-        height="640"
-      />
+      >
+        <FramedImage
+          frameId="frame-23"
+          src="/images/cca-photography/commencement-masters24.jpg"
+          alt=""
+          uid="home-hero-1"
+        />
+      </div>
+      <div
+        class="hero__fragment hero__fragment--2"
+        data-cursor-track
+        data-cursor-strength="0.02"
+        data-cursor-max="24"
+        data-cursor-lerp="0.05"
+        style="background-image: url('/images/cca-photography/eoy-show-sp25.jpg'); mask-image: url('/images/chimera-expanded-2026/shape-040.svg'); -webkit-mask-image: url('/images/chimera-expanded-2026/shape-040.svg');"
+      ></div>
       <div
         class="hero__fragment hero__fragment--3 hero__doodle"
         data-cursor-track
@@ -110,15 +106,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
           ? 'Honoring the creativity, resilience, and vision of the Class of 2026.'
           : 'Honoring the creativity, resilience, and vision of our graduating class.'}
       </p>
-      <div class="hero__ctas stagger-5">
-        {isPostEvent ? (
-          <Button href="/commencement/" variant="primary">Commencement</Button>
-          <Button href="#events" variant="outline">Browse Events</Button>
-        ) : (
-          <Button href="#events" variant="primary">Explore Events</Button>
-          <Button href="/subscribe/" variant="outline">Subscribe for Updates</Button>
-        )}
-      </div>
     </div>
     <div class="hero__scroll" aria-hidden="true">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -151,10 +138,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
           <div class="anchor-section__content">
             <div class="anchor-section__header">
               <span class="section-label">May 16, 2026</span>
-              <h2 class="anchor-section__title">
-                <span class="anchor-section__number shimmer-text">119<sup>th</sup></span>
-                <span class="anchor-section__name">Commencement</span>
-              </h2>
+              <h2 class="anchor-section__title">119<sup>th</sup> Commencement</h2>
             </div>
             <div class="anchor-section__body">
               <p class="anchor-section__desc">{commencementEntry.data.description}</p>
@@ -177,13 +161,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     </section>
   )}
 
-  <!-- 5. Quote -->
-  <QuoteBlock
-    text="Our graduates leave CCA not just as skilled artists and designers, but as creative leaders ready to shape a more just and joyful world."
-    attribution="Tamara Alvarado, President, California College of the Arts"
-    variant="gradient"
-  />
-
   <!-- 5. Graduation Exhibitions -->
     {showcaseEntry && (
       <section class="anchor-section anchor-section--exhibitions reveal">
@@ -192,15 +169,12 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
             <div class="anchor-section__content">
               <div class="anchor-section__header">
                 <span class="section-label">May 15, 2026</span>
-                <h2 class="anchor-section__title">
-                  <span class="anchor-section__number shimmer-text">700<sup>+</sup></span>
-                  <span class="anchor-section__name">Graduating Students</span>
-                </h2>
+                <h2 class="anchor-section__title">CCA Graduation Exhibitions 2026</h2>
               </div>
               <div class="anchor-section__body">
                 <p class="anchor-section__desc">{showcaseEntry.data.description}</p>
                 <div class="anchor-section__cta">
-                  <Button href="/thesis/" variant="link">Explore Exhibitions</Button>
+                  <Button href="/thesis/" variant="link">Join the All-Campus Celebration</Button>
                 </div>
               </div>
             </div>
@@ -221,7 +195,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   <!-- 7. Email Signup -->
   <section id="subscribe" class="signup-section">
     <div class="signup-section__glow" aria-hidden="true"></div>
-    <EmailSignup heading="Don't Miss a Moment" description="Sign up for the CCA mailing list to receive updates on commencement, exhibitions, showcases, and more." />
+    <EmailSignup />
   </section>
 
 </BaseLayout>
@@ -375,7 +349,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   .hero__fragment {
     position: absolute;
-    border-radius: 6px;
     opacity: 0;
     animation: fragment-enter 0.6s var(--ease-out-expo) forwards;
   }
@@ -383,9 +356,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   .hero__fragment--1 {
     top: 8%;
     right: 4%;
-    width: 24vw;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    width: 22vw;
     rotate: 4deg;
     animation-delay: 0.15s;
   }
@@ -393,9 +364,16 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   .hero__fragment--2 {
     bottom: 10%;
     left: 3%;
-    width: 20vw;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
+    width: 22vw;
+    aspect-ratio: 9.49 / 8.47;
+    background-size: cover;
+    background-position: center 30%;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
     rotate: -5deg;
     animation-delay: 0.3s;
   }
@@ -519,30 +497,16 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   }
 
   .anchor-section__title {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-    margin: 0;
-  }
-
-  .anchor-section__number {
-    font-family: var(--font-display);
-    font-size: clamp(5rem, 12vw, 10rem);
-    font-weight: normal;
-    line-height: 1.15;
-  }
-
-  .anchor-section__number sup {
-    font-size: 0.4em;
-    vertical-align: super;
-  }
-
-  .anchor-section__name {
     font-family: var(--font-heading);
     font-size: clamp(1.75rem, 4vw, 3rem);
     font-weight: 700;
     line-height: 1.1;
+    margin: 0;
+  }
+
+  .anchor-section__title sup {
+    font-size: 0.5em;
+    vertical-align: super;
   }
 
   .anchor-section__meta {
@@ -583,11 +547,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   }
 
   @media (max-width: 767px) {
-    .anchor-section__title {
-      flex-direction: column;
-      gap: var(--space-1);
-    }
-
     .anchor-section__image img {
       aspect-ratio: 16 / 9;
     }

@@ -2,10 +2,12 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
-import { chimeraPaths } from '../../data/chimera-paths';
+import { chimeraExpanded2026Paths, chimeraExpanded2026Colors } from '../../data/chimera-expanded-2026-paths';
 import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
+import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
+
 import PastGallery from '../../components/sections/PastGallery.astro';
 import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
 import { formatDate } from '../../lib/utils/format';
@@ -65,39 +67,115 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 <BaseLayout title="Commencement" themeKey="commencement">
   <ParticleField
     mode="svg"
-    svgPaths={chimeraPaths}
-    colors={['#563D82', '#00BFB3', '#005776']}
+    svgPaths={chimeraExpanded2026Paths}
+    colors={chimeraExpanded2026Colors}
     count={60}
-    sizeRange={[24, 64]}
-    opacityRange={[0.1, 0.4]}
+    sizeRange={[18, 55]}
+    opacityRange={[0.12, 0.45]}
   />
 
   {/* ── Hero ── */}
   <section class="comm-hero" data-cursor-scope>
-    <div class="comm-hero__seal" aria-hidden="true"></div>
-    <div class="comm-hero__inner">
-      <div class="comm-hero__content">
-        <span class="comm-hero__label">CCA {info?.data.commencementNumber}</span>
-        <h1 class="comm-hero__title shimmer-text">Commencement</h1>
-        <p class="comm-hero__subtitle">
-          {isPostEvent
-            ? 'Congratulations to the Class of 2026'
-            : 'Celebrate the Class of 2026'}
-        </p>
-        <div class="comm-hero__cta stagger-1">
-          <Button href="#ceremonies" variant="primary">View Ceremonies</Button>
+    <div class="comm-hero__collage" aria-hidden="true">
+      <div
+        class="comm-hero__fragment comm-hero__fragment--1"
+        data-cursor-track
+        data-cursor-direction="towards"
+        data-cursor-strength="0.035"
+        data-cursor-max="36"
+        data-cursor-lerp="0.06"
+      >
+        <div class="comm-hero__masked-loop" data-comm-chimera>
+          <div class="comm-hero__masked-slot" data-slot="a">
+            <div class="comm-hero__masked-shape" data-shape="a"></div>
+          </div>
+          <div class="comm-hero__masked-slot" data-slot="b">
+            <div class="comm-hero__masked-shape" data-shape="b"></div>
+          </div>
         </div>
       </div>
-      <div class="comm-hero__media">
-        <div class="comm-hero__frame" data-cursor-track data-cursor-strength="0.012" data-cursor-max="12" data-cursor-lerp="0.04">
-          <img
-            src="https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg"
-            alt="Graduates celebrating at CCA Commencement"
-            class="comm-hero__img"
-            loading="eager"
-          />
+      <div
+        class="comm-hero__fragment comm-hero__fragment--2"
+        data-cursor-track
+        data-cursor-direction="towards"
+        data-cursor-strength="0.055"
+        data-cursor-max="28"
+        data-cursor-lerp="0.12"
+      >
+        <div class="comm-hero__masked-loop" data-comm-chimera>
+          <div class="comm-hero__masked-slot" data-slot="a">
+            <div class="comm-hero__masked-shape" data-shape="a"></div>
+          </div>
+          <div class="comm-hero__masked-slot" data-slot="b">
+            <div class="comm-hero__masked-shape" data-shape="b"></div>
+          </div>
         </div>
       </div>
+      <div
+        class="comm-hero__fragment comm-hero__fragment--3"
+        data-cursor-track
+        data-cursor-direction="towards"
+        data-cursor-strength="0.03"
+        data-cursor-max="20"
+        data-cursor-lerp="0.08"
+      >
+        <div class="comm-hero__masked-loop" data-comm-chimera>
+          <div class="comm-hero__masked-slot" data-slot="a">
+            <div class="comm-hero__masked-shape" data-shape="a"></div>
+          </div>
+          <div class="comm-hero__masked-slot" data-slot="b">
+            <div class="comm-hero__masked-shape" data-shape="b"></div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="comm-hero__fragment comm-hero__doodle comm-hero__doodle--1"
+        data-cursor-track
+        data-cursor-strength="0.05"
+        data-cursor-max="45"
+        data-cursor-lerp="0.12"
+      >
+        <ChimeraLoop3D
+          id="comm-hero-chimera-1"
+          cycleDuration={4}
+          fadeOverlap={0.3}
+          elasticIntensity={1}
+          skewAmount={15}
+          driftSpeed={1}
+          sizeVariance={0.25}
+          color="#ffffff"
+        />
+      </div>
+      <div
+        class="comm-hero__fragment comm-hero__doodle comm-hero__doodle--2"
+        data-cursor-track
+        data-cursor-strength="0.038"
+        data-cursor-max="32"
+        data-cursor-lerp="0.09"
+      >
+        <ChimeraLoop3D
+          id="comm-hero-chimera-2"
+          cycleDuration={4}
+          fadeOverlap={0.3}
+          elasticIntensity={1}
+          skewAmount={15}
+          driftSpeed={1}
+          sizeVariance={0.25}
+          color="#ffffff"
+          startDelay={2}
+        />
+      </div>
+    </div>
+    <div class="comm-hero__content">
+      <h1 class="comm-hero__logo-wrap">
+        <img
+          src="/images/commencement/commencement-secondary-36.svg"
+          alt="CCA Commencement 2026"
+          class="comm-hero__logo"
+          width="900"
+          height="630"
+        />
+      </h1>
     </div>
     <div class="comm-hero__scroll" aria-hidden="true">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -112,36 +190,17 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       <span class="section-label reveal">Ceremonies</span>
       <h2 class="section-heading reveal">Two Ceremonies, One Celebration</h2>
       <div class="ceremony-cards">
-        {undergradEvent && isPhaseBefore(phase, 'pre-event') ? (
-          <div class="ceremony-info reveal">
-            <h3 class="ceremony-info__title">{undergradEvent.data.title}</h3>
-            <time class="ceremony-info__date">{formatDate(undergradEvent.data.date)}</time>
-            <p class="ceremony-info__meta">{undergradEvent.data.time}</p>
-            <p class="ceremony-info__meta">{undergradEvent.data.location}</p>
-          </div>
-        ) : undergradEvent && (
-          <a href="/commencement/undergraduate/" class="ceremony-card reveal">
-            <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">Undergraduate</span>
-            <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
-            <time class="ceremony-card__date">{formatDate(undergradEvent.data.date)}</time>
-            <p class="ceremony-card__meta">{undergradEvent.data.time}</p>
-            <p class="ceremony-card__meta">{undergradEvent.data.location}</p>
-            <span class="ceremony-card__cta">Details &rarr;</span>
-          </a>
-        )}
-
         {gradEvent && isPhaseBefore(phase, 'pre-event') ? (
           <div class="ceremony-info reveal">
             <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
             <time class="ceremony-info__date">{formatDate(gradEvent.data.date)}</time>
             <p class="ceremony-info__meta">{gradEvent.data.time}</p>
-            <p class="ceremony-info__meta">{gradEvent.data.location}</p>
+            <p class="ceremony-info__meta"><a href="https://maps.google.com/?q=275+Hayes+St,+San+Francisco,+CA" target="_blank" rel="noopener noreferrer">{gradEvent.data.location}</a></p>
           </div>
         ) : gradEvent && (
           <a href="/commencement/graduate/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">Graduate</span>
+            <span class="ceremony-card__badge">Master's</span>
             <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
             <time class="ceremony-card__date">{formatDate(gradEvent.data.date)}</time>
             <p class="ceremony-card__meta">{gradEvent.data.time}</p>
@@ -149,6 +208,28 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
             <span class="ceremony-card__cta">Details &rarr;</span>
           </a>
         )}
+
+        {undergradEvent && isPhaseBefore(phase, 'pre-event') ? (
+          <div class="ceremony-info reveal">
+            <h3 class="ceremony-info__title">{undergradEvent.data.title}</h3>
+            <time class="ceremony-info__date">{formatDate(undergradEvent.data.date)}</time>
+            <p class="ceremony-info__meta">{undergradEvent.data.time}</p>
+            <p class="ceremony-info__meta"><a href="https://maps.google.com/?q=275+Hayes+St,+San+Francisco,+CA" target="_blank" rel="noopener noreferrer">{undergradEvent.data.location}</a></p>
+          </div>
+        ) : undergradEvent && (
+          <a href="/commencement/undergraduate/" class="ceremony-card reveal">
+            <div class="ceremony-card__accent" aria-hidden="true"></div>
+            <span class="ceremony-card__badge">Bachelor's</span>
+            <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
+            <time class="ceremony-card__date">{formatDate(undergradEvent.data.date)}</time>
+            <p class="ceremony-card__meta">{undergradEvent.data.time}</p>
+            <p class="ceremony-card__meta">{undergradEvent.data.location}</p>
+            <span class="ceremony-card__cta">Details &rarr;</span>
+          </a>
+        )}
+      </div>
+      <div class="ceremonies-cta reveal">
+        <Button href="https://portal.cca.edu/thriving/student-engagement/commencement/#latest-updates--emails" variant="link">Up-to-date information, deadlines, and important links</Button>
       </div>
     </div>
   </section>
@@ -218,6 +299,154 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 </BaseLayout>
 
 <script src="../../scripts/cursor-track.ts"></script>
+<script src="../../scripts/chimera-loop-3d.ts"></script>
+
+<script>
+  function initCommChimera() {
+    const PRESETS = [
+      { image: '/images/cca-photography/commencement-masters24.jpg',  shape: 97  },
+      { image: '/images/cca-photography/eoy-show-sp25.jpg',           shape: 40  },
+    ];
+
+    const LOOP_CONFIGS = [
+      { cycleDuration: 9  },
+      { cycleDuration: 13 },
+      { cycleDuration: 11 },
+    ];
+
+    const containers = document.querySelectorAll<HTMLElement>('[data-comm-chimera]');
+    containers.forEach((container, i) => initLoop(container, PRESETS, i, LOOP_CONFIGS[i] ?? LOOP_CONFIGS[0]));
+  }
+
+  function initLoop(
+    container: HTMLElement,
+    PRESETS: { image: string; shape: number }[],
+    startOffset: number,
+    config: { cycleDuration: number },
+  ) {
+    const CYCLE_DURATION = config.cycleDuration;
+    const FADE_OVERLAP = 0.2;
+    const ELASTIC_INTENSITY = 0.8;
+    const SKEW_AMOUNT = 8;
+    const DRIFT_SPEED = 0.5;
+    const SIZE_VARIANCE = 0.06;
+
+    const morphDur = CYCLE_DURATION * FADE_OVERLAP;
+    const holdDur = CYCLE_DURATION * (1 - FADE_OVERLAP * 2);
+
+    function pad(n: number) { return String(n).padStart(3, '0'); }
+    function shapeUrl(n: number) { return `/images/chimera-expanded-2026/shape-${pad(n)}.svg`; }
+    function easeInOut(t: number) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
+    function elasticOut(t: number) {
+      if (t === 0 || t === 1) return t;
+      const p = 0.4;
+      return Math.pow(2, -10*t) * Math.sin((t - p/4) * (2*Math.PI) / p) + 1;
+    }
+    function easeInCubic(t: number) { return t * t * t; }
+
+    const slotEls = [
+      container.querySelector<HTMLElement>('[data-slot="a"]')!,
+      container.querySelector<HTMLElement>('[data-slot="b"]')!,
+    ] as [HTMLElement, HTMLElement];
+    const shapeEls = [
+      container.querySelector<HTMLElement>('[data-shape="a"]')!,
+      container.querySelector<HTMLElement>('[data-shape="b"]')!,
+    ] as [HTMLElement, HTMLElement];
+
+    type Phase = 'idle' | 'morph-in' | 'hold' | 'morph-out';
+    interface SlotState { phase: Phase; start: number; skewDir: number; rotDir: number; sizeMult: number; }
+
+    const state: [SlotState, SlotState] = [
+      { phase: 'idle', start: 0, skewDir: 1, rotDir: 1, sizeMult: 1 },
+      { phase: 'idle', start: 0, skewDir: 1, rotDir: 1, sizeMult: 1 },
+    ];
+
+    let presetIndex = startOffset;
+
+    function kick(slot: 0 | 1, now: number) {
+      const s = state[slot];
+      const preset = PRESETS[presetIndex % PRESETS.length];
+      presetIndex++;
+      const url = shapeUrl(preset.shape);
+      shapeEls[slot].style.maskImage = `url('${url}')`;
+      shapeEls[slot].style.setProperty('-webkit-mask-image', `url('${url}')`);
+      shapeEls[slot].style.backgroundImage = `url('${preset.image}')`;
+      s.phase = 'morph-in';
+      s.start = now;
+      s.skewDir = Math.random() < 0.5 ? -1 : 1;
+      s.rotDir = Math.random() < 0.5 ? -1 : 1;
+      s.sizeMult = 1 + (Math.random() * 2 - 1) * SIZE_VARIANCE;
+    }
+
+    function updateSlot(slotIdx: 0 | 1, now: number) {
+      const s = state[slotIdx];
+      const el = slotEls[slotIdx];
+      if (s.phase === 'idle') return;
+      const elapsed = (now - s.start) / 1000;
+
+      if (s.phase === 'morph-in') {
+        const t = Math.min(elapsed / morphDur, 1);
+        const elastic = elasticOut(t) * ELASTIC_INTENSITY + (1 - ELASTIC_INTENSITY) * easeInOut(t);
+        const smooth = easeInOut(t);
+        const scale = s.sizeMult * (0.3 + 0.7 * elastic);
+        const skew = (1 - elastic) * SKEW_AMOUNT * s.skewDir;
+        const rotate = (1 - smooth) * 12 * s.rotDir;
+        el.style.opacity = String(Math.min(t / 0.6, 1));
+        el.style.transform = `rotate(${rotate}deg) skew(${skew}deg) scale(${scale})`;
+        if (t >= 1) {
+          s.phase = 'hold'; s.start = now;
+          el.style.opacity = '1';
+          el.style.transform = `scale(${s.sizeMult})`;
+        }
+      } else if (s.phase === 'hold') {
+        const t = elapsed / Math.max(holdDur, 0.1);
+        const ds = DRIFT_SPEED;
+        const breathe = Math.sin(elapsed * ds * 0.8) * 0.04;
+        const driftRotate = Math.sin(elapsed * ds * 0.5) * 2 * s.rotDir;
+        const driftSkew = Math.sin(elapsed * ds * 0.3) * 1.5 * s.skewDir;
+        const driftY = Math.sin(elapsed * ds * 0.4) * 4;
+        el.style.transform = `translateY(${driftY}px) rotate(${driftRotate}deg) skew(${driftSkew}deg) scale(${s.sizeMult * (1 + breathe)})`;
+        if (t >= 1) {
+          s.phase = 'morph-out'; s.start = now;
+          kick((slotIdx === 0 ? 1 : 0) as 0 | 1, now);
+        }
+      } else if (s.phase === 'morph-out') {
+        const t = Math.min(elapsed / morphDur, 1);
+        const e = easeInCubic(t);
+        const scaleX = s.sizeMult * (1 + e * 1.2);
+        const scaleY = s.sizeMult * (1 - e * 0.4);
+        const skew = e * SKEW_AMOUNT * 1.5 * -s.skewDir;
+        const rotate = e * 20 * -s.rotDir;
+        el.style.opacity = String(1 - easeInOut(t));
+        el.style.transform = `rotate(${rotate}deg) skew(${skew}deg) scaleX(${scaleX}) scaleY(${scaleY})`;
+        if (t >= 1) { s.phase = 'idle'; el.style.opacity = '0'; }
+      }
+    }
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion) {
+      const first = PRESETS[startOffset % PRESETS.length];
+      shapeEls[0].style.maskImage = `url('${shapeUrl(first.shape)}')`;
+      shapeEls[0].style.setProperty('-webkit-mask-image', `url('${shapeUrl(first.shape)}')`);
+      shapeEls[0].style.backgroundImage = `url('${first.image}')`;
+      slotEls[0].style.opacity = '1';
+      return;
+    }
+
+    kick(0, performance.now());
+
+    function tick(now: number) {
+      updateSlot(0, now);
+      updateSlot(1, now);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  initCommChimera();
+  document.addEventListener('astro:after-swap', initCommChimera);
+</script>
 
 <style>
   /* ── Hero ── */
@@ -228,147 +457,161 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-  }
-
-  .comm-hero__inner {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    gap: var(--space-8);
-    width: 100%;
-    max-width: 1440px;
-    padding-inline: var(--space-4);
-  }
-
-  @media (min-width: 768px) {
-    .comm-hero__inner {
-      grid-template-columns: 45fr 55fr;
-      gap: var(--space-10);
-      padding-inline: var(--space-10);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .comm-hero__inner {
-      padding-inline: var(--space-12);
-    }
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .comm-hero__content {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding-inline: var(--space-4);
   }
 
-  @media (min-width: 768px) {
-    .comm-hero__content {
-      align-items: flex-start;
-      text-align: left;
-    }
+  .comm-hero__logo-wrap {
+    margin: 0 0 var(--space-6);
+    line-height: 0;
   }
 
-  .comm-hero__label {
+  .comm-hero__logo {
+    width: clamp(300px, 52vw, 640px);
+    height: auto;
     display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-muted);
-    margin-bottom: var(--space-4);
-  }
-
-  .comm-hero__title {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 8rem);
-    font-weight: normal;
-    line-height: 1;
-    margin: 0;
-  }
-
-  .comm-hero__subtitle {
-    font-family: var(--font-mono);
-    font-size: var(--text-lg);
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--color-muted);
-    margin-top: var(--space-4);
+    margin: 0 auto;
   }
 
   .comm-hero__cta {
-    margin-top: var(--space-6);
-  }
-
-  /* ── Hero media ── */
-  .comm-hero__media {
     display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    flex-wrap: wrap;
     justify-content: center;
   }
 
-  .comm-hero__frame {
-    border-radius: var(--radius-card);
-    padding: 3px;
-    background: var(--gradient-prismatic);
-    background-size: 200% 200%;
-    width: 95%;
-    max-width: 560px;
-  }
-
-  @media (min-width: 768px) {
-    .comm-hero__frame {
-      width: 100%;
-      max-width: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .comm-hero__frame {
-      animation: prismatic-shift 6s linear infinite;
-    }
-  }
-
-  .comm-hero__img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    object-position: center 30%;
-    border-radius: calc(var(--radius-card) - 2px);
-  }
-
-  .comm-hero__seal {
+  /* ── Collage fragments ── */
+  .comm-hero__collage {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(280px, 60vw, 600px);
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .comm-hero__fragment {
+    position: absolute;
+  }
+
+  .comm-hero__fragment--1 {
+    top: 4%;
+    right: 2%;
+    width: clamp(130px, 22vw, 300px);
+    rotate: 3deg;
+  }
+
+  .comm-hero__fragment--2 {
+    bottom: 6%;
+    left: 4%;
+    width: clamp(150px, 24vw, 320px);
+    rotate: -4deg;
+  }
+
+  .comm-hero__fragment--3 {
+    bottom: -12%;
+    right: 5%;
+    width: clamp(160px, 26vw, 360px);
+    rotate: 5deg;
+  }
+
+  .comm-hero__doodle {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .comm-hero__doodle--1 {
+    bottom: 28%;
+    right: 7%;
+    width: clamp(70px, 9vw, 130px);
+    height: clamp(70px, 9vw, 130px);
+  }
+
+  .comm-hero__doodle--2 {
+    top: 14%;
+    left: 7%;
+    width: clamp(50px, 7vw, 100px);
+    height: clamp(50px, 7vw, 100px);
+  }
+
+  /* ── Chimera mask loop ── */
+  .comm-hero__masked-loop {
+    position: relative;
+    width: 100%;
     aspect-ratio: 1;
-    background: var(--color-accent);
-    opacity: 0.07;
-    mask-image: url('/images/cca-seal.svg');
-    -webkit-mask-image: url('/images/cca-seal.svg');
+    overflow: visible;
+  }
+
+  .comm-hero__masked-slot {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+
+  .comm-hero__masked-shape {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 30%;
     mask-size: contain;
     -webkit-mask-size: contain;
     mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
-    pointer-events: none;
-    z-index: 0;
+    mask-position: center;
+    -webkit-mask-position: center;
   }
 
-  @media (min-width: 768px) {
-    .comm-hero__seal {
-      left: 70%;
-      width: clamp(200px, 35vw, 400px);
-      opacity: 0.05;
-    }
-  }
-
+  /* ── Enter animations ── */
   @media (prefers-reduced-motion: no-preference) {
-    .comm-hero__seal {
-      animation: seal-hero-breathe 12s ease-in-out infinite;
+    .comm-hero__logo {
+      opacity: 0;
+      animation: fragment-enter 0.8s var(--ease-out-expo) 0.05s both;
+    }
+
+    .comm-hero__fragment {
+      opacity: 0;
+      animation: fragment-enter 0.6s var(--ease-out-expo) both;
+    }
+
+    .comm-hero__fragment--1 { animation-delay: 0.1s; }
+    .comm-hero__fragment--2 { animation-delay: 0.3s; }
+    .comm-hero__fragment--3 { animation-delay: 0.2s; }
+    .comm-hero__doodle--1   { animation-delay: 0.5s; }
+    .comm-hero__doodle--2   { animation-delay: 0.65s; }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .comm-hero__collage {
+      opacity: 0.5;
+    }
+
+    .comm-hero__fragment--1 {
+      width: clamp(120px, 42vw, 220px);
+      right: -4%;
+    }
+
+    .comm-hero__fragment--2 {
+      width: clamp(140px, 48vw, 260px);
+      left: -4%;
+    }
+
+    .comm-hero__fragment--3 {
+      display: none;
+    }
+
+    .comm-hero__doodle {
+      display: none;
     }
   }
 
@@ -510,6 +753,10 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     letter-spacing: 0.05em;
   }
 
+  .ceremonies-cta {
+    margin-top: var(--space-10);
+  }
+
   /* ── Ceremony info (non-card, save-the-date phase) ── */
   .ceremony-info {
   }
@@ -533,6 +780,17 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     font-size: var(--text-sm);
     color: var(--color-muted);
     margin-bottom: var(--space-1);
+  }
+
+  .ceremony-info__meta a {
+    color: inherit;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+  }
+
+  .ceremony-info__meta a:hover {
+    color: var(--color-accent);
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
   }
 
   /* ── Celebrations grid ── */

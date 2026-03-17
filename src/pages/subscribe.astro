@@ -1,15 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
-import { chimeraPaths } from '../data/chimera-paths';
+import { chimeraExpanded2026Paths, chimeraExpanded2026Colors } from '../data/chimera-expanded-2026-paths';
 import EmailSignup from '../components/sections/EmailSignup.astro';
 ---
 
 <BaseLayout title="Subscribe" description="Sign up for the CCA 2026 Celebrations mailing list to receive event updates and RSVP reminders." minimalHeader>
   <ParticleField
     mode="svg"
-    svgPaths={chimeraPaths}
-    colors={['#00BFB3', '#563D82', '#FFC845', '#E57200', '#005776']}
+    svgPaths={chimeraExpanded2026Paths}
+    colors={chimeraExpanded2026Colors}
     count={25}
     sizeRange={[14, 40]}
     opacityRange={[0.08, 0.3]}
@@ -17,9 +17,9 @@ import EmailSignup from '../components/sections/EmailSignup.astro';
 
   <div class="subscribe-page">
     <div class="subscribe-main">
-      <h1 class="subscribe-title">Stay Updated</h1>
+      <h1 class="subscribe-title">Stay Connected</h1>
       <p class="subscribe-intro">
-        Join the CCA 2026 Celebrations mailing list. We'll send you event announcements, schedule changes, RSVP reminders, and other important updates as commencement, graduation exhibitions, and thesis exhibitions approach.
+        Join the CCA 2026 Celebrations list to get event updates, schedule changes, and RSVP reminders.
       </p>
       <EmailSignup heading="" description="" />
     </div>
