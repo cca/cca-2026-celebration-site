@@ -1,0 +1,662 @@
+---
+import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
+---
+
+<DemoEffectLayout title="Halftone CSS Pulse Demo">
+  <div class="halftone-wrap" id="halftone-wrap" aria-hidden="true">
+    <div class="layer-base" id="layer-base"></div>
+    <div class="layer-moire" id="layer-moire"></div>
+    <div class="scan-line" id="scan-line"></div>
+  </div>
+
+  <div class="demo-overlay">
+    <a href="/demo/" class="back-link">&larr; Demo Pages</a>
+    <h1 class="demo-title">CSS Pulse</h1>
+    <p class="demo-technique">CSS radial-gradient dot grid + keyframe scan sweep</p>
+  </div>
+
+  <div class="perf-counter" id="perf-counter" aria-live="off" aria-hidden="true">
+    <span id="fps-val">--</span> <span class="perf-label">fps</span>
+  </div>
+
+  <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle controls" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="6" cy="4" r="1.5"/><line x1="6" y1="5.5" x2="6" y2="18"/>
+      <circle cx="14" cy="10" r="1.5"/><line x1="14" y1="2" x2="14" y2="8.5"/><line x1="14" y1="11.5" x2="14" y2="18"/>
+      <circle cx="10" cy="15" r="1.5"/><line x1="10" y1="2" x2="10" y2="13.5"/><line x1="10" y1="16.5" x2="10" y2="18"/>
+    </svg>
+  </button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Controls</h2>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close controls">&times;</button>
+    </div>
+    <p class="sidebar-description">
+      A staggered halftone dot grid built purely from CSS radial-gradient — no SVG assets, no
+      JavaScript animation. A keyframe scan sweep and a rotated moiré layer run entirely on the
+      GPU compositor. The FPS counter should show a consistent 60 because nothing runs on the
+      main thread during animation.
+    </p>
+    <div class="controls">
+      <div class="control-group">
+        <label for="ctrl-spacing">Dot Spacing: <output id="val-spacing">16</output>px</label>
+        <input type="range" id="ctrl-spacing" min="6" max="40" value="16" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-radius">Dot Radius: <output id="val-radius">4</output>px</label>
+        <input type="range" id="ctrl-radius" min="1" max="14" value="4" step="0.5" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-scan-speed">Scan Speed: <output id="val-scan-speed">1.0</output>×</label>
+        <input type="range" id="ctrl-scan-speed" min="0.1" max="5" value="1" step="0.1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-scan-width">Scan Width: <output id="val-scan-width">20</output>%</label>
+        <input type="range" id="ctrl-scan-width" min="5" max="60" value="20" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-scan-opacity">Scan Opacity: <output id="val-scan-opacity">0.55</output></label>
+        <input type="range" id="ctrl-scan-opacity" min="0" max="1" value="0.55" step="0.01" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-moire-angle">Moiré Angle: <output id="val-moire-angle">15</output>°</label>
+        <input type="range" id="ctrl-moire-angle" min="0" max="45" value="15" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-moire-opacity">Moiré Opacity: <output id="val-moire-opacity">0.4</output></label>
+        <input type="range" id="ctrl-moire-opacity" min="0" max="1" value="0.4" step="0.01" />
+      </div>
+      <div class="control-group">
+        <label>Dot Color</label>
+        <div class="swatch-picker" id="dot-swatches">
+          <button class="swatch active" data-color="#231f20" style="background:#231f20" title="Black"></button>
+          <button class="swatch" data-color="#00BFB3" style="background:#00BFB3" title="Teal"></button>
+          <button class="swatch" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="#E57200" style="background:#E57200" title="Orange"></button>
+          <button class="swatch" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch" data-color="#B7BF10" style="background:#B7BF10" title="Lime"></button>
+          <button class="swatch" data-color="#F1BDC8" style="background:#F1BDC8" title="Pink"></button>
+          <button class="swatch" data-color="#005776" style="background:#005776" title="Navy"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#231f20" tabindex="-1" />
+          </button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Scan Color</label>
+        <div class="swatch-picker" id="scan-swatches">
+          <button class="swatch active" data-color="0,191,179" data-hex="#00BFB3" style="background:#00BFB3" title="Teal"></button>
+          <button class="swatch" data-color="255,255,255" data-hex="#ffffff" style="background:#ffffff;border:1px solid #ddd" title="White"></button>
+          <button class="swatch" data-color="86,61,130" data-hex="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="229,114,0" data-hex="#E57200" style="background:#E57200" title="Orange"></button>
+          <button class="swatch" data-color="255,200,69" data-hex="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch" data-color="183,191,16" data-hex="#B7BF10" style="background:#B7BF10" title="Lime"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#00BFB3" tabindex="-1" />
+          </button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Background</label>
+        <div class="swatch-picker" id="bg-swatches">
+          <button class="swatch active" data-color="#ffffff" style="background:#ffffff;border:1px solid #ddd" title="White"></button>
+          <button class="swatch" data-color="#fafafa" style="background:#fafafa;border:1px solid #ddd" title="Off-white"></button>
+          <button class="swatch" data-color="#231f20" style="background:#231f20" title="Black"></button>
+          <button class="swatch" data-color="#005776" style="background:#005776" title="Navy"></button>
+          <button class="swatch" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#ffffff" tabindex="-1" />
+          </button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="ctrl-blend">Scan Blend Mode</label>
+        <select id="ctrl-blend">
+          <option value="normal" selected>Normal</option>
+          <option value="screen">Screen</option>
+          <option value="multiply">Multiply</option>
+          <option value="overlay">Overlay</option>
+          <option value="soft-light">Soft Light</option>
+        </select>
+      </div>
+    </div>
+  </aside>
+</DemoEffectLayout>
+
+<style>
+  .halftone-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background: var(--bg-color, #ffffff);
+  }
+
+  .layer-base,
+  .layer-moire {
+    position: absolute;
+    /* Bleed past edges so the rotated moiré layer doesn't show gaps */
+    inset: -10%;
+    width: 120%;
+    height: 120%;
+  }
+
+  /* Staggered halftone grid via two offset radial-gradient layers */
+  .layer-base {
+    background-image:
+      radial-gradient(circle, var(--dot-color, #231f20) var(--dot-radius, 4px), transparent var(--dot-radius, 4px)),
+      radial-gradient(circle, var(--dot-color, #231f20) var(--dot-radius, 4px), transparent var(--dot-radius, 4px));
+    background-size:
+      var(--dot-spacing, 16px) var(--dot-spacing, 16px),
+      var(--dot-spacing, 16px) var(--dot-spacing, 16px);
+    background-position:
+      0 0,
+      calc(var(--dot-spacing, 16px) / 2) calc(var(--dot-spacing, 16px) / 2);
+  }
+
+  /* Same pattern, rotated to create moiré interference */
+  .layer-moire {
+    background-image:
+      radial-gradient(circle, var(--dot-color, #231f20) var(--dot-radius, 4px), transparent var(--dot-radius, 4px)),
+      radial-gradient(circle, var(--dot-color, #231f20) var(--dot-radius, 4px), transparent var(--dot-radius, 4px));
+    background-size:
+      var(--dot-spacing, 16px) var(--dot-spacing, 16px),
+      var(--dot-spacing, 16px) var(--dot-spacing, 16px);
+    background-position:
+      0 0,
+      calc(var(--dot-spacing, 16px) / 2) calc(var(--dot-spacing, 16px) / 2);
+    transform-origin: center;
+    transform: rotate(var(--moire-angle, 15deg));
+    opacity: var(--moire-opacity, 0.4);
+  }
+
+  /* Scanner sweep — pure CSS transform animation, compositor-only */
+  .scan-line {
+    position: absolute;
+    top: 0;
+    /* Start off the left edge by its own width */
+    left: calc(-1 * var(--scan-width-pct, 20%) - 1px);
+    width: var(--scan-width-pct, 20%);
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(var(--scan-rgb, 0,191,179), var(--scan-alpha, 0.55)) 35%,
+      rgba(var(--scan-rgb, 0,191,179), var(--scan-alpha, 0.55)) 65%,
+      transparent 100%
+    );
+    mix-blend-mode: var(--scan-blend, normal);
+    animation: scan-sweep var(--scan-duration, 4s) linear infinite;
+    will-change: transform;
+  }
+
+  /*
+    translateX(600%) moves the element by 6× its own width.
+    Element starts at left: -20%, so it starts 20% off-screen left.
+    Translating by 600% of 20vw = 120vw, landing at left: -20% + 120% = 100%.
+    Adjust if scan-width-pct changes — JS recomputes the translate.
+  */
+  @keyframes scan-sweep {
+    from { transform: translateX(0); }
+    to   { transform: translateX(var(--scan-translate, 600%)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scan-line  { animation: none; opacity: 0; }
+    .layer-moire { opacity: 0; }
+    .perf-counter { display: none; }
+  }
+
+  /* Demo overlay */
+  .demo-overlay {
+    position: fixed;
+    top: 5rem;
+    left: var(--space-6);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-2);
+    pointer-events: auto;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 0.25rem;
+  }
+
+  .demo-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-1);
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  .demo-technique {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  /* Perf counter */
+  .perf-counter {
+    position: fixed;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+    line-height: 1.4;
+  }
+
+  #fps-val {
+    color: var(--color-accent);
+    font-weight: 600;
+    min-width: 2.5ch;
+    display: inline-block;
+  }
+
+  .perf-label {
+    color: var(--color-muted);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Sidebar toggle */
+  .sidebar-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-right: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background 0.2s ease;
+  }
+
+  .sidebar-toggle:hover {
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.9);
+  }
+
+  .sidebar-toggle[aria-expanded="true"] {
+    display: none;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 30;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid var(--color-border);
+    padding: var(--space-6);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar { transition: none; }
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+
+  .sidebar-header h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+  }
+
+  .sidebar-close {
+    background: none;
+    border: none;
+    font-size: var(--text-xl);
+    cursor: pointer;
+    color: var(--color-muted);
+    padding: var(--space-1);
+    line-height: 1;
+  }
+
+  .sidebar-description {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .control-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .control-group label {
+    display: block;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-1);
+  }
+
+  .control-group output {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .control-group input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .control-group select {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .swatch-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .swatch {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .swatch:hover {
+    transform: scale(1.15);
+  }
+
+  .swatch.active {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .swatch--custom {
+    background: conic-gradient(from 0deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .swatch--custom span {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  .swatch--custom input[type="color"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+  }
+</style>
+
+<script>
+  // Sidebar toggle
+  const toggle = document.getElementById('sidebar-toggle')!;
+  const sidebarEl = document.getElementById('sidebar')!;
+  const closeBtn = document.getElementById('sidebar-close')!;
+
+  toggle.addEventListener('click', () => {
+    sidebarEl.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  });
+  closeBtn.addEventListener('click', () => {
+    sidebarEl.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+
+  // All controls update CSS custom properties — zero JS in the animation hot path
+  const wrap = document.getElementById('halftone-wrap') as HTMLElement;
+  const scanLine = document.getElementById('scan-line') as HTMLElement;
+  const layerMoire = document.getElementById('layer-moire') as HTMLElement;
+
+  let dotSpacingPx = 16;
+  let dotRadiusPx = 4;
+  let scanWidthPct = 20;
+
+  function updateDotPattern() {
+    wrap.style.setProperty('--dot-spacing', `${dotSpacingPx}px`);
+    // Clamp radius to < spacing/2 to prevent dot overlap
+    const maxR = dotSpacingPx / 2 - 0.5;
+    const clampedR = Math.min(dotRadiusPx, maxR);
+    wrap.style.setProperty('--dot-radius', `${clampedR}px`);
+    // Update slider display if clamped
+    const radiusOutput = document.getElementById('val-radius') as HTMLOutputElement;
+    if (clampedR !== dotRadiusPx) {
+      radiusOutput.textContent = String(clampedR.toFixed(1));
+    }
+  }
+
+  function updateScanTranslate() {
+    // translateX moves element from left:-W% to left:100%
+    // travel = 100% + W% of viewport = (100 + W) / W × element widths
+    const translateMultiplier = (100 + scanWidthPct) / scanWidthPct;
+    wrap.style.setProperty('--scan-width-pct', `${scanWidthPct}%`);
+    wrap.style.setProperty('--scan-translate', `${(translateMultiplier * 100).toFixed(0)}%`);
+
+    // Restart animation so new translate takes effect immediately
+    scanLine.style.animation = 'none';
+    scanLine.offsetHeight; // force reflow
+    scanLine.style.animation = '';
+  }
+
+  // Spacing
+  const spacingInput = document.getElementById('ctrl-spacing') as HTMLInputElement;
+  const spacingOutput = document.getElementById('val-spacing') as HTMLOutputElement;
+  spacingInput.addEventListener('input', () => {
+    dotSpacingPx = parseFloat(spacingInput.value);
+    spacingOutput.textContent = String(dotSpacingPx);
+    updateDotPattern();
+  });
+
+  // Radius
+  const radiusInput = document.getElementById('ctrl-radius') as HTMLInputElement;
+  const radiusOutput = document.getElementById('val-radius') as HTMLOutputElement;
+  radiusInput.addEventListener('input', () => {
+    dotRadiusPx = parseFloat(radiusInput.value);
+    radiusOutput.textContent = String(dotRadiusPx);
+    updateDotPattern();
+  });
+
+  // Scan speed (maps to animation duration)
+  const scanSpeedInput = document.getElementById('ctrl-scan-speed') as HTMLInputElement;
+  const scanSpeedOutput = document.getElementById('val-scan-speed') as HTMLOutputElement;
+  scanSpeedInput.addEventListener('input', () => {
+    const v = parseFloat(scanSpeedInput.value);
+    scanSpeedOutput.textContent = v.toFixed(1);
+    // Base duration = 4s at 1×, so duration = 4 / v
+    const dur = (4 / v).toFixed(2);
+    wrap.style.setProperty('--scan-duration', `${dur}s`);
+    // Restart animation
+    scanLine.style.animation = 'none';
+    scanLine.offsetHeight;
+    scanLine.style.animation = '';
+  });
+
+  // Scan width
+  const scanWidthInput = document.getElementById('ctrl-scan-width') as HTMLInputElement;
+  const scanWidthOutput = document.getElementById('val-scan-width') as HTMLOutputElement;
+  scanWidthInput.addEventListener('input', () => {
+    scanWidthPct = parseFloat(scanWidthInput.value);
+    scanWidthOutput.textContent = String(scanWidthPct);
+    updateScanTranslate();
+  });
+
+  // Scan opacity
+  const scanOpacityInput = document.getElementById('ctrl-scan-opacity') as HTMLInputElement;
+  const scanOpacityOutput = document.getElementById('val-scan-opacity') as HTMLOutputElement;
+  scanOpacityInput.addEventListener('input', () => {
+    const v = parseFloat(scanOpacityInput.value);
+    scanOpacityOutput.textContent = v.toFixed(2);
+    wrap.style.setProperty('--scan-alpha', String(v));
+  });
+
+  // Moiré angle
+  const moireAngleInput = document.getElementById('ctrl-moire-angle') as HTMLInputElement;
+  const moireAngleOutput = document.getElementById('val-moire-angle') as HTMLOutputElement;
+  moireAngleInput.addEventListener('input', () => {
+    const v = parseInt(moireAngleInput.value);
+    moireAngleOutput.textContent = String(v);
+    layerMoire.style.transform = `rotate(${v}deg)`;
+  });
+
+  // Moiré opacity
+  const moireOpacityInput = document.getElementById('ctrl-moire-opacity') as HTMLInputElement;
+  const moireOpacityOutput = document.getElementById('val-moire-opacity') as HTMLOutputElement;
+  moireOpacityInput.addEventListener('input', () => {
+    const v = parseFloat(moireOpacityInput.value);
+    moireOpacityOutput.textContent = v.toFixed(2);
+    wrap.style.setProperty('--moire-opacity', String(v));
+  });
+
+  // Blend mode
+  const blendSelect = document.getElementById('ctrl-blend') as HTMLSelectElement;
+  blendSelect.addEventListener('change', () => {
+    wrap.style.setProperty('--scan-blend', blendSelect.value);
+  });
+
+  // Swatch helpers
+  function wireSwatchPicker(pickerId: string, setter: (val: string) => void) {
+    const picker = document.getElementById(pickerId)!;
+    picker.querySelectorAll('.swatch:not(.swatch--custom)').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        picker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        setter((swatch as HTMLElement).dataset.color!);
+        (picker.querySelector('.swatch--custom') as HTMLElement).style.background = '';
+      });
+    });
+    const cb = picker.querySelector('.swatch--custom') as HTMLElement;
+    const ci = cb.querySelector('input[type="color"]') as HTMLInputElement;
+    ci.addEventListener('input', () => {
+      picker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      cb.classList.add('active');
+      cb.style.background = ci.value;
+      setter(ci.value);
+    });
+  }
+
+  function hexToRgb(hex: string): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r},${g},${b}`;
+  }
+
+  wireSwatchPicker('dot-swatches', hex => {
+    wrap.style.setProperty('--dot-color', hex);
+  });
+
+  // Scan color swatches have a pre-computed RGB string for use in rgba()
+  const scanPicker = document.getElementById('scan-swatches')!;
+  scanPicker.querySelectorAll('.swatch:not(.swatch--custom)').forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      scanPicker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      wrap.style.setProperty('--scan-rgb', (swatch as HTMLElement).dataset.color!);
+      (scanPicker.querySelector('.swatch--custom') as HTMLElement).style.background = '';
+    });
+  });
+  const scanCustomBtn = scanPicker.querySelector('.swatch--custom') as HTMLElement;
+  const scanCustomInput = scanCustomBtn.querySelector('input[type="color"]') as HTMLInputElement;
+  scanCustomInput.addEventListener('input', () => {
+    scanPicker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    scanCustomBtn.classList.add('active');
+    scanCustomBtn.style.background = scanCustomInput.value;
+    wrap.style.setProperty('--scan-rgb', hexToRgb(scanCustomInput.value));
+  });
+
+  wireSwatchPicker('bg-swatches', hex => {
+    wrap.style.setProperty('--bg-color', hex);
+  });
+
+  // Initialize CSS vars to match defaults
+  updateDotPattern();
+  updateScanTranslate();
+
+  // FPS counter — should read ~60 since the effect is purely CSS/compositor
+  const fpsVal = document.getElementById('fps-val')!;
+  const frameTimes: number[] = [];
+  let lastTs = 0;
+  function tickFps(ts: number) {
+    if (lastTs > 0) {
+      frameTimes.push(ts - lastTs);
+      if (frameTimes.length > 30) frameTimes.shift();
+      const avg = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+      fpsVal.textContent = String(Math.round(1000 / avg));
+    }
+    lastTs = ts;
+    requestAnimationFrame(tickFps);
+  }
+  requestAnimationFrame(tickFps);
+</script>

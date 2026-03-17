@@ -1,0 +1,854 @@
+---
+import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
+---
+
+<DemoEffectLayout title="Halftone Procedural Scan Demo">
+  <canvas class="halftone-canvas" id="halftone-canvas" aria-hidden="true"></canvas>
+
+  <div class="demo-overlay">
+    <a href="/demo/" class="back-link">&larr; Demo Pages</a>
+    <h1 class="demo-title">Procedural Scan</h1>
+    <p class="demo-technique">Canvas staggered dot grid + per-dot spring displacement</p>
+  </div>
+
+  <div class="perf-counter" id="perf-counter" aria-live="off" aria-hidden="true">
+    <span id="fps-val">--</span> <span class="perf-label">fps</span>
+  </div>
+
+  <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle controls" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="6" cy="4" r="1.5"/><line x1="6" y1="5.5" x2="6" y2="18"/>
+      <circle cx="14" cy="10" r="1.5"/><line x1="14" y1="2" x2="14" y2="8.5"/><line x1="14" y1="11.5" x2="14" y2="18"/>
+      <circle cx="10" cy="15" r="1.5"/><line x1="10" y1="2" x2="10" y2="13.5"/><line x1="10" y1="16.5" x2="10" y2="18"/>
+    </svg>
+  </button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Controls</h2>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close controls">&times;</button>
+    </div>
+    <p class="sidebar-description">
+      A staggered halftone dot grid rendered entirely on Canvas — no SVG assets needed. Each dot has
+      individual spring-damper physics: it bows toward the scanner head, overshoots slightly, then
+      oscillates back to rest. Auto-scales dot density for mobile performance.
+    </p>
+    <div class="controls">
+      <div class="control-group">
+        <label for="ctrl-spacing">Dot Spacing: <output id="val-spacing">14</output>px</label>
+        <input type="range" id="ctrl-spacing" min="6" max="32" value="14" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-size">Dot Radius: <output id="val-size">3</output></label>
+        <input type="range" id="ctrl-size" min="1" max="8" value="3" step="0.5" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-variation">Size Variation: <output id="val-variation">0.3</output></label>
+        <input type="range" id="ctrl-variation" min="0" max="1" value="0.3" step="0.05" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-displacement">Displacement: <output id="val-displacement">30</output></label>
+        <input type="range" id="ctrl-displacement" min="0" max="80" value="30" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-speed">Scan Speed: <output id="val-speed">60</output></label>
+        <input type="range" id="ctrl-speed" min="0" max="200" value="60" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-width">Scan Width: <output id="val-width">100</output></label>
+        <input type="range" id="ctrl-width" min="40" max="200" value="100" step="10" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-direction">Scan Direction</label>
+        <select id="ctrl-direction">
+          <option value="y" selected>Y (top → bottom)</option>
+          <option value="x">X (left → right)</option>
+          <option value="xy">X and Y</option>
+          <option value="xyr">X, Y, and Random</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="ctrl-bidirectional" />
+          Bidirectional
+        </label>
+      </div>
+      <div class="control-group">
+        <label for="ctrl-count">Scanner Count: <output id="val-count">1</output></label>
+        <input type="range" id="ctrl-count" min="1" max="4" value="1" step="1" />
+      </div>
+      <div class="control-group">
+        <label for="ctrl-opacity">Dot Opacity: <output id="val-opacity">0.6</output></label>
+        <input type="range" id="ctrl-opacity" min="0.05" max="1" value="0.6" step="0.01" />
+      </div>
+      <div class="control-group">
+        <label>Dot Color</label>
+        <div class="swatch-picker" id="dot-swatches">
+          <button class="swatch active" data-color="#231f20" style="background:#231f20" title="Black"></button>
+          <button class="swatch" data-color="#00BFB3" style="background:#00BFB3" title="Teal"></button>
+          <button class="swatch" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="#E57200" style="background:#E57200" title="Orange"></button>
+          <button class="swatch" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch" data-color="#B7BF10" style="background:#B7BF10" title="Lime"></button>
+          <button class="swatch" data-color="#F1BDC8" style="background:#F1BDC8" title="Pink"></button>
+          <button class="swatch" data-color="#005776" style="background:#005776" title="Navy"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#231f20" tabindex="-1" />
+          </button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Scan Glow</label>
+        <div class="swatch-picker" id="glow-swatches">
+          <button class="swatch active" data-color="#00BFB3" style="background:#00BFB3" title="Teal"></button>
+          <button class="swatch" data-color="#ffffff" style="background:#ffffff;border:1px solid #ddd" title="White"></button>
+          <button class="swatch" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="#E57200" style="background:#E57200" title="Orange"></button>
+          <button class="swatch" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch" data-color="#B7BF10" style="background:#B7BF10" title="Lime"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#00BFB3" tabindex="-1" />
+          </button>
+        </div>
+        <label for="ctrl-glow-opacity" style="margin-top:0.5rem">Glow Opacity: <output id="val-glow-opacity">0.4</output></label>
+        <input type="range" id="ctrl-glow-opacity" min="0" max="1" value="0.4" step="0.01" />
+      </div>
+      <div class="control-group">
+        <label>Background</label>
+        <div class="swatch-picker" id="bg-swatches">
+          <button class="swatch active" data-color="#ffffff" style="background:#ffffff;border:1px solid #ddd" title="White"></button>
+          <button class="swatch" data-color="#231f20" style="background:#231f20" title="Black"></button>
+          <button class="swatch" data-color="#005776" style="background:#005776" title="Navy"></button>
+          <button class="swatch" data-color="#563D82" style="background:#563D82" title="Purple"></button>
+          <button class="swatch" data-color="#FFC845" style="background:#FFC845" title="Yellow"></button>
+          <button class="swatch" data-color="#fafafa" style="background:#fafafa;border:1px solid #ddd" title="Off-white"></button>
+          <button class="swatch swatch--custom" title="Custom">
+            <span>+</span>
+            <input type="color" value="#ffffff" tabindex="-1" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</DemoEffectLayout>
+
+<style>
+  .halftone-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background: #ffffff;
+  }
+
+  .demo-overlay {
+    position: fixed;
+    top: 5rem;
+    left: var(--space-6);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-2);
+    pointer-events: auto;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 0.25rem;
+  }
+
+  .demo-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-1);
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  .demo-technique {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.3);
+  }
+
+  .perf-counter {
+    position: fixed;
+    bottom: var(--space-4);
+    left: var(--space-4);
+    z-index: 10;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-border);
+    pointer-events: none;
+    line-height: 1.4;
+  }
+
+  #fps-val {
+    color: var(--color-accent);
+    font-weight: 600;
+    min-width: 2.5ch;
+    display: inline-block;
+  }
+
+  .perf-label {
+    color: var(--color-muted);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .perf-counter { display: none; }
+  }
+
+  .sidebar-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-right: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background 0.2s ease;
+  }
+
+  .sidebar-toggle:hover {
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.9);
+  }
+
+  .sidebar-toggle[aria-expanded="true"] {
+    display: none;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 30;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid var(--color-border);
+    padding: var(--space-6);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sidebar { transition: none; }
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+
+  .sidebar-header h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+  }
+
+  .sidebar-close {
+    background: none;
+    border: none;
+    font-size: var(--text-xl);
+    cursor: pointer;
+    color: var(--color-muted);
+    padding: var(--space-1);
+    line-height: 1;
+  }
+
+  .sidebar-description {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .control-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .control-group label {
+    display: block;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-1);
+  }
+
+  .control-group output {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .control-group input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .control-group select {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    background: hsla(var(--color-bg-rgb, 0 0% 99%), 0.6);
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  .swatch-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .swatch {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .swatch:hover {
+    transform: scale(1.15);
+  }
+
+  .swatch.active {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .swatch--custom {
+    background: conic-gradient(from 0deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .swatch--custom span {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  .swatch--custom input[type="color"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+  }
+</style>
+
+<script>
+  function initHalftoneProceduralEffect() {
+    const canvas = document.getElementById('halftone-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    if ((canvas as any).__halftoneRunning) return;
+    (canvas as any).__halftoneRunning = true;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // --- Config ---
+    let dotSpacing = 14;
+    let dotRadius = 3;
+    let sizeVariation = 0.3;
+    let displacementAmp = 30;
+    let scanSpeed = 60;
+    let scanWidth = 100;
+    let scannerCount = 1;
+    let dotOpacity = 0.6;
+    let dotColor = '#231f20';
+    let glowColor = '#00BFB3';
+    let glowOpacity = 0.4;
+    let bgColor = '#ffffff';
+    let scanDirection: 'y' | 'x' | 'xy' | 'xyr' = 'y';
+    let bidirectional = false;
+
+    // --- State ---
+    let w = 0, h = 0, dpr = 1;
+    let animId = 0, time = 0;
+    let gridDirty = true;
+    let tier = 0; // 0=desktop, 1=mobile, 2=low-end
+    let lastFrameTime = 0;
+    const TWO_PI = Math.PI * 2;
+
+    // --- Dot grid ---
+    type Dot = { baseX: number; baseY: number; radius: number; phase: number };
+    type DotState = { dx: number; dy: number; vx: number; vy: number };
+    let dots: Dot[] = [];
+    let dotStates: DotState[] = [];
+
+    // --- Scan heads ---
+    type ScanHead = { pos: number; dir: 1 | -1; phase: number; axis: 'v' | 'h' };
+    let scanHeads: ScanHead[] = [];
+    let vHeads: ScanHead[] = []; // sweep Y axis, displace X
+    let hHeads: ScanHead[] = []; // sweep X axis, displace Y
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function hash(x: number, y: number): number {
+      let h = (x * 374761393 + y * 668265263) | 0;
+      h = Math.imul(h ^ (h >>> 13), 1274126177);
+      return ((h ^ (h >>> 16)) >>> 0) / 0xffffffff;
+    }
+
+    function detectTier(): number {
+      const w = window.innerWidth;
+      const cpu = (navigator as any).hardwareConcurrency ?? 4;
+      if (w <= 480 && cpu <= 4) return 2;
+      if (w <= 768) return 1;
+      return 0;
+    }
+
+    function effectiveSpacing(): number {
+      if (tier >= 2) return Math.max(dotSpacing, 28);
+      if (tier >= 1) return Math.max(dotSpacing, 20);
+      return dotSpacing;
+    }
+
+    function buildGrid() {
+      const sp = effectiveSpacing();
+      dots = [];
+      dotStates = [];
+
+      const bleed = sp * 2;
+      const cols = Math.ceil((w + bleed * 2) / sp) + 1;
+      const rows = Math.ceil((h + bleed * 2) / sp) + 1;
+
+      for (let row = 0; row < rows; row++) {
+        const xOffset = (row % 2 === 1) ? sp / 2 : 0;
+        for (let col = 0; col < cols; col++) {
+          const bx = col * sp + xOffset - bleed;
+          const by = row * sp - bleed;
+          const variation = 1 - sizeVariation + sizeVariation * hash(col * 3 + 1, row * 7 + 2);
+          const r = Math.max(0.5, dotRadius * variation);
+          const phase = hash(col * 7 + 5, row * 13 + 3) * TWO_PI;
+          dots.push({ baseX: bx, baseY: by, radius: r, phase });
+          dotStates.push({ dx: 0, dy: 0, vx: 0, vy: 0 });
+        }
+      }
+
+      gridDirty = false;
+    }
+
+    function buildScanHeads() {
+      const margin = scanWidth;
+      const count = tier >= 1 ? Math.min(scannerCount, 1) : scannerCount;
+      const needsV = scanDirection === 'y' || scanDirection === 'xy' || scanDirection === 'xyr';
+      const needsH = scanDirection === 'x' || scanDirection === 'xy' || scanDirection === 'xyr';
+
+      scanHeads = [];
+
+      if (needsV) {
+        for (let i = 0; i < count; i++) {
+          const span = h + margin * 2;
+          scanHeads.push({
+            pos: -margin + (i / count) * span,
+            dir: (bidirectional && i % 2 === 1) ? -1 : 1,
+            phase: i * 2.399,
+            axis: 'v',
+          });
+        }
+      }
+
+      if (needsH) {
+        for (let i = 0; i < count; i++) {
+          const span = w + margin * 2;
+          scanHeads.push({
+            pos: -margin + (i / count) * span,
+            dir: (bidirectional && i % 2 === 1) ? -1 : 1,
+            phase: (count + i) * 2.399 + 1.7,
+            axis: 'h',
+          });
+        }
+      }
+
+      if (scanDirection === 'xyr') {
+        for (let i = 0; i < count; i++) {
+          const axis: 'v' | 'h' = hash(i * 3 + 17, 9999) > 0.5 ? 'v' : 'h';
+          const extent = axis === 'v' ? h : w;
+          const span = extent + margin * 2;
+          scanHeads.push({
+            pos: -margin + hash(i, 7777) * span,
+            dir: (bidirectional && hash(i, 5555) > 0.5) ? -1 : 1,
+            phase: (2 * count + i) * 2.399 + 3.1,
+            axis,
+          });
+        }
+      }
+
+      vHeads = scanHeads.filter(s => s.axis === 'v');
+      hHeads = scanHeads.filter(s => s.axis === 'h');
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      tier = detectTier();
+      gridDirty = true;
+    }
+
+    function updateDots() {
+      const spring = 0.18;
+      const damping = 0.72;
+      const lerpRate = 0.12;
+      const useLerp = tier >= 2;
+
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        const s = dotStates[i];
+        let forceX = 0;
+        let forceY = 0;
+
+        // V heads sweep top-to-bottom → displace dots horizontally (X)
+        for (const head of vHeads) {
+          const dist = Math.abs(dot.baseY - head.pos);
+          if (dist < scanWidth) {
+            const t = 1 - dist / scanWidth;
+            const bell = t * t * (3 - 2 * t);
+            forceX += bell * displacementAmp * Math.sin(dot.baseY * 0.04 + time * 1.5 + head.phase + dot.phase * 0.3);
+          }
+        }
+
+        // H heads sweep left-to-right → displace dots vertically (Y)
+        for (const head of hHeads) {
+          const dist = Math.abs(dot.baseX - head.pos);
+          if (dist < scanWidth) {
+            const t = 1 - dist / scanWidth;
+            const bell = t * t * (3 - 2 * t);
+            forceY += bell * displacementAmp * Math.sin(dot.baseX * 0.04 + time * 1.3 + head.phase + dot.phase * 0.3);
+          }
+        }
+
+        if (useLerp) {
+          s.dx += (forceX - s.dx) * lerpRate;
+          s.dy += (forceY - s.dy) * lerpRate;
+        } else {
+          s.vx += (forceX - s.dx) * spring;
+          s.vy += (forceY - s.dy) * spring;
+          s.vx *= damping;
+          s.vy *= damping;
+          s.dx += s.vx;
+          s.dy += s.vy;
+        }
+      }
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw all dots in a single batched path
+      ctx.fillStyle = dotColor;
+      ctx.globalAlpha = dotOpacity;
+      ctx.beginPath();
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        const s = dotStates[i];
+        const cx = dot.baseX + s.dx;
+        const cy = dot.baseY + s.dy;
+        const r = dot.radius;
+        ctx.moveTo(cx + r, cy);
+        ctx.arc(cx, cy, r, 0, TWO_PI);
+      }
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Scan glow lines
+      const glowSize = 10;
+      for (const head of scanHeads) {
+        if (head.axis === 'v' && head.pos > -30 && head.pos < h + 30) {
+          // Horizontal glow bar for vertical scanner
+          const grad = ctx.createLinearGradient(0, head.pos - glowSize, 0, head.pos + glowSize);
+          grad.addColorStop(0, 'transparent');
+          grad.addColorStop(0.5, glowColor);
+          grad.addColorStop(1, 'transparent');
+          ctx.globalAlpha = glowOpacity;
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, head.pos - glowSize, w, glowSize * 2);
+          ctx.globalAlpha = 1;
+        } else if (head.axis === 'h' && head.pos > -30 && head.pos < w + 30) {
+          // Vertical glow bar for horizontal scanner
+          const grad = ctx.createLinearGradient(head.pos - glowSize, 0, head.pos + glowSize, 0);
+          grad.addColorStop(0, 'transparent');
+          grad.addColorStop(0.5, glowColor);
+          grad.addColorStop(1, 'transparent');
+          ctx.globalAlpha = glowOpacity;
+          ctx.fillStyle = grad;
+          ctx.fillRect(head.pos - glowSize, 0, glowSize * 2, h);
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      // Edge vignette using destination-in
+      const edgeSize = 60;
+      ctx.globalCompositeOperation = 'destination-in';
+
+      const fadeV = ctx.createLinearGradient(0, 0, 0, h);
+      fadeV.addColorStop(0, 'transparent');
+      fadeV.addColorStop(edgeSize / h, 'white');
+      fadeV.addColorStop(1 - edgeSize / h, 'white');
+      fadeV.addColorStop(1, 'transparent');
+      ctx.fillStyle = fadeV;
+      ctx.fillRect(0, 0, w, h);
+
+      const fadeH = ctx.createLinearGradient(0, 0, w, 0);
+      fadeH.addColorStop(0, 'transparent');
+      fadeH.addColorStop(edgeSize / w, 'white');
+      fadeH.addColorStop(1 - edgeSize / w, 'white');
+      fadeH.addColorStop(1, 'transparent');
+      ctx.fillStyle = fadeH;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function animate(ts: number) {
+      // Frame limiting: target 30fps on mobile (tier 1+)
+      const targetInterval = tier >= 1 ? 33 : 0;
+      if (targetInterval > 0 && ts - lastFrameTime < targetInterval) {
+        animId = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime = ts;
+
+      if (gridDirty) {
+        buildGrid();
+        buildScanHeads();
+      }
+
+      time += 1 / 60;
+
+      // Advance scan heads with variable velocity
+      const margin = scanWidth;
+      for (const head of scanHeads) {
+        const extent = head.axis === 'v' ? h : w;
+        const noise = 0.5 + 0.5 * Math.sin(time * 0.37 + head.phase)
+                    + 0.3 * Math.sin(time * 0.89 + head.phase * 1.7);
+        head.pos += head.dir * scanSpeed * Math.max(0.05, noise) * (1 / 60);
+
+        if (bidirectional) {
+          if (head.pos > extent + margin) { head.pos = extent + margin; head.dir = -1; }
+          else if (head.pos < -margin)    { head.pos = -margin;         head.dir = 1;  }
+        } else {
+          if (head.pos > extent + margin) head.pos = -margin;
+        }
+      }
+
+      updateDots();
+      render();
+      animId = requestAnimationFrame(animate);
+    }
+
+    function renderStatic() {
+      buildGrid();
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = dotColor;
+      ctx.globalAlpha = dotOpacity;
+      ctx.beginPath();
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        ctx.moveTo(dot.baseX + dot.radius, dot.baseY);
+        ctx.arc(dot.baseX, dot.baseY, dot.radius, 0, TWO_PI);
+      }
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function startAnimation() {
+      cancelAnimationFrame(animId);
+      resize();
+      buildGrid();
+      buildScanHeads();
+      animId = requestAnimationFrame(animate);
+    }
+
+    function stopAnimation() {
+      cancelAnimationFrame(animId);
+      resize();
+      renderStatic();
+    }
+
+    prefersReducedMotion.addEventListener('change', () => {
+      if (prefersReducedMotion.matches) stopAnimation();
+      else startAnimation();
+    });
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const prevTier = tier;
+        tier = detectTier();
+        resize();
+        if (tier !== prevTier) gridDirty = true;
+        if (!prefersReducedMotion.matches) buildScanHeads();
+        else renderStatic();
+      }, 200);
+    });
+
+    if (prefersReducedMotion.matches) stopAnimation();
+    else startAnimation();
+
+    // --- Sidebar ---
+    const toggle = document.getElementById('sidebar-toggle')!;
+    const sidebarEl = document.getElementById('sidebar')!;
+    const closeBtn = document.getElementById('sidebar-close')!;
+
+    toggle.addEventListener('click', () => {
+      sidebarEl.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+    });
+    closeBtn.addEventListener('click', () => {
+      sidebarEl.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+
+    // --- Range controls ---
+    function wireRange(ctrlId: string, valId: string, setter: (v: number) => void) {
+      const input = document.getElementById(ctrlId) as HTMLInputElement;
+      const output = document.getElementById(valId) as HTMLOutputElement;
+      input.addEventListener('input', () => {
+        const v = parseFloat(input.value);
+        output.textContent = String(v);
+        setter(v);
+      });
+    }
+
+    wireRange('ctrl-spacing', 'val-spacing', v => { dotSpacing = v; gridDirty = true; });
+    wireRange('ctrl-size', 'val-size', v => { dotRadius = v; gridDirty = true; });
+    wireRange('ctrl-variation', 'val-variation', v => { sizeVariation = v; gridDirty = true; });
+    wireRange('ctrl-displacement', 'val-displacement', v => { displacementAmp = v; });
+    wireRange('ctrl-speed', 'val-speed', v => { scanSpeed = v; });
+    wireRange('ctrl-width', 'val-width', v => { scanWidth = v; buildScanHeads(); });
+    wireRange('ctrl-count', 'val-count', v => { scannerCount = Math.round(v); buildScanHeads(); });
+
+    const dirSelect = document.getElementById('ctrl-direction') as HTMLSelectElement;
+    dirSelect.addEventListener('change', () => {
+      scanDirection = dirSelect.value as typeof scanDirection;
+      buildScanHeads();
+    });
+
+    const bidiCheck = document.getElementById('ctrl-bidirectional') as HTMLInputElement;
+    bidiCheck.addEventListener('change', () => {
+      bidirectional = bidiCheck.checked;
+      buildScanHeads();
+    });
+    wireRange('ctrl-opacity', 'val-opacity', v => { dotOpacity = v; });
+    wireRange('ctrl-glow-opacity', 'val-glow-opacity', v => { glowOpacity = v; });
+
+    // --- Swatch helpers ---
+    function wireSwatchPicker(pickerId: string, setter: (hex: string) => void) {
+      const picker = document.getElementById(pickerId)!;
+      picker.querySelectorAll('.swatch:not(.swatch--custom)').forEach(swatch => {
+        swatch.addEventListener('click', () => {
+          picker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+          swatch.classList.add('active');
+          setter((swatch as HTMLElement).dataset.color!);
+          (picker.querySelector('.swatch--custom') as HTMLElement).style.background = '';
+        });
+      });
+      const cb = picker.querySelector('.swatch--custom') as HTMLElement;
+      const ci = cb.querySelector('input[type="color"]') as HTMLInputElement;
+      ci.addEventListener('input', () => {
+        picker.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        cb.classList.add('active');
+        cb.style.background = ci.value;
+        setter(ci.value);
+      });
+    }
+
+    wireSwatchPicker('dot-swatches', hex => { dotColor = hex; if (prefersReducedMotion.matches) renderStatic(); });
+    wireSwatchPicker('glow-swatches', hex => { glowColor = hex; });
+    wireSwatchPicker('bg-swatches', hex => { bgColor = hex; canvas.style.background = hex; });
+
+    // --- FPS counter ---
+    const fpsVal = document.getElementById('fps-val')!;
+    const frameTimes: number[] = [];
+    let lastFpsTs = 0;
+    function tickFps(ts: number) {
+      if (lastFpsTs > 0) {
+        frameTimes.push(ts - lastFpsTs);
+        if (frameTimes.length > 30) frameTimes.shift();
+        const avg = frameTimes.reduce((a, b) => a + b, 0) / frameTimes.length;
+        fpsVal.textContent = String(Math.round(1000 / avg));
+      }
+      lastFpsTs = ts;
+      requestAnimationFrame(tickFps);
+    }
+    requestAnimationFrame(tickFps);
+  }
+
+  initHalftoneProceduralEffect();
+  document.addEventListener('astro:page-load', initHalftoneProceduralEffect);
+</script>

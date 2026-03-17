@@ -7,7 +7,7 @@ import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import FramedImage from '../../components/ui/FramedImage.astro';
 import { formatDateRange } from '../../lib/utils/format';
-import HalftoneDisplacement from '../../components/effects/HalftoneDisplacement.astro';
+import HalftoneProceduralScan from '../../components/effects/HalftoneProceduralScan.astro';
 import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
@@ -25,18 +25,22 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">
-  <HalftoneDisplacement
-    scale={20}
-    frequency={0.006}
-    speed={0.005}
-    opacity={0.25}
-    tint={[0.05, 0.2, 0.35]}
+  <HalftoneProceduralScan
+    dotColor="#00BFB3"
+    dotOpacity={0.22}
+    dotSpacing={18}
+    dotRadius={4.5}
+    scanSpeed={45}
+    displacement={28}
+    scanWidth={200}
+    scannerCount={3}
+    direction="xy"
+    bidirectional
   />
 
   {/* ── Hero ── */}
   <section class="showcase-hero" data-cursor-scope>
-    <div class="showcase-hero__seal" aria-hidden="true"></div>
-    <div class="showcase-hero__collage" aria-hidden="true">
+<div class="showcase-hero__collage" aria-hidden="true">
       <div
         class="showcase-hero__fragment showcase-hero__fragment--1"
         data-cursor-track
@@ -47,7 +51,8 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       >
         <FramedImage
           frameId="frame-04"
-          src="https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg"
+          src="/images/cca-photography/eoy-show-sp25.jpg"
+          alt="Students and visitors at the CCA end-of-year show"
           uid="thesis-hero-1"
         />
       </div>
@@ -60,9 +65,25 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         data-cursor-lerp="0.12"
       >
         <FramedImage
-          frameId="frame-01"
-          src="https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg"
+          frameId="frame-11"
+          src="/images/cca-photography/design-senior-show-fa25-54.jpg"
+          alt="Design senior show installation view"
           uid="thesis-hero-2"
+        />
+      </div>
+      <div
+        class="showcase-hero__fragment showcase-hero__fragment--3"
+        data-cursor-track
+        data-cursor-direction="towards"
+        data-cursor-strength="0.042"
+        data-cursor-max="24"
+        data-cursor-lerp="0.08"
+      >
+        <FramedImage
+          frameId="frame-07"
+          src="/images/cca-photography/illustration-senior-show-fa25-43.jpg"
+          alt="Illustration senior show artwork"
+          uid="thesis-hero-3"
         />
       </div>
       <div
@@ -106,25 +127,15 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       </div>
     </div>
     <div class="showcase-hero__content">
-      <span class="showcase-hero__label">CCA 2026</span>
-      <h1 class="showcase-hero__title shimmer-text">Graduation<br />Exhibitions</h1>
-      <p class="showcase-hero__subtitle">
-        {formatDateRange(event.data.date, event.data.endDate)} &middot; {event.data.location}
-      </p>
-      <div class="showcase-hero__cta">
-        {isPhaseBefore(phase, 'pre-event') && (
-          <Button href="#about" variant="primary">Learn More</Button>
-        )}
-        {isPhaseAtLeast(phase, 'pre-event') && !isPostEvent && (
-          <Button href="/subscribe" variant="primary">Subscribe for Updates</Button>
-        )}
-        {isPhaseAtLeast(phase, 'pre-event') && !isPostEvent && (
-          <Button href="#about" variant="outline">Learn More</Button>
-        )}
-        {isPostEvent && (
-          <Button href="/showcase/works/" variant="primary">Browse Student Work</Button>
-        )}
-      </div>
+      <h1 class="showcase-hero__logo-wrap">
+        <img
+          src="/images/graduation-exhibitions/graduation-exhibitions-logo-primary.svg"
+          alt="CCA Graduation Exhibitions 2026"
+          class="showcase-hero__logo"
+          width="900"
+          height="630"
+        />
+      </h1>
     </div>
     <div class="showcase-hero__scroll" aria-hidden="true">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -151,7 +162,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
               <div class="about-detail">
                 <span class="about-detail__label">Where</span>
                 <span class="about-detail__value">{event.data.location}</span>
-                {event.data.address && <span class="about-detail__sub">{event.data.address}</span>}
+                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address}</a>}
               </div>
             </div>
           )}
@@ -170,7 +181,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
               <div class="about-detail">
                 <span class="about-detail__label">Where</span>
                 <span class="about-detail__value">{event.data.location}</span>
-                {event.data.address && <span class="about-detail__sub">{event.data.address}</span>}
+                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address}</a>}
               </div>
             </div>
           </div>
@@ -230,7 +241,8 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .showcase-hero__content {
@@ -243,37 +255,24 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     padding-inline: var(--space-4);
   }
 
-  .showcase-hero__label {
+  .showcase-hero__logo-wrap {
+    margin: 0 0 var(--space-6);
+    line-height: 0;
+  }
+
+  .showcase-hero__logo {
+    width: clamp(300px, 52vw, 640px);
+    height: auto;
     display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-muted);
-    margin-bottom: var(--space-4);
-  }
-
-  .showcase-hero__title {
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 7vw, 7rem);
-    font-weight: normal;
-    line-height: 1;
-    margin: 0;
-  }
-
-  .showcase-hero__subtitle {
-    font-family: var(--font-mono);
-    font-size: var(--text-base);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-muted);
-    margin-top: var(--space-4);
+    margin: 0 auto;
+    /* Drop shadow to lift logo off dark bg */
+    filter: drop-shadow(0 2px 24px rgba(0, 191, 179, 0.18));
   }
 
   .showcase-hero__cta {
     display: flex;
     gap: var(--space-3);
-    margin-top: var(--space-6);
+    margin-top: var(--space-5);
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -284,7 +283,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    overflow: hidden;
   }
 
   .showcase-hero__fragment {
@@ -304,6 +302,14 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     left: 8%;
     width: clamp(120px, 22vw, 300px);
     rotate: -4deg;
+  }
+
+  .showcase-hero__fragment--3 {
+    bottom: -14%;
+    left: 68%;
+    width: clamp(140px, 22vw, 280px);
+    rotate: -3deg;
+    --frame-color: #fff;
   }
 
   .showcase-hero__doodle {
@@ -326,6 +332,11 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .showcase-hero__logo {
+      opacity: 0;
+      animation: fragment-enter 0.8s var(--ease-out-expo) 0.05s both;
+    }
+
     .showcase-hero__fragment {
       opacity: 0;
       animation: fragment-enter 0.6s var(--ease-out-expo) both;
@@ -333,8 +344,9 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
     .showcase-hero__fragment--1 { animation-delay: 0.1s; }
     .showcase-hero__fragment--2 { animation-delay: 0.25s; }
-    .showcase-hero__doodle--1 { animation-delay: 0.4s; }
-    .showcase-hero__doodle--2 { animation-delay: 0.55s; }
+    .showcase-hero__fragment--3 { animation-delay: 0.38s; }
+    .showcase-hero__doodle--1 { animation-delay: 0.5s; }
+    .showcase-hero__doodle--2 { animation-delay: 0.65s; }
   }
 
   @media (max-width: 767px) {
@@ -352,37 +364,16 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       left: -3%;
     }
 
+    .showcase-hero__fragment--3 {
+      display: none;
+    }
+
     .showcase-hero__doodle {
       display: none;
     }
   }
 
-  .showcase-hero__seal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: clamp(280px, 60vw, 600px);
-    aspect-ratio: 1;
-    background: white;
-    opacity: 0.07;
-    mask-image: url('/images/cca-seal.svg');
-    -webkit-mask-image: url('/images/cca-seal.svg');
-    mask-size: contain;
-    -webkit-mask-size: contain;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .showcase-hero__seal {
-      animation: seal-hero-breathe 12s ease-in-out infinite;
-    }
-  }
-
-  .showcase-hero__scroll {
+.showcase-hero__scroll {
     position: absolute;
     bottom: var(--space-8);
     left: 50%;

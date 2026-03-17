@@ -1,0 +1,360 @@
+---
+interface Props {
+  /** Dot fill color (default: CCA navy) */
+  dotColor?: string;
+  /** Dot opacity 0–1 (default: 0.2) */
+  dotOpacity?: number;
+  /** Grid spacing in px (default: 16) */
+  dotSpacing?: number;
+  /** Base dot radius in px (default: 2.5) */
+  dotRadius?: number;
+  /** Size variation 0–1 (default: 0.3) */
+  sizeVariation?: number;
+  /** Scanner speed in px/s (default: 35) */
+  scanSpeed?: number;
+  /** Displacement amplitude in px (default: 18) */
+  displacement?: number;
+  /** Zone of influence around scanner head in px (default: 120) */
+  scanWidth?: number;
+  /** Number of scanner heads (default: 1) */
+  scannerCount?: number;
+  /** Scan direction (default: 'y') */
+  direction?: 'y' | 'x' | 'xy';
+  /** Heads bounce back and forth instead of wrapping (default: false) */
+  bidirectional?: boolean;
+}
+
+const {
+  dotColor      = '#005776',
+  dotOpacity    = 0.2,
+  dotSpacing    = 16,
+  dotRadius     = 2.5,
+  sizeVariation = 0.3,
+  scanSpeed     = 35,
+  displacement  = 18,
+  scanWidth     = 120,
+  scannerCount  = 1,
+  direction     = 'y',
+  bidirectional = false,
+} = Astro.props;
+---
+
+<canvas
+  class="halftone-proc-bg"
+  id="halftone-proc-bg"
+  aria-hidden="true"
+  data-dot-color={dotColor}
+  data-dot-opacity={dotOpacity}
+  data-dot-spacing={dotSpacing}
+  data-dot-radius={dotRadius}
+  data-size-variation={sizeVariation}
+  data-scan-speed={scanSpeed}
+  data-displacement={displacement}
+  data-scan-width={scanWidth}
+  data-scanner-count={scannerCount}
+  data-direction={direction}
+  data-bidirectional={bidirectional ? 'true' : 'false'}
+></canvas>
+
+<style>
+  .halftone-proc-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: transparent;
+  }
+</style>
+
+<script>
+  function initHalftoneProceduralScan() {
+    const canvas = document.getElementById('halftone-proc-bg') as HTMLCanvasElement;
+    if (!canvas) return;
+    if ((canvas as any).__hpRunning) return;
+    (canvas as any).__hpRunning = true;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Read config from data attributes
+    const dotColor      = canvas.dataset.dotColor     ?? '#005776';
+    const dotOpacity    = parseFloat(canvas.dataset.dotOpacity    ?? '0.2');
+    const dotSpacingCfg = parseFloat(canvas.dataset.dotSpacing    ?? '16');
+    const dotRadiusCfg  = parseFloat(canvas.dataset.dotRadius     ?? '2.5');
+    const sizeVariation = parseFloat(canvas.dataset.sizeVariation ?? '0.3');
+    const scanSpeedCfg  = parseFloat(canvas.dataset.scanSpeed     ?? '35');
+    const displacement  = parseFloat(canvas.dataset.displacement  ?? '18');
+    const scanWidthCfg  = parseFloat(canvas.dataset.scanWidth     ?? '120');
+    const scannerCount  = parseInt(canvas.dataset.scannerCount    ?? '1', 10);
+    const direction     = (canvas.dataset.direction ?? 'y') as 'y' | 'x' | 'xy';
+    const bidirectional = canvas.dataset.bidirectional === 'true';
+
+    let w = 0, h = 0, dpr = 1;
+    let animId = 0, time = 0;
+    let gridDirty = true;
+    let tier = 0;
+    let lastFrameTime = 0;
+    const TWO_PI = Math.PI * 2;
+
+    type Dot      = { baseX: number; baseY: number; radius: number; phase: number };
+    type DotState = { dx: number; dy: number; vx: number; vy: number };
+    type ScanHead = { pos: number; dir: 1 | -1; phase: number; axis: 'v' | 'h' };
+
+    let dots: Dot[] = [];
+    let dotStates: DotState[] = [];
+    let vHeads: ScanHead[] = [];
+    let hHeads: ScanHead[] = [];
+    let allHeads: ScanHead[] = [];
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function hash(x: number, y: number): number {
+      let h = (x * 374761393 + y * 668265263) | 0;
+      h = Math.imul(h ^ (h >>> 13), 1274126177);
+      return ((h ^ (h >>> 16)) >>> 0) / 0xffffffff;
+    }
+
+    function detectTier(): number {
+      const cpu = (navigator as any).hardwareConcurrency ?? 4;
+      if (window.innerWidth <= 480 && cpu <= 4) return 2;
+      if (window.innerWidth <= 768) return 1;
+      return 0;
+    }
+
+    function effectiveSpacing(): number {
+      if (tier >= 2) return Math.max(dotSpacingCfg, 28);
+      if (tier >= 1) return Math.max(dotSpacingCfg, 20);
+      return dotSpacingCfg;
+    }
+
+    function buildGrid() {
+      const sp = effectiveSpacing();
+      dots = [];
+      dotStates = [];
+      const bleed = sp * 2;
+      const cols = Math.ceil((w + bleed * 2) / sp) + 1;
+      const rows = Math.ceil((h + bleed * 2) / sp) + 1;
+      for (let row = 0; row < rows; row++) {
+        const xOffset = (row % 2 === 1) ? sp / 2 : 0;
+        for (let col = 0; col < cols; col++) {
+          const bx = col * sp + xOffset - bleed;
+          const by = row * sp - bleed;
+          const variation = 1 - sizeVariation + sizeVariation * hash(col * 3 + 1, row * 7 + 2);
+          const r = Math.max(0.5, dotRadiusCfg * variation);
+          const phase = hash(col * 7 + 5, row * 13 + 3) * TWO_PI;
+          dots.push({ baseX: bx, baseY: by, radius: r, phase });
+          dotStates.push({ dx: 0, dy: 0, vx: 0, vy: 0 });
+        }
+      }
+      gridDirty = false;
+    }
+
+    function buildScanHeads() {
+      const margin = scanWidthCfg;
+      const count = tier >= 1 ? Math.min(scannerCount, 1) : scannerCount;
+      const needsV = direction === 'y' || direction === 'xy';
+      const needsH = direction === 'x' || direction === 'xy';
+      allHeads = [];
+
+      if (needsV) {
+        for (let i = 0; i < count; i++) {
+          allHeads.push({
+            pos: -margin + (i / count) * (h + margin * 2),
+            dir: (bidirectional && i % 2 === 1) ? -1 : 1,
+            phase: i * 2.399,
+            axis: 'v',
+          });
+        }
+      }
+      if (needsH) {
+        for (let i = 0; i < count; i++) {
+          allHeads.push({
+            pos: -margin + (i / count) * (w + margin * 2),
+            dir: (bidirectional && i % 2 === 1) ? -1 : 1,
+            phase: (count + i) * 2.399 + 1.7,
+            axis: 'h',
+          });
+        }
+      }
+
+      vHeads = allHeads.filter(s => s.axis === 'v');
+      hHeads = allHeads.filter(s => s.axis === 'h');
+    }
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      tier = detectTier();
+      gridDirty = true;
+    }
+
+    function updateDots() {
+      const spring  = 0.18;
+      const damping = 0.72;
+      const lerpRate = 0.12;
+      const useLerp = tier >= 2;
+
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        const s   = dotStates[i];
+        let forceX = 0, forceY = 0;
+
+        for (const head of vHeads) {
+          const dist = Math.abs(dot.baseY - head.pos);
+          if (dist < scanWidthCfg) {
+            const t = 1 - dist / scanWidthCfg;
+            const bell = t * t * (3 - 2 * t);
+            forceX += bell * displacement * Math.sin(dot.baseY * 0.04 + time * 1.5 + head.phase + dot.phase * 0.3);
+          }
+        }
+        for (const head of hHeads) {
+          const dist = Math.abs(dot.baseX - head.pos);
+          if (dist < scanWidthCfg) {
+            const t = 1 - dist / scanWidthCfg;
+            const bell = t * t * (3 - 2 * t);
+            forceY += bell * displacement * Math.sin(dot.baseX * 0.04 + time * 1.3 + head.phase + dot.phase * 0.3);
+          }
+        }
+
+        if (useLerp) {
+          s.dx += (forceX - s.dx) * lerpRate;
+          s.dy += (forceY - s.dy) * lerpRate;
+        } else {
+          s.vx += (forceX - s.dx) * spring;
+          s.vy += (forceY - s.dy) * spring;
+          s.vx *= damping;
+          s.vy *= damping;
+          s.dx += s.vx;
+          s.dy += s.vy;
+        }
+      }
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.fillStyle  = dotColor;
+      ctx.globalAlpha = dotOpacity;
+      ctx.beginPath();
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        const s   = dotStates[i];
+        const cx  = dot.baseX + s.dx;
+        const cy  = dot.baseY + s.dy;
+        const r   = dot.radius;
+        ctx.moveTo(cx + r, cy);
+        ctx.arc(cx, cy, r, 0, TWO_PI);
+      }
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Edge vignette
+      const edge = 80;
+      ctx.globalCompositeOperation = 'destination-in';
+
+      const fv = ctx.createLinearGradient(0, 0, 0, h);
+      fv.addColorStop(0,            'transparent');
+      fv.addColorStop(edge / h,     'white');
+      fv.addColorStop(1 - edge / h, 'white');
+      fv.addColorStop(1,            'transparent');
+      ctx.fillStyle = fv;
+      ctx.fillRect(0, 0, w, h);
+
+      const fh = ctx.createLinearGradient(0, 0, w, 0);
+      fh.addColorStop(0,            'transparent');
+      fh.addColorStop(edge / w,     'white');
+      fh.addColorStop(1 - edge / w, 'white');
+      fh.addColorStop(1,            'transparent');
+      ctx.fillStyle = fh;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function animate(ts: number) {
+      const targetInterval = tier >= 1 ? 33 : 0;
+      if (targetInterval > 0 && ts - lastFrameTime < targetInterval) {
+        animId = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime = ts;
+
+      if (gridDirty) { buildGrid(); buildScanHeads(); }
+
+      time += 1 / 60;
+
+      const margin = scanWidthCfg;
+      for (const head of allHeads) {
+        const extent = head.axis === 'v' ? h : w;
+        const noise = 0.5 + 0.5 * Math.sin(time * 0.37 + head.phase)
+                    + 0.3 * Math.sin(time * 0.89 + head.phase * 1.7);
+        head.pos += head.dir * scanSpeedCfg * Math.max(0.05, noise) * (1 / 60);
+        if (bidirectional) {
+          if (head.pos > extent + margin) { head.pos = extent + margin; head.dir = -1; }
+          else if (head.pos < -margin)    { head.pos = -margin;         head.dir = 1;  }
+        } else {
+          if (head.pos > extent + margin) head.pos = -margin;
+        }
+      }
+
+      updateDots();
+      render();
+      animId = requestAnimationFrame(animate);
+    }
+
+    function renderStatic() {
+      buildGrid();
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle   = dotColor;
+      ctx.globalAlpha = dotOpacity;
+      ctx.beginPath();
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        ctx.moveTo(dot.baseX + dot.radius, dot.baseY);
+        ctx.arc(dot.baseX, dot.baseY, dot.radius, 0, TWO_PI);
+      }
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function start() {
+      cancelAnimationFrame(animId);
+      resize();
+      buildGrid();
+      buildScanHeads();
+      animId = requestAnimationFrame(animate);
+    }
+
+    function stop() {
+      cancelAnimationFrame(animId);
+      resize();
+      renderStatic();
+    }
+
+    prefersReducedMotion.addEventListener('change', () => {
+      prefersReducedMotion.matches ? stop() : start();
+    });
+
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        tier = detectTier();
+        resize();
+        if (prefersReducedMotion.matches) renderStatic();
+        else buildScanHeads();
+      }, 200);
+    });
+
+    prefersReducedMotion.matches ? stop() : start();
+  }
+
+  initHalftoneProceduralScan();
+  document.addEventListener('astro:page-load', initHalftoneProceduralScan);
+</script>
