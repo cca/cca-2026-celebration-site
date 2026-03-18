@@ -14,8 +14,8 @@
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg",
-    "alt": "Graduate students celebrating at commencement"
+    "src": "/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg",
+    "alt": "Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them."
   },
   "schedule": [
     { "time": "1:30 PM", "label": "Doors Open" },

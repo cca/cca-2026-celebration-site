@@ -44,8 +44,8 @@ const honorees = [
     detail: p.data.ccaConnection,
   })),
   ...[
-    { event: undergradEvent, placeholder: 'https://images.unsplash.com/photo-1529068755536-a5ade0dcb4e8?w=600&h=600&fit=crop&crop=face' },
-    { event: gradEvent, placeholder: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=600&fit=crop&crop=face' },
+    { event: undergradEvent, placeholder: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg' },
+    { event: gradEvent, placeholder: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg' },
   ]
     .filter(({ event }) => event?.data.ceremonyProgram?.studentSpeaker)
     .map(({ event, placeholder }) => {
@@ -263,15 +263,25 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   <PastGallery
     label="Past Commencements"
     title="Celebrating Generations of Graduates"
+    marqueeDuration={90}
     images={[
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Graduates celebrating at a previous CCA commencement' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Commencement ceremony processional' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Students receiving their diplomas' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Families and friends at commencement' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Cap toss celebration moment' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Graduate portraits from past years' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg', alt: 'Decorated graduation caps' },
-      { src: 'https://storage.googleapis.com/ccaedu-prod/media/images/large_digital_jpg-CCA_EOY-Show_SP25-115-jrl2.original.jpg', alt: 'Celebration with faculty and staff' },
+      { src: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', alt: 'A graduate in a vibrant pink shawl stands next to colorful paper lanterns and rainbow streamers, smiling during a commencement celebration.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', alt: 'A group of ten students dressed in casual clothing pose together in front of decorative purple lanterns and colorful ribbons at an indoor celebration.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', alt: 'Three male graduates wearing black robes and colorful cultural sashes stand together outdoors on a brick plaza, smiling at the camera.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', alt: 'Two graduates in formal attire pose together outdoors; one wears a green dress and the other a pink blazer, both smiling in front of a white building.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-005-03-2026-JL.jpg', alt: 'Four graduates dressed in vibrant pink and purple outfits pose together in a parking lot during a bright, sunny commencement day.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-006-03-2026-JL.jpg', alt: 'Three graduates with colorful hair stand together on a white courtyard; one wears navy and black, another a gray dress, and the third a teal skirt with yellow sash.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-007-03-2026-JL.jpg', alt: 'Nine graduates in black academic robes and regalia pose together indoors, with two seated in front and seven standing behind them.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-008-03-2026-JL.jpg', alt: 'Two graduates in black robes with colorful cultural sashes sit together on red auditorium seats, smiling during the commencement ceremony.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-009-03-2026-JL.jpg', alt: 'Four graduates pose together outdoors against a brick building; they wear a mix of casual and formal attire, including vibrant pink and maroon colors.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-010-03-2026-JL.jpg', alt: 'A group of graduates in black robes and mortarboards stand together in front of a brick building, celebrating with raised arms and smiling at the camera.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-011-03-2026-JL.jpg', alt: 'A diverse group of young graduates wearing leis and graduation regalia pose together outdoors in front of a modern building with colorful turquoise architectural elements.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-012-03-2026-JL.jpg', alt: 'Two graduates embrace in front of a celebration backdrop decorated with purple and white balloons, with a paved courtyard and building visible behind them.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg', alt: 'Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-014-03-2026-JL.jpg', alt: 'Two speakers in academic regalia stand at a CCAlum podium during a commencement ceremony, with one holding a microphone as they address the audience.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-015-03-2026-JL.jpg', alt: 'A group of graduates in caps and gowns pose together indoors, smiling and posing for a photo in a hallway with windows and other attendees visible in the background.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg', alt: 'Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them.' },
+      { src: '/images/commencement-past/previousCommencementPhotos-017-03-2026-JL.jpg', alt: 'A group of graduates wearing black gowns and yellow sashes pose together in a brick courtyard, standing in front of historic buildings on the campus grounds.' },
     ]}
   />
 
@@ -304,8 +314,23 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 <script>
   function initCommChimera() {
     const PRESETS = [
-      { image: '/images/cca-photography/commencement-masters24.jpg',  shape: 97  },
-      { image: '/images/cca-photography/eoy-show-sp25.jpg',           shape: 40  },
+      { image: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-005-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-006-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-007-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-008-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-009-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-010-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-011-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-012-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-014-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-015-03-2026-JL.jpg', shape: 97 },
+      { image: '/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg', shape: 40 },
+      { image: '/images/commencement-past/previousCommencementPhotos-017-03-2026-JL.jpg', shape: 97 },
     ];
 
     const LOOP_CONFIGS = [
@@ -361,12 +386,9 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       { phase: 'idle', start: 0, skewDir: 1, rotDir: 1, sizeMult: 1 },
     ];
 
-    let presetIndex = startOffset;
-
     function kick(slot: 0 | 1, now: number) {
       const s = state[slot];
-      const preset = PRESETS[presetIndex % PRESETS.length];
-      presetIndex++;
+      const preset = PRESETS[Math.floor(Math.random() * PRESETS.length)];
       const url = shapeUrl(preset.shape);
       shapeEls[slot].style.maskImage = `url('${url}')`;
       shapeEls[slot].style.setProperty('-webkit-mask-image', `url('${url}')`);
@@ -426,7 +448,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reducedMotion) {
-      const first = PRESETS[startOffset % PRESETS.length];
+      const first = PRESETS[Math.floor(Math.random() * PRESETS.length)];
       shapeEls[0].style.maskImage = `url('${shapeUrl(first.shape)}')`;
       shapeEls[0].style.setProperty('-webkit-mask-image', `url('${shapeUrl(first.shape)}')`);
       shapeEls[0].style.backgroundImage = `url('${first.image}')`;

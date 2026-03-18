@@ -14,8 +14,8 @@
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "https://storage.googleapis.com/ccaedu-prod/media/images/commencement-masters24-2025-body-001.original.jpg",
-    "alt": "Undergraduate students celebrating at commencement"
+    "src": "/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg",
+    "alt": "Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage."
   },
   "schedule": [
     { "time": "2:00 PM", "label": "Doors Open" },
