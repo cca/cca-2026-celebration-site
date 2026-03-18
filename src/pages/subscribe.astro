@@ -1,18 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
-import { chimeraExpanded2026Paths, chimeraExpanded2026Colors } from '../data/chimera-expanded-2026-paths';
 import EmailSignup from '../components/sections/EmailSignup.astro';
 ---
 
 <BaseLayout title="Subscribe" description="Sign up for the CCA 2026 Celebrations mailing list to receive event updates and RSVP reminders." minimalHeader>
   <ParticleField
-    mode="svg"
-    svgPaths={chimeraExpanded2026Paths}
-    colors={chimeraExpanded2026Colors}
-    count={25}
-    sizeRange={[14, 40]}
-    opacityRange={[0.08, 0.3]}
+    colors={['#00BFB3', '#563D82', '#FFC845', '#E57200', '#005776']}
+    count={80}
+    sizeRange={[3, 9]}
+    opacityRange={[0.12, 0.45]}
   />
 
   <div class="subscribe-page">

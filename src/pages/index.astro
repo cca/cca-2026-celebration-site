@@ -4,8 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
 
 import EmailSignup from '../components/sections/EmailSignup.astro';
-import ChimeraLoop3D from '../components/effects/ChimeraLoop3D.astro';
-import ArrowLoop3D from '../components/effects/ArrowLoop3D.astro';
+
 import Button from '../components/ui/Button.astro';
 import FramedImage from '../components/ui/FramedImage.astro';
 import { getCurrentPhase } from '../lib/utils/phase';
@@ -59,47 +58,10 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         data-cursor-lerp="0.05"
         style="background-image: url('/images/cca-photography/eoy-show-sp25.jpg'); mask-image: url('/images/chimera-expanded-2026/shape-040.svg'); -webkit-mask-image: url('/images/chimera-expanded-2026/shape-040.svg');"
       ></div>
-      <div
-        class="hero__fragment hero__fragment--3 hero__doodle"
-        data-cursor-track
-        data-cursor-strength="0.05"
-        data-cursor-max="45"
-        data-cursor-lerp="0.12"
-      >
-        <ArrowLoop3D
-          id="hero-arrow-1"
-          cycleDuration={3}
-          fadeOverlap={0.15}
-          scaleAmount={0.04}
-          spinDegrees={180}
-          spinAxis="Y"
-          perspective={300}
-          sizeVariance={0.3}
-          colors={['#00BFB3', '#563D82', '#E57200', '#FFC845', '#005776']}
-        />
-      </div>
-      <div
-        class="hero__fragment hero__fragment--4 hero__doodle"
-        data-cursor-track
-        data-cursor-strength="0.038"
-        data-cursor-max="32"
-        data-cursor-lerp="0.09"
-      >
-        <ChimeraLoop3D
-          id="hero-chimera"
-          cycleDuration={4}
-          fadeOverlap={0.3}
-          elasticIntensity={0.8}
-          skewAmount={10}
-          driftSpeed={0.8}
-          sizeVariance={0.15}
-          colors={['#00BFB3', '#563D82', '#E57200', '#FFC845', '#005776']}
-        />
-      </div>
     </div>
     <div class="hero__content" id="hero-content">
-      <span class="hero__eyebrow stagger-1">California College of the Arts</span>
-      <span class="hero__year shimmer-text stagger-2">2026</span>
+      <img src="/images/logos/wordmark-single.svg" alt="California College of the Arts" class="hero__eyebrow stagger-1" />
+      <span class="hero__year stagger-2" role="img" aria-label="2026"></span>
       <span class="hero__label stagger-3">{isPostEvent ? 'Congratulations' : 'Celebrations'}</span>
       <p class="hero__tagline stagger-4">
         {isPostEvent
@@ -264,19 +226,40 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   .hero__eyebrow {
     display: block;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-muted);
+    width: clamp(180px, 28vw, 320px);
+    height: auto;
     margin-bottom: var(--space-4);
   }
 
   .hero__year {
     display: block;
-    font-family: var(--font-display);
-    font-size: clamp(6rem, 20vw, 18rem);
-    line-height: 1;
+    height: clamp(4rem, 13vw, 10rem);
+    aspect-ratio: 948.8 / 269.9;
+    margin-block: var(--space-6);
+    background: linear-gradient(
+      90deg,
+      var(--color-shimmer-base) 0%,
+      var(--color-shimmer-highlight) 25%,
+      var(--color-shimmer-base) 50%,
+      var(--color-shimmer-warm) 75%,
+      var(--color-shimmer-base) 100%
+    );
+    background-size: 200% auto;
+    -webkit-mask-image: url('/images/logos/2026.svg');
+    mask-image: url('/images/logos/2026.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__year {
+      animation: none;
+    }
   }
 
   .hero__label {
@@ -285,7 +268,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     font-size: var(--text-3xl);
     font-weight: 700;
     color: var(--color-text);
-    margin-top: var(--space-2);
+    margin-top: 0;
     line-height: 1.2;
   }
 
@@ -313,10 +296,18 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: clamp(280px, 60vw, 600px);
+    width: clamp(300px, 64vw, 640px);
     aspect-ratio: 1;
-    background: var(--color-accent);
-    opacity: 0.05;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent) 0%,
+      color-mix(in srgb, var(--color-accent) 50%, white) 25%,
+      var(--color-accent) 50%,
+      color-mix(in srgb, var(--color-accent) 60%, #004040) 75%,
+      var(--color-accent) 100%
+    );
+    background-size: 200% auto;
+    opacity: 0.08;
     mask-image: url('/images/cca-seal.svg');
     -webkit-mask-image: url('/images/cca-seal.svg');
     mask-size: contain;
@@ -329,12 +320,12 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   :global([data-theme="commencement"]) .hero__seal,
   :global([data-theme="thesis-grad"]) .hero__seal {
-    opacity: 0.07;
+    opacity: 0.11;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .hero__seal {
-      animation: seal-hero-breathe 12s ease-in-out infinite;
+      animation: seal-hero-breathe 12s ease-in-out infinite, shimmer 8s ease-in-out infinite;
     }
   }
 
@@ -378,32 +369,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     animation-delay: 0.3s;
   }
 
-  .hero__fragment--3 {
-    bottom: 30%;
-    right: 8%;
-    width: clamp(60px, 7vw, 100px);
-    aspect-ratio: 1;
-    object-fit: contain;
-    rotate: 15deg;
-    animation-delay: 0.45s;
-  }
-
-  .hero__fragment--4 {
-    top: 15%;
-    left: 8%;
-    width: clamp(40px, 4.5vw, 64px);
-    aspect-ratio: 3 / 2;
-    object-fit: contain;
-    rotate: -8deg;
-    animation-delay: 0.55s;
-  }
-
-  .hero__doodle {
-    border-radius: 0;
-    opacity: 0;
-    pointer-events: auto;
-    cursor: pointer;
-  }
 
   @media (max-width: 767px) {
     .hero__collage {
@@ -420,10 +385,6 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       left: -3%;
     }
 
-    .hero__fragment--3,
-    .hero__fragment--4 {
-      display: none;
-    }
   }
 
   /* ---- Scroll indicator ---- */
@@ -438,16 +399,17 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   /* ---- Hero Media ---- */
   .hero-media {
-    padding: var(--space-4) var(--space-4) var(--space-20);
+    padding-block: var(--space-4) var(--space-20);
     overflow: hidden;
   }
 
   .hero-media__frame {
-    transform: scale(0.78);
-    border-radius: 16px;
-    overflow: hidden;
-    will-change: transform, border-radius;
-    transition: transform 0.1s linear, border-radius 0.1s linear;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--grid-gutter);
+    transform: scale(0.65);
+    will-change: transform;
+    transition: transform 0.1s linear;
   }
 
   .hero-media__video {
@@ -456,12 +418,18 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     aspect-ratio: 16 / 9;
     object-fit: cover;
     background: var(--color-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    will-change: border-radius;
+    transition: border-radius 0.1s linear;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-media__frame {
       transform: scale(1) !important;
-      border-radius: 0 !important;
+    }
+    .hero-media__video {
+      border-radius: var(--radius-card, 12px) !important;
     }
   }
 

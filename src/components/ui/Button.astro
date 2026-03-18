@@ -10,7 +10,8 @@ const { href, variant = "primary", arrow, ...rest } = Astro.props;
 const Tag = href ? "a" : "button";
 
 // Pick a random arrow SVG (1-13, skipping 1) if variant is link and no arrow specified
-const arrowIndex = arrow ?? `0${2 + Math.floor(Math.random() * 12)}`.slice(-2);
+const LONG_TAIL_ARROWS = ['02', '05', '06', '07', '11', '12'];
+const arrowIndex = arrow ?? LONG_TAIL_ARROWS[Math.floor(Math.random() * LONG_TAIL_ARROWS.length)];
 ---
 
 <Tag href={href} class:list={["btn", `btn-${variant}`]} {...rest}>
@@ -99,7 +100,7 @@ const arrowIndex = arrow ?? `0${2 + Math.floor(Math.random() * 12)}`.slice(-2);
   /* ── Link: text + wavy arrow, no box ── */
   .btn-link {
     background: none;
-    padding: 0 var(--space-10) var(--space-8) 0;
+    padding: 0 var(--space-16) var(--space-12) 0;
     border-radius: 0;
     color: var(--color-accent);
     font-family: var(--font-heading);
@@ -116,7 +117,7 @@ const arrowIndex = arrow ?? `0${2 + Math.floor(Math.random() * 12)}`.slice(-2);
   }
 
   .btn-link:hover .btn-link__arrow {
-    transform: translateX(6px);
+    transform: translateX(8px);
   }
 
   .btn-link:active {
@@ -127,8 +128,8 @@ const arrowIndex = arrow ?? `0${2 + Math.floor(Math.random() * 12)}`.slice(-2);
     position: absolute;
     right: 0;
     bottom: 0;
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     background: currentColor;
     mask-image: var(--arrow-src);
     -webkit-mask-image: var(--arrow-src);

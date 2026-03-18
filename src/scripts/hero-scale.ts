@@ -8,15 +8,16 @@ function initHeroScale() {
   const frame = document.getElementById('hero-frame');
   if (!frame) return;
 
+  const video = frame.querySelector('.hero-media__video') as HTMLElement | null;
+
   // Respect prefers-reduced-motion — show at full size immediately
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     frame.style.transform = 'scale(1)';
-    frame.style.borderRadius = '0';
     return;
   }
 
   const section = frame.closest('.hero-media') as HTMLElement | null;
-  if (!section) return;
+  if (!section || !video) return;
 
   let ticking = false;
 
@@ -43,11 +44,11 @@ function initHeroScale() {
     let progress = 1 - (current - end) / (start - end);
     progress = Math.max(0, Math.min(1, progress));
 
-    const scale = 0.78 + progress * 0.22;     // 0.78 → 1
-    const radius = (1 - progress) * 16;       // 16px → 0
+    const scale = 0.65 + progress * 0.35;     // 0.65 → 1
+    const radius = 12 + (1 - progress) * 8;   // 20px → 12px
 
     frame.style.transform = `scale(${scale})`;
-    frame.style.borderRadius = `${radius}px`;
+    video!.style.borderRadius = `${radius}px`;
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });

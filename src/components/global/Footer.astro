@@ -1,6 +1,9 @@
 ---
 import CcaSeal from '../ui/CcaSeal.astro';
+import { getCurrentPhase, isContentVisible } from '../../lib/utils/phase';
 const year = new Date().getFullYear();
+const phase = getCurrentPhase(Astro.url);
+const showExhibitionLinks = isContentVisible(phase, undefined, ['save-the-date']);
 ---
 
 <footer class="site-footer">
@@ -8,8 +11,8 @@ const year = new Date().getFullYear();
     <div class="footer-main">
       <div class="footer-brand">
         <div class="footer-brand__lockup">
-          <CcaSeal size="44px" color="var(--color-accent)" opacity={0.7} />
-          <span class="footer-brand__year shimmer-text">2026</span>
+          <CcaSeal size="52px" color="var(--color-teal)" opacity={0.7} />
+          <span class="footer-brand__year" role="img" aria-label="2026"></span>
         </div>
         <p class="footer-tagline">
           Celebrate the achievements of <a href="/">CCA's Class of 2026</a> at commencement ceremonies, exhibitions, and showcases.
@@ -20,9 +23,9 @@ const year = new Date().getFullYear();
         <div class="footer-col">
           <ul class="footer-links" role="list">
             <li><a href="/commencement/">Commencement</a></li>
-            <li><a href="/thesis/showcase/">Graduation Exhibitions</a></li>
-            <li><a href="/thesis/">Thesis Exhibitions</a></li>
-            <li><a href="/showcase/">Student Showcase</a></li>
+            {showExhibitionLinks && <li><a href="/thesis/showcase/">Graduation Exhibitions</a></li>}
+            <li><a href="/thesis/">Graduation Exhibitions</a></li>
+            {showExhibitionLinks && <li><a href="/showcase/">Student Showcase</a></li>}
           </ul>
         </div>
 
@@ -121,9 +124,33 @@ const year = new Date().getFullYear();
   }
 
   .footer-brand__year {
-    font-family: var(--font-display);
-    font-size: var(--text-3xl);
-    line-height: 1;
+    display: inline-block;
+    height: 40px;
+    aspect-ratio: 948.8 / 269.9;
+    background: linear-gradient(
+      90deg,
+      var(--color-shimmer-base) 0%,
+      var(--color-shimmer-highlight) 25%,
+      var(--color-shimmer-base) 50%,
+      var(--color-shimmer-warm) 75%,
+      var(--color-shimmer-base) 100%
+    );
+    background-size: 200% auto;
+    -webkit-mask-image: url('/images/logos/2026.svg');
+    mask-image: url('/images/logos/2026.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: left center;
+    mask-position: left center;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-brand__year {
+      animation: none;
+    }
   }
 
   .footer-tagline {
