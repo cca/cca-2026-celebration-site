@@ -13,7 +13,7 @@
   /* Typography — Font Families (three-font system) */
   --font-display: "Chimera Display", Georgia, "Times New Roman", serif;
   --font-body: "Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: "Roboto Mono", "SF Mono", "Fira Code", monospace;
+  --font-mono: "Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-heading: "Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Typography — Scale (fluid via clamp) */

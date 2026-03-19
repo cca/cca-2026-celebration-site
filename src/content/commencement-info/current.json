@@ -18,17 +18,17 @@
   "statistics": [
     { "label": "Graduates", "value": "462", "detail": "Class of 2026" },
     { "label": "Countries", "value": "38", "detail": "Represented" },
-    { "label": "Degree Programs", "value": "22" },
-    { "label": "Honorary Doctorates", "value": "2", "detail": "Awarded" }
+    { "label": "Degree programs", "value": "22" },
+    { "label": "Honorary doctorates", "value": "2", "detail": "Awarded" }
   ],
   "downloadableAssets": [
     {
-      "label": "DIY Celebration Kit",
+      "label": "DIY celebration kit",
       "url": "/downloads/cca-2026-diy-kit.pdf",
       "description": "Printable decorations, social media frames, and more"
     },
     {
-      "label": "Commencement Program",
+      "label": "Commencement program",
       "url": "/downloads/cca-2026-program.pdf",
       "description": "Official ceremony program booklet"
     }

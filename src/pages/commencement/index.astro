@@ -10,7 +10,7 @@ import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
 import PastGallery from '../../components/sections/PastGallery.astro';
 import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
-import { formatDate } from '../../lib/utils/format';
+import { formatDate, formatTime } from '../../lib/utils/format';
 import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
 import PhaseGate from '../../components/PhaseGate.astro';
 import { getCurrentPhase, isContentVisible } from '../../lib/utils/phase';
@@ -188,42 +188,46 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   <section id="ceremonies" class="ceremonies-section">
     <div class="container">
       <span class="section-label reveal">Ceremonies</span>
-      <h2 class="section-heading reveal">Two Ceremonies, One Celebration</h2>
+      <h2 class="section-heading reveal">Two ceremonies, one celebration</h2>
+      {(gradEvent || undergradEvent) && (() => {
+        const sharedEvent = (gradEvent || undergradEvent)!;
+        return (
+          <p class="ceremony-shared-meta reveal">
+            <time>{formatDate(sharedEvent.data.date)}</time>
+            {' · '}
+            <a href={`https://maps.google.com/?q=${encodeURIComponent(sharedEvent.data.address)}`} target="_blank" rel="noopener noreferrer">
+              {sharedEvent.data.location}
+            </a>
+          </p>
+        );
+      })()}
       <div class="ceremony-cards">
         {gradEvent && isPhaseBefore(phase, 'pre-event') ? (
           <div class="ceremony-info reveal">
+            <div class="ceremony-info__accent" aria-hidden="true"></div>
+            <span class="ceremony-info__badge">{formatTime(gradEvent.data.time)}</span>
             <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
-            <time class="ceremony-info__date">{formatDate(gradEvent.data.date)}</time>
-            <p class="ceremony-info__meta">{gradEvent.data.time}</p>
-            <p class="ceremony-info__meta"><a href="https://maps.google.com/?q=275+Hayes+St,+San+Francisco,+CA" target="_blank" rel="noopener noreferrer">{gradEvent.data.location}</a></p>
           </div>
         ) : gradEvent && (
           <a href="/commencement/graduate/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">Master's</span>
+            <span class="ceremony-card__badge">{formatTime(gradEvent.data.time)}</span>
             <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
-            <time class="ceremony-card__date">{formatDate(gradEvent.data.date)}</time>
-            <p class="ceremony-card__meta">{gradEvent.data.time}</p>
-            <p class="ceremony-card__meta">{gradEvent.data.location}</p>
             <span class="ceremony-card__cta">Details &rarr;</span>
           </a>
         )}
 
         {undergradEvent && isPhaseBefore(phase, 'pre-event') ? (
           <div class="ceremony-info reveal">
+            <div class="ceremony-info__accent" aria-hidden="true"></div>
+            <span class="ceremony-info__badge">{formatTime(undergradEvent.data.time)}</span>
             <h3 class="ceremony-info__title">{undergradEvent.data.title}</h3>
-            <time class="ceremony-info__date">{formatDate(undergradEvent.data.date)}</time>
-            <p class="ceremony-info__meta">{undergradEvent.data.time}</p>
-            <p class="ceremony-info__meta"><a href="https://maps.google.com/?q=275+Hayes+St,+San+Francisco,+CA" target="_blank" rel="noopener noreferrer">{undergradEvent.data.location}</a></p>
           </div>
         ) : undergradEvent && (
           <a href="/commencement/undergraduate/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">Bachelor's</span>
+            <span class="ceremony-card__badge">{formatTime(undergradEvent.data.time)}</span>
             <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
-            <time class="ceremony-card__date">{formatDate(undergradEvent.data.date)}</time>
-            <p class="ceremony-card__meta">{undergradEvent.data.time}</p>
-            <p class="ceremony-card__meta">{undergradEvent.data.location}</p>
             <span class="ceremony-card__cta">Details &rarr;</span>
           </a>
         )}
@@ -246,8 +250,8 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     {celebrations.length > 0 && (
       <section class="celebrations-section">
         <div class="container">
-          <span class="section-label reveal">Pre-Commencement</span>
-          <h2 class="section-heading reveal">Special Celebrations</h2>
+          <span class="section-label reveal">Pre-commencement</span>
+          <h2 class="section-heading reveal">Special celebrations</h2>
           <p class="section-desc reveal">Join us for celebrations honoring all graduating students before the main ceremonies.</p>
           <div class="celebrations-grid">
             {celebrations.map((event) => (
@@ -261,8 +265,8 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   {/* ── Past Commencement Gallery ── */}
   <PastGallery
-    label="Past Commencements"
-    title="Celebrating Generations of Graduates"
+    label="Past commencements"
+    title="Celebrating generations of graduates"
     marqueeDuration={90}
     images={[
       { src: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', alt: 'A graduate in a vibrant pink shawl stands next to colorful paper lanterns and rainbow streamers, smiling during a commencement celebration.' },
@@ -290,7 +294,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     <section class="memoriam-section">
       <div class="container">
         <span class="section-label reveal">In Memoriam</span>
-        <h2 class="section-heading reveal">Remembering Members of Our Community</h2>
+        <h2 class="section-heading reveal">Remembering members of our community</h2>
         <p class="memoriam-intro reveal">We honor the members of the CCA community who passed during this academic year. Their contributions continue to inspire us.</p>
         <ul class="memoriam-list reveal">
           {inMemoriam.map((person) => (
@@ -677,6 +681,30 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     margin-inline: auto;
   }
 
+  /* ── Shared ceremony date/location line ── */
+  .ceremony-shared-meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-top: calc(var(--space-6) * -1);
+    margin-bottom: var(--space-10);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .ceremony-shared-meta a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .ceremony-shared-meta a:hover {
+    color: var(--color-accent);
+  }
+
   /* ── Ceremony cards ── */
   .ceremony-cards {
     display: grid;
@@ -781,38 +809,43 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   /* ── Ceremony info (non-card, save-the-date phase) ── */
   .ceremony-info {
+    position: relative;
+    padding-top: var(--space-6);
+    overflow: hidden;
+  }
+
+  .ceremony-info__accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-prismatic);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ceremony-info__accent {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
+  .ceremony-info__badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    background: var(--color-accent-tint);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 3px;
+    margin-bottom: var(--space-4);
   }
 
   .ceremony-info__title {
     font-size: var(--text-2xl);
     line-height: 1.2;
-    margin-bottom: var(--space-4);
-  }
-
-  .ceremony-info__date {
-    display: block;
-    font-size: var(--text-lg);
-    font-weight: 600;
-    color: var(--color-accent);
-    margin-bottom: var(--space-2);
-  }
-
-  .ceremony-info__meta {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-muted);
-    margin-bottom: var(--space-1);
-  }
-
-  .ceremony-info__meta a {
-    color: inherit;
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 100% 1px;
-  }
-
-  .ceremony-info__meta a:hover {
-    color: var(--color-accent);
-    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    margin-bottom: 0;
   }
 
   /* ── Celebrations grid ── */

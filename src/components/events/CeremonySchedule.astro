@@ -1,4 +1,6 @@
 ---
+import { formatTime } from "../../lib/utils/format";
+
 interface Props {
   schedule: Array<{ time: string; label: string }>;
 }
@@ -10,7 +12,7 @@ const { schedule } = Astro.props;
   <ol class="timeline" role="list">
     {schedule.map((item, i) => (
       <li class="timeline-item">
-        <span class="timeline-time">{item.time}</span>
+        <span class="timeline-time">{formatTime(item.time)}</span>
         <span class="timeline-dot" aria-hidden="true" />
         <span class="timeline-label">{item.label}</span>
       </li>

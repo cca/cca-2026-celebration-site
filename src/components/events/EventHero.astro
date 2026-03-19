@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDate, formatDateRange } from "../../lib/utils/format";
+import { formatDate, formatDateRange, formatTime } from "../../lib/utils/format";
 import { generateIcsDataUri } from "../../lib/utils/calendar";
 import Button from "../ui/Button.astro";
 
@@ -22,7 +22,7 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
       <div class="hero-meta stagger-2">
         <time class="hero-date">{dateDisplay}</time>
         <span class="hero-separator" aria-hidden="true">&#9670;</span>
-        <span class="hero-time">{time}</span>
+        <span class="hero-time">{formatTime(time)}</span>
         <span class="hero-separator" aria-hidden="true">&#9670;</span>
         <span class="hero-location">{location}</span>
       </div>

@@ -9,7 +9,7 @@ const FONT_MAP: Record<string, string> = {
   display: '"Merriweather", Georgia, "Times New Roman", serif',
   body: '"Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif',
   heading: '"Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif',
-  mono: '"Roboto Mono", "SF Mono", "Fira Code", monospace',
+  mono: '"Lineto Brown", "Helvetica Neue", Helvetica, Arial, sans-serif',
 };
 
 const imageCache = new Map<string, HTMLImageElement>();

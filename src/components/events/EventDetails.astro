@@ -7,6 +7,8 @@ interface Props {
 
 const { event } = Astro.props;
 const { location, address, longDescription } = event.data;
+const addressStreet = address ? address.substring(0, address.indexOf(',')) : '';
+const addressCityState = address ? address.substring(address.indexOf(',') + 2) : '';
 ---
 
 <section class="event-details">
@@ -20,7 +22,7 @@ const { location, address, longDescription } = event.data;
         target="_blank"
         rel="noopener noreferrer"
       >
-        {address}
+        {addressStreet}<br />{addressCityState}
       </a>
     </div>
 

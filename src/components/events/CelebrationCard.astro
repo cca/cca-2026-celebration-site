@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { formatDate } from "../../lib/utils/format";
+import { formatDate, formatTime } from "../../lib/utils/format";
 
 interface Props {
   event: CollectionEntry<"events">;
@@ -17,7 +17,7 @@ const dateDisplay = formatDate(date);
     <span class="celebration-badge">CELEBRATION</span>
     <h3 class="celebration-title">{title}</h3>
     <time class="celebration-date">{dateDisplay}</time>
-    <p class="celebration-time">{time}</p>
+    <p class="celebration-time">{formatTime(time)}</p>
     <p class="celebration-location">{location}</p>
     <p class="celebration-desc">{description}</p>
   </article>

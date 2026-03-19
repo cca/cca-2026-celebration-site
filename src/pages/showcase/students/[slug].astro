@@ -4,7 +4,7 @@ import StudentLayout from '../../../layouts/StudentLayout.astro';
 import WorkGrid from '../../../components/works/WorkGrid.astro';
 import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
 import { getWorksByStudent } from '../../../lib/utils/collections';
-import { fullName, formatDate } from '../../../lib/utils/format';
+import { fullName, formatDate, formatTime } from '../../../lib/utils/format';
 import { CURRENT_PHASE, isPhaseBefore } from '../../../config/phases';
 
 export async function getStaticPaths() {
@@ -53,7 +53,7 @@ function getCeremonyHref(event: { data: { type: string; slug: string } }) {
           <li>
             <a href={getCeremonyHref(event!)} class="ceremony-link">
               <span class="ceremony-title">{event!.data.title}</span>
-              <span class="ceremony-meta">{formatDate(event!.data.date)} &middot; {event!.data.time}</span>
+              <span class="ceremony-meta">{formatDate(event!.data.date)} &middot; {formatTime(event!.data.time)}</span>
             </a>
           </li>
         ))}

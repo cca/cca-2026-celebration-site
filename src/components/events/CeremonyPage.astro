@@ -13,7 +13,7 @@ import Button from '../ui/Button.astro';
 import PersonGrid from '../people/PersonGrid.astro';
 import StatisticsGrid from '../sections/StatisticsGrid.astro';
 import { getWorksByEvent, getPeopleByCeremony } from '../../lib/utils/collections';
-import { fullName } from '../../lib/utils/format';
+import { fullName, formatTime } from '../../lib/utils/format';
 
 interface Props {
   eventId: string;
@@ -78,14 +78,14 @@ const allFeaturedPeople = [
 const tocItems: Array<{ label: string; href: string }> = [];
 
 const hasFeaturedPeople = allFeaturedPeople.length > 0;
-if (hasFeaturedPeople) tocItems.push({ label: 'Featured Speakers & Honorees', href: '#featured-people' });
-if (commencementInfo?.data.presidentQuote) tocItems.push({ label: "President's Message", href: '#president-message' });
-if (diyKitAssets.length > 0) tocItems.push({ label: 'DIY Celebration Kit', href: '#diy-kit' });
-if (commencementInfo?.data.statistics) tocItems.push({ label: 'By the Numbers', href: '#statistics' });
-if (works.length > 0) tocItems.push({ label: 'Student Works', href: '#works' });
-if (videoUrl) tocItems.push({ label: 'Ceremony Video', href: '#video' });
-tocItems.push({ label: 'Digital Program', href: '#digital-program' });
-tocItems.push({ label: 'Questions & Contact', href: '#contact' });
+if (hasFeaturedPeople) tocItems.push({ label: 'Featured speakers & honorees', href: '#featured-people' });
+if (commencementInfo?.data.presidentQuote) tocItems.push({ label: "President's message", href: '#president-message' });
+if (diyKitAssets.length > 0) tocItems.push({ label: 'DIY celebration kit', href: '#diy-kit' });
+if (commencementInfo?.data.statistics) tocItems.push({ label: 'By the numbers', href: '#statistics' });
+if (works.length > 0) tocItems.push({ label: 'Student works', href: '#works' });
+if (videoUrl) tocItems.push({ label: 'Ceremony video', href: '#video' });
+tocItems.push({ label: 'Digital program', href: '#digital-program' });
+tocItems.push({ label: 'Questions & contact', href: '#contact' });
 ---
 
 <EventLayout event={event}>
@@ -105,7 +105,7 @@ tocItems.push({ label: 'Questions & Contact', href: '#contact' });
         {/* Featured Speakers & Honorees */}
         {hasFeaturedPeople && (
           <section id="featured-people" class="ceremony-section reveal">
-            <h2 class="section-heading">Featured Speakers & Honorees</h2>
+            <h2 class="section-heading">Featured speakers & honorees</h2>
             <PersonGrid people={allFeaturedPeople} />
           </section>
         )}
@@ -123,7 +123,7 @@ tocItems.push({ label: 'Questions & Contact', href: '#contact' });
         {/* DIY Celebration Kit */}
         {diyKitAssets.length > 0 && (
           <section id="diy-kit" class="ceremony-section reveal">
-            <h2 class="section-heading">DIY Celebration Kit</h2>
+            <h2 class="section-heading">DIY celebration kit</h2>
             <p class="diy-kit-intro">Celebrate your way — download printable decorations, social media frames, and more to make the day your own.</p>
             <div class="downloads-list">
               {diyKitAssets.map((asset: { label: string; url: string; description?: string }) => (
@@ -140,7 +140,7 @@ tocItems.push({ label: 'Questions & Contact', href: '#contact' });
         {/* By the Numbers */}
         {commencementInfo?.data.statistics && (
           <section id="statistics" class="ceremony-section reveal">
-            <h2 class="section-heading">By the Numbers</h2>
+            <h2 class="section-heading">By the numbers</h2>
             <StatisticsGrid statistics={commencementInfo.data.statistics} />
           </section>
         )}
@@ -148,7 +148,7 @@ tocItems.push({ label: 'Questions & Contact', href: '#contact' });
         {/* Student Works */}
         {works.length > 0 && (
           <section id="works" class="ceremony-section reveal">
-            <h2 class="section-heading">Student Works</h2>
+            <h2 class="section-heading">Student works</h2>
             <WorkGrid works={works} studentMap={studentMap} />
           </section>
         )}
@@ -156,32 +156,32 @@ tocItems.push({ label: 'Questions & Contact', href: '#contact' });
         {/* Ceremony Video */}
         {videoUrl && (
           <section id="video" class="ceremony-section reveal">
-            <h2 class="section-heading">Ceremony Video</h2>
+            <h2 class="section-heading">Ceremony video</h2>
             <VideoEmbed url={videoUrl} caption={videoCaption} />
           </section>
         )}
 
         {/* Digital Program */}
         <section id="digital-program" class="ceremony-section reveal">
-          <h2 class="section-heading">Digital Program</h2>
+          <h2 class="section-heading">Digital program</h2>
           {keyTimes.length > 0 && (
             <div class="key-times">
               {keyTimes.map((item: { time: string; label: string }) => (
                 <div class="key-time">
-                  <span class="key-time-value">{item.time}</span>
+                  <span class="key-time-value">{formatTime(item.time)}</span>
                   <span class="key-time-label">{item.label}</span>
                 </div>
               ))}
             </div>
           )}
           <div class="program-cta-actions">
-            <Button href={programUrl} variant="primary">View Full Program &rarr;</Button>
+            <Button href={programUrl} variant="primary">View full program &rarr;</Button>
           </div>
         </section>
 
         {/* Questions & Contact */}
         <section id="contact" class="ceremony-section reveal">
-          <h2 class="section-heading">Questions & Contact</h2>
+          <h2 class="section-heading">Questions & contact</h2>
           <div class="contact-card">
             <p class="contact-text">For details on regalia, guest tickets, accessibility, parking, and everything else about ceremony day, visit the CCA Commencement Portal.</p>
             {commencementInfo?.data.intranetUrl && (

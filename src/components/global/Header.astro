@@ -44,13 +44,13 @@ const allNavItems: NavItem[] = [
     activePrefix: "/thesis/",
   },
   {
-    label: "Student Showcase",
+    label: "Student showcase",
     href: "/showcase/",
     activePrefix: "/showcase/",
     hiddenIn: ['save-the-date'],
     children: [
-      { label: "Graduating Students", href: "/showcase/students/" },
-      { label: "Thesis Work", href: "/showcase/works/" },
+      { label: "Graduating students", href: "/showcase/students/" },
+      { label: "Thesis work", href: "/showcase/works/" },
     ],
   },
 ];
@@ -126,7 +126,7 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     )}
 
     <div class="header-actions">
-      {!minimal && <a href="/subscribe/" class="nav-cta">Join Us</a>}
+      {!minimal && <a href="/subscribe/" class="nav-cta">Join us</a>}
 
       {/* ── Hamburger ── */}
       <button
@@ -202,7 +202,7 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
               class="mobile-top-link"
               aria-current={isSubscribeActive ? "page" : undefined}
             >
-              Join Us
+              Join us
             </a>
           </li>
         );

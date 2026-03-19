@@ -6,7 +6,7 @@ import BentoEvents from '../../components/landing/BentoEvents.astro';
 import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import FramedImage from '../../components/ui/FramedImage.astro';
-import { formatDateRange } from '../../lib/utils/format';
+import { formatDateRange, formatTime } from '../../lib/utils/format';
 import HalftoneProceduralScan from '../../components/effects/HalftoneProceduralScan.astro';
 import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
@@ -149,25 +149,25 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     <div class="container">
       <div class="about-grid">
         <div class="about-grid__content">
-          <span class="section-label reveal">About the Exhibitions</span>
-          <h2 class="section-heading reveal">An Evening of Art, Design &amp; Making</h2>
+          <span class="section-label reveal">About the exhibitions</span>
+          <h2 class="section-heading reveal">An evening of art, design &amp; making</h2>
           <p class="about-desc reveal">{event.data.description}</p>
           {isPhaseAtLeast(phase, 'pre-event') && (
             <div class="about-details reveal">
               <div class="about-detail">
                 <span class="about-detail__label">When</span>
                 <span class="about-detail__value">{formatDateRange(event.data.date, event.data.endDate)}</span>
-                {event.data.time && <span class="about-detail__sub">{event.data.time}</span>}
+                {event.data.time && <span class="about-detail__sub">{formatTime(event.data.time)}</span>}
               </div>
               <div class="about-detail">
                 <span class="about-detail__label">Where</span>
                 <span class="about-detail__value">{event.data.location}</span>
-                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address}</a>}
+                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address.substring(0, event.data.address.indexOf(','))}<br />{event.data.address.substring(event.data.address.indexOf(',') + 2)}</a>}
               </div>
             </div>
           )}
           <div class="about-subscribe reveal">
-            <Button href="/subscribe" variant="link">Subscribe for Updates</Button>
+            <Button href="/subscribe" variant="link">Subscribe for updates</Button>
           </div>
         </div>
         {isPhaseBefore(phase, 'pre-event') ? (
@@ -176,12 +176,12 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
               <div class="about-detail">
                 <span class="about-detail__label">When</span>
                 <span class="about-detail__value">{formatDateRange(event.data.date, event.data.endDate)}</span>
-                {event.data.time && <span class="about-detail__sub">{event.data.time}</span>}
+                {event.data.time && <span class="about-detail__sub">{formatTime(event.data.time)}</span>}
               </div>
               <div class="about-detail">
                 <span class="about-detail__label">Where</span>
                 <span class="about-detail__value">{event.data.location}</span>
-                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address}</a>}
+                {event.data.address && <a href={`https://maps.google.com/?q=${encodeURIComponent(event.data.address)}`} target="_blank" rel="noopener noreferrer" class="about-detail__sub">{event.data.address.substring(0, event.data.address.indexOf(','))}<br />{event.data.address.substring(event.data.address.indexOf(',') + 2)}</a>}
               </div>
             </div>
           </div>
@@ -199,7 +199,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     <section class="all-events-section">
       <div class="container">
         <span class="section-label reveal">Class of 2026</span>
-        <h2 class="section-heading reveal">All Celebration Events</h2>
+        <h2 class="section-heading reveal">All celebration events</h2>
         <p class="all-events-desc reveal">
           From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
         </p>
@@ -210,8 +210,8 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 
   {/* ── Past Exhibitions Gallery ── */}
   <PastGallery
-    label="Past Exhibitions"
-    title="A Legacy of Creative Work"
+    label="Past exhibitions"
+    title="A legacy of creative work"
     marqueeDuration={180}
     images={[
       { src: '/images/eoy-show-past/previousEOYShowPhotos-001-03-2026.jpg', alt: 'Gallery visitors interact with a colorful sculptural installation featuring turquoise and coral architectural forms with text reading \'SAINT SUSIE\' at a CCA End of Year Show exhibition.' },

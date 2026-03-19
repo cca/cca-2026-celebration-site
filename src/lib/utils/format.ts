@@ -18,6 +18,39 @@ export function formatDate(dateStr: string): string {
   });
 }
 
+/**
+ * Format a time string like "5:00 PM" or "5:00 PM – 8:00 PM" into a compact
+ * style: "5 pm" or "5 – 8 pm". Minutes are omitted when they are :00.
+ * If the two sides of a range have different periods (AM vs PM), each gets its own suffix.
+ */
+export function formatTime(timeStr: string): string {
+  function parsePart(s: string): { hour: number; min: number; period: string } | null {
+    const m = s.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if (!m) return null;
+    return { hour: parseInt(m[1], 10), min: parseInt(m[2], 10), period: m[3].toUpperCase() };
+  }
+  function display(hour: number, min: number): string {
+    return min === 0 ? `${hour}` : `${hour}:${String(min).padStart(2, "0")}`;
+  }
+
+  const parts = timeStr.split(/\s+[–\-]\s+/);
+  if (parts.length === 2) {
+    const a = parsePart(parts[0]);
+    const b = parsePart(parts[1]);
+    if (a && b) {
+      if (a.period === b.period) {
+        return `${display(a.hour, a.min)} – ${display(b.hour, b.min)} ${a.period.toLowerCase()}`;
+      }
+      return `${display(a.hour, a.min)} ${a.period.toLowerCase()} – ${display(b.hour, b.min)} ${b.period.toLowerCase()}`;
+    }
+  }
+  if (parts.length === 1) {
+    const a = parsePart(parts[0]);
+    if (a) return `${display(a.hour, a.min)} ${a.period.toLowerCase()}`;
+  }
+  return timeStr;
+}
+
 /** Format a date range. If endDate is absent, returns a single formatted date. */
 export function formatDateRange(startStr: string, endStr?: string): string {
   if (!endStr) return formatDate(startStr);
