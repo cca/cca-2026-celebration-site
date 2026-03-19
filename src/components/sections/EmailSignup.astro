@@ -135,6 +135,13 @@ const {
     img.addEventListener('mouseleave', () => signupSection?.classList.remove('is-hovered'));
   });
 
+  // Newsletter form submit → push generate_lead before Mailchimp navigation
+  const form = signupSection?.querySelector('.signup-form');
+  form?.addEventListener('submit', () => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'generate_lead' });
+  });
+
   // Click anywhere on the card → focus the email input
   const card = signupSection?.querySelector('.signup-card') as HTMLElement | null;
   const emailInput = signupSection?.querySelector<HTMLInputElement>('#mce-EMAIL');
