@@ -21,6 +21,8 @@ const pageTitle = `${title} | CCA 2026`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://2026.cca.edu');
 const defaultDescription = "Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.";
 const metaDescription = description ?? defaultDescription;
+const siteRoot = Astro.site ?? 'https://2026.cca.edu';
+const metaImage = ogImage ?? new URL('/og-image.jpg', siteRoot).href;
 ---
 
 <!doctype html>
@@ -48,11 +50,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl.href} />
     <meta property="og:site_name" content="CCA 2026 Celebrations" />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={metaImage} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={metaImage} />
 
     <!-- Preload critical fonts -->
     <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
