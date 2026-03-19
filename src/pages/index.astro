@@ -87,6 +87,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         playsinline
         aria-hidden="true"
       >
+        <source src="/CCAEDU-Homepage-SP26-jrl.mp4" type="video/mp4" />
         <source src="https://storage.googleapis.com/ccaedu-prod/media/media/CCAEDU-Homepage-SP26-jrl.webm" type="video/webm" />
       </video>
     </div>
@@ -400,6 +401,12 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   .hero-media {
     padding-block: var(--space-4) var(--space-20);
     overflow: hidden;
+  }
+
+  @media (max-width: 767px) {
+    .hero-media {
+      display: none;
+    }
   }
 
   .hero-media__frame {
