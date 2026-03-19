@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getFrameData } from "../../lib/utils/frame-data";
 import { ccaPhotography, photoCollections } from "../../data/cca-photography";
 
-// Build src → space-separated collection IDs map
 const photoCollectionAttr = new Map<string, string>();
 for (const { id, photos } of photoCollections) {
   for (const p of photos) {
@@ -20,29 +20,47 @@ const allPhotos = photoCollections.flatMap(c => c.photos).filter(p => {
   return true;
 });
 
-const shapeCount = 104;
-const shapes = Array.from({ length: shapeCount }, (_, i) => {
-  const num = String(i + 1).padStart(3, "0");
-  return { id: `shape-${num}`, file: `shape-${num}.svg`, src: `/images/chimera-expanded-2026/shape-${num}.svg` };
-});
+const frameIds = [
+  "frame-01", "frame-02", "frame-03", "frame-04", "frame-05",
+  "frame-07", "frame-09", "frame-10", "frame-11", "frame-12",
+  "frame-13", "frame-14", "frame-15", "frame-16", "frame-17",
+  "frame-18", "frame-19", "frame-20", "frame-21", "frame-22", "frame-23",
+];
+
+const allFrames = frameIds.map(id => getFrameData(id));
 ---
 
-<BaseLayout title="Chimera Mask Editor" minimalHeader={true}>
+<BaseLayout title="Frame Editor" minimalHeader={true}>
+  <!-- Expose build-time frame data to client JS -->
+  <script is:inline define:vars={{ framesData: allFrames }}>
+    window.__CCA_FRAME_DATA__ = framesData;
+  </script>
+
   <main class="editor">
     <div class="editor-header">
-      <a href="/demo/chimera-image-mask-2026/" class="back-link">&larr; Back to Grid</a>
-      <h1>Chimera Mask Editor</h1>
+      <a href="/demo/" class="back-link">&larr; Demo Pages</a>
+      <h1>Frame Editor</h1>
     </div>
 
     <div class="editor-layout">
-      <!-- Left: Canvas viewport -->
+      <!-- Left: SVG viewport -->
       <div class="viewport-wrap">
         <div class="viewport" id="viewport">
-          <canvas id="canvas" width="800" height="800"></canvas>
+          <svg id="preview-svg" xmlns="http://www.w3.org/2000/svg" style="color:#231f20;">
+            <defs>
+              <clipPath id="clip-active">
+                <path id="clip-path" d="" />
+              </clipPath>
+            </defs>
+            <g clip-path="url(#clip-active)">
+              <image id="preview-image" href="" x="0" y="0" width="0" height="0" preserveAspectRatio="none" />
+            </g>
+            <g id="frame-border"></g>
+          </svg>
           <div class="viewport-hint" id="viewport-hint">Drag to pan &middot; Scroll to zoom</div>
         </div>
         <div class="viewport-toolbar">
-          <button id="btn-reset" class="toolbar-btn" title="Reset pan & zoom">Reset View</button>
+          <button id="btn-reset" class="toolbar-btn" title="Reset pan &amp; zoom">Reset View</button>
           <span class="toolbar-sep"></span>
           <label class="toolbar-label">
             Zoom: <output id="zoom-val">100%</output>
@@ -65,18 +83,17 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
 
       <!-- Right: Controls panel -->
       <aside class="panel">
-        <!-- Shape picker -->
+        <!-- Frame picker -->
         <section class="panel-section">
-          <h2>Shape</h2>
-          <div class="shape-grid" id="shape-grid">
-            {shapes.map((shape, i) => (
+          <h2>Frame</h2>
+          <div class="shape-grid frame-grid" id="frame-grid">
+            {allFrames.map((frame, i) => (
               <button
                 class={`shape-thumb${i === 0 ? ' active' : ''}`}
-                data-shape-index={i}
-                data-shape-src={shape.src}
-                title={shape.id}
+                data-frame-index={String(i)}
+                title={frame.id}
               >
-                <img src={shape.src} alt={shape.id} loading="lazy" />
+                <img src={`/images/scanned-graphics/frames/${frame.id}.svg`} alt={frame.id} loading="lazy" />
               </button>
             ))}
           </div>
@@ -85,19 +102,17 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
         <!-- Image source -->
         <section class="panel-section">
           <h2>Image</h2>
-
           <div class="image-source-tabs">
             <button class="tab active" data-tab="collection">Collection</button>
             <button class="tab" data-tab="upload">Upload</button>
           </div>
-
           <div class="tab-content active" id="tab-collection">
             <label class="field">
               <span>Collection</span>
               <select id="collection-select">
                 <option value="all">All Photos</option>
-                {photoCollections.map(c => (
-                  <option value={c.id}>{c.label}</option>
+                {photoCollections.map(coll => (
+                  <option value={coll.id}>{coll.label}</option>
                 ))}
               </select>
             </label>
@@ -105,7 +120,7 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
               <span>Image</span>
               <select id="image-select">
                 {allPhotos.map((photo, i) => (
-                  <option value={photo.src} data-collection={getCollAttr(photo.src)} selected={i === 0}>{photo.alt}</option>
+                  <option value={photo.src} selected={i === 0} data-collection={getCollAttr(photo.src)}>{photo.alt}</option>
                 ))}
               </select>
             </label>
@@ -115,7 +130,6 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
                   class={`image-thumb${i === 0 ? ' active' : ''}`}
                   data-src={photo.src}
                   data-collection={getCollAttr(photo.src)}
-
                   title={photo.alt}
                 >
                   <img src={photo.src} alt={photo.alt} loading="lazy" />
@@ -123,7 +137,6 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
               ))}
             </div>
           </div>
-
           <div class="tab-content" id="tab-upload">
             <div class="drop-zone" id="drop-zone">
               <p>Drag &amp; drop an image here</p>
@@ -134,11 +147,12 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
           </div>
         </section>
 
-        <!-- Background color -->
+        <!-- Frame color -->
         <section class="panel-section">
-          <h2>Background</h2>
-          <div class="bg-swatches" id="bg-swatches">
-            <button class="swatch active" data-color="#ffffff" title="White" style="background:#ffffff;"></button>
+          <h2>Frame Color</h2>
+          <div class="bg-swatches" id="frame-swatches">
+            <button class="swatch active" data-color="#231f20" title="Dark (natural)" style="background:#231f20;"></button>
+            <button class="swatch" data-color="#ffffff" title="White" style="background:#ffffff;"></button>
             <button class="swatch" data-color="#FDFAF5" title="Sand Light" style="background:#FDFAF5;"></button>
             <button class="swatch" data-color="#F7F3E9" title="Sand" style="background:#F7F3E9;"></button>
             <button class="swatch" data-color="#1a1a1a" title="Black" style="background:#1a1a1a;"></button>
@@ -154,11 +168,7 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
           <div class="bg-options">
             <label class="field field-inline">
               <span>Custom</span>
-              <input type="color" id="bg-color" value="#ffffff" />
-            </label>
-            <label class="field field-inline">
-              <input type="checkbox" id="bg-transparent" />
-              <span>Transparent</span>
+              <input type="color" id="frame-color" value="#231f20" />
             </label>
           </div>
         </section>
@@ -168,207 +178,160 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
 </BaseLayout>
 
 <script>
-  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  const ctx = canvas.getContext('2d')!;
+  interface FrameData {
+    id: string;
+    viewBox: string;
+    minX: number;
+    minY: number;
+    width: number;
+    height: number;
+    pathsVisual: string;
+    clipPathD: string;
+  }
+
+  const allFrames = (window as any).__CCA_FRAME_DATA__ as FrameData[];
+
+  // DOM refs
   const viewport = document.getElementById('viewport')!;
   const viewportHint = document.getElementById('viewport-hint')!;
+  const previewSvg = document.getElementById('preview-svg') as HTMLElement;
+  const clipPathEl = document.getElementById('clip-path') as HTMLElement;
+  const previewImage = document.getElementById('preview-image') as HTMLElement;
+  const frameBorderEl = document.getElementById('frame-border')!;
+  const zoomSlider = document.getElementById('zoom-slider') as HTMLInputElement;
+  const zoomVal = document.getElementById('zoom-val') as HTMLOutputElement;
+  const exportSizeSelect = document.getElementById('export-size') as HTMLSelectElement;
+  const imageSelect = document.getElementById('image-select') as HTMLSelectElement;
+  const frameColorInput = document.getElementById('frame-color') as HTMLInputElement;
+  const frameSwatchesEl = document.getElementById('frame-swatches')!;
 
-  // --- State ---
-  let currentShapeSrc = '/images/chimera-expanded-2026/shape-001.svg';
-  let currentImageSrc = '';
-  let bgColor = '#ffffff';
-  let bgTransparent = false;
+  // State
+  let currentFrame: FrameData = allFrames[0];
+  let currentPhotoSrc = '';
+  let photoNaturalWidth = 1;
+  let photoNaturalHeight = 1;
   let zoom = 1;
-  let panX = 0;
-  let panY = 0;
-
-  // Loaded assets
-  let shapeImg: HTMLImageElement | null = null;
-  let photoImg: HTMLImageElement | null = null;
+  let panX = 0; // SVG units
+  let panY = 0; // SVG units
+  let frameColor = '#231f20';
 
   // --- Helpers ---
-  function loadImage(src: string): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = src;
-    });
+
+  function computeImageRect() {
+    const { minX, minY, width, height } = currentFrame;
+    const frameAspect = width / height;
+    const photoAspect = photoNaturalWidth / photoNaturalHeight;
+
+    let pw: number, ph: number;
+    if (photoAspect > frameAspect) {
+      // Photo wider: fit height to cover
+      ph = height * zoom;
+      pw = ph * photoAspect;
+    } else {
+      // Photo taller: fit width to cover
+      pw = width * zoom;
+      ph = pw / photoAspect;
+    }
+
+    const x = minX + (width - pw) / 2 + panX;
+    const y = minY + (height - ph) / 2 + panY;
+    return { x, y, pw, ph };
   }
 
-  async function loadShape(src: string) {
-    currentShapeSrc = src;
-    shapeImg = await loadImage(src);
-    resetView();
-    render();
+  function renderSVG() {
+    if (!currentPhotoSrc) return;
+    const { x, y, pw, ph } = computeImageRect();
+    previewImage.setAttribute('x', String(x));
+    previewImage.setAttribute('y', String(y));
+    previewImage.setAttribute('width', String(pw));
+    previewImage.setAttribute('height', String(ph));
   }
 
-  async function loadPhoto(src: string) {
-    currentImageSrc = src;
-    photoImg = await loadImage(src);
-    render();
-  }
-
-  function loadPhotoFromFile(file: File) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const url = e.target!.result as string;
-      currentImageSrc = url;
-      const img = new Image();
-      img.onload = () => {
-        photoImg = img;
-        render();
-      };
-      img.src = url;
-    };
-    reader.readAsDataURL(file);
+  function updateZoomUI() {
+    zoomSlider.value = String(Math.round(zoom * 100));
+    zoomVal.textContent = Math.round(zoom * 100) + '%';
   }
 
   function resetView() {
     zoom = 1;
     panX = 0;
     panY = 0;
-    zoomSlider.value = '100';
-    zoomVal.textContent = '100%';
-    render();
+    updateZoomUI();
+    renderSVG();
   }
 
-  // --- Render ---
-  function render() {
-    const size = canvas.width;
-    ctx.clearRect(0, 0, size, size);
-
-    // Background
-    if (!bgTransparent) {
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, size, size);
-    }
-
-    if (!photoImg || !shapeImg) return;
-
-    // Create offscreen canvas for the masked image
-    const offscreen = new OffscreenCanvas(size, size);
-    const offCtx = offscreen.getContext('2d')!;
-
-    // Draw the shape as mask (white = visible)
-    // Center the shape in the canvas, fitting it to the viewport
-    const shapeAspect = shapeImg.naturalWidth / shapeImg.naturalHeight;
-    let sw: number, sh: number;
-    if (shapeAspect > 1) {
-      sw = size * 0.85;
-      sh = sw / shapeAspect;
-    } else {
-      sh = size * 0.85;
-      sw = sh * shapeAspect;
-    }
-    const sx = (size - sw) / 2;
-    const sy = (size - sh) / 2;
-
-    offCtx.drawImage(shapeImg, sx, sy, sw, sh);
-
-    // Use destination-in to mask the photo with the shape
-    offCtx.globalCompositeOperation = 'source-in';
-
-    // Draw photo with pan and zoom
-    const photoAspect = photoImg.naturalWidth / photoImg.naturalHeight;
-    let pw: number, ph: number;
-    // Fill the canvas area then apply zoom
-    if (photoAspect > 1) {
-      ph = size * zoom;
-      pw = ph * photoAspect;
-    } else {
-      pw = size * zoom;
-      ph = pw / photoAspect;
-    }
-    const px = (size - pw) / 2 + panX;
-    const py = (size - ph) / 2 + panY;
-
-    offCtx.drawImage(photoImg, px, py, pw, ph);
-
-    // Draw the composited result onto the main canvas
-    ctx.drawImage(offscreen, 0, 0);
+  function loadFrame(frame: FrameData) {
+    currentFrame = frame;
+    previewSvg.setAttribute('viewBox', frame.viewBox);
+    clipPathEl.setAttribute('d', frame.clipPathD);
+    frameBorderEl.innerHTML = frame.pathsVisual;
+    zoom = 1;
+    panX = 0;
+    panY = 0;
+    updateZoomUI();
+    renderSVG();
   }
 
-  // --- Render for export at arbitrary size ---
-  function renderForExport(exportSize: number): HTMLCanvasElement {
-    const expCanvas = document.createElement('canvas');
-    expCanvas.width = exportSize;
-    expCanvas.height = exportSize;
-    const expCtx = expCanvas.getContext('2d')!;
+  async function loadPhoto(src: string) {
+    currentPhotoSrc = src;
+    await new Promise<void>((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        photoNaturalWidth = img.naturalWidth;
+        photoNaturalHeight = img.naturalHeight;
+        resolve();
+      };
+      img.onerror = () => resolve();
+      img.src = src;
+    });
+    previewImage.setAttribute('href', src);
+    renderSVG();
+  }
 
-    if (!bgTransparent) {
-      expCtx.fillStyle = bgColor;
-      expCtx.fillRect(0, 0, exportSize, exportSize);
-    }
-
-    if (!photoImg || !shapeImg) return expCanvas;
-
-    const offscreen = new OffscreenCanvas(exportSize, exportSize);
-    const offCtx = offscreen.getContext('2d')!;
-
-    const shapeAspect = shapeImg.naturalWidth / shapeImg.naturalHeight;
-    let sw: number, sh: number;
-    if (shapeAspect > 1) {
-      sw = exportSize * 0.85;
-      sh = sw / shapeAspect;
-    } else {
-      sh = exportSize * 0.85;
-      sw = sh * shapeAspect;
-    }
-    const sx = (exportSize - sw) / 2;
-    const sy = (exportSize - sh) / 2;
-    offCtx.drawImage(shapeImg, sx, sy, sw, sh);
-
-    offCtx.globalCompositeOperation = 'source-in';
-
-    const photoAspect = photoImg.naturalWidth / photoImg.naturalHeight;
-    let pw: number, ph: number;
-    if (photoAspect > 1) {
-      ph = exportSize * zoom;
-      pw = ph * photoAspect;
-    } else {
-      pw = exportSize * zoom;
-      ph = pw / photoAspect;
-    }
-    // Scale pan proportionally
-    const scale = exportSize / canvas.width;
-    const px = (exportSize - pw) / 2 + panX * scale;
-    const py = (exportSize - ph) / 2 + panY * scale;
-    offCtx.drawImage(photoImg, px, py, pw, ph);
-
-    expCtx.drawImage(offscreen, 0, 0);
-    return expCanvas;
+  function loadPhotoFromFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const url = e.target!.result as string;
+      const img = new Image();
+      img.onload = () => {
+        currentPhotoSrc = url;
+        photoNaturalWidth = img.naturalWidth;
+        photoNaturalHeight = img.naturalHeight;
+        previewImage.setAttribute('href', url);
+        renderSVG();
+      };
+      img.src = url;
+    };
+    reader.readAsDataURL(file);
   }
 
   // --- Pan & Zoom ---
+
   let isDragging = false;
-  let dragStartX = 0;
-  let dragStartY = 0;
-  let panStartX = 0;
-  let panStartY = 0;
+  let dragStartX = 0, dragStartY = 0;
+  let panStartX = 0, panStartY = 0;
 
   viewport.addEventListener('pointerdown', (e) => {
-    if (e.target === canvas || e.target === viewport) {
-      isDragging = true;
-      dragStartX = e.clientX;
-      dragStartY = e.clientY;
-      panStartX = panX;
-      panStartY = panY;
-      viewport.setPointerCapture(e.pointerId);
-      viewport.style.cursor = 'grabbing';
-      viewportHint.style.display = 'none';
-    }
+    if ((e.target as HTMLElement).closest('button, input, select')) return;
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    panStartX = panX;
+    panStartY = panY;
+    viewport.setPointerCapture(e.pointerId);
+    viewport.style.cursor = 'grabbing';
+    viewportHint.style.display = 'none';
   });
 
   viewport.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    const rect = previewSvg.getBoundingClientRect();
+    const scaleX = currentFrame.width / rect.width;
+    const scaleY = currentFrame.height / rect.height;
     panX = panStartX + (e.clientX - dragStartX) * scaleX;
     panY = panStartY + (e.clientY - dragStartY) * scaleY;
-    render();
+    renderSVG();
   });
 
   viewport.addEventListener('pointerup', () => {
@@ -380,31 +343,29 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -0.05 : 0.05;
     zoom = Math.max(0.1, Math.min(5, zoom + delta));
-    zoomSlider.value = String(Math.round(zoom * 100));
-    zoomVal.textContent = Math.round(zoom * 100) + '%';
-    render();
+    updateZoomUI();
+    renderSVG();
   }, { passive: false });
 
   // --- Controls ---
-  const zoomSlider = document.getElementById('zoom-slider') as HTMLInputElement;
-  const zoomVal = document.getElementById('zoom-val') as HTMLOutputElement;
+
+  document.getElementById('btn-reset')!.addEventListener('click', resetView);
 
   zoomSlider.addEventListener('input', () => {
     zoom = parseInt(zoomSlider.value) / 100;
     zoomVal.textContent = zoomSlider.value + '%';
-    render();
+    renderSVG();
   });
 
-  document.getElementById('btn-reset')!.addEventListener('click', resetView);
-
-  // Shape picker
-  const shapeGrid = document.getElementById('shape-grid')!;
-  shapeGrid.addEventListener('click', (e) => {
+  // Frame picker
+  const frameGrid = document.getElementById('frame-grid')!;
+  frameGrid.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest('.shape-thumb') as HTMLButtonElement | null;
     if (!btn) return;
-    shapeGrid.querySelector('.active')?.classList.remove('active');
+    frameGrid.querySelector('.active')?.classList.remove('active');
     btn.classList.add('active');
-    loadShape(btn.dataset.shapeSrc!);
+    const idx = parseInt(btn.dataset.frameIndex!);
+    loadFrame(allFrames[idx]);
   });
 
   // Image tabs
@@ -420,10 +381,8 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
   });
 
   // Image select (dropdown)
-  const imageSelect = document.getElementById('image-select') as HTMLSelectElement;
   imageSelect.addEventListener('change', () => {
     loadPhoto(imageSelect.value);
-    // Sync thumbnail highlight
     const thumbs = document.querySelectorAll<HTMLButtonElement>('#image-preview-grid .image-thumb');
     thumbs.forEach((t) => t.classList.toggle('active', t.dataset.src === imageSelect.value));
   });
@@ -441,15 +400,11 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
 
   // Collection switching
   const collectionSelect = document.getElementById('collection-select') as HTMLSelectElement;
-  // Snapshot all option data before any filtering
   const allImageOptions = Array.from(imageSelect.options).map(o => ({
     value: o.value, label: o.text, collection: o.dataset.collection ?? 'cca',
   }));
-
   collectionSelect.addEventListener('change', () => {
     const coll = collectionSelect.value;
-
-    // Rebuild image-select dropdown for this collection
     imageSelect.innerHTML = '';
     let firstSrc = '';
     allImageOptions.forEach(p => {
@@ -459,16 +414,12 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
       if (!firstSrc) firstSrc = p.value;
       imageSelect.appendChild(o);
     });
-
-    // Show/hide thumbnails
     const thumbs = imagePreviewGrid.querySelectorAll<HTMLButtonElement>('.image-thumb');
     thumbs.forEach(t => {
       const visible = coll === 'all' || (t.dataset.collection ?? 'cca').split(' ').includes(coll);
       t.style.display = visible ? '' : 'none';
       t.classList.remove('active');
     });
-
-    // Load first photo in collection
     if (firstSrc) {
       imageSelect.value = firstSrc;
       imagePreviewGrid.querySelector<HTMLButtonElement>(`[data-src="${CSS.escape(firstSrc)}"]`)?.classList.add('active');
@@ -500,83 +451,113 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     const file = e.dataTransfer?.files[0];
     if (file && file.type.startsWith('image/')) {
       loadPhotoFromFile(file);
-      // Switch to upload tab
       tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === 'upload'));
       tabContents.forEach((tc) => tc.classList.toggle('active', tc.id === 'tab-upload'));
     }
   });
 
-  // Background
-  const bgColorInput = document.getElementById('bg-color') as HTMLInputElement;
-  const bgTransparentCheck = document.getElementById('bg-transparent') as HTMLInputElement;
-  const bgSwatches = document.getElementById('bg-swatches')!;
-
-  function selectBgColor(color: string) {
-    bgColor = color;
-    bgColorInput.value = color;
-    bgTransparentCheck.checked = false;
-    bgTransparent = false;
-    render();
+  // Frame color
+  function applyFrameColor(color: string) {
+    frameColor = color;
+    frameColorInput.value = color;
+    previewSvg.style.color = color;
   }
 
-  bgSwatches.addEventListener('click', (e) => {
+  frameSwatchesEl.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest('.swatch') as HTMLButtonElement | null;
     if (!btn) return;
-    bgSwatches.querySelector('.active')?.classList.remove('active');
+    frameSwatchesEl.querySelector('.active')?.classList.remove('active');
     btn.classList.add('active');
-    selectBgColor(btn.dataset.color!);
+    applyFrameColor(btn.dataset.color!);
   });
 
-  bgColorInput.addEventListener('input', () => {
-    bgSwatches.querySelector('.active')?.classList.remove('active');
-    bgColor = bgColorInput.value;
-    render();
+  frameColorInput.addEventListener('input', () => {
+    frameSwatchesEl.querySelector('.active')?.classList.remove('active');
+    applyFrameColor(frameColorInput.value);
   });
 
-  bgTransparentCheck.addEventListener('change', () => {
-    bgTransparent = bgTransparentCheck.checked;
-    if (bgTransparent) bgSwatches.querySelector('.active')?.classList.remove('active');
-    render();
-  });
+  // --- Export ---
 
-  // Download
-  const exportSizeSelect = document.getElementById('export-size') as HTMLSelectElement;
-  document.getElementById('btn-download')!.addEventListener('click', () => {
+  document.getElementById('btn-download')!.addEventListener('click', async () => {
+    const frame = currentFrame;
     const exportSize = parseInt(exportSizeSelect.value);
-    const expCanvas = renderForExport(exportSize);
-    expCanvas.toBlob((blob) => {
+    const canvasW = exportSize;
+    const canvasH = Math.round(exportSize * frame.height / frame.width);
+    const scale = exportSize / frame.width;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasW;
+    canvas.height = canvasH;
+    const ctx = canvas.getContext('2d')!;
+
+    // Draw clipped photo
+    if (currentPhotoSrc) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = currentPhotoSrc;
+      });
+
+      if (img.naturalWidth > 0) {
+        const { x, y, pw, ph } = computeImageRect();
+
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.translate(-frame.minX, -frame.minY);
+
+        const clipPath2D = new Path2D(frame.clipPathD);
+        ctx.clip(clipPath2D);
+        ctx.drawImage(img, x, y, pw, ph);
+        ctx.restore();
+      }
+    }
+
+    // Draw frame border overlay as SVG
+    const pathsWithColor = frame.pathsVisual.replace(/fill:currentColor/g, `fill:${frameColor}`);
+    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${frame.viewBox}" width="${canvasW}" height="${canvasH}">${pathsWithColor}</svg>`;
+    const svgBlob = new Blob([svgStr], { type: 'image/svg+xml' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const svgImg = new Image();
+    await new Promise<void>((resolve) => {
+      svgImg.onload = () => resolve();
+      svgImg.onerror = () => resolve();
+      svgImg.src = svgUrl;
+    });
+    ctx.drawImage(svgImg, 0, 0, canvasW, canvasH);
+    URL.revokeObjectURL(svgUrl);
+
+    canvas.toBlob((blob) => {
       if (!blob) return;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      const shapeId = currentShapeSrc.split('/').pop()?.replace('.svg', '') || 'shape';
-      a.download = `cca-mask-${shapeId}-${exportSize}px.png`;
+      a.download = `cca-frame-${frame.id}-${exportSize}px.png`;
       a.href = url;
       a.click();
       URL.revokeObjectURL(url);
     }, 'image/png');
   });
 
-  // --- Init: read URL params for shape pre-selection ---
+  // --- Init ---
+
+  // URL param ?frame=N (1-based) for pre-selection
   const params = new URLSearchParams(window.location.search);
-  const shapeParam = params.get('shape');
-  if (shapeParam) {
-    const idx = parseInt(shapeParam) - 1;
-    if (idx >= 0 && idx < 104) {
-      const btn = shapeGrid.children[idx] as HTMLButtonElement;
-      shapeGrid.querySelector('.active')?.classList.remove('active');
+  const frameParam = params.get('frame');
+  let initialFrameIdx = 0;
+  if (frameParam) {
+    const idx = parseInt(frameParam) - 1;
+    if (idx >= 0 && idx < allFrames.length) {
+      initialFrameIdx = idx;
+      const btn = frameGrid.children[idx] as HTMLButtonElement;
+      frameGrid.querySelector('.active')?.classList.remove('active');
       btn.classList.add('active');
       btn.scrollIntoView({ block: 'nearest' });
-      currentShapeSrc = btn.dataset.shapeSrc!;
     }
   }
 
-  // Load initial shape and first photo
-  (async () => {
-    await Promise.all([
-      loadShape(currentShapeSrc),
-      loadPhoto(imageSelect.value),
-    ]);
-  })();
+  loadFrame(allFrames[initialFrameIdx]);
+  loadPhoto(imageSelect.value);
 </script>
 
 <style>
@@ -627,9 +608,6 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
 
   .viewport {
     position: relative;
-    aspect-ratio: 1;
-    /* Never taller than the window — width drives height via aspect-ratio */
-    width: min(100%, calc(100dvh - 7rem));
     background: repeating-conic-gradient(#e8e8e8 0% 25%, #f5f5f5 0% 50%) 0 0 / 20px 20px;
     border: 1px solid var(--color-border);
     border-radius: 0.5rem;
@@ -637,10 +615,13 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     cursor: grab;
   }
 
-  .viewport canvas {
+  #preview-svg {
     display: block;
-    width: 100%;
-    height: 100%;
+    /* Never taller than the window — shrink width proportionally via SVG intrinsic sizing */
+    max-height: calc(100dvh - 7rem);
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 
   .viewport-hint {
@@ -655,6 +636,7 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     border-radius: 1rem;
     pointer-events: none;
     transition: opacity 0.3s ease;
+    white-space: nowrap;
   }
 
   .viewport-toolbar {
@@ -751,14 +733,18 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     margin-bottom: var(--space-3);
   }
 
-  /* Shape grid */
+  /* Frame/shape grid */
   .shape-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
     gap: 4px;
     max-height: 16rem;
     overflow-y: auto;
     padding: 2px;
+  }
+
+  .frame-grid {
+    /* 4 columns for rectangular frames */
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .shape-thumb {
@@ -857,6 +843,7 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     background: none;
   }
 
+  /* Color swatches */
   .bg-swatches {
     display: flex;
     flex-wrap: wrap;
@@ -884,7 +871,6 @@ const shapes = Array.from({ length: shapeCount }, (_, i) => {
     box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
   }
 
-  /* Outline light swatches so they're visible on white bg */
   .swatch[data-color="#ffffff"],
   .swatch[data-color="#FDFAF5"],
   .swatch[data-color="#F7F3E9"],

@@ -15,12 +15,12 @@ const frameIds = [
 ];
 
 // Frames where turnaround split fails — use ray-casting override
-const overrideIds = new Set(["frame-05", "frame-09", "frame-14", "frame-19"]);
+const overrideIds = new Set(["frame-09", "frame-19"]);
 
 // --- Clip path generation: extract inner edge of each frame border ---
 
 function flattenPath(d: string, matrix: number[], samplesPerCurve = 12) {
-  const svgpath = SvgPath(d).matrix(matrix).abs().unshort();
+  const svgpath = SvgPath(d).matrix(matrix).abs().unshort().unarc();
   const points: number[][] = [];
   let curX = 0, curY = 0;
   svgpath.iterate((seg: any) => {
@@ -45,36 +45,39 @@ function flattenPath(d: string, matrix: number[], samplesPerCurve = 12) {
 }
 
 /**
- * Split a closed strip path into two halves at the min/max of the given axis.
- * Returns [half1, half2] where each follows one edge of the strip.
+ * PCA: find the principal axis of a point set.
+ * Returns the unit axis vector and eigenvalue ratio (eccentricity).
+ * High eccentricity = clear strip/diagonal. Low = L-shaped or ambiguous.
  */
-function twoTurnaroundSplit(points: number[][], axis: number): [number[][], number[][]] {
-  let minIdx = 0, maxIdx = 0;
-  for (let i = 1; i < points.length; i++) {
-    if (points[i][axis] < points[minIdx][axis]) minIdx = i;
-    if (points[i][axis] > points[maxIdx][axis]) maxIdx = i;
+function computePrincipalAxis(points: number[][]): { axis: [number, number]; eccentricity: number } {
+  const n = points.length;
+  const mx = points.reduce((s, p) => s + p[0], 0) / n;
+  const my = points.reduce((s, p) => s + p[1], 0) / n;
+  let cxx = 0, cxy = 0, cyy = 0;
+  for (const [x, y] of points) {
+    const dx = x - mx, dy = y - my;
+    cxx += dx * dx; cxy += dx * dy; cyy += dy * dy;
   }
-
-  let startIdx = minIdx, endIdx = maxIdx;
-  if (startIdx > endIdx) { const tmp = startIdx; startIdx = endIdx; endIdx = tmp; }
-
-  const half1 = points.slice(startIdx, endIdx + 1);
-  const half2 = [...points.slice(endIdx), ...points.slice(0, startIdx + 1)];
-
-  return [half1, half2];
+  cxx /= n; cxy /= n; cyy /= n;
+  const d = cxx - cyy;
+  const sq = Math.sqrt(d * d + 4 * cxy * cxy);
+  const lambda1 = (cxx + cyy + sq) / 2;
+  const lambda2 = (cxx + cyy - sq) / 2;
+  const eccentricity = Math.abs(lambda2) > 1e-10 ? lambda1 / lambda2 : Infinity;
+  const vx = cxy, vy = lambda1 - cxx;
+  const len = Math.hypot(vx, vy);
+  const axis: [number, number] = len < 1e-10 ? [1, 0] : [vx / len, vy / len];
+  return { axis, eccentricity };
 }
 
 /**
- * Extract inner edge of an L-shaped or complex path using distance from frame center.
- * Points closer to center are on the inner edge. Returns the longest contiguous
- * run of "inner" points.
+ * Extract inner edge of an L-shaped or ambiguous path using distance from frame center.
+ * Returns the longest contiguous run of points closer than the median distance.
  */
 function extractInnerByDistance(points: number[][], centerX: number, centerY: number): number[][] {
   const n = points.length;
   const dists = points.map(p => Math.hypot(p[0] - centerX, p[1] - centerY));
-  const sortedDists = [...dists].sort((a, b) => a - b);
-  const threshold = sortedDists[Math.floor(n / 2)];
-
+  const threshold = [...dists].sort((a, b) => a - b)[Math.floor(n / 2)];
   let bestStart = 0, bestLen = 0;
   for (let start = 0; start < n; start++) {
     if (dists[start] >= threshold) continue;
@@ -86,13 +89,8 @@ function extractInnerByDistance(points: number[][], centerX: number, centerY: nu
     }
     if (len > bestLen) { bestLen = len; bestStart = start; }
   }
-
   if (bestLen === 0) return points;
-  const result: number[][] = [];
-  for (let i = 0; i < bestLen; i++) {
-    result.push(points[(bestStart + i) % n]);
-  }
-  return result;
+  return Array.from({ length: bestLen }, (_, i) => points[(bestStart + i) % n]);
 }
 
 function raySegIntersect(ox: number, oy: number, dx: number, dy: number,
@@ -172,15 +170,15 @@ function rayCastClipPath(svg: string, centerX: number, centerY: number,
   return d + " Z";
 }
 
-type SideInfo = { position: string; innerLeg: number[][]; synthesized?: boolean };
-
 /**
- * Generate clip path using turnaround split approach.
- * Works for ~17/21 frames with clear strip-shaped border paths.
+ * Generate clip path by:
+ * 1. Using PCA to find each strip path's actual main axis (handles diagonal strips)
+ * 2. Splitting at turnaround points along that axis to get inner vs outer edge
+ * 3. Stitching inner legs together by nearest-endpoint proximity (no position classification)
  */
-function generateClipPath(svg: string, centerX: number, centerY: number, frameWidth: number, frameHeight: number) {
+function generateClipPath(svg: string, centerX: number, centerY: number, _frameWidth: number, _frameHeight: number) {
   const pathRegex = /<path\s+d="([^"]+)"[^>]*transform="matrix\(([^)]+)\)"/g;
-  const sides: SideInfo[] = [];
+  const innerLegs: number[][][] = [];
   let match;
 
   while ((match = pathRegex.exec(svg)) !== null) {
@@ -189,122 +187,66 @@ function generateClipPath(svg: string, centerX: number, centerY: number, frameWi
     const points = flattenPath(d, matrix);
     if (points.length < 4) continue;
 
-    const xs = points.map(p => p[0]), ys = points.map(p => p[1]);
-    const bboxMinX = Math.min(...xs), bboxMaxX = Math.max(...xs);
-    const bboxMinY = Math.min(...ys), bboxMaxY = Math.max(...ys);
-    const bboxW = bboxMaxX - bboxMinX, bboxH = bboxMaxY - bboxMinY;
+    // Use PCA to detect whether this is a true strip (high eccentricity) or L-shaped (low).
+    // True strips: turnaround split along PCA axis. L-shaped: distance-from-center extraction.
+    const { axis: [ax, ay], eccentricity } = computePrincipalAxis(points);
+    let innerLeg: number[][];
 
-    // For clear strips, use turnaround split along the long axis.
-    // For L-shaped / diagonal / ambiguous paths, use distance-from-center.
-    const aspectRatio = bboxW / bboxH;
-    let bestInnerLeg: number[][] | null = null;
-
-    if (aspectRatio > 1.5 || aspectRatio < 1 / 1.5) {
-      // Clear strip shape: turnaround split on the long axis
-      const axis = aspectRatio > 1.5 ? 0 : 1;
-      const perpAxis = 1 - axis;
-      const centerPerp = perpAxis === 0 ? centerX : centerY;
-      const [half1, half2] = twoTurnaroundSplit(points, axis);
-      if (half1.length >= 2 && half2.length >= 2) {
-        const avg1 = half1.reduce((s, p) => s + p[perpAxis], 0) / half1.length;
-        const avg2 = half2.reduce((s, p) => s + p[perpAxis], 0) / half2.length;
-        const dist1 = Math.abs(avg1 - centerPerp);
-        const dist2 = Math.abs(avg2 - centerPerp);
-        bestInnerLeg = dist1 < dist2 ? [...half1] : [...half2];
+    if (eccentricity > 5) {
+      // Clear strip (axis-aligned or diagonal): turnaround split along PCA axis
+      const projs = points.map(p => p[0] * ax + p[1] * ay);
+      let minIdx = 0, maxIdx = 0;
+      for (let i = 1; i < points.length; i++) {
+        if (projs[i] < projs[minIdx]) minIdx = i;
+        if (projs[i] > projs[maxIdx]) maxIdx = i;
       }
+      const s = Math.min(minIdx, maxIdx);
+      const e = Math.max(minIdx, maxIdx);
+      const half1 = points.slice(s, e + 1);
+      const half2 = [...points.slice(e), ...points.slice(0, s + 1)];
+      if (half1.length < 2 || half2.length < 2) continue;
+      const px = -ay, py = ax;
+      const cProj = centerX * px + centerY * py;
+      const avg1 = half1.reduce((sum, p) => sum + p[0] * px + p[1] * py, 0) / half1.length;
+      const avg2 = half2.reduce((sum, p) => sum + p[0] * px + p[1] * py, 0) / half2.length;
+      innerLeg = Math.abs(avg1 - cProj) < Math.abs(avg2 - cProj) ? [...half1] : [...half2];
     } else {
-      // L-shaped, diagonal, or ambiguous: extract inner edge by distance from center
-      bestInnerLeg = extractInnerByDistance(points, centerX, centerY);
+      // L-shaped or ambiguous: extract inner edge by distance from frame center
+      innerLeg = extractInnerByDistance(points, centerX, centerY);
     }
 
-    if (!bestInnerLeg || bestInnerLeg.length < 2) continue;
+    innerLegs.push(innerLeg);
+  }
 
-    // Classify position AFTER inner leg extraction
-    const spanX = bboxW / frameWidth;
-    const spanY = bboxH / frameHeight;
-    const legXs = bestInnerLeg.map(p => p[0]);
-    const legYs = bestInnerLeg.map(p => p[1]);
-    const legCX = legXs.reduce((a, b) => a + b, 0) / legXs.length;
-    const legCY = legYs.reduce((a, b) => a + b, 0) / legYs.length;
+  if (innerLegs.length === 0) return "";
 
-    let position: string;
-    if (spanX > 0.5 && spanY > 0.5) {
-      const dx = legCX - centerX;
-      const dy = legCY - centerY;
-      if (Math.abs(dx) > Math.abs(dy)) {
-        position = dx < 0 ? "left" : "right";
-      } else {
-        position = dy < 0 ? "top" : "bottom";
-      }
-    } else if (bboxH > bboxW) {
-      position = legCX < centerX ? "left" : "right";
-    } else {
-      position = legCY < centerY ? "top" : "bottom";
+  // Stitch inner legs by nearest-endpoint proximity
+  const result = [...innerLegs[0]];
+  const used = new Set([0]);
+  while (used.size < innerLegs.length) {
+    const last = result[result.length - 1];
+    let bestIdx = -1, bestDist = Infinity, bestRev = false;
+    for (let i = 0; i < innerLegs.length; i++) {
+      if (used.has(i)) continue;
+      const leg = innerLegs[i];
+      const d1 = (last[0] - leg[0][0]) ** 2 + (last[1] - leg[0][1]) ** 2;
+      const d2 = (last[0] - leg[leg.length - 1][0]) ** 2 + (last[1] - leg[leg.length - 1][1]) ** 2;
+      if (d1 < bestDist) { bestDist = d1; bestIdx = i; bestRev = false; }
+      if (d2 < bestDist) { bestDist = d2; bestIdx = i; bestRev = true; }
     }
-
-    sides.push({ position, innerLeg: bestInnerLeg });
+    if (bestIdx === -1) break;
+    used.add(bestIdx);
+    const next = bestRev ? [...innerLegs[bestIdx]].reverse() : innerLegs[bestIdx];
+    result.push(...next);
   }
 
-  // Deduplicate: keep side with more points if two paths map to same position
-  const byPos: Record<string, SideInfo> = {};
-  for (const s of sides) {
-    if (!byPos[s.position] || s.innerLeg.length > byPos[s.position].innerLeg.length) {
-      byPos[s.position] = s;
-    }
-  }
-
-  const allPositions = ["top", "right", "bottom", "left"] as const;
-  const missing = allPositions.filter(p => !byPos[p]);
-
-  // Synthesize missing side for 3-path frames
-  if (missing.length === 1) {
-    const missingPos = missing[0];
-    const cwOrder = ["top", "right", "bottom", "left"];
-    const missingIdx = cwOrder.indexOf(missingPos);
-    const prevPos = cwOrder[(missingIdx + 3) % 4];
-    const nextPos = cwOrder[(missingIdx + 1) % 4];
-
-    const getOrientedLeg = (pos: string) => {
-      const orderEntry = ([
-        ["top", 0, true], ["right", 1, true], ["bottom", 0, false], ["left", 1, false],
-      ] as const).find(([p]) => p === pos)!;
-      const [, axis, ascending] = orderEntry;
-      const pts = [...byPos[pos].innerLeg];
-      const first = pts[0][axis], last = pts[pts.length - 1][axis];
-      if (ascending ? first > last : first < last) pts.reverse();
-      return pts;
-    };
-
-    if (byPos[prevPos] && byPos[nextPos]) {
-      const prevLeg = getOrientedLeg(prevPos);
-      const nextLeg = getOrientedLeg(nextPos);
-      byPos[missingPos] = {
-        position: missingPos,
-        innerLeg: [prevLeg[prevLeg.length - 1], nextLeg[0]],
-        synthesized: true,
-      };
-    }
-  }
-
-  // Order clockwise: top(L→R), right(T→B), bottom(R→L), left(B→T)
-  const orderedPoints: number[][] = [];
-  for (const [pos, axis, ascending] of [
-    ["top", 0, true], ["right", 1, true], ["bottom", 0, false], ["left", 1, false],
-  ] as const) {
-    if (!byPos[pos]) continue;
-    const pts = [...byPos[pos].innerLeg];
-    const first = pts[0][axis], last = pts[pts.length - 1][axis];
-    if (ascending ? first > last : first < last) pts.reverse();
-    orderedPoints.push(...pts);
-  }
-
-  if (orderedPoints.length === 0) return "";
+  if (result.length === 0) return "";
   const r = (n: number) => Math.round(n * 10) / 10;
-  let d = `M${r(orderedPoints[0][0])} ${r(orderedPoints[0][1])}`;
-  for (let i = 1; i < orderedPoints.length; i++) {
-    d += ` L${r(orderedPoints[i][0])} ${r(orderedPoints[i][1])}`;
+  let d_path = `M${r(result[0][0])} ${r(result[0][1])}`;
+  for (let i = 1; i < result.length; i++) {
+    d_path += ` L${r(result[i][0])} ${r(result[i][1])}`;
   }
-  return d + " Z";
+  return d_path + " Z";
 }
 
 // --- Build frame data ---
