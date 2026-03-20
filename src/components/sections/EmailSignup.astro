@@ -142,7 +142,7 @@ const {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
       event: 'generate_lead',
-      eventCallback: () => { form.submit(); },
+      eventCallback: () => { HTMLFormElement.prototype.submit.call(form); },
       eventTimeout: 2000,
     });
   });
