@@ -135,11 +135,16 @@ const {
     img.addEventListener('mouseleave', () => signupSection?.classList.remove('is-hovered'));
   });
 
-  // Newsletter form submit → push generate_lead before Mailchimp navigation
-  const form = signupSection?.querySelector('.signup-form');
-  form?.addEventListener('submit', () => {
+  // Newsletter form submit → push generate_lead, then submit after GTM fires
+  const form = signupSection?.querySelector('.signup-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'generate_lead' });
+    window.dataLayer.push({
+      event: 'generate_lead',
+      eventCallback: () => { form.submit(); },
+      eventTimeout: 2000,
+    });
   });
 
   // Click anywhere on the card → focus the email input
