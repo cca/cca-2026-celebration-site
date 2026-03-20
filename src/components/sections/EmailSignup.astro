@@ -135,17 +135,25 @@ const {
     img.addEventListener('mouseleave', () => signupSection?.classList.remove('is-hovered'));
   });
 
-  // Newsletter form submit → push generate_lead, then submit after GTM fires
+  // Newsletter form submit → push generate_lead, then submit after GTM fires.
+  // Guard flag prevents re-entry if GTM's patched form.submit() re-dispatches
+  // a submit event — on the second pass we skip preventDefault so the form
+  // actually navigates.
   const form = signupSection?.querySelector('.signup-form') as HTMLFormElement | null;
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: 'generate_lead',
-      eventCallback: () => { HTMLFormElement.prototype.submit.call(form); },
-      eventTimeout: 2000,
+  if (form) {
+    let submitted = false;
+    form.addEventListener('submit', (e) => {
+      if (submitted) return;
+      e.preventDefault();
+      submitted = true;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'generate_lead',
+        eventCallback: () => { form.submit(); },
+        eventTimeout: 2000,
+      });
     });
-  });
+  }
 
   // Click anywhere on the card → focus the email input
   const card = signupSection?.querySelector('.signup-card') as HTMLElement | null;
