@@ -136,20 +136,22 @@ const {
   });
 
   // Newsletter form submit → push generate_lead, then submit after GTM fires.
-  // Guard flag prevents re-entry if GTM's patched form.submit() re-dispatches
-  // a submit event — on the second pass we skip preventDefault so the form
-  // actually navigates.
+  // GTM patches both form.submit() and HTMLFormElement.prototype.submit on the
+  // main window. To bypass its Form Submission listener entirely, we borrow the
+  // native submit from a sandboxed iframe that GTM has never touched.
   const form = signupSection?.querySelector('.signup-form') as HTMLFormElement | null;
   if (form) {
-    let submitted = false;
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
+    const nativeSubmit = (iframe.contentWindow as Window).HTMLFormElement.prototype.submit;
+    document.body.removeChild(iframe);
+
     form.addEventListener('submit', (e) => {
-      if (submitted) return;
       e.preventDefault();
-      submitted = true;
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: 'generate_lead',
-        eventCallback: () => { form.submit(); },
+        eventCallback: () => { nativeSubmit.call(form); },
         eventTimeout: 2000,
       });
     });
