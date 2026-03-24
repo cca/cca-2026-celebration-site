@@ -55,7 +55,6 @@ export const ccaPhotography: CCAPhoto[] = [
   // HAAVC Tea Ceremony, Fall 2025
   { src: '/images/cca-photography/haavc-tea-ceremony-fa25.jpg', alt: 'HAAVC Tea Ceremony, Fall 2025' },
   // Illustration Senior Show, Fall 2025
-  { src: '/images/cca-photography/illustration-senior-show-fa25-43.jpg', alt: 'Illustration Senior Show, Fall 2025' },
   { src: '/images/cca-photography/illustration-senior-show-fa25-46.jpg', alt: 'Illustration Senior Show, Fall 2025' },
   // Staff Show, Fall 2025
   { src: '/images/cca-photography/staff-show-every-day-strange-fa25.jpg', alt: 'Staff Show: Every Day Strange, Fall 2025' },
