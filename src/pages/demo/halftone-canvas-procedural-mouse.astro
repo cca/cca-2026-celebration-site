@@ -8,7 +8,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   <div class="demo-overlay">
     <a href="/demo/" class="back-link">&larr; Demo Pages</a>
     <h1 class="demo-title">Mouse Interaction</h1>
-    <p class="demo-technique">Canvas dot grid + mouse-driven ripple &amp; spring physics</p>
+    <p class="demo-technique">Canvas dot grid + click-driven ripple &amp; spring physics</p>
   </div>
 
   <div class="perf-counter" id="perf-counter" aria-live="off" aria-hidden="true">
@@ -29,7 +29,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
       <button class="sidebar-close" id="sidebar-close" aria-label="Close controls">&times;</button>
     </div>
     <p class="sidebar-description">
-      Move the mouse fast to launch expanding ripple waves through the dot grid. Click for a burst. Switch modes for a static repel or attract field that follows the cursor.
+      Click anywhere to launch expanding ripple waves through the dot grid. Switch modes for a static repel or attract field that follows the cursor.
     </p>
     <div class="controls">
 
@@ -486,8 +486,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     // --- Mouse state ---
     let mouseX = -9999, mouseY = -9999;
     let smoothMouseX = -9999, smoothMouseY = -9999;
-    let prevMouseX = -9999, prevMouseY = -9999;
-    let mouseVX = 0, mouseVY = 0;
     let mouseOnCanvas = false;
 
     // --- Mouse config ---
@@ -502,9 +500,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     let ripples: Ripple[] = [];
     const MAX_RIPPLES = 12;
     const RIPPLE_BAND = 30;
-    const RIPPLE_VELOCITY_THRESHOLD = 8;
-    const RIPPLE_EMIT_COOLDOWN_MS = 80;
-    let lastRippleEmitMs = 0;
 
     // --- Scan head toggle ---
     let backgroundScanEnabled = false;
@@ -858,21 +853,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
       // Smooth mouse position
       smoothMouseX += (mouseX - smoothMouseX) * 0.2;
       smoothMouseY += (mouseY - smoothMouseY) * 0.2;
-
-      // Velocity measurement
-      mouseVX = mouseX - prevMouseX;
-      mouseVY = mouseY - prevMouseY;
-      prevMouseX = mouseX;
-      prevMouseY = mouseY;
-
-      // Auto-emit ripple on fast movement
-      if (mouseOnCanvas
-          && (mouseMode === 'ripple' || mouseMode === 'combined')
-          && Math.hypot(mouseVX, mouseVY) > RIPPLE_VELOCITY_THRESHOLD
-          && ts - lastRippleEmitMs > RIPPLE_EMIT_COOLDOWN_MS) {
-        emitRipple(mouseX, mouseY, mouseStrength);
-        lastRippleEmitMs = ts;
-      }
 
       // Advance scan heads
       const margin = scanWidth;
