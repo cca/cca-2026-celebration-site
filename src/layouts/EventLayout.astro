@@ -17,13 +17,16 @@ interface Props {
 
 const { event, title } = Astro.props;
 const pageTitle = title ?? event.data.title;
+const particleColors = event.data.themeKey === 'commencement'
+  ? ['#00bfb3', '#f2b23a', '#7ec8e3']
+  : ['#005776', '#00BFB3', '#563D82', '#FFC845'];
 ---
 
 <BaseLayout title={pageTitle} description={event.data.description} themeKey={event.data.themeKey}>
   <ParticleField
     mode="svg"
     svgPaths={chimeraPaths}
-    colors={['#005776', '#00BFB3', '#563D82', '#FFC845']}
+    colors={particleColors}
     count={40}
     sizeRange={[18, 52]}
     opacityRange={[0.06, 0.25]}

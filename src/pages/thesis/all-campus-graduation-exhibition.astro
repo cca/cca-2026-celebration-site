@@ -1,0 +1,52 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'showcase');
+if (!event) throw new Error('Event showcase not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'All-Campus Graduation Exhibition' },
+    ]} />
+  </div>
+
+  <EventHero event={event} />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Event"
+          paragraphs={[
+            "The All-Campus Graduation Exhibition is CCA's signature end-of-year celebration — a single evening when graduating students from every program open their studios, galleries, and presentation spaces to the public.",
+            "From fine arts and design to architecture, writing, and beyond, the exhibition brings the full breadth of CCA's graduating class together in one night. It's the largest gathering of student work of the year, free and open to all.",
+            "Details on participating programs, venue maps, and opening night logistics will be announced closer to the event. Check back soon.",
+          ]}
+          meta={[
+            { label: 'Format', value: 'Opening night celebration, all disciplines' },
+            { label: 'Degree level', value: 'Undergraduate & Graduate' },
+            { label: 'Date', value: 'May 15, 2026 · 5–8 PM' },
+            { label: 'Venue', value: 'California College of the Arts, SF Campus' },
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+
+</ThesisEventLayout>

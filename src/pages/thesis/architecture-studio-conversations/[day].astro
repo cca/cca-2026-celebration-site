@@ -1,0 +1,237 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../../components/events/EventHero.astro';
+import EventContextSection from '../../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../../lib/utils/phase';
+import { isPhaseBefore } from '../../../config/phases';
+
+export async function getStaticPaths() {
+  const event = await getEntry('events', 'architecture-studio-conversations');
+  if (!event) throw new Error('Event architecture-studio-conversations not found');
+  return event.data.seriesDays!.map((day) => ({
+    params: { day: `day-${day.dayNumber}` },
+    props: { day, event },
+  }));
+}
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const { day, event } = Astro.props;
+const prevDay = event.data.seriesDays!.find((d) => d.dayNumber === day.dayNumber - 1) ?? null;
+const nextDay = event.data.seriesDays!.find((d) => d.dayNumber === day.dayNumber + 1) ?? null;
+
+// Override hero with day-specific date and time
+const dayEventForHero = {
+  ...event,
+  data: {
+    ...event.data,
+    date: day.date,
+    endDate: undefined,
+    time: day.time,
+  },
+} as typeof event;
+
+const galleryImages = [
+  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: 'Architecture students present their final studio work at CCA' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: 'Architectural models and drawings on display during studio conversations' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: 'Faculty and students in discussion during Architecture Division final reviews' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: 'Students presenting large-format architectural drawings at CCA' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: 'Architecture studio model work displayed during final conversations' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: 'CCA Architecture Division final review presentations' },
+];
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Architecture Studio Conversations', href: '/thesis/architecture-studio-conversations/' },
+      { label: day.studio },
+    ]} />
+  </div>
+
+  <EventHero event={dayEventForHero} />
+
+  <div class="container">
+
+    {/* ── Studio Details ── */}
+    <EventContextSection
+      id="studio"
+      kicker="About this Studio"
+      paragraphs={[
+        `${day.studio} is part of the Architecture Division's four-day Final Studio Conversations series — an open review where students present their capstone work to faculty, visiting critics, and the public.`,
+        "The conversations are open: visitors are encouraged to engage directly with the students and their work.",
+      ]}
+      meta={[
+        ...(day.programs && day.programs.length > 0 ? [{ label: 'Programs', value: day.programs.join(', ') }] : []),
+        { label: 'Date', value: new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) },
+        { label: 'Hours', value: day.time },
+        {
+          label: 'Location',
+          value: event.data.location as string,
+          href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.data.location}, ${event.data.address}`)}`,
+        },
+      ]}
+    />
+
+    {/* ── Photo Gallery ── */}
+    <section id="gallery" class="gallery-section reveal">
+      <span class="gallery-kicker">From Last Year's Reviews</span>
+      <div class="gallery-grid">
+        {galleryImages.map((img, i) => (
+          <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
+            <img src={img.src} alt={img.alt} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ── Day Navigation ── */}
+    <nav class="day-nav" aria-label="Day navigation">
+      <div class="day-nav__inner">
+        <div class="day-nav__prev">
+          {prevDay && (
+            <a href={`/thesis/architecture-studio-conversations/day-${prevDay.dayNumber}/`} class="day-nav__link">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M10 3L5 8l5 5"/>
+              </svg>
+              Day {prevDay.dayNumber}
+            </a>
+          )}
+        </div>
+
+        <a href="/thesis/architecture-studio-conversations/" class="day-nav__series">
+          Back to Studio Conversations
+        </a>
+
+        <div class="day-nav__next">
+          {nextDay && (
+            <a href={`/thesis/architecture-studio-conversations/day-${nextDay.dayNumber}/`} class="day-nav__link">
+              Day {nextDay.dayNumber}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 3l5 5-5 5"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    </nav>
+
+  </div>
+</ThesisEventLayout>
+
+<style>
+  /* ── Photo gallery ── */
+  .gallery-section {
+    padding-block: var(--space-4) var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .gallery-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-5);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gallery-item--featured {
+      grid-column: span 2;
+    }
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface);
+  }
+
+  .gallery-item--featured {
+    aspect-ratio: 16 / 9;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.04);
+  }
+
+  /* ── Day nav ── */
+  .day-nav {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .day-nav__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .day-nav__prev {
+    justify-self: start;
+  }
+
+  .day-nav__next {
+    justify-self: end;
+  }
+
+  .day-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .day-nav__link:hover {
+    color: var(--color-text);
+  }
+
+  .day-nav__series {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    text-decoration: none;
+    text-align: center;
+    transition: color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .day-nav__series:hover {
+    color: var(--color-accent);
+  }
+</style>

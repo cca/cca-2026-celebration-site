@@ -1,0 +1,91 @@
+---
+// Entry details card for the Fine Arts Senior Exhibition (Novack Gallery, Simpson Building)
+// No props — content is specific to this venue and exhibition format.
+---
+
+<section class="entry-info reveal">
+  <div class="entry-card">
+    <div class="entry-card__icon" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div class="entry-card__content">
+      <h3 class="entry-card__heading">Entry Details</h3>
+      <p class="entry-card__admission">Free and open to the public.</p>
+      <p class="entry-card__hours">
+        <svg width="13" height="13" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <circle cx="6" cy="6" r="5"/>
+          <path d="M6 3v3l2 1.5"/>
+        </svg>
+        Gallery hours: Wednesday 11am–7pm; Thursday &amp; Friday 11am–4pm
+      </p>
+      <p class="entry-card__text">
+        Visitors must sign in at the security window located to the left of CCA's main gates. Please bring a valid ID for check-in. After signing in, enter CCA's campus through the main gates. Turn left to access the Simpson Family Makers Building. Once inside, take the elevator to the second floor. When you exit the elevator, turn left. The gallery entrance is located near the outdoor stairs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .entry-info {
+    padding-block: var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .entry-card {
+    display: flex;
+    gap: var(--space-6);
+    align-items: flex-start;
+    max-width: 720px;
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+
+  .entry-card__icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+  }
+
+  .entry-card__heading {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+  }
+
+  .entry-card__admission {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-3);
+  }
+
+  .entry-card__hours {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .entry-card__text {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 55ch;
+  }
+</style>

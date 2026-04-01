@@ -1,0 +1,50 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', '2d-open-studios');
+if (!event) throw new Error('Event 2d-open-studios not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: '2D Open Studios' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Event"
+          paragraphs={[
+            "2D Open Studios offers a look inside the studios of CCA's graduating 2D students — painters, printmakers, illustrators, and more — as they open their spaces and present their capstone work to visitors, faculty, and peers.",
+            "More details coming soon.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>
+
+<style>
+  .page-layout {
+    padding-block: var(--space-8) var(--space-20);
+  }
+</style>

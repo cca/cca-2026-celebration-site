@@ -1,7 +1,7 @@
 {
   "title": "Game Arts & Design Showcase",
   "slug": "game-arts-showcase",
-  "shortTitle": "Game Arts",
+  "shortTitle": "Game Arts & Design Showcase",
   "type": "game-showcase",
   "degreeLevel": "all",
   "themeKey": "game-arts",
@@ -11,10 +11,9 @@
   "location": "CCA Room 250",
   "address": "145 Hooper St, San Francisco, CA 94107",
   "description": "An interactive showcase of student games, immersive experiences, and design projects from CCA's Game Arts program.",
-  "image": {
-    "src": "/images/events/game-arts-showcase.png",
-    "alt": "Game Arts & Design Showcase promotional graphic"
-  },
-  "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/spring-2026-game-arts-design-showcase/",
+  "heroImages": [
+    { "src": "/images/cca-photography/eventbrite-dice-macro-0811.jpg", "alt": "Students demoing games at the CCA Game Arts showcase", "frameId": "frame-04" }
+  ],
+  "rsvpUrl": "https://www.eventbrite.com/e/1977748003518",
   "order": 10
 }

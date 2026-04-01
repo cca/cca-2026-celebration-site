@@ -1,0 +1,432 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../../components/events/EventHero.astro';
+import EventContextSection from '../../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../../lib/utils/phase';
+import { isPhaseBefore } from '../../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'architecture-studio-conversations');
+if (!event) throw new Error('Event architecture-studio-conversations not found');
+
+const { seriesDays } = event.data;
+
+const galleryImages = [
+  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: 'Architecture students present their final studio work at CCA' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: 'Architectural models and drawings on display during studio conversations' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: 'Faculty and students in discussion during Architecture Division final reviews' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: 'Students presenting large-format architectural drawings at CCA' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: 'Architecture studio model work displayed during final conversations' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: 'CCA Architecture Division final review presentations' },
+];
+
+function fmtDate(dateStr: string): string {
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric',
+  });
+}
+
+function dayLabel(n: number): string {
+  return String(n).padStart(2, '0');
+}
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Architecture Studio Conversations' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+
+        <EventContextSection
+          id="about"
+          kicker="About the Event"
+          paragraphs={[
+            "Final Studio Conversations are the Architecture Division's end-of-year culmination — a multi-day open review where students across all degree levels present their capstone projects to faculty, visiting critics, and the public.",
+            "Work spans architectural design, urban research, speculative proposals, and constructed models. The conversations are open: visitors are encouraged to engage directly with the students and their work.",
+          ]}
+          meta={[
+            { label: 'Format', value: 'Open studio reviews with presented work and public critique' },
+            { label: 'Degree levels', value: 'BArch, MArch, MAAD' },
+            { label: 'Duration', value: 'April 30 – May 3, all day' },
+            {
+              label: 'Location',
+              value: event.data.location as string,
+              href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.data.location}, ${event.data.address}`)}`,
+            },
+          ]}
+        />
+
+        {/* ── Day Schedule ── */}
+        {seriesDays && seriesDays.length > 0 && (
+          <section id="schedule" class="schedule-section">
+            <div class="schedule-header reveal">
+              <span class="section-kicker">Studio Schedule</span>
+              <h2 class="schedule-heading">Four days. Four studios.<br />One division.</h2>
+            </div>
+
+            <ol class="day-list">
+              {seriesDays.map((day) => (
+                <li id={`day-${day.dayNumber}`}>
+                  <a href={`/thesis/architecture-studio-conversations/day-${day.dayNumber}/`} class="day-entry reveal">
+                    <span class="day-entry__ghost" aria-hidden="true">{dayLabel(day.dayNumber)}</span>
+
+                    <div class="day-entry__header">
+                      <div class="day-entry__meta">
+                        <span class="day-entry__label">Day {day.dayNumber}</span>
+                      </div>
+                      <div class="day-time-chip">
+                        <span class="time-dot" aria-hidden="true"></span>
+                        <div>
+                          <span class="time-label">Studio Hours</span>
+                          <span class="time-value">{day.time}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="day-entry__body">
+                      <div class="day-entry__studio">
+                        <span class="studio-name">{day.studio}</span>
+                        {day.programs && day.programs.length > 0 && (
+                          <span class="studio-date">{fmtDate(day.date)}</span>
+                        )}
+                      </div>
+                      {day.programs && day.programs.length > 0 && (
+                        <div class="day-programs">
+                          <span class="programs-kicker">Programs</span>
+                          <ul class="programs-list" role="list">
+                            {day.programs.map((prog) => (
+                              <li class="programs-list__item">{prog}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {/* ── Photo Gallery ── */}
+        <section id="gallery" class="gallery-section reveal">
+          <span class="gallery-kicker">From Last Year's Reviews</span>
+          <div class="gallery-grid">
+            {galleryImages.map((img, i) => (
+              <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
+                <img src={img.src} alt={img.alt} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>
+
+<style>
+  /* ── Schedule section ── */
+  .schedule-section {
+    padding-block: var(--space-12) var(--space-20);
+  }
+
+  .schedule-header {
+    margin-bottom: var(--space-20);
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .schedule-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: normal;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  /* ── Day list ── */
+  .day-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .day-entry {
+    display: block;
+    position: relative;
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    padding-left: calc(var(--space-6) + 3px);
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: none;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-rest);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo);
+  }
+
+  .day-entry::before {
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: 0;
+    height: 40%;
+    width: 3px;
+    background: var(--gradient-prismatic);
+    border-radius: 4px 0 0 4px;
+    transition: top var(--duration-base) var(--ease-out-expo),
+                height var(--duration-base) var(--ease-out-expo);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .day-entry::before {
+      animation: prismatic-shift 6s linear infinite;
+    }
+
+    .day-entry:hover::before {
+      animation-duration: 2s;
+    }
+  }
+
+  .day-entry:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .day-entry:hover::before {
+    top: 0;
+    height: 100%;
+  }
+
+  .day-entry__ghost {
+    position: absolute;
+    top: 50%;
+    right: -0.05em;
+    transform: translateY(-50%);
+    font-family: var(--font-display, var(--font-heading));
+    font-size: clamp(120px, 18vw, 200px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+
+  .day-entry__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+    text-transform: uppercase;
+  }
+
+  .day-entry__meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .day-entry__label {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: normal;
+    line-height: 1;
+    color: var(--color-text);
+  }
+
+  .day-entry__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .day-time-chip {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-radius: var(--radius-card);
+    flex-shrink: 0;
+    text-transform: none;
+  }
+
+  .time-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 0.3em;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 60%, transparent);
+  }
+
+  .time-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .time-value {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .day-entry__studio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .studio-name {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .studio-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+  }
+
+  /* Programs */
+  .day-programs {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-4);
+  }
+
+  .programs-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .programs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .programs-list__item {
+    font-size: var(--text-base);
+    color: var(--color-text);
+    font-weight: 500;
+    position: relative;
+    padding-right: var(--space-3);
+  }
+
+  .programs-list__item:not(:last-child)::after {
+    content: '·';
+    position: absolute;
+    right: 0;
+    color: var(--color-muted);
+    font-weight: normal;
+  }
+
+  /* ── Photo gallery ── */
+  .gallery-section {
+    padding-block: var(--space-4) var(--space-16);
+  }
+
+  .gallery-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-5);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gallery-item--featured {
+      grid-column: span 2;
+    }
+  }
+
+  .gallery-item {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    aspect-ratio: 4 / 3;
+    background: var(--color-surface);
+  }
+
+  .gallery-item--featured {
+    aspect-ratio: 16 / 9;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.04);
+  }
+</style>

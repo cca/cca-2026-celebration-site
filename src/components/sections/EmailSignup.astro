@@ -9,6 +9,9 @@ interface Props {
   buttonText?: string;
   /** Use 'chimera' for chimera expanded shapes instead of arrows */
   doodleVariant?: 'arrows' | 'chimera';
+  /** Arrow colors (only applies when doodleVariant is 'arrows') */
+  arrow1Color?: string;
+  arrow2Color?: string;
 }
 
 const {
@@ -16,6 +19,8 @@ const {
   description = "Join the CCA 2026 Celebrations list to get event updates, schedule changes, and RSVP reminders.",
   buttonText = "Subscribe",
   doodleVariant = "arrows",
+  arrow1Color = "#ffffff",
+  arrow2Color = "#ffffff",
 } = Astro.props;
 ---
 
@@ -81,7 +86,7 @@ const {
         spinAxis="Y"
         perspective={300}
         sizeVariance={0.3}
-        color="#ffffff"
+        color={arrow1Color}
       />
     )}
   </div>
@@ -115,7 +120,7 @@ const {
         spinAxis="Y"
         perspective={300}
         sizeVariance={0.3}
-        color="#ffffff"
+        color={arrow2Color}
         startDelay={1.5}
       />
     )}

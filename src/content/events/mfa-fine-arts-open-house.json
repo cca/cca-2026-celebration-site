@@ -1,0 +1,21 @@
+{
+  "title": "MFA Fine Arts Open House",
+  "slug": "mfa-fine-arts-open-house",
+  "shortTitle": "MFA Open House",
+  "type": "open-studios",
+  "degreeLevel": "graduate",
+  "themeKey": "thesis-grad",
+  "date": "2026-04-11",
+  "location": "California College of the Arts",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "An open house showcasing MFA Fine Arts thesis work and graduate studio practice.",
+  "rsvpUrl": "https://www.eventbrite.com/e/1975346151514",
+  "order": 6.6,
+  "heroImages": [
+    {
+      "src": "/images/cca-photography/staff-show-every-day-strange-fa25.jpg",
+      "alt": "Artwork on view at a CCA fine arts exhibition",
+      "frameId": "frame-19"
+    }
+  ]
+}

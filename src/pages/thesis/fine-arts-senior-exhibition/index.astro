@@ -1,0 +1,326 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../../components/events/EventHero.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import BFASeniorExhibitionsEntryDetails from '../../../components/events/BFASeniorExhibitionsEntryDetails.astro';
+import { getCurrentPhase } from '../../../lib/utils/phase';
+import { isPhaseBefore } from '../../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'fine-arts-senior-exhibition');
+if (!event) throw new Error('Event fine-arts-senior-exhibition not found');
+
+const { seriesWeeks, longDescription } = event.data;
+
+function weekLabel(n: number): string {
+  return String(n).padStart(2, '0');
+}
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Fine Arts Senior Exhibition' },
+    ]} />
+  </div>
+
+  <EventHero event={event} />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        {/* ── About ── */}
+        {longDescription && (
+          <section id="about" class="about-series reveal">
+            <span class="section-kicker">About the Exhibition</span>
+            <p class="about-series__text">{longDescription}</p>
+          </section>
+        )}
+
+        {/* ── Week Schedule ── */}
+        {seriesWeeks && seriesWeeks.length > 0 && (
+          <section id="schedule" class="schedule-section">
+            <div class="schedule-header reveal">
+              <span class="section-kicker">Exhibition Schedule</span>
+              <h2 class="schedule-heading">Four weeks. Four cohorts.<br />One gallery.</h2>
+            </div>
+
+            <ol class="week-list">
+              {seriesWeeks.map((week, i) => (
+                <li id={`week-${week.weekNumber}`}>
+                  <a href={`/thesis/fine-arts-senior-exhibition/week-${week.weekNumber}/`} class="week-entry reveal">
+                    <span class="week-entry__ghost" aria-hidden="true">{weekLabel(week.weekNumber)}</span>
+
+                    <div class="week-entry__header">
+                      <div class="week-entry__meta">
+                        <span class="week-entry__label">Week {week.weekNumber}</span>
+                      </div>
+                      <div class="week-reception">
+                        <span class="reception-dot" aria-hidden="true"></span>
+                        <div>
+                          <span class="reception-label">Opening Reception</span>
+                          <span class="reception-time">{week.openingReception}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="week-entry__body">
+                      <div class="week-entry__artists">
+                        <span class="artists-kicker">Exhibiting Artists</span>
+                        <ul class="artists-list" role="list">
+                          {week.artists.map((name) => (
+                            <li class="artists-list__item">{name}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {/* ── Entry Information ── */}
+        <BFASeniorExhibitionsEntryDetails />
+      </div>
+    </div>
+  </div>
+
+</ThesisEventLayout>
+
+<style>
+  /* ── About ── */
+  .about-series {
+    padding-block: var(--space-12);
+  }
+
+  .about-series__text {
+    max-width: 65ch;
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+
+  /* ── Schedule section ── */
+  .schedule-section {
+    padding-block: var(--space-12) var(--space-20);
+  }
+
+  .schedule-header {
+    margin-bottom: var(--space-20);
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .schedule-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: normal;
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  /* ── Week list ── */
+  .week-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .week-entry {
+    display: block;
+    position: relative;
+    padding: var(--space-5) var(--space-6) var(--space-6);
+    padding-left: calc(var(--space-6) + 3px);
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: none;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-rest);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: transform var(--duration-base) var(--ease-out-expo),
+                box-shadow var(--duration-base) var(--ease-out-expo);
+  }
+
+  .week-entry::before {
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: 0;
+    height: 40%;
+    width: 3px;
+    background: var(--gradient-prismatic);
+    border-radius: 4px 0 0 4px;
+    transition: top var(--duration-base) var(--ease-out-expo),
+                height var(--duration-base) var(--ease-out-expo);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .week-entry::before {
+      animation: prismatic-shift 6s linear infinite;
+    }
+
+    .week-entry:hover::before {
+      animation-duration: 2s;
+    }
+  }
+
+  .week-entry:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .week-entry:hover::before {
+    top: 0;
+    height: 100%;
+  }
+
+  /* Large ghost number — decorative, behind content */
+  .week-entry__ghost {
+    position: absolute;
+    top: 50%;
+    right: -0.05em;
+    transform: translateY(-50%);
+    font-family: var(--font-display, var(--font-heading));
+    font-size: clamp(120px, 18vw, 200px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+
+  /* Header row: week label left, reception chip right */
+  .week-entry__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+    text-transform: uppercase;
+  }
+
+  .week-entry__meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .week-entry__label {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: normal;
+    line-height: 1;
+    color: var(--color-text);
+  }
+
+  /* Body: single column — artists only */
+  .week-entry__body {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Reception chip — lives in header, top-right */
+  .week-reception {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-radius: var(--radius-card);
+    flex-shrink: 0;
+    text-transform: none;
+  }
+
+  .reception-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 0.3em;
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 60%, transparent);
+  }
+
+  .reception-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-1);
+  }
+
+  .reception-time {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* Artists */
+  .artists-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .artists-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .artists-list__item {
+    font-size: var(--text-base);
+    color: var(--color-text);
+    font-weight: 500;
+    position: relative;
+    padding-right: var(--space-3);
+  }
+
+  /* Midpoint separator — not on last item */
+  .artists-list__item:not(:last-child)::after {
+    content: '·';
+    position: absolute;
+    right: 0;
+    color: var(--color-muted);
+    font-weight: normal;
+  }
+
+</style>

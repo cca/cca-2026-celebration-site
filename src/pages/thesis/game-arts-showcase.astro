@@ -1,0 +1,161 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'game-arts-showcase');
+if (!event) throw new Error('Event game-arts-showcase not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Game Arts & Design Showcase' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <section id="about" class="showcase-info reveal">
+          <span class="showcase-kicker">About the Showcase</span>
+          <p class="showcase-intro">
+            From May 7–8, come to the Game Arts and Design Homeroom (Room 250) for the
+            end-of-semester Student Game Showcase. Play student-created games, celebrate
+            the semester with classmates and faculty, and explore the full range of
+            interactive work from CCA's game design program.
+          </p>
+          <div class="info-grid">
+            <div class="info-tile">
+              <span class="info-tile__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="18" height="12" rx="2"/>
+                  <path d="M8 10h2M9 9v2"/>
+                  <circle cx="14" cy="10.5" r="0.5" fill="currentColor"/>
+                  <circle cx="16" cy="10.5" r="0.5" fill="currentColor"/>
+                </svg>
+              </span>
+              <h3 class="info-tile__heading">Play the Work</h3>
+              <p class="info-tile__text">Games, interactive experiences, and design projects are playable and explorable. Bring friends — most works are made for an audience.</p>
+            </div>
+            <div class="info-tile">
+              <span class="info-tile__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="18" height="18" rx="2"/>
+                  <path d="M8 2v18M2 8h6M2 14h6"/>
+                </svg>
+              </span>
+              <h3 class="info-tile__heading">Two-Day Event</h3>
+              <p class="info-tile__text">The showcase runs May 7–8, 1–8 PM each day. Attend one or both days — the full lineup of student work is on display throughout.</p>
+            </div>
+            <div class="info-tile">
+              <span class="info-tile__icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </span>
+              <h3 class="info-tile__heading">Free & Open</h3>
+              <p class="info-tile__text">Free and open to the public — students, alumni, families, and game enthusiasts all welcome. RSVP on Eventbrite to let us know you're coming.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</ThesisEventLayout>
+
+<style>
+  .showcase-info {
+    padding-block: var(--space-12) var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .showcase-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+  }
+
+  .showcase-intro {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    line-height: 1.7;
+    max-width: 60ch;
+    margin-bottom: var(--space-10);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .info-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .info-tile {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--theme-gradient);
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out-expo);
+  }
+
+  .info-tile:hover::before {
+    opacity: 1;
+  }
+
+  .info-tile__icon {
+    display: block;
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+  }
+
+  .info-tile__heading {
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+  }
+
+  .info-tile__text {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

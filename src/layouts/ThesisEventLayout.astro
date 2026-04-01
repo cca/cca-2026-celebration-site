@@ -1,0 +1,82 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import HalftoneProceduralScan from '../components/effects/HalftoneProceduralScan.astro';
+
+interface Props {
+  event: {
+    data: {
+      title: string;
+      themeKey: string;
+      description: string;
+      [key: string]: unknown;
+    };
+  };
+  title?: string;
+}
+
+const { event, title } = Astro.props;
+const pageTitle = title ?? event.data.title;
+---
+
+<BaseLayout title={pageTitle} description={event.data.description} themeKey="showcase">
+  <HalftoneProceduralScan
+    dotColor="#00BFB3"
+    dotOpacity={0.22}
+    dotSpacing={18}
+    dotRadius={4.5}
+    scanSpeed={45}
+    displacement={28}
+    scanWidth={200}
+    scannerCount={3}
+    direction="xy"
+    bidirectional
+  />
+  <div class="event-page">
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .event-page {
+    min-height: 100vh;
+  }
+
+  .event-page :global(.hero-title) {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    background: none;
+    -webkit-text-fill-color: var(--color-text);
+  }
+
+  /* ── Shared two-column layout for thesis event pages ── */
+  .event-page :global(.page-layout) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .event-page :global(.page-main) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .event-page :global(.page-sidebar) {
+    order: -1;
+  }
+
+  @media (min-width: 1024px) {
+    .event-page :global(.page-layout) {
+      flex-direction: row;
+      gap: var(--space-10);
+      align-items: flex-start;
+    }
+
+    .event-page :global(.page-sidebar) {
+      order: 0;
+      flex: 0 0 220px;
+      position: sticky;
+      top: calc(60px + var(--space-8));
+      align-self: flex-start;
+    }
+  }
+</style>

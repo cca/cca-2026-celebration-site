@@ -3,6 +3,8 @@ import { getEntry, getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import BentoEvents from '../../components/landing/BentoEvents.astro';
+import EventListView from '../../components/landing/EventListView.astro';
+import EventViewToggle from '../../components/landing/EventViewToggle.astro';
 import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import FramedImage from '../../components/ui/FramedImage.astro';
@@ -152,7 +154,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
           <span class="section-label reveal">About the exhibitions</span>
           <h2 class="section-heading reveal">An evening of art, design &amp; making</h2>
           <p class="about-desc reveal">{event.data.description}</p>
-          {isPhaseAtLeast(phase, 'pre-event') && (
+          {isPhaseAtLeast(phase, 'during-event') && (
             <div class="about-details reveal">
               <div class="about-detail">
                 <span class="about-detail__label">When</span>
@@ -170,7 +172,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
             <Button href="/subscribe" variant="link">Subscribe for updates</Button>
           </div>
         </div>
-        {isPhaseBefore(phase, 'pre-event') ? (
+        {isPhaseBefore(phase, 'during-event') ? (
           <div class="about-grid__sidebar reveal">
             <div class="about-details">
               <div class="about-detail">
@@ -200,10 +202,16 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       <div class="container">
         <span class="section-label reveal">Class of 2026</span>
         <h2 class="section-heading reveal">All celebration events</h2>
-        <p class="all-events-desc reveal">
-          From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
-        </p>
-        <BentoEvents events={events} />
+        <div class="all-events-header">
+          <p class="all-events-desc reveal">
+            From commencement ceremonies to thesis exhibitions and showcases, explore the full range of events celebrating the Class of 2026.
+          </p>
+          <EventViewToggle />
+        </div>
+        <div id="events-view-container" data-view="bento">
+          <div class="view-bento"><BentoEvents events={events} /></div>
+          <div class="view-list"><EventListView events={events} /></div>
+        </div>
       </div>
     </section>
   )}
@@ -248,7 +256,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   />
 
   {/* ── Email Signup ── */}
-  <EmailSignup />
+  <EmailSignup arrow1Color="#00BFB3" arrow2Color="#B7BF10" />
 </BaseLayout>
 
 <script src="../../scripts/cursor-track.ts"></script>
@@ -511,11 +519,24 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
     border-top: 1px solid var(--color-border);
   }
 
+  .all-events-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-10);
+    flex-wrap: wrap;
+  }
+
   .all-events-desc {
     font-size: var(--text-lg);
     color: var(--color-muted);
     max-width: 60ch;
     line-height: 1.6;
-    margin-bottom: var(--space-10);
+    margin-bottom: 0;
   }
+
+  /* ── View toggling ── */
+  #events-view-container[data-view="list"] .view-bento { display: none; }
+  #events-view-container[data-view="bento"] .view-list { display: none; }
 </style>

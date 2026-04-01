@@ -1,6 +1,6 @@
 {
   "title": "2026 MFA Thesis Exhibition",
-  "slug": "thesis-graduate",
+  "slug": "mfa-exhibition",
   "shortTitle": "MFA Thesis",
   "type": "thesis-exhibition",
   "degreeLevel": "graduate",
@@ -11,11 +11,11 @@
   "location": "Wattis Institute / Novack Gallery",
   "address": "360 Kansas St, San Francisco, CA 94107",
   "description": "The culminating exhibition of MFA thesis work by CCA's 2026 graduate candidates, featuring works across all fine arts disciplines.",
+  "rsvpUrl": "https://www.eventbrite.com/e/1978199560136",
   "image": {
-    "src": "/images/events/mfathesis.jpg",
-    "alt": "2026 MFA Thesis Exhibition poster"
+    "src": "/images/cca-photography/mfa-2026-thesis-banner.png",
+    "alt": "MFA thesis exhibition at CCA's Wattis Institute",
+    "heroOnly": true
   },
-  "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/2026-mfa-thesis-exhibition/",
-  "rsvpUrl": "https://www.eventbrite.com/e/2026-spring-mfa-thesis-exhibition-tickets-1978199560136?aff=oddtdtcreator",
   "order": 5
 }

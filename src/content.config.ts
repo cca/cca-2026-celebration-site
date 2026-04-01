@@ -96,12 +96,12 @@ const events = defineCollection({
     title: z.string(),
     slug: z.string(),
     shortTitle: z.string(),
-    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase"]),
+    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase", "senior-exhibition", "open-studios", "symposium", "reception", "venture-showcase"]),
     degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
     themeKey: z.string(),
     date: z.string(),
     endDate: z.string().optional(),
-    time: z.string(),
+    time: z.string().optional(),
     location: z.string(),
     address: z.string(),
     description: z.string(),
@@ -113,7 +113,18 @@ const events = defineCollection({
       .object({
         src: z.string(),
         alt: z.string(),
+        aspectRatio: z.string().optional(),
+        heroOnly: z.boolean().optional(),
       })
+      .optional(),
+    heroImages: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          frameId: z.string().optional(),
+        }),
+      )
       .optional(),
     schedule: z
       .array(
@@ -166,6 +177,22 @@ const events = defineCollection({
         disclaimer: z.string().optional(),
       })
       .optional(),
+    seriesWeeks: z.array(z.object({
+      weekNumber: z.number(),
+      date: z.string(),
+      endDate: z.string(),
+      openingReception: z.string(),
+      artists: z.array(z.string()),
+      externalUrl: z.string().optional(),
+    })).optional(),
+    seriesDays: z.array(z.object({
+      dayNumber: z.number(),
+      date: z.string(),
+      time: z.string(),
+      studio: z.string(),
+      programs: z.array(z.string()).optional(),
+      externalUrl: z.string().optional(),
+    })).optional(),
     videoUrl: z.string().optional(),
     videoCaption: z.string().optional(),
     order: z.number(),

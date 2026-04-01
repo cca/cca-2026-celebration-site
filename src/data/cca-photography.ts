@@ -44,7 +44,6 @@ export const ccaPhotography: CCAPhoto[] = [
   { src: '/images/cca-photography/core-2d-perspective-collage-fa25.jpg', alt: 'Core 2D Perspective Collage, Fall 2025' },
   // Design Senior Show, Fall 2025
   { src: '/images/cca-photography/design-senior-show-fa25-39.jpg', alt: 'Design Senior Show, Fall 2025' },
-  { src: '/images/cca-photography/design-senior-show-fa25-47.jpg', alt: 'Design Senior Show, Fall 2025' },
   { src: '/images/cca-photography/design-senior-show-fa25-54.jpg', alt: 'Design Senior Show, Fall 2025' },
   { src: '/images/cca-photography/design-senior-show-fa25-67.jpg', alt: 'Design Senior Show, Fall 2025' },
   // Fashion x Roots Stereo Film Stills
@@ -54,8 +53,6 @@ export const ccaPhotography: CCAPhoto[] = [
   { src: '/images/cca-photography/fashion-roots-stereo-film-46.jpg', alt: 'Fashion x Roots Stereo Film Still' },
   // HAAVC Tea Ceremony, Fall 2025
   { src: '/images/cca-photography/haavc-tea-ceremony-fa25.jpg', alt: 'HAAVC Tea Ceremony, Fall 2025' },
-  // Illustration Senior Show, Fall 2025
-  { src: '/images/cca-photography/illustration-senior-show-fa25-46.jpg', alt: 'Illustration Senior Show, Fall 2025' },
   // Staff Show, Fall 2025
   { src: '/images/cca-photography/staff-show-every-day-strange-fa25.jpg', alt: 'Staff Show: Every Day Strange, Fall 2025' },
 ];

@@ -31,7 +31,7 @@ const allNavItems: NavItem[] = [
     label: "Commencement",
     href: "/commencement/",
     activePrefix: "/commencement/",
-    children: isPhaseBefore(phase, 'pre-event') ? undefined : [
+    children: isPhaseBefore(phase, 'during-event') ? undefined : [
       { label: "Master's Ceremony", href: "/commencement/graduate/" },
       { label: "Bachelor's Ceremony", href: "/commencement/undergraduate/" },
       { label: "Multicultural Celebration", href: "/commencement/multicultural-celebration/" },
@@ -47,7 +47,7 @@ const allNavItems: NavItem[] = [
     label: "Student showcase",
     href: "/showcase/",
     activePrefix: "/showcase/",
-    hiddenIn: ['save-the-date'],
+    hiddenIn: ['save-the-date', 'pre-event'],
     children: [
       { label: "Graduating students", href: "/showcase/students/" },
       { label: "Thesis work", href: "/showcase/works/" },

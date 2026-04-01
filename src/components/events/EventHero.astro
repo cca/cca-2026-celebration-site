@@ -1,28 +1,36 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { formatDate, formatDateRange, formatTime } from "../../lib/utils/format";
-import { generateIcsDataUri } from "../../lib/utils/calendar";
+import { generateGoogleCalendarUrl } from "../../lib/utils/calendar";
 import Button from "../ui/Button.astro";
+import FramedImage from "../ui/FramedImage.astro";
+
+const FALLBACK_FRAMES = ['frame-04', 'frame-11', 'frame-07'];
 
 interface Props {
   event: CollectionEntry<"events">;
+  heroImageSize?: 'default' | 'large';
 }
 
-const { event } = Astro.props;
-const { title, date, endDate, time, location, address, description, image, rsvpUrl, livestreamUrl } = event.data;
+const { event, heroImageSize = 'default' } = Astro.props;
+const { title, date, endDate, time, location, address, description, image, heroImages, rsvpUrl, livestreamUrl } = event.data;
 const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
-const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, address, description });
+const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, location, address, description });
 ---
 
-<section class="event-hero reveal">
-  <div class="hero-seal" aria-hidden="true"></div>
+<section class={`event-hero reveal${heroImageSize === 'large' ? ' event-hero--large-frame' : ''}`}>
+
   <div class="hero-inner">
     <div class="hero-content">
       <h1 class="hero-title stagger-1">{title}</h1>
       <div class="hero-meta stagger-2">
         <time class="hero-date">{dateDisplay}</time>
-        <span class="hero-separator" aria-hidden="true">&#9670;</span>
-        <span class="hero-time">{formatTime(time)}</span>
+        {time && (
+          <>
+            <span class="hero-separator" aria-hidden="true">&#9670;</span>
+            <span class="hero-time">{formatTime(time)}</span>
+          </>
+        )}
         <span class="hero-separator" aria-hidden="true">&#9670;</span>
         <span class="hero-location">{location}</span>
       </div>
@@ -40,7 +48,7 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
             Watch Livestream
           </Button>
         )}
-        <a href={calendarUrl} download={`${event.data.slug}.ics`} class="calendar-link">
+        <a href={calendarUrl} target="_blank" rel="noopener noreferrer" class="calendar-link">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="2" y="3" width="12" height="12" rx="1" />
             <line x1="2" y1="7" x2="14" y2="7" />
@@ -58,10 +66,23 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
         </button>
       </div>
     </div>
-    {image && (
+    {heroImages && heroImages.length > 0 ? (
+      <div class={`hero-framed-images hero-framed-images--${heroImages.length > 1 ? 'multi' : 'single'} stagger-3`}>
+        {heroImages.map((img, i) => (
+          <div class={`hero-framed-images__item hero-framed-images__item--${i + 1}`}>
+            <FramedImage
+              frameId={img.frameId ?? FALLBACK_FRAMES[i % FALLBACK_FRAMES.length]}
+              src={img.src}
+              alt={img.alt}
+              uid={`event-hero-${event.data.slug}-${i}`}
+            />
+          </div>
+        ))}
+      </div>
+    ) : image && (
       <div class="hero-media stagger-3">
         <div class="hero-frame">
-          <img src={image.src} alt={image.alt} loading="eager" />
+          <img src={image.src} alt={image.alt} loading="eager" style={image.aspectRatio ? `aspect-ratio: ${image.aspectRatio}` : undefined} />
         </div>
       </div>
     )}
@@ -76,18 +97,6 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     display: flex;
     align-items: center;
     overflow: hidden;
-  }
-
-  /* Radial gradient spotlight */
-  .event-hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--color-accent) 6%, transparent), transparent 70%);
-    pointer-events: none;
   }
 
   /* Decorative seal — centered behind content */
@@ -254,18 +263,24 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
     font-weight: 600;
     color: var(--color-muted);
     text-decoration: none;
-    background: none;
+    background-color: transparent;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-size: 0% 1px;
+    background-position: left bottom;
+    background-repeat: no-repeat;
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: color 0.15s ease;
+    transition: background-size var(--duration-base) var(--ease-out-expo),
+                color var(--duration-base) var(--ease-out-expo);
   }
 
   .share-link:hover {
     color: var(--color-accent);
+    background-size: 100% 1px;
   }
 
-  /* ── Hero image ── */
+  /* ── Hero image (plain, used by commencement etc.) ── */
   .hero-media {
     display: flex;
     justify-content: center;
@@ -274,7 +289,7 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
   .hero-frame {
     border-radius: var(--radius-card);
     padding: 3px;
-    background: var(--gradient-prismatic);
+    background: linear-gradient(135deg, #00BFB3, #B7BF10);
     background-size: 200% 200%;
     width: 95%;
     max-width: 560px;
@@ -296,10 +311,80 @@ const calendarUrl = generateIcsDataUri({ title, date, endDate, time, location, a
   .hero-frame img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    object-position: center 30%;
     border-radius: calc(var(--radius-card) - 2px);
+  }
+
+  /* ── Framed images (thesis-style scanned frames) ── */
+  .hero-framed-images {
+    --frame-color: var(--color-accent);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Single image — centered, generous width */
+  .hero-framed-images--single {
+    padding: var(--space-4);
+  }
+
+  .hero-framed-images--single .hero-framed-images__item--1 {
+    width: clamp(220px, 80%, 420px);
+  }
+
+  .event-hero--large-frame .hero-framed-images--single .hero-framed-images__item--1 {
+    width: clamp(320px, 100%, 680px);
+  }
+
+  /* Two images — overlapping collage */
+  .hero-framed-images--multi {
+    min-height: 340px;
+  }
+
+  .hero-framed-images--multi .hero-framed-images__item {
+    position: absolute;
+  }
+
+  .hero-framed-images--multi .hero-framed-images__item--1 {
+    width: clamp(200px, 62%, 340px);
+    top: 0;
+    right: 0;
+    rotate: 2.5deg;
+    z-index: 2;
+  }
+
+  .hero-framed-images--multi .hero-framed-images__item--2 {
+    width: clamp(160px, 50%, 280px);
+    bottom: 0;
+    left: 0;
+    rotate: -3deg;
+    z-index: 1;
+  }
+
+  @media (max-width: 767px) {
+    .hero-framed-images--multi {
+      min-height: 240px;
+    }
+
+    .hero-framed-images--multi .hero-framed-images__item--2 {
+      display: none;
+    }
+
+    .hero-framed-images--multi .hero-framed-images__item--1 {
+      position: static;
+      rotate: 2deg;
+      width: clamp(180px, 70%, 320px);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-framed-images__item {
+      opacity: 0;
+      animation: fragment-enter 0.6s var(--ease-out-expo) both;
+    }
+
+    .hero-framed-images__item--1 { animation-delay: 0.1s; }
+    .hero-framed-images__item--2 { animation-delay: 0.28s; }
   }
 </style>
 

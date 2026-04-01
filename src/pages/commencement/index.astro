@@ -202,7 +202,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         );
       })()}
       <div class="ceremony-cards">
-        {gradEvent && isPhaseBefore(phase, 'pre-event') ? (
+        {gradEvent && isPhaseBefore(phase, 'during-event') ? (
           <div class="ceremony-info reveal">
             <div class="ceremony-info__accent" aria-hidden="true"></div>
             <span class="ceremony-info__badge">{formatTime(gradEvent.data.time)}</span>
@@ -217,7 +217,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
           </a>
         )}
 
-        {undergradEvent && isPhaseBefore(phase, 'pre-event') ? (
+        {undergradEvent && isPhaseBefore(phase, 'during-event') ? (
           <div class="ceremony-info reveal">
             <div class="ceremony-info__accent" aria-hidden="true"></div>
             <span class="ceremony-info__badge">{formatTime(undergradEvent.data.time)}</span>
@@ -239,14 +239,14 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   </section>
 
   {/* ── Honored People ── */}
-  <PhaseGate hiddenIn={['save-the-date']}>
+  <PhaseGate hiddenIn={['save-the-date', 'pre-event']}>
     {honorees.length > 0 && (
       <HonoreeSpotlight honorees={honorees} />
     )}
   </PhaseGate>
 
   {/* ── Special Celebrations ── */}
-  <PhaseGate hiddenIn={['save-the-date']}>
+  <PhaseGate hiddenIn={['save-the-date', 'pre-event']}>
     {celebrations.length > 0 && (
       <section class="celebrations-section">
         <div class="container">

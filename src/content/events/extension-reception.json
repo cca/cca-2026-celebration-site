@@ -1,0 +1,20 @@
+{
+  "title": "CCA Extension Nights + Weekends Reception",
+  "slug": "extension-reception",
+  "shortTitle": "Extension Nights + Weekends Reception",
+  "type": "reception",
+  "degreeLevel": "all",
+  "themeKey": "thesis-undergrad",
+  "date": "2026-05-08",
+  "location": "California College of the Arts",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "A reception celebrating the achievements of CCA Extension Nights + Weekends students.",
+  "order": 10.5,
+  "heroImages": [
+    {
+      "src": "/images/eoy-show-past/previousEOYShowPhotos-012-03-2026.jpg",
+      "alt": "CCA students celebrate at the end of year show",
+      "frameId": "frame-03"
+    }
+  ]
+}

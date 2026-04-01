@@ -1,12 +1,13 @@
 /**
- * Generate an .ics calendar file data URI for an event.
+ * Generate a Google Calendar URL for an event.
  */
 
 function pad(n: number): string {
   return n.toString().padStart(2, '0');
 }
 
-function parseTime(timeStr: string): { hours: number; minutes: number } {
+function parseTime(timeStr: string | undefined): { hours: number; minutes: number } {
+  if (!timeStr) return { hours: 0, minutes: 0 };
   const match = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
   if (!match) return { hours: 0, minutes: 0 };
 
@@ -20,7 +21,7 @@ function parseTime(timeStr: string): { hours: number; minutes: number } {
   return { hours, minutes };
 }
 
-function formatIcsDate(dateStr: string, timeStr: string): string {
+function formatGCalDate(dateStr: string, timeStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
   const { hours, minutes } = parseTime(timeStr);
   return (
@@ -29,46 +30,57 @@ function formatIcsDate(dateStr: string, timeStr: string): string {
   );
 }
 
-export function generateIcsDataUri(event: {
+function nextDay(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+}
+
+function formatGCalDateOnly(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+}
+
+export function generateGoogleCalendarUrl(event: {
   title: string;
   date: string;
   endDate?: string;
-  time: string;
+  time?: string;
   location: string;
   address: string;
   description: string;
 }): string {
-  const dtstart = formatIcsDate(event.date, event.time);
+  // All-day event: use date-only format; Google Calendar end is exclusive so add one day
+  if (!event.time) {
+    const dtstart = formatGCalDateOnly(event.date);
+    const dtend = nextDay(event.endDate ?? event.date);
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: event.title,
+      dates: `${dtstart}/${dtend}`,
+      details: event.description,
+      location: `${event.location}, ${event.address}`,
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
 
-  // Default to 3-hour duration if no end date
+  const dtstart = formatGCalDate(event.date, event.time);
+
   const { hours, minutes } = parseTime(event.time);
   const endHours = hours + 3;
   const endDate = event.endDate ?? event.date;
   const d = new Date(endDate + 'T00:00:00');
   const dtend = event.endDate
-    ? formatIcsDate(event.endDate, event.time)
+    ? formatGCalDate(event.endDate, event.time)
     : `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(endHours)}${pad(minutes)}00`;
 
-  const uid = `${dtstart}-${event.title.replace(/\s+/g, '-').toLowerCase()}@cca.edu`;
-  const escapedDesc = event.description.replace(/[,;\\]/g, (m) => '\\' + m).replace(/\n/g, '\\n');
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: event.title,
+    dates: `${dtstart}/${dtend}`,
+    details: event.description,
+    location: `${event.location}, ${event.address}`,
+  });
 
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//CCA//2026 Celebrations//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `DTSTART;TZID=America/Los_Angeles:${dtstart}`,
-    `DTEND;TZID=America/Los_Angeles:${dtend}`,
-    `SUMMARY:${event.title}`,
-    `LOCATION:${event.location}\\, ${event.address}`,
-    `DESCRIPTION:${escapedDesc}`,
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ];
-
-  const icsContent = lines.join('\r\n');
-  return `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

@@ -10,10 +10,8 @@
   "location": "Roxie Theater",
   "address": "3117 16th St, San Francisco, CA 94103",
   "description": "A screening of animated short films and senior projects by CCA's graduating Animation students.",
-  "image": {
-    "src": "/images/events/roxie.jpg",
-    "alt": "The Roxie Theater marquee for CCA Animation Senior Showcase"
-  },
-  "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/spring-2026-animation-senior-showcase-roxie/",
+  "heroImages": [
+    { "src": "/images/cca-photography/roxie.jpg", "alt": "The Roxie Theater marquee in San Francisco's Mission District", "frameId": "frame-17" }
+  ],
   "order": 9
 }

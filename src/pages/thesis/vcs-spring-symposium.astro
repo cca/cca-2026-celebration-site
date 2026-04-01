@@ -1,0 +1,50 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'vcs-spring-symposium');
+if (!event) throw new Error('Event vcs-spring-symposium not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: '2026 VCS Spring Symposium' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Symposium"
+          paragraphs={[
+            "The Visual + Critical Studies Spring Symposium brings together graduating VCS students for a day of presentations, discussions, and critical exchange.",
+            "More details coming soon.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>
+
+<style>
+  .page-layout {
+    padding-block: var(--space-8) var(--space-20);
+  }
+</style>

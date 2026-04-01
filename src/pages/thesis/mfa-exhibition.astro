@@ -1,0 +1,52 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'mfa-exhibition');
+if (!event) throw new Error('Event mfa-exhibition not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'MFA Thesis Exhibition' },
+    ]} />
+  </div>
+
+  <EventHero event={event} />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Exhibition"
+          paragraphs={[
+            "The 2026 MFA Thesis Exhibition is the culminating public presentation of graduate candidates across CCA's fine arts disciplines — a multi-week exhibition held at the Wattis Institute and the Deborah and Kenneth Novack Gallery.",
+            "Spanning painting, sculpture, photography, film, performance, and interdisciplinary practice, the exhibition brings together the full breadth of MFA thesis work. The opening reception and run of show are free and open to the public.",
+            "The exhibition is presented across two venues on CCA's San Francisco campus. Details for the closing reception will be announced — check back soon.",
+          ]}
+          meta={[
+            { label: 'Format', value: 'Public exhibition with opening reception' },
+            { label: 'Degree level', value: 'MFA (all disciplines)' },
+            { label: 'Duration', value: 'May 1 – 16, 12–6 PM daily' },
+            { label: 'Venues', value: 'Wattis Institute & Novack Gallery' },
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+
+</ThesisEventLayout>

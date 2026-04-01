@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import { CURRENT_PHASE, isPhaseBefore } from '../../config/phases';
 import EventLayout from '../../layouts/EventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
-import EventDetails from '../../components/events/EventDetails.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 
 export async function getStaticPaths() {
@@ -30,7 +29,4 @@ const { event } = Astro.props;
 
   <EventHero event={event} />
 
-  <div class="container">
-    <EventDetails event={event} />
-  </div>
 </EventLayout>

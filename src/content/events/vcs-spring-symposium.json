@@ -1,0 +1,20 @@
+{
+  "title": "2026 VCS Spring Symposium",
+  "slug": "vcs-spring-symposium",
+  "shortTitle": "VCS Spring Symposium",
+  "type": "symposium",
+  "degreeLevel": "undergraduate",
+  "themeKey": "thesis-undergrad",
+  "date": "2026-04-25",
+  "location": "California College of the Arts",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "The annual Visual + Critical Studies Spring Symposium, featuring student presentations and critical discourse.",
+  "order": 7.5,
+  "heroImages": [
+    {
+      "src": "/images/cca-photography/design-senior-show-fa25-54.jpg",
+      "alt": "Students and visitors at a CCA senior design show",
+      "frameId": "frame-16"
+    }
+  ]
+}

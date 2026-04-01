@@ -5,7 +5,7 @@
  */
 import type { CollectionEntry } from "astro:content";
 import BentoEventCard from "./BentoEventCard.astro";
-import DecorativeCell from "./DecorativeCell.astro";
+import ArrowLoop3D from "../effects/ArrowLoop3D.astro";
 
 interface Props {
   events: CollectionEntry<"events">[];
@@ -19,11 +19,17 @@ const bySlug = Object.fromEntries(events.map(e => [e.data.slug, e]));
 // Grid layout definition: slug → { size, gridArea }
 const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area: string }[] = [
   { slug: "showcase",                          size: "large",   area: "show" },
-  { slug: "thesis-graduate",                   size: "tall",    area: "mfa" },
-  { slug: "thesis-undergraduate",              size: "compact", area: "ug-thesis" },
+  { slug: "mfa-exhibition",                    size: "tall",    area: "mfa" },
   { slug: "animation-senior-showcase",         size: "wide",    area: "anim" },
-  { slug: "game-arts-showcase",                size: "wide",    area: "game" },
-  { slug: "architecture-studio-conversations", size: "compact", area: "arch" },
+  { slug: "game-arts-showcase",                size: "compact", area: "game" },
+  { slug: "architecture-studio-conversations", size: "tall",    area: "arch" },
+  { slug: "fine-arts-senior-exhibition",       size: "tall",    area: "fase" },
+  { slug: "2d-open-studios",                   size: "compact", area: "twod" },
+  { slug: "film-screenings",                   size: "compact", area: "film" },
+  { slug: "mfa-fine-arts-open-house",          size: "wide",    area: "mopen" },
+  { slug: "vcs-spring-symposium",              size: "compact", area: "vcs" },
+  { slug: "extension-reception",               size: "wide",    area: "ext" },
+  { slug: "dmba-venture-showcase",             size: "wide",    area: "dmba" },
 ];
 ---
 
@@ -37,10 +43,70 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     ) : null;
   })}
 
-  {/* Decorative cells — visible on desktop only */}
-  <DecorativeCell shape="circle"  class="bento-grid__deco bento-grid__deco--circle" />
-  <DecorativeCell shape="blob"    class="bento-grid__deco bento-grid__deco--blob" />
-  <DecorativeCell shape="diamond" class="bento-grid__deco bento-grid__deco--diamond" />
+  {/* Decorative arrow cells — visible on desktop only */}
+  <div class="bento-grid__deco bento-grid__deco--1" aria-hidden="true">
+    <div class="deco-arrow-wrap">
+      <ArrowLoop3D
+        id="bento-arrow-1"
+        cycleDuration={3}
+        fadeOverlap={0.15}
+        scaleAmount={0.04}
+        spinDegrees={180}
+        spinAxis="Y"
+        perspective={300}
+        sizeVariance={0.3}
+        color="#00BFB3"
+      />
+    </div>
+  </div>
+  <div class="bento-grid__deco bento-grid__deco--2" aria-hidden="true">
+    <div class="deco-arrow-wrap">
+      <ArrowLoop3D
+        id="bento-arrow-2"
+        cycleDuration={3}
+        fadeOverlap={0.15}
+        scaleAmount={0.04}
+        spinDegrees={180}
+        spinAxis="Y"
+        perspective={300}
+        sizeVariance={0.3}
+        color="#B7BF10"
+        startDelay={1}
+      />
+    </div>
+  </div>
+<div class="bento-grid__deco bento-grid__deco--3" aria-hidden="true">
+    <div class="deco-arrow-wrap">
+      <ArrowLoop3D
+        id="bento-arrow-3"
+        cycleDuration={3}
+        fadeOverlap={0.15}
+        scaleAmount={0.04}
+        spinDegrees={180}
+        spinAxis="Z"
+        perspective={300}
+        sizeVariance={0.3}
+        color="#00BFB3"
+        startDelay={0.5}
+      />
+    </div>
+  </div>
+  <div class="bento-grid__deco bento-grid__deco--4" aria-hidden="true">
+    <div class="deco-arrow-wrap">
+      <ArrowLoop3D
+        id="bento-arrow-4"
+        cycleDuration={3}
+        fadeOverlap={0.15}
+        scaleAmount={0.04}
+        spinDegrees={180}
+        spinAxis="X"
+        perspective={300}
+        sizeVariance={0.3}
+        color="#B7BF10"
+        startDelay={1.5}
+      />
+    </div>
+  </div>
 </div>
 
 <style>
@@ -52,10 +118,16 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     grid-template-areas:
       "show"
       "mfa"
-      "ug-thesis"
+      "fase"
+      "arch"
       "anim"
       "game"
-      "arch";
+      "film"
+      "twod"
+      "mopen"
+      "vcs"
+      "ext"
+      "dmba";
   }
 
   .bento-grid__cell {
@@ -71,6 +143,7 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
   /* Decorative cells hidden below desktop */
   .bento-grid__deco {
     display: none;
+    pointer-events: none;
   }
 
   /* ---- Tablet: 2 columns ---- */
@@ -79,10 +152,13 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       grid-template-columns: repeat(2, 1fr);
       grid-template-areas:
         "show       show"
-        "mfa        ug-thesis"
         "mfa        arch"
-        "anim       anim"
-        "game       game";
+        "anim       arch"
+        "fase       fase"
+        "film       game"
+        "twod       mopen"
+        "vcs        ext"
+        "dmba       dmba";
     }
   }
 
@@ -92,26 +168,31 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: minmax(180px, auto);
       grid-template-areas:
-        "show         show         deco-circle  mfa"
-        "show         show         ug-thesis    mfa"
-        "anim         anim         arch         deco-blob"
-        "game         game         deco-diamond .";
+        "show   show   deco-1  mfa"
+        "show   show   arch    mfa"
+        "twod   deco-2 arch    fase"
+        "film   anim   anim    fase"
+        "mopen  mopen  game    deco-4"
+        "deco-3 vcs    ext     ext"
+        "dmba   dmba   .       .";
     }
 
     .bento-grid__deco {
       display: grid;
+      place-items: center;
     }
 
-    .bento-grid__deco--circle {
-      grid-area: deco-circle;
-    }
+    .bento-grid__deco--1 { grid-area: deco-1; }
+    .bento-grid__deco--2 { grid-area: deco-2; }
+    .bento-grid__deco--3 { grid-area: deco-3; }
+    .bento-grid__deco--4 { grid-area: deco-4; }
+  }
 
-    .bento-grid__deco--blob {
-      grid-area: deco-blob;
-    }
-
-    .bento-grid__deco--diamond {
-      grid-area: deco-diamond;
-    }
+  /* Arrow wrapper sizing within decorative cells */
+  .deco-arrow-wrap {
+    width: clamp(70px, 9vw, 130px);
+    height: clamp(70px, 9vw, 130px);
   }
 </style>
+
+<script src="../../scripts/arrow-loop-3d.ts"></script>

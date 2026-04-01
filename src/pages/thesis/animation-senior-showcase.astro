@@ -1,0 +1,138 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'animation-senior-showcase');
+if (!event) throw new Error('Event animation-senior-showcase not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Animation Senior Showcase' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="screening"
+          kicker="About the Screening"
+          paragraphs={[
+            "Join us for a special evening at The Roxie as we celebrate the Spring 2026 graduating seniors in Animation. Experience a diverse collection of films showcasing the creativity, passion, and storytelling of our talented students.",
+            "Lineup coming soon — don't miss this showcase of fresh talent and visionary storytelling. Entry is by ticket.",
+          ]}
+        />
+
+        <section id="venue" class="venue-note reveal">
+          <div class="venue-card">
+            <div class="venue-card__filmstrip" aria-hidden="true">
+              {Array.from({ length: 8 }).map(() => <span class="filmstrip__hole" />)}
+            </div>
+            <div class="venue-card__body">
+              <span class="venue-kicker">About the Venue</span>
+              <h2 class="venue-heading">The Roxie Theater</h2>
+              <p class="venue-text">
+                The Roxie is San Francisco's oldest continuously operating cinema, an independent
+                neighborhood theater in the Mission District. CCA Animation students bring their
+                graduating films to this beloved venue each spring — a proper theatrical debut
+                for work made over four years of study.
+              </p>
+              <p class="venue-text">
+                Seating is general admission. Arrive early — this screening fills up.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</ThesisEventLayout>
+
+<style>
+  .venue-note {
+    padding-block: var(--space-4) var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .venue-card {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    max-width: 720px;
+  }
+
+  /* Filmstrip side decoration */
+  .venue-card__filmstrip {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 32px;
+    flex-shrink: 0;
+    background: var(--color-accent);
+    padding-block: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .filmstrip__hole {
+    display: block;
+    width: 14px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--color-bg);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .venue-card__body {
+    padding: var(--space-8);
+    background: var(--color-surface);
+  }
+
+  .venue-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+  }
+
+  .venue-heading {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+
+  .venue-text {
+    font-size: var(--text-base);
+    color: var(--color-muted);
+    line-height: 1.7;
+    max-width: 55ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .venue-text:last-child {
+    margin-bottom: 0;
+  }
+</style>

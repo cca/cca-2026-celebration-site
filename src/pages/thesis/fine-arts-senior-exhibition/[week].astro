@@ -1,0 +1,323 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../../components/events/EventHero.astro';
+import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
+import BFASeniorExhibitionsEntryDetails from '../../../components/events/BFASeniorExhibitionsEntryDetails.astro';
+import { getCurrentPhase } from '../../../lib/utils/phase';
+import { isPhaseBefore } from '../../../config/phases';
+
+export async function getStaticPaths() {
+  const event = await getEntry('events', 'fine-arts-senior-exhibition');
+  if (!event) throw new Error('Event fine-arts-senior-exhibition not found');
+  return event.data.seriesWeeks!.map((week) => ({
+    params: { week: `week-${week.weekNumber}` },
+    props: { week, event },
+  }));
+}
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const { week, event } = Astro.props;
+const prevWeek = event.data.seriesWeeks!.find((w) => w.weekNumber === week.weekNumber - 1) ?? null;
+const nextWeek = event.data.seriesWeeks!.find((w) => w.weekNumber === week.weekNumber + 1) ?? null;
+
+// Extract time portion from opening reception (e.g. "5–7 PM" from "Wednesday, April 1 · 5–7 PM")
+const receptionTimePart = week.openingReception.split('·').at(-1)?.trim();
+
+// Override with week-specific dates and reception time so the hero is accurate
+const weekEventForHero = {
+  ...event,
+  data: {
+    ...event.data,
+    date: week.date,
+    endDate: week.endDate,
+    time: receptionTimePart,
+  },
+} as typeof event;
+
+function fmtDay(dateStr: string): string {
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric',
+  });
+}
+function addDays(dateStr: string, n: number): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+}
+const [receptionDayLabel] = week.openingReception.split('·').map((s: string) => s.trim());
+const weekSchedule = [
+  { label: 'Opening Reception', day: receptionDayLabel,             time: receptionTimePart ?? '' },
+  { label: 'Gallery Open',      day: fmtDay(week.date),             time: '11:00 AM – 7:00 PM' },
+  { label: 'Gallery Open',      day: fmtDay(addDays(week.date, 1)), time: '11:00 AM – 4:00 PM' },
+  { label: 'Gallery Open',      day: fmtDay(addDays(week.date, 2)), time: '11:00 AM – 4:00 PM' },
+];
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'Fine Arts Senior Exhibition', href: '/thesis/fine-arts-senior-exhibition/' },
+      { label: `Week ${week.weekNumber}` },
+    ]} />
+  </div>
+
+  <EventHero event={weekEventForHero} />
+
+  <div class="container">
+    {/* ── Artists ── */}
+    <section class="artists-section reveal">
+      <span class="artists-kicker">Exhibiting Artists</span>
+      <ul class="artists-list" role="list">
+        {week.artists.map((name) => (
+          <li class="artists-list__item">{name}</li>
+        ))}
+      </ul>
+    </section>
+
+    {/* ── Schedule ── */}
+    <section class="schedule-section reveal">
+      <span class="schedule-kicker">Exhibition Schedule</span>
+      <ol class="schedule-list">
+        {weekSchedule.map((entry, i) => (
+          <li class="schedule-entry">
+            <span class="schedule-entry__index">{String(i + 1).padStart(2, '0')}</span>
+            <div class="schedule-entry__detail">
+              <span class="schedule-entry__studio">{entry.label}</span>
+              <span class="schedule-entry__day">{entry.day}</span>
+            </div>
+            <span class="schedule-entry__time">{entry.time}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <BFASeniorExhibitionsEntryDetails />
+
+    {/* ── Week Navigation ── */}
+    <nav class="week-nav" aria-label="Week navigation">
+      <div class="week-nav__inner">
+        <div class="week-nav__prev">
+          {prevWeek && (
+            <a href={`/thesis/fine-arts-senior-exhibition/week-${prevWeek.weekNumber}/`} class="week-nav__link">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M10 3L5 8l5 5"/>
+              </svg>
+              Week {prevWeek.weekNumber}
+            </a>
+          )}
+        </div>
+
+        <a href="/thesis/fine-arts-senior-exhibition/" class="week-nav__series">
+          Back to Exhibition Series
+        </a>
+
+        <div class="week-nav__next">
+          {nextWeek && (
+            <a href={`/thesis/fine-arts-senior-exhibition/week-${nextWeek.weekNumber}/`} class="week-nav__link">
+              Week {nextWeek.weekNumber}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 3l5 5-5 5"/>
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+    </nav>
+  </div>
+
+</ThesisEventLayout>
+
+<style>
+  /* ── Exhibition schedule ── */
+  .schedule-section {
+    padding-block: var(--space-12) var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .schedule-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-5);
+  }
+
+  .schedule-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .schedule-entry {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: var(--space-5);
+    row-gap: 0;
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+
+  .schedule-entry__index {
+    grid-row: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    min-width: 2ch;
+  }
+
+  .schedule-entry__detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .schedule-entry__studio {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.3;
+  }
+
+  .schedule-entry__day {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
+  }
+
+  .schedule-entry__time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    justify-self: end;
+  }
+
+  @media (min-width: 560px) {
+    .schedule-entry {
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: 1fr;
+      align-items: center;
+    }
+
+    .schedule-entry__time {
+      justify-self: auto;
+    }
+  }
+
+  /* ── Artists section ── */
+  .artists-section {
+    padding-block: var(--space-12) var(--space-16);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .artists-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-6);
+  }
+
+  .artists-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-10);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .artists-list__item {
+    font-size: var(--text-2xl);
+    color: var(--color-text);
+    font-weight: 500;
+    position: relative;
+    padding-right: var(--space-3);
+  }
+
+  .artists-list__item:not(:last-child)::after {
+    content: '·';
+    position: absolute;
+    right: 0;
+    color: var(--color-muted);
+    font-weight: normal;
+  }
+
+  /* ── Week nav ── */
+  .week-nav {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .week-nav__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .week-nav__prev {
+    justify-self: start;
+  }
+
+  .week-nav__next {
+    justify-self: end;
+  }
+
+  .week-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .week-nav__link:hover {
+    color: var(--color-text);
+  }
+
+  .week-nav__series {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    text-decoration: none;
+    text-align: center;
+    transition: color var(--duration-fast) var(--ease-out-expo);
+  }
+
+  .week-nav__series:hover {
+    color: var(--color-accent);
+  }
+</style>
