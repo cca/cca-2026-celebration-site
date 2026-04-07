@@ -13,11 +13,25 @@
   "longDescription": "The Lavender Celebration is a pre-commencement ceremony that recognizes and honors the achievements of CCA's LGBTQIA+ graduates. This affirming event celebrates the intersections of identity, creativity, and community. Graduates, allies, families, and friends are all welcome to join in this meaningful gathering.",
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "schedule": [
-    { "time": "4:00 PM", "label": "Gathering & welcome" },
-    { "time": "4:30 PM", "label": "Opening remarks" },
-    { "time": "5:00 PM", "label": "Graduate recognition ceremony" },
-    { "time": "5:45 PM", "label": "Keynote & reflections" },
-    { "time": "6:15 PM", "label": "Reception & celebration" }
-  ],
-  "order": 7
+    {
+      "time": "4:00 PM",
+      "label": "Gathering & welcome"
+    },
+    {
+      "time": "4:30 PM",
+      "label": "Opening remarks"
+    },
+    {
+      "time": "5:00 PM",
+      "label": "Graduate recognition ceremony"
+    },
+    {
+      "time": "5:45 PM",
+      "label": "Keynote & reflections"
+    },
+    {
+      "time": "6:15 PM",
+      "label": "Reception & celebration"
+    }
+  ]
 }

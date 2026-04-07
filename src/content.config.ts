@@ -184,7 +184,6 @@ const events = defineCollection({
     })).optional(),
     videoUrl: z.string().optional(),
     videoCaption: z.string().optional(),
-    order: z.number(),
   }),
 });
 

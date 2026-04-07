@@ -13,11 +13,25 @@
   "longDescription": "The Multicultural Celebration is an annual tradition that honors the rich cultural diversity of CCA's graduating students. This joyful evening features performances, cultural presentations, and a communal meal. All graduates, their families, and the CCA community are welcome to attend this special pre-commencement gathering.",
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "schedule": [
-    { "time": "5:00 PM", "label": "Doors open & reception" },
-    { "time": "5:30 PM", "label": "Welcome & opening remarks" },
-    { "time": "6:00 PM", "label": "Cultural performances & presentations" },
-    { "time": "7:00 PM", "label": "Communal dinner" },
-    { "time": "8:00 PM", "label": "Closing celebration" }
-  ],
-  "order": 6
+    {
+      "time": "5:00 PM",
+      "label": "Doors open & reception"
+    },
+    {
+      "time": "5:30 PM",
+      "label": "Welcome & opening remarks"
+    },
+    {
+      "time": "6:00 PM",
+      "label": "Cultural performances & presentations"
+    },
+    {
+      "time": "7:00 PM",
+      "label": "Communal dinner"
+    },
+    {
+      "time": "8:00 PM",
+      "label": "Closing celebration"
+    }
+  ]
 }

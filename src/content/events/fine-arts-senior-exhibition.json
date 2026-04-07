@@ -23,7 +23,17 @@
       "date": "2026-04-01",
       "endDate": "2026-04-03",
       "openingReception": "Wednesday, April 1 · 5–7 PM",
-      "artists": ["Amylee Rachael", "Bunny", "Gabi Dagdag", "jeslyn yoo", "Lucy Harrington", "rex wallia", "Ru Lyons", "Sahalie Aurora", "Sam Naftaly"],
+      "artists": [
+        "Amylee Rachael",
+        "Bunny",
+        "Gabi Dagdag",
+        "jeslyn yoo",
+        "Lucy Harrington",
+        "rex wallia",
+        "Ru Lyons",
+        "Sahalie Aurora",
+        "Sam Naftaly"
+      ],
       "externalUrl": "https://portal.cca.edu/events-calendar/spring-2026-fine-arts-senior-exhibition/"
     },
     {
@@ -31,7 +41,18 @@
       "date": "2026-04-08",
       "endDate": "2026-04-10",
       "openingReception": "Wednesday, April 8 · 5–7 PM",
-      "artists": ["Devon", "Faye Tagen", "Jay Martin", "Lola Reed", "ManJia (Liz) Zhu", "Marcus Masaki Rodriguez", "Megan Mei Shum Wong", "Millicent Villacastin", "RUOSHUI ZHU", "Shi Su"],
+      "artists": [
+        "Devon",
+        "Faye Tagen",
+        "Jay Martin",
+        "Lola Reed",
+        "ManJia (Liz) Zhu",
+        "Marcus Masaki Rodriguez",
+        "Megan Mei Shum Wong",
+        "Millicent Villacastin",
+        "RUOSHUI ZHU",
+        "Shi Su"
+      ],
       "externalUrl": "https://portal.cca.edu/events-calendar/spring-2026-fine-arts-senior-exhibition-2/"
     },
     {
@@ -39,7 +60,17 @@
       "date": "2026-04-15",
       "endDate": "2026-04-17",
       "openingReception": "Wednesday, April 15 · 5–7 PM",
-      "artists": ["Aki Yoshie", "Alexandra Guthrie", "Angel Mae Lusky", "Burugz Burugu", "Byron Claxton Jr", "Estella Mora-Lopez", "Jakob Jimenez", "Netanya Buenrostro", "Sara Govert"],
+      "artists": [
+        "Aki Yoshie",
+        "Alexandra Guthrie",
+        "Angel Mae Lusky",
+        "Burugz Burugu",
+        "Byron Claxton Jr",
+        "Estella Mora-Lopez",
+        "Jakob Jimenez",
+        "Netanya Buenrostro",
+        "Sara Govert"
+      ],
       "externalUrl": "https://portal.cca.edu/events-calendar/spring-2026-fine-arts-senior-exhibition-3/"
     },
     {
@@ -47,9 +78,19 @@
       "date": "2026-04-22",
       "endDate": "2026-04-24",
       "openingReception": "Wednesday, April 22 · 5–7 PM",
-      "artists": ["D Galvez", "Fortune Fechtor", "Katie Vadasz", "Luochen Zhang", "Mookie Margolis", "Natalie Krebs", "Taia Wong Konstantinidis", "Yujun Chu", "Zipporah Hinds", "Zoe E. Miles"],
+      "artists": [
+        "D Galvez",
+        "Fortune Fechtor",
+        "Katie Vadasz",
+        "Luochen Zhang",
+        "Mookie Margolis",
+        "Natalie Krebs",
+        "Taia Wong Konstantinidis",
+        "Yujun Chu",
+        "Zipporah Hinds",
+        "Zoe E. Miles"
+      ],
       "externalUrl": "https://portal.cca.edu/events-calendar/spring-2026-fine-arts-senior-exhibition-4/"
     }
-  ],
-  "order": 6
+  ]
 }

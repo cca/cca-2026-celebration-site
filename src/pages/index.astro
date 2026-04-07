@@ -10,7 +10,7 @@ import FramedImage from '../components/ui/FramedImage.astro';
 import { getCurrentPhase } from '../lib/utils/phase';
 import { isPhaseAtLeast } from '../config/phases';
 
-const events = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
+const events = await getCollection('events');
 
 // Commencement data (use undergraduate entry for the shared ceremony info)
 const commencementEntry = await getEntry('events', 'commencement-undergraduate');

@@ -12,8 +12,11 @@
   "address": "145 Hooper St, San Francisco, CA 94107",
   "description": "An interactive showcase of student games, immersive experiences, and design projects from CCA's Game Arts program.",
   "heroImages": [
-    { "src": "/images/cca-photography/eventbrite-dice-macro-0811.jpg", "alt": "Students demoing games at the CCA Game Arts showcase", "frameId": "frame-04" }
+    {
+      "src": "/images/cca-photography/eventbrite-dice-macro-0811.jpg",
+      "alt": "Students demoing games at the CCA Game Arts showcase",
+      "frameId": "frame-04"
+    }
   ],
-  "rsvpUrl": "https://www.eventbrite.com/e/1977748003518",
-  "order": 10
+  "rsvpUrl": "https://www.eventbrite.com/e/1977748003518"
 }

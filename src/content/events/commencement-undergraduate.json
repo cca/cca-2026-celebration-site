@@ -18,15 +18,42 @@
     "alt": "Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage."
   },
   "schedule": [
-    { "time": "2:00 PM", "label": "Doors open" },
-    { "time": "9:00 AM", "label": "Guest seating begins" },
-    { "time": "9:30 AM", "label": "Graduate processional line-up" },
-    { "time": "9:50 AM", "label": "Academic processional" },
-    { "time": "10:00 AM", "label": "Ceremony begins" },
-    { "time": "10:15 AM", "label": "Welcome & opening remarks" },
-    { "time": "10:30 AM", "label": "Student speaker address" },
-    { "time": "11:00 AM", "label": "Conferral of degrees" },
-    { "time": "12:00 PM", "label": "Reception" }
+    {
+      "time": "2:00 PM",
+      "label": "Doors open"
+    },
+    {
+      "time": "9:00 AM",
+      "label": "Guest seating begins"
+    },
+    {
+      "time": "9:30 AM",
+      "label": "Graduate processional line-up"
+    },
+    {
+      "time": "9:50 AM",
+      "label": "Academic processional"
+    },
+    {
+      "time": "10:00 AM",
+      "label": "Ceremony begins"
+    },
+    {
+      "time": "10:15 AM",
+      "label": "Welcome & opening remarks"
+    },
+    {
+      "time": "10:30 AM",
+      "label": "Student speaker address"
+    },
+    {
+      "time": "11:00 AM",
+      "label": "Conferral of degrees"
+    },
+    {
+      "time": "12:00 PM",
+      "label": "Reception"
+    }
   ],
   "ceremonyProgram": {
     "studentSpeaker": {
@@ -37,19 +64,77 @@
     "distinguishedAlumni": "sarah-chen-distinguished",
     "candidatesListUrl": "/downloads/undergraduate-candidates-2026.pdf",
     "programItems": [
-      { "order": 1, "label": "Grand marshal", "presenter": "Professor Elena Vasquez, Professor Emerita of Sculpture", "type": "processional" },
-      { "order": 2, "label": "Academic processional", "type": "processional" },
-      { "order": 3, "label": "Welcome", "presenter": "Tamara Maloney, Provost", "type": "welcome" },
-      { "order": 4, "label": "Land acknowledgment", "type": "address" },
-      { "order": 5, "label": "In Memoriam", "type": "recognition" },
-      { "order": 6, "label": "President's address", "presenter": "Dr. Leslie T. Hsu, President", "type": "address" },
-      { "order": 7, "label": "Conferral of professor emeritus", "presenter": "Professor Elena Vasquez", "type": "recognition" },
-      { "order": 8, "label": "Conferral of honorary degrees", "type": "recognition" },
-      { "order": 9, "label": "Student remarks", "type": "address" },
-      { "order": 10, "label": "Commencement video", "type": "performance" },
-      { "order": 11, "label": "Conferring of degrees", "presenter": "Dr. Leslie T. Hsu, President", "description": "Candidates presented by division chairs", "type": "conferring" },
-      { "order": 12, "label": "Class presentation", "type": "other" },
-      { "order": 13, "label": "Recessional", "type": "recessional" }
+      {
+        "order": 1,
+        "label": "Grand marshal",
+        "presenter": "Professor Elena Vasquez, Professor Emerita of Sculpture",
+        "type": "processional"
+      },
+      {
+        "order": 2,
+        "label": "Academic processional",
+        "type": "processional"
+      },
+      {
+        "order": 3,
+        "label": "Welcome",
+        "presenter": "Tamara Maloney, Provost",
+        "type": "welcome"
+      },
+      {
+        "order": 4,
+        "label": "Land acknowledgment",
+        "type": "address"
+      },
+      {
+        "order": 5,
+        "label": "In Memoriam",
+        "type": "recognition"
+      },
+      {
+        "order": 6,
+        "label": "President's address",
+        "presenter": "Dr. Leslie T. Hsu, President",
+        "type": "address"
+      },
+      {
+        "order": 7,
+        "label": "Conferral of professor emeritus",
+        "presenter": "Professor Elena Vasquez",
+        "type": "recognition"
+      },
+      {
+        "order": 8,
+        "label": "Conferral of honorary degrees",
+        "type": "recognition"
+      },
+      {
+        "order": 9,
+        "label": "Student remarks",
+        "type": "address"
+      },
+      {
+        "order": 10,
+        "label": "Commencement video",
+        "type": "performance"
+      },
+      {
+        "order": 11,
+        "label": "Conferring of degrees",
+        "presenter": "Dr. Leslie T. Hsu, President",
+        "description": "Candidates presented by division chairs",
+        "type": "conferring"
+      },
+      {
+        "order": 12,
+        "label": "Class presentation",
+        "type": "other"
+      },
+      {
+        "order": 13,
+        "label": "Recessional",
+        "type": "recessional"
+      }
     ],
     "grandMarshal": {
       "name": "Professor Elena Vasquez",
@@ -58,6 +143,5 @@
     "presidentName": "Dr. Leslie T. Hsu",
     "landAcknowledgment": "California College of the Arts acknowledges that our campus is located on the unceded territory of Chochenyo and Karkin Ohlone peoples, who have stewarded this land throughout the generations. We recognize their continuing connection to the land and pay our respects to their elders past and present.",
     "disclaimer": "The list of degree candidates represents those who have applied for graduation. Inclusion in the commencement program does not confirm that a degree has been conferred. Degrees are officially conferred only upon completion of all academic requirements as certified by the Registrar."
-  },
-  "order": 2
+  }
 }

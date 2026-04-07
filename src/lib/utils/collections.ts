@@ -30,7 +30,7 @@ export async function getCelebrationEvents() {
   const events = await getCollection('events');
   return events
     .filter(e => e.data.type === 'celebration')
-    .sort((a, b) => a.data.order - b.data.order);
+    .sort((a, b) => a.data.date.localeCompare(b.data.date));
 }
 
 export async function getPeopleByRole(role: string) {

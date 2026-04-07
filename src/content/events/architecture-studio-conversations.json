@@ -12,14 +12,51 @@
   "address": "145 Hooper St, San Francisco, CA 94107",
   "description": "Final studio conversations for the Architecture Division, showcasing student work and design research across all degree levels.",
   "heroImages": [
-    { "src": "/images/cca-photography/arch-final-conversations-fa25-022.jpg", "alt": "Architecture students present their final studio work at CCA", "frameId": "frame-04" }
+    {
+      "src": "/images/cca-photography/arch-final-conversations-fa25-022.jpg",
+      "alt": "Architecture students present their final studio work at CCA",
+      "frameId": "frame-04"
+    }
   ],
   "rsvpUrl": "https://www.eventbrite.com/e/1982408139109",
   "seriesDays": [
-    { "dayNumber": 1, "date": "2026-04-30", "time": "12:00 – 6:00 PM",   "studio": "Architecture Core Studios",                  "programs": ["BArch"] },
-    { "dayNumber": 2, "date": "2026-05-01", "time": "12:00 – 4:00 PM",   "studio": "Interior Design Studios",                    "programs": ["Interior Design"] },
-    { "dayNumber": 3, "date": "2026-05-02", "time": "10:00 AM – 5:00 PM", "studio": "Advanced & Integrated Architecture Studios", "programs": ["MArch", "MAAD"] },
-    { "dayNumber": 4, "date": "2026-05-03", "time": "10:00 AM – 5:00 PM", "studio": "Graduate Thesis Studio",                    "programs": ["MArch", "MAAD"] }
-  ],
-  "order": 8
+    {
+      "dayNumber": 1,
+      "date": "2026-04-30",
+      "time": "12:00 – 6:00 PM",
+      "studio": "Architecture Core Studios",
+      "programs": [
+        "BArch"
+      ]
+    },
+    {
+      "dayNumber": 2,
+      "date": "2026-05-01",
+      "time": "12:00 – 4:00 PM",
+      "studio": "Interior Design Studios",
+      "programs": [
+        "Interior Design"
+      ]
+    },
+    {
+      "dayNumber": 3,
+      "date": "2026-05-02",
+      "time": "10:00 AM – 5:00 PM",
+      "studio": "Advanced & Integrated Architecture Studios",
+      "programs": [
+        "MArch",
+        "MAAD"
+      ]
+    },
+    {
+      "dayNumber": 4,
+      "date": "2026-05-03",
+      "time": "10:00 AM – 5:00 PM",
+      "studio": "Graduate Thesis Studio",
+      "programs": [
+        "MArch",
+        "MAAD"
+      ]
+    }
+  ]
 }

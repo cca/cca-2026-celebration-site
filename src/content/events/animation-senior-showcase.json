@@ -11,7 +11,10 @@
   "address": "3117 16th St, San Francisco, CA 94103",
   "description": "A screening of animated short films and senior projects by CCA's graduating Animation students.",
   "heroImages": [
-    { "src": "/images/cca-photography/roxie.jpg", "alt": "The Roxie Theater marquee in San Francisco's Mission District", "frameId": "frame-17" }
-  ],
-  "order": 9
+    {
+      "src": "/images/cca-photography/roxie.jpg",
+      "alt": "The Roxie Theater marquee in San Francisco's Mission District",
+      "frameId": "frame-17"
+    }
+  ]
 }
