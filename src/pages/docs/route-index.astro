@@ -1,0 +1,146 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+interface RouteEntry {
+  pattern: string;
+  kind: 'static' | 'dynamic';
+  description: string;
+  file?: string;
+}
+
+interface RouteGroup {
+  label: string;
+  routes: RouteEntry[];
+}
+
+const routeGroups: RouteGroup[] = [
+  {
+    label: 'Root',
+    routes: [
+      { pattern: '/', kind: 'static', description: 'Landing page — bento grid of all events, hero, email signup', file: 'src/pages/index.astro' },
+      { pattern: '/subscribe', kind: 'static', description: 'Email subscription confirmation page', file: 'src/pages/subscribe.astro' },
+      { pattern: '/404', kind: 'static', description: 'Custom 404 page', file: 'src/pages/404.astro' },
+    ],
+  },
+  {
+    label: 'Documentation',
+    routes: [
+      { pattern: '/docs/', kind: 'static', description: 'Docs hub — section cards', file: 'src/pages/docs/index.astro' },
+      { pattern: '/docs/[...slug]/', kind: 'dynamic', description: 'Markdown docs pages from src/content/docs/', file: 'src/pages/docs/[...slug].astro' },
+      { pattern: '/docs/schema-reference/', kind: 'static', description: 'Content collection schema tables', file: 'src/pages/docs/schema-reference.astro' },
+      { pattern: '/docs/route-index/', kind: 'static', description: 'This page — all routes cataloged', file: 'src/pages/docs/route-index.astro' },
+      { pattern: '/docs/component-catalog/', kind: 'static', description: 'All components with props and usage', file: 'src/pages/docs/component-catalog.astro' },
+    ],
+  },
+  {
+    label: 'Events — Commencement',
+    routes: [
+      { pattern: '/commencement/undergraduate/', kind: 'static', description: 'Undergraduate commencement ceremony page' },
+      { pattern: '/commencement/graduate/', kind: 'static', description: 'Graduate commencement ceremony page' },
+    ],
+  },
+  {
+    label: 'Events — Thesis & Exhibitions',
+    routes: [
+      { pattern: '/thesis/[slug]/', kind: 'dynamic', description: 'Individual thesis event pages — each is a hand-authored .astro file', file: 'src/pages/thesis/' },
+    ],
+  },
+  {
+    label: 'Events — Showcase',
+    routes: [
+      { pattern: '/showcase/', kind: 'static', description: 'All-Campus Graduation Exhibition hub' },
+      { pattern: '/showcase/[slug]/', kind: 'dynamic', description: 'Individual showcase event pages' },
+    ],
+  },
+  {
+    label: 'Students',
+    routes: [
+      { pattern: '/students/', kind: 'static', description: 'Student directory with filter chips' },
+      { pattern: '/students/[slug]/', kind: 'dynamic', description: 'Individual student profile pages', file: 'src/pages/students/[slug].astro' },
+    ],
+  },
+  {
+    label: 'Works',
+    routes: [
+      { pattern: '/works/[slug]/', kind: 'dynamic', description: 'Individual work detail pages with media gallery', file: 'src/pages/works/[slug].astro' },
+    ],
+  },
+  {
+    label: 'Demo / Internal',
+    routes: [
+      { pattern: '/demo/', kind: 'static', description: 'Demo index — links to all internal asset and effect preview pages (30+ pages total)', file: 'src/pages/demo/index.astro' },
+      { pattern: '/demo/photography/', kind: 'static', description: '88 raster images organized by directory — CCA photography, EOY show, commencement, events, and thesis', file: 'src/pages/demo/photography.astro' },
+    ],
+  },
+];
+
+const breadcrumb = [
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Route Index' },
+];
+---
+
+<DocsLayout
+  title="Route Index"
+  description="All routes in the CCA 2026 site cataloged by section, with static/dynamic classification and source file references"
+  currentSlug="route-index"
+  breadcrumb={breadcrumb}
+>
+  <h1>Route Index</h1>
+  <p>All routes in the site, grouped by section. Dynamic routes are generated at build time from content collections or hand-authored <code>.astro</code> files.</p>
+
+  {routeGroups.map(group => (
+    <section class="route-section">
+      <h2>{group.label}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Kind</th>
+            <th>Description</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {group.routes.map(route => (
+            <tr>
+              <td><code>{route.pattern}</code></td>
+              <td>
+                <span class={`badge badge-${route.kind}`}>{route.kind}</span>
+              </td>
+              <td>{route.description}</td>
+              <td>{route.file ? <code>{route.file}</code> : '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  ))}
+</DocsLayout>
+
+<style>
+  .route-section {
+    margin-bottom: var(--space-10);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.1em 0.5em;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .badge-static {
+    background: color-mix(in srgb, var(--color-lime) 15%, var(--color-bg));
+    color: color-mix(in srgb, var(--color-lime) 70%, var(--color-text));
+  }
+
+  .badge-dynamic {
+    background: color-mix(in srgb, var(--color-teal) 15%, var(--color-bg));
+    color: color-mix(in srgb, var(--color-teal) 70%, var(--color-text));
+  }
+</style>

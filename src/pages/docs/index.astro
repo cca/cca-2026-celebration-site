@@ -1,0 +1,153 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { docsNav } from '../../config/docs-nav';
+
+const sectionIcons: Record<string, string> = {
+  overview: 'O',
+  architecture: 'A',
+  workflow: 'W',
+  reference: 'R',
+  ops: '⊙',
+};
+---
+
+<DocsLayout
+  title="Developer Docs"
+  description="Technical documentation for the CCA 2026 celebration site — architecture, content workflow, component reference, and operations guides"
+  currentSlug=""
+>
+  <div class="hub-hero reveal">
+    <h1>Developer Documentation</h1>
+    <p class="hub-intro">
+      Reference documentation for the CCA 2026 celebration site. Built for the developer maintaining
+      and extending the codebase — start with Getting Started if you're new.
+    </p>
+    <div class="hub-hero-rule" aria-hidden="true"></div>
+  </div>
+
+  <div class="hub-sections">
+    {docsNav.map((section, i) => (
+      <div class={`hub-card reveal stagger-${Math.min(i + 1, 8)}`}>
+        <div class="hub-card-icon" aria-hidden="true">{sectionIcons[section.key] ?? section.label[0]}</div>
+        <h2 class="hub-card-title">{section.label}</h2>
+        <ul role="list" class="hub-card-links">
+          {section.items.map(item => {
+            const href = item.slug === '' ? '/docs/' : `/docs/${item.slug}/`;
+            const isSelf = item.slug === '' && Astro.url.pathname === '/docs/';
+            return (
+              <li>
+                <a href={isSelf ? '#' : href}>
+                  <span>{item.label}</span>
+                  <span class="link-arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+</DocsLayout>
+
+<style>
+  .hub-hero {
+    margin-bottom: 0;
+  }
+
+  .hub-intro {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    opacity: 0.75;
+    margin-bottom: var(--space-6);
+    max-width: 48ch;
+  }
+
+  .hub-hero-rule {
+    height: 1px;
+    background: var(--gradient-prismatic);
+    opacity: 0.4;
+    width: 100%;
+    margin-bottom: var(--space-10);
+    border: none;
+  }
+
+  .hub-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: var(--grid-gutter);
+  }
+
+  .hub-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-accent);
+    border-radius: var(--radius-card);
+    padding: var(--space-8);
+  }
+
+  .hub-card-icon {
+    width: 2rem;
+    height: 2rem;
+    background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg));
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    margin-bottom: var(--space-4);
+  }
+
+  .hub-card-title {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    opacity: 0.5;
+    margin-bottom: var(--space-3);
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-top: 0;
+  }
+
+  .hub-card-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hub-card-links a {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    border-left: 2px solid transparent;
+    transition:
+      color var(--duration-fast),
+      border-color var(--duration-fast);
+  }
+
+  .hub-card-links a:hover {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+    background: var(--color-accent-tint);
+  }
+
+  .link-arrow {
+    opacity: 0;
+    color: var(--color-accent);
+    transition: opacity var(--duration-fast);
+    font-size: var(--text-xs);
+  }
+
+  .hub-card-links a:hover .link-arrow {
+    opacity: 1;
+  }
+</style>

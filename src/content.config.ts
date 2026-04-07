@@ -302,6 +302,17 @@ const videoInterviews = defineCollection({
   }),
 });
 
+const docs = defineCollection({
+  loader: glob({ pattern: "*.{md,mdx}", base: "src/content/docs" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    section: z.enum(["overview", "architecture", "workflow", "reference", "ops"]),
+    order: z.number().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   programs,
   students,
@@ -310,4 +321,5 @@ export const collections = {
   people,
   "commencement-info": commencementInfo,
   "video-interviews": videoInterviews,
+  docs,
 };

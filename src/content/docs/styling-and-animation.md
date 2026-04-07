@@ -1,4 +1,10 @@
-# Styling and Animation
+---
+title: Styling and Animation
+description: Design tokens, fluid typography, theme system, and scroll-reveal animations in the CCA 2026 site
+section: architecture
+order: 3
+---
+
 
 ## No CSS framework
 

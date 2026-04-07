@@ -1,4 +1,10 @@
-# Phase System
+---
+title: Phase System
+description: How the single-variable phase system controls content visibility across the entire site
+section: architecture
+order: 1
+---
+
 
 The phase system is the single most important architectural concept in this codebase. One variable controls what content is visible across the entire site — there are no feature flags, no per-component toggles, no per-user logic.
 

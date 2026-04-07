@@ -1,4 +1,10 @@
-# Content Collections
+---
+title: Content Collections
+description: How Astro content collections work, schema patterns, cross-references, and the collections utility layer
+section: architecture
+order: 2
+---
+
 
 All site content lives as JSON files under `src/content/`. Astro's Content Layer reads these files, validates them against Zod schemas defined in `src/content.config.ts`, and makes them available as typed objects in component frontmatter.
 

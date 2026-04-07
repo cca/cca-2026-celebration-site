@@ -187,9 +187,14 @@ Look at existing pages like `vcs-spring-symposium.astro` (schedule + presenters 
 
 ## Developer Documentation
 
-Extended reference docs for junior developers are in `docs/`:
+Developer docs are served as a live site at `/docs/` and authored in `src/content/docs/` (markdown) and `src/pages/docs/` (structured reference pages).
 
-- `docs/phase-system.md` — Phase system deep dive
-- `docs/content-collections.md` — Collections, Zod schemas, and utility layer
-- `docs/component-guide.md` — Component taxonomy and layout hierarchy
-- `docs/styling-and-animation.md` — Fluid tokens, themes, scroll-reveal
+Key docs:
+- `/docs/getting-started/` — local setup and key concepts
+- `/docs/phase-system/` — Phase system deep dive
+- `/docs/content-collections/` — Collections, Zod schemas, and utility layer
+- `/docs/component-guide/` — Component taxonomy and layout hierarchy
+- `/docs/styling-and-animation/` — Fluid tokens, themes, scroll-reveal
+- `/docs/schema-reference/` — Full field reference for all 7 collections
+- `/docs/component-catalog/` — All components with props and usage
+- `/docs/route-index/` — All site routes cataloged

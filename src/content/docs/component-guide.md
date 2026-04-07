@@ -1,4 +1,10 @@
-# Component Guide
+---
+title: Component Guide
+description: Component taxonomy, layout hierarchy, and rules for organizing pages in the CCA 2026 site
+section: reference
+order: 1
+---
+
 
 Components are organized by domain into subdirectories of `src/components/`. Knowing which directory to look in — and which to reach for when building new pages — is the fastest way to navigate the codebase.
 
@@ -35,7 +41,7 @@ Use these everywhere. They're the lowest-level building blocks.
 
 ### `events/` — event-specific rendering
 
-- `EventHero.astro` — hero section with image (poster or framed mode) and event metadata. Handles both `image` and `heroImages` fields. See the [README](../README.md#event-hero-images) for field details.
+- `EventHero.astro` — hero section with image (poster or framed mode) and event metadata. Handles both `image` and `heroImages` fields.
 - `EventDetails.astro` — date, time, location, RSVP link display
 - `EventContextSection.astro` — narrative text section, accepts a `paragraphs` array
 - `CeremonySchedule.astro` — vertical timeline card from a `{ time, label }[]` array
@@ -87,7 +93,7 @@ These are included once by `BaseLayout`. Never import them into a page or compon
 
 ## `PhaseGate.astro`
 
-`PhaseGate` lives at `src/components/PhaseGate.astro` (root of components, not in a subdirectory). It's a special component — see [docs/phase-system.md](phase-system.md) for full usage.
+`PhaseGate` lives at `src/components/PhaseGate.astro` (root of components, not in a subdirectory). It's a special component — see the [Phase System](/docs/phase-system/) guide for full usage.
 
 ```astro
 import PhaseGate from '../components/PhaseGate.astro';
@@ -125,7 +131,7 @@ BaseLayout
 <EventLayout themeKey={event.data.themeKey}>
 ```
 
-Available theme keys: `commencement`, `showcase`. See [docs/styling-and-animation.md](styling-and-animation.md#theme-system) for how themes work.
+Available theme keys: `commencement`, `showcase`. See the [Styling & Animation](/docs/styling-and-animation/) guide for how themes work.
 
 ## Rule of thumb: keep pages thin
 

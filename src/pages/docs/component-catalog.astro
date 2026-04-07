@@ -1,0 +1,201 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+interface ComponentEntry {
+  name: string;
+  path: string;
+  props?: string;
+  notes: string;
+}
+
+interface ComponentGroup {
+  label: string;
+  description: string;
+  components: ComponentEntry[];
+}
+
+const groups: ComponentGroup[] = [
+  {
+    label: 'UI Primitives — ui/',
+    description: 'Low-level building blocks usable anywhere in the site.',
+    components: [
+      { name: 'Button', path: 'src/components/ui/Button.astro', props: 'href, variant?, size?', notes: 'Styled anchor or button. Use for primary CTAs.' },
+      { name: 'Breadcrumb', path: 'src/components/ui/Breadcrumb.astro', props: 'items: Array<{ label, href? }>', notes: 'Accessible breadcrumb nav. Last item has no href.' },
+      { name: 'FilterChips', path: 'src/components/ui/FilterChips.astro', props: 'tags, selectedTag?', notes: 'Client-side filter UI for student and work grids.' },
+      { name: 'DownloadLink', path: 'src/components/ui/DownloadLink.astro', props: 'href, label, description?', notes: 'Asset download link with icon.' },
+      { name: 'VideoEmbed', path: 'src/components/ui/VideoEmbed.astro', props: 'url, caption?', notes: 'YouTube/Vimeo embed with lazy loading.' },
+      { name: 'QuoteBlock', path: 'src/components/ui/QuoteBlock.astro', props: 'quote, attribution?', notes: 'Pull quote with accent styling.' },
+      { name: 'FramedImage', path: 'src/components/ui/FramedImage.astro', props: 'src, alt, frameId', notes: 'Image with SVG clip-mask frame. frameId is frame-01 through frame-23.' },
+      { name: 'TableOfContents', path: 'src/components/ui/TableOfContents.astro', props: 'headings', notes: 'Sticky anchor nav for long pages. Pair with StickyTocLayout.' },
+      { name: 'StickyTocLayout', path: 'src/components/ui/StickyTocLayout.astro', props: 'headings', notes: 'Two-column layout: TOC left, content right.' },
+      { name: 'CcaSeal', path: 'src/components/ui/CcaSeal.astro', props: '—', notes: 'CCA official seal SVG graphic.' },
+    ],
+  },
+  {
+    label: 'Events — events/',
+    description: 'Event detail page components. Use on event pages only.',
+    components: [
+      { name: 'EventHero', path: 'src/components/events/EventHero.astro', props: 'event, heroImageSize?', notes: 'Hero with image (poster or framed) and event metadata. Handles both image and heroImages fields.' },
+      { name: 'EventDetails', path: 'src/components/events/EventDetails.astro', props: 'event', notes: 'Date, time, location, RSVP link in a compact block.' },
+      { name: 'EventContextSection', path: 'src/components/events/EventContextSection.astro', props: 'paragraphs: string[], heading?', notes: 'Narrative text section with optional heading.' },
+      { name: 'CeremonySchedule', path: 'src/components/events/CeremonySchedule.astro', props: 'schedule: Array<{ time, label }>', notes: 'Vertical timeline card. Always null-guard — schedule is optional.' },
+      { name: 'CeremonyPage', path: 'src/components/events/CeremonyPage.astro', props: 'event', notes: 'Full commencement ceremony page wrapper with all standard sections.' },
+      { name: 'CelebrationCard', path: 'src/components/events/CelebrationCard.astro', props: 'event', notes: 'Card for celebration-type events. Used in event grid views.' },
+      { name: 'SpeakerFeature', path: 'src/components/events/SpeakerFeature.astro', props: 'person', notes: 'Featured speaker/honoree display with photo.' },
+      { name: 'BFASeniorExhibitionsEntryDetails', path: 'src/components/events/BFASeniorExhibitionsEntryDetails.astro', props: 'event', notes: 'Specialized entry details for BFA Senior Exhibitions only.' },
+    ],
+  },
+  {
+    label: 'Landing Page — landing/',
+    description: 'Components specific to the site index page. Do not use elsewhere.',
+    components: [
+      { name: 'BentoEvents', path: 'src/components/landing/BentoEvents.astro', props: '—', notes: 'Manually-designed CSS Grid of all celebration events. Edit the layout array to add events.' },
+      { name: 'BentoEventCard', path: 'src/components/landing/BentoEventCard.astro', props: 'event, size', notes: 'Individual card within the bento grid.' },
+      { name: 'EventListView', path: 'src/components/landing/EventListView.astro', props: 'events', notes: 'List-format alternative to bento grid.' },
+      { name: 'EventViewToggle', path: 'src/components/landing/EventViewToggle.astro', props: '—', notes: 'Grid/list toggle control. Client-side only.' },
+      { name: 'DecorativeCell', path: 'src/components/landing/DecorativeCell.astro', props: 'variant?', notes: 'Non-content decorative cells in the bento grid.' },
+    ],
+  },
+  {
+    label: 'Page Sections — sections/',
+    description: 'Full-width reusable sections. Drop into any page.',
+    components: [
+      { name: 'EmailSignup', path: 'src/components/sections/EmailSignup.astro', props: '—', notes: 'Email subscription form with GTM tracking.' },
+      { name: 'HonoreeSpotlight', path: 'src/components/sections/HonoreeSpotlight.astro', props: 'person', notes: 'Featured honoree with photo, bio, and CCA connection.' },
+      { name: 'InfoSection', path: 'src/components/sections/InfoSection.astro', props: 'heading, content', notes: 'General info section with heading and body text.' },
+      { name: 'InMemoriam', path: 'src/components/sections/InMemoriam.astro', props: 'names: Array<{ name, role? }>', notes: 'In memoriam list from commencement-info data.' },
+      { name: 'StatisticsGrid', path: 'src/components/sections/StatisticsGrid.astro', props: 'stats', notes: 'Statistics display grid. Data from commencement-info.' },
+      { name: 'PastGallery', path: 'src/components/sections/PastGallery.astro', props: 'images', notes: 'Historical photo gallery section.' },
+      { name: 'SocialFeed', path: 'src/components/sections/SocialFeed.astro', props: 'hashtag?', notes: 'Social media feed embed.' },
+    ],
+  },
+  {
+    label: 'Visual Effects — effects/',
+    description: 'Expensive WebGL/canvas components. Use at most one or two per page.',
+    components: [
+      { name: 'ParticleField', path: 'src/components/effects/ParticleField.astro', props: 'density?', notes: 'Animated particle background. Used in EventLayout.' },
+      { name: 'ParticleFieldArrows', path: 'src/components/effects/ParticleFieldArrows.astro', props: '—', notes: 'Particle field variant with directional arrows.' },
+      { name: 'ArrowLoop3D', path: 'src/components/effects/ArrowLoop3D.astro', props: '—', notes: '3D animated arrow loop via WebGL.' },
+      { name: 'ChimeraLoop3D', path: 'src/components/effects/ChimeraLoop3D.astro', props: '—', notes: '3D animated Chimera logo.' },
+      { name: 'ConstellationGrid', path: 'src/components/effects/ConstellationGrid.astro', props: '—', notes: 'Animated constellation graphic.' },
+      { name: 'HalftoneDisplacement', path: 'src/components/effects/HalftoneDisplacement.astro', props: 'src', notes: 'Halftone image displacement effect.' },
+      { name: 'HalftoneProceduralScan', path: 'src/components/effects/HalftoneProceduralScan.astro', props: '—', notes: 'Halftone scan line effect.' },
+      { name: 'PrismaticFlare', path: 'src/components/effects/PrismaticFlare.astro', props: '—', notes: 'Prismatic light flare overlay.' },
+    ],
+  },
+  {
+    label: 'People — people/',
+    description: 'Faculty, speaker, and honoree display components.',
+    components: [
+      { name: 'PersonCard', path: 'src/components/people/PersonCard.astro', props: 'person', notes: 'Card with photo, name, role, and bio.' },
+      { name: 'PersonGrid', path: 'src/components/people/PersonGrid.astro', props: 'people', notes: 'Responsive grid of PersonCards.' },
+    ],
+  },
+  {
+    label: 'Students — students/',
+    description: 'Student profile listing components.',
+    components: [
+      { name: 'StudentCard', path: 'src/components/students/StudentCard.astro', props: 'student', notes: 'Card with photo, name, program. Links to student profile.' },
+      { name: 'StudentGrid', path: 'src/components/students/StudentGrid.astro', props: 'students', notes: 'Responsive grid of StudentCards with filter support.' },
+    ],
+  },
+  {
+    label: 'Works — works/',
+    description: 'Artwork entry display components.',
+    components: [
+      { name: 'WorkCard', path: 'src/components/works/WorkCard.astro', props: 'work', notes: 'Card with thumbnail, title, medium. Links to work detail.' },
+      { name: 'WorkGrid', path: 'src/components/works/WorkGrid.astro', props: 'works', notes: 'Responsive grid of WorkCards.' },
+    ],
+  },
+  {
+    label: 'Showcase — showcase/',
+    description: 'Components specific to showcase and newsroom pages.',
+    components: [
+      { name: 'CreditsRoll', path: 'src/components/showcase/CreditsRoll.astro', props: 'students', notes: 'Scrolling credits display for the showcase.' },
+      { name: 'NewsroomGrid', path: 'src/components/showcase/NewsroomGrid.astro', props: 'stories', notes: 'Grid of newsroom story cards.' },
+      { name: 'ShowcaseHero', path: 'src/components/showcase/ShowcaseHero.astro', props: 'event', notes: 'Showcase-specific hero section.' },
+      { name: 'StudentSpotlight', path: 'src/components/showcase/StudentSpotlight.astro', props: 'student, work', notes: 'Featured student+work spotlight block.' },
+      { name: 'VideoInterviewSection', path: 'src/components/showcase/VideoInterviewSection.astro', props: 'interviews', notes: 'Video interview grid with embedded players.' },
+    ],
+  },
+  {
+    label: 'Commencement Program — program/',
+    description: 'Components for the print-formatted commencement program layout.',
+    components: [
+      { name: 'CandidatesList', path: 'src/components/program/CandidatesList.astro', props: 'candidates', notes: 'Print-formatted candidate listing.' },
+      { name: 'ProgramAgenda', path: 'src/components/program/ProgramAgenda.astro', props: 'items', notes: 'Ordered program agenda.' },
+      { name: 'ProgramDisclaimer', path: 'src/components/program/ProgramDisclaimer.astro', props: 'text', notes: 'Disclaimer text block.' },
+      { name: 'ProgramHero', path: 'src/components/program/ProgramHero.astro', props: 'event', notes: 'Program cover hero.' },
+    ],
+  },
+  {
+    label: 'Special — root',
+    description: 'Components at the root of src/components/ that don\'t belong to a domain.',
+    components: [
+      { name: 'PhaseGate', path: 'src/components/PhaseGate.astro', props: 'visibleIn?: Phase[], hiddenIn?: Phase[]', notes: 'Gate content by phase. Use visibleIn OR hiddenIn — not both.' },
+    ],
+  },
+  {
+    label: 'Docs — docs/',
+    description: 'Components used only within the /docs/ route tree.',
+    components: [
+      { name: 'DocsNav', path: 'src/components/docs/DocsNav.astro', props: 'currentSlug: string', notes: 'Sidebar navigation. Used by DocsLayout.' },
+      { name: 'DocCallout', path: 'src/components/docs/DocCallout.astro', props: 'type?: note|tip|warning|danger, title?: string', notes: 'Callout box for important notes in docs pages.' },
+    ],
+  },
+];
+
+const breadcrumb = [
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Component Catalog' },
+];
+---
+
+<DocsLayout
+  title="Component Catalog"
+  description="All components in the CCA 2026 site with paths, props, and usage notes, organized by domain"
+  currentSlug="component-catalog"
+  breadcrumb={breadcrumb}
+>
+  <h1>Component Catalog</h1>
+  <p>Every component in the codebase, organized by domain. Source of truth: <code>src/components/</code>.</p>
+
+  {groups.map(group => (
+    <section class="catalog-section">
+      <h2>{group.label}</h2>
+      <p class="group-desc">{group.description}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Path</th>
+            <th>Props</th>
+            <th>Usage note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {group.components.map(c => (
+            <tr>
+              <td><code>{c.name}</code></td>
+              <td><code>{c.path}</code></td>
+              <td>{c.props ? <code>{c.props}</code> : '—'}</td>
+              <td>{c.notes}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  ))}
+</DocsLayout>
+
+<style>
+  .catalog-section {
+    margin-bottom: var(--space-12);
+  }
+
+  .group-desc {
+    font-size: var(--text-sm);
+    opacity: 0.75;
+    margin-bottom: var(--space-4);
+  }
+</style>

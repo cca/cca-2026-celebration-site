@@ -4,14 +4,17 @@ A multi-event celebration platform for the California College of the Arts Class 
 
 ## New here? Start with these
 
-Before diving into code, read these four docs — they explain the core concepts that everything else builds on:
+Developer docs are served as a live site at `/docs/` when running locally. Start with these:
 
 | Doc | What it covers |
 |---|---|
-| [Phase System](docs/phase-system.md) | One variable controls what content the whole site shows — how it works and how to use it |
-| [Content Collections](docs/content-collections.md) | JSON files, Zod schemas, typed queries, and the utility layer |
-| [Component Guide](docs/component-guide.md) | What lives in each `components/` subdirectory and the layout hierarchy |
-| [Styling & Animation](docs/styling-and-animation.md) | Design tokens, themes, fluid type, and the scroll-reveal system |
+| [Getting Started](/docs/getting-started/) | Local setup and key concepts |
+| [Phase System](/docs/phase-system/) | One variable controls what content the whole site shows — how it works and how to use it |
+| [Content Collections](/docs/content-collections/) | JSON files, Zod schemas, typed queries, and the utility layer |
+| [Component Guide](/docs/component-guide/) | What lives in each `components/` subdirectory and the layout hierarchy |
+| [Styling & Animation](/docs/styling-and-animation/) | Design tokens, themes, fluid type, and the scroll-reveal system |
+
+Additional reference docs: [Schema Reference](/docs/schema-reference/), [Component Catalog](/docs/component-catalog/), [Route Index](/docs/route-index/).
 
 ## Overview
 
@@ -41,20 +44,15 @@ All commands are run from the root of the project:
 
 | Concept | One-liner | Doc |
 |---|---|---|
-| **Phase System** | One variable gates all content visibility across the site | [docs/phase-system.md](docs/phase-system.md) |
-| **Content Collections** | All content is JSON → Zod schema → typed component queries | [docs/content-collections.md](docs/content-collections.md) |
-| **Component Guide** | Directory taxonomy, layout hierarchy, and rules for pages | [docs/component-guide.md](docs/component-guide.md) |
-| **Styling & Animation** | Design tokens, themes, fluid type, and scroll-reveal | [docs/styling-and-animation.md](docs/styling-and-animation.md) |
+| **Phase System** | One variable gates all content visibility across the site | [/docs/phase-system/](/docs/phase-system/) |
+| **Content Collections** | All content is JSON → Zod schema → typed component queries | [/docs/content-collections/](/docs/content-collections/) |
+| **Component Guide** | Directory taxonomy, layout hierarchy, and rules for pages | [/docs/component-guide/](/docs/component-guide/) |
+| **Styling & Animation** | Design tokens, themes, fluid type, and scroll-reveal | [/docs/styling-and-animation/](/docs/styling-and-animation/) |
 
 ## Project Structure
 
 ```text
 /
-├── docs/                       # Developer documentation
-│   ├── phase-system.md
-│   ├── content-collections.md
-│   ├── component-guide.md
-│   └── styling-and-animation.md
 ├── public/                     # Static assets (images, fonts, favicon)
 ├── src/
 │   ├── pages/                  # File-based routes
@@ -63,36 +61,42 @@ All commands are run from the root of the project:
 │   │   ├── showcase/           # Graduate showcase pages
 │   │   ├── thesis/             # Thesis exhibition pages
 │   │   ├── students/           # Student profile pages
+│   │   ├── docs/               # Live developer documentation site
 │   │   ├── subscribe.astro     # Email subscription page
 │   │   └── demo/               # Development demo pages
 │   ├── layouts/                # Page layout components
 │   │   ├── BaseLayout.astro
 │   │   ├── EventLayout.astro
+│   │   ├── DocsLayout.astro    # Docs site layout
 │   │   ├── StudentLayout.astro
 │   │   ├── WorkLayout.astro
 │   │   └── ...
 │   ├── components/
 │   │   ├── ui/                 # Generic UI primitives
+│   │   ├── docs/               # Docs site components (DocsNav, DocCallout)
 │   │   ├── landing/            # Landing page sections
 │   │   ├── sections/           # Reusable page sections
 │   │   ├── events/             # Event-specific components
 │   │   ├── effects/            # Visual effect components
 │   │   └── global/             # Site-wide components (nav, footer)
-│   ├── content/                # Content collections (JSON data)
+│   ├── content/                # Content collections (JSON data + docs markdown)
 │   │   ├── events/
 │   │   ├── students/
 │   │   ├── works/
 │   │   ├── people/
 │   │   ├── programs/
 │   │   ├── video-interviews/
-│   │   └── commencement-info/
+│   │   ├── commencement-info/
+│   │   └── docs/               # Markdown source for the /docs/ site
 │   ├── config/
-│   │   └── phases.ts           # Phase system configuration
+│   │   ├── phases.ts           # Phase system configuration
+│   │   └── docs-nav.ts         # Docs site navigation structure
 │   ├── styles/                 # Global CSS
 │   │   ├── global.css
 │   │   ├── animations.css
 │   │   ├── fonts.css
 │   │   ├── grid.css
+│   │   ├── docs.css            # Docs site styles
 │   │   └── themes/
 │   └── scripts/                # Client-side animation and interaction scripts
 └── package.json
@@ -150,7 +154,7 @@ Adding an event requires three coordinated changes — all are necessary:
 2. **Detail page** — create `src/pages/thesis/{slug}.astro` (copy the closest existing page)
 3. **Bento grid** — add the event to `src/components/landing/BentoEvents.astro`: add a `{ slug, size, area }` entry to the `layout` array, then add the `area` name to all three `grid-template-areas` blocks (mobile, tablet, desktop)
 
-The bento grid is manually laid out — confirm visually in the browser after adding a new event. See `CLAUDE.md` for more detail on the process.
+The bento grid is manually laid out — confirm visually in the browser after adding a new event. See `CLAUDE.md` or the live docs for more detail.
 
 ## Updating Event Details
 
@@ -160,4 +164,4 @@ When new details arrive from the CCA portal (schedule, presenters, admission inf
 
 2. **`src/pages/thesis/{slug}.astro`** — each page is custom-built, so add whatever sections the content warrants: `EventContextSection` for narrative text, `CeremonySchedule` for a timed program, an inline styled list for presenters or speakers, or an inline photo gallery. Content not supported by the schema (like presenter names) lives as a hardcoded array in the page frontmatter.
 
-See `CLAUDE.md` for the full list of building blocks and reference page examples.
+See `CLAUDE.md` or `/docs/` for the full list of building blocks and reference page examples.

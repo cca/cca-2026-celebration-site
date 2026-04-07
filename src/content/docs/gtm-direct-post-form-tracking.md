@@ -1,4 +1,10 @@
-# GTM Tracking on Direct-POST Forms (e.g. Mailchimp)
+---
+title: GTM Tracking on Direct-POST Forms
+description: How to track form submissions that POST directly to external URLs like Mailchimp, bypassing GTM's event loop
+section: ops
+order: 2
+---
+
 
 ## The Problem
 

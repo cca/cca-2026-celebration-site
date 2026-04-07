@@ -1,0 +1,201 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+
+interface FieldDef {
+  field: string;
+  type: string;
+  required: boolean;
+  notes?: string;
+}
+
+interface CollectionDef {
+  name: string;
+  path: string;
+  fields: FieldDef[];
+}
+
+const collections: CollectionDef[] = [
+  {
+    name: 'events',
+    path: 'src/content/events/*.json',
+    fields: [
+      { field: 'title', type: 'string', required: true },
+      { field: 'slug', type: 'string', required: true, notes: 'Must match filename' },
+      { field: 'shortTitle', type: 'string', required: true },
+      { field: 'type', type: 'enum', required: true, notes: 'commencement | showcase | thesis-exhibition | celebration | studio-review | screening | game-showcase | senior-exhibition | open-studios | symposium | reception | venture-showcase' },
+      { field: 'degreeLevel', type: 'enum', required: true, notes: 'undergraduate | graduate | all' },
+      { field: 'themeKey', type: 'enum', required: true, notes: 'commencement | showcase' },
+      { field: 'date', type: 'string', required: true, notes: 'ISO date: YYYY-MM-DD' },
+      { field: 'endDate', type: 'string', required: false, notes: 'ISO date — for multi-day events' },
+      { field: 'time', type: 'string', required: false },
+      { field: 'location', type: 'string', required: true },
+      { field: 'address', type: 'string', required: true },
+      { field: 'description', type: 'string', required: true },
+      { field: 'longDescription', type: 'string', required: false },
+      { field: 'externalUrl', type: 'string', required: false },
+      { field: 'rsvpUrl', type: 'string', required: false },
+      { field: 'livestreamUrl', type: 'string', required: false },
+      { field: 'image', type: 'object', required: false, notes: '{ src, alt, aspectRatio?, heroOnly? } — plain hero image' },
+      { field: 'heroImages', type: 'array', required: false, notes: '[{ src, alt, frameId? }] — framed hero images' },
+      { field: 'schedule', type: 'array', required: false, notes: '[{ time, label }]' },
+      { field: 'ceremonyProgram', type: 'object', required: false, notes: 'Complex nested object — see content.config.ts' },
+      { field: 'seriesWeeks', type: 'array', required: false, notes: 'For recurring-week event series' },
+      { field: 'seriesDays', type: 'array', required: false, notes: 'For multi-day event series' },
+      { field: 'videoUrl', type: 'string', required: false },
+      { field: 'videoCaption', type: 'string', required: false },
+    ],
+  },
+  {
+    name: 'students',
+    path: 'src/content/students/*.json',
+    fields: [
+      { field: 'firstName', type: 'string', required: true },
+      { field: 'lastName', type: 'string', required: true },
+      { field: 'slug', type: 'string', required: true, notes: 'Must match filename' },
+      { field: 'pronouns', type: 'string', required: false },
+      { field: 'photo', type: 'object', required: true, notes: '{ src, alt }' },
+      { field: 'program', type: 'reference(programs)', required: true },
+      { field: 'degreeLevel', type: 'enum', required: true, notes: 'undergraduate | graduate' },
+      { field: 'degreeType', type: 'enum', required: true, notes: 'BFA | BA | MFA | MA | MBA | MArch | MDes | MDesign | BArch | MAAD' },
+      { field: 'expectedGraduation', type: 'string', required: true },
+      { field: 'bio', type: 'string', required: false },
+      { field: 'artistStatement', type: 'string', required: false },
+      { field: 'links', type: 'array', required: false, notes: '[{ label, url, type }]' },
+      { field: 'ceremonies', type: 'reference(events)[]', required: false },
+      { field: 'newsroomStories', type: 'array', required: false, notes: '[{ title, url, date?, summary?, listingTitle?, image? }]' },
+    ],
+  },
+  {
+    name: 'works',
+    path: 'src/content/works/*.json',
+    fields: [
+      { field: 'title', type: 'string', required: true },
+      { field: 'slug', type: 'string', required: true, notes: 'Must match filename' },
+      { field: 'students', type: 'reference(students)[]', required: true },
+      { field: 'events', type: 'reference(events)[]', required: true },
+      { field: 'medium', type: 'string', required: false },
+      { field: 'dimensions', type: 'string', required: false },
+      { field: 'year', type: 'number', required: true },
+      { field: 'description', type: 'string', required: false },
+      { field: 'artistStatement', type: 'string', required: false },
+      { field: 'media', type: 'array', required: true, notes: '[{ type: image|video|audio|embed, src, alt?, thumbnail?, caption? }]' },
+      { field: 'tags', type: 'string[]', required: false },
+      { field: 'featured', type: 'boolean', required: false, notes: 'Defaults to false' },
+      { field: 'order', type: 'number', required: false },
+    ],
+  },
+  {
+    name: 'programs',
+    path: 'src/content/programs/*.json',
+    fields: [
+      { field: 'name', type: 'string', required: true },
+      { field: 'slug', type: 'string', required: true, notes: 'Must match filename' },
+      { field: 'division', type: 'enum', required: true, notes: 'fine-arts | design | architecture | humanities-sciences | writing' },
+      { field: 'degreeTypes', type: 'enum[]', required: true, notes: 'Array of degree type strings' },
+      { field: 'description', type: 'string', required: true },
+      { field: 'url', type: 'string', required: true },
+    ],
+  },
+  {
+    name: 'people',
+    path: 'src/content/people/*.json',
+    fields: [
+      { field: 'name', type: 'string', required: true },
+      { field: 'slug', type: 'string', required: true, notes: 'Must match filename' },
+      { field: 'role', type: 'enum', required: true, notes: 'honorary-doctorate | professor-emeritus | distinguished-alumni | other' },
+      { field: 'photo', type: 'object', required: false, notes: '{ src, alt }' },
+      { field: 'title', type: 'string', required: false },
+      { field: 'bio', type: 'string', required: false },
+      { field: 'ccaConnection', type: 'string', required: false },
+      { field: 'ceremony', type: 'reference(events)', required: false },
+      { field: 'order', type: 'number', required: false },
+    ],
+  },
+  {
+    name: 'commencement-info',
+    path: 'src/content/commencement-info/*.json',
+    fields: [
+      { field: 'year', type: 'number', required: true },
+      { field: 'commencementNumber', type: 'string', required: true },
+      { field: 'contact', type: 'object', required: true, notes: '{ email, phone? }' },
+      { field: 'forStudents', type: 'object', required: false, notes: '{ heading, summary, content }' },
+      { field: 'forFamilies', type: 'object', required: false, notes: '{ heading, summary, content }' },
+      { field: 'intranetUrl', type: 'string', required: false },
+      { field: 'presidentQuote', type: 'object', required: false, notes: '{ text, attribution }' },
+      { field: 'statistics', type: 'array', required: false, notes: '[{ label, value, detail? }]' },
+      { field: 'downloadableAssets', type: 'array', required: false, notes: '[{ label, url, description? }]' },
+      { field: 'inMemoriam', type: 'array', required: false, notes: '[{ name, role? }]' },
+    ],
+  },
+  {
+    name: 'video-interviews',
+    path: 'src/content/video-interviews/*.json',
+    fields: [
+      { field: 'student', type: 'reference(students)', required: true },
+      { field: 'title', type: 'string', required: true },
+      { field: 'videoUrl', type: 'string', required: true },
+      { field: 'platform', type: 'enum', required: true, notes: 'youtube | vimeo' },
+      { field: 'thumbnail', type: 'string', required: false },
+      { field: 'pullQuote', type: 'string', required: false },
+      { field: 'duration', type: 'string', required: false },
+      { field: 'order', type: 'number', required: true },
+    ],
+  },
+];
+
+const breadcrumb = [
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Schema Reference' },
+];
+---
+
+<DocsLayout
+  title="Schema Reference"
+  description="Complete field reference for all seven content collection schemas in the CCA 2026 site"
+  currentSlug="schema-reference"
+  breadcrumb={breadcrumb}
+>
+  <h1>Schema Reference</h1>
+  <p>All seven content collections with every field, type, and requirement. Source of truth: <code>src/content.config.ts</code>.</p>
+
+  {collections.map(col => (
+    <section class="schema-section">
+      <h2 id={col.name}>{col.name}</h2>
+      <p class="schema-path"><code>{col.path}</code></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {col.fields.map(f => (
+            <tr>
+              <td><code>{f.field}</code></td>
+              <td><code>{f.type}</code></td>
+              <td>{f.required ? '✓' : '—'}</td>
+              <td>{f.notes ?? ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  ))}
+</DocsLayout>
+
+<style>
+  .schema-section {
+    margin-bottom: var(--space-12);
+  }
+
+  .schema-path {
+    font-size: var(--text-sm);
+    opacity: 0.7;
+    margin-bottom: var(--space-4);
+  }
+
+  /* Inherit docs-prose table styles via the layout */
+</style>
