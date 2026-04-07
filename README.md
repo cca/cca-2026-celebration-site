@@ -2,6 +2,17 @@
 
 A multi-event celebration platform for the California College of the Arts Class of 2026.
 
+## New here? Start with these
+
+Before diving into code, read these four docs — they explain the core concepts that everything else builds on:
+
+| Doc | What it covers |
+|---|---|
+| [Phase System](docs/phase-system.md) | One variable controls what content the whole site shows — how it works and how to use it |
+| [Content Collections](docs/content-collections.md) | JSON files, Zod schemas, typed queries, and the utility layer |
+| [Component Guide](docs/component-guide.md) | What lives in each `components/` subdirectory and the layout hierarchy |
+| [Styling & Animation](docs/styling-and-animation.md) | Design tokens, themes, fluid type, and the scroll-reveal system |
+
 ## Overview
 
 This site covers all end-of-year celebration events: commencement ceremonies, graduate showcases, thesis exhibitions, student profiles, and work galleries. Content visibility is managed through a phase system that progressively reveals information as events approach.
@@ -26,10 +37,24 @@ All commands are run from the root of the project:
 | `bun run preview` | Preview production build locally                 |
 | `bunx astro ...`  | Run Astro CLI commands (e.g. `astro check`)      |
 
+## Key Concepts
+
+| Concept | One-liner | Doc |
+|---|---|---|
+| **Phase System** | One variable gates all content visibility across the site | [docs/phase-system.md](docs/phase-system.md) |
+| **Content Collections** | All content is JSON → Zod schema → typed component queries | [docs/content-collections.md](docs/content-collections.md) |
+| **Component Guide** | Directory taxonomy, layout hierarchy, and rules for pages | [docs/component-guide.md](docs/component-guide.md) |
+| **Styling & Animation** | Design tokens, themes, fluid type, and scroll-reveal | [docs/styling-and-animation.md](docs/styling-and-animation.md) |
+
 ## Project Structure
 
 ```text
 /
+├── docs/                       # Developer documentation
+│   ├── phase-system.md
+│   ├── content-collections.md
+│   ├── component-guide.md
+│   └── styling-and-animation.md
 ├── public/                     # Static assets (images, fonts, favicon)
 ├── src/
 │   ├── pages/                  # File-based routes

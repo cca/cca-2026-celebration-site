@@ -184,3 +184,12 @@ const presenters = ['Name One', 'Name Two', 'Name Three'];
 ```
 
 Look at existing pages like `vcs-spring-symposium.astro` (schedule + presenters + gallery) and `mfa-writing-25th-anniversary.astro` (schedule only) as reference implementations.
+
+## Developer Documentation
+
+Extended reference docs for junior developers are in `docs/`:
+
+- `docs/phase-system.md` — Phase system deep dive
+- `docs/content-collections.md` — Collections, Zod schemas, and utility layer
+- `docs/component-guide.md` — Component taxonomy and layout hierarchy
+- `docs/styling-and-animation.md` — Fluid tokens, themes, scroll-reveal
