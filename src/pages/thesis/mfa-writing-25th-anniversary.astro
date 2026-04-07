@@ -1,0 +1,50 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'mfa-writing-25th-anniversary');
+if (!event) throw new Error('Event mfa-writing-25th-anniversary not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'MFA Writing 25th Anniversary Celebration' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Celebration"
+          paragraphs={[
+            "Celebrating 25 years of the MFA Writing program at CCA — an all-year reunion bringing together alumni, current students, and faculty to mark a quarter century of literary community.",
+            "More details coming soon.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>
+
+<style>
+  .page-layout {
+    padding-block: var(--space-8) var(--space-20);
+  }
+</style>

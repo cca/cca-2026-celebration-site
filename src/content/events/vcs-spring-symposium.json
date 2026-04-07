@@ -3,12 +3,14 @@
   "slug": "vcs-spring-symposium",
   "shortTitle": "VCS Spring Symposium",
   "type": "symposium",
-  "degreeLevel": "undergraduate",
+  "degreeLevel": "graduate",
   "themeKey": "thesis-undergrad",
   "date": "2026-04-25",
-  "location": "California College of the Arts",
+  "time": "11:00 AM – 3:00 PM",
+  "location": "CCA Timken Hall",
   "address": "145 Hooper Street, San Francisco, CA 94107",
   "description": "The annual Visual + Critical Studies Spring Symposium, featuring student presentations and critical discourse.",
+  "rsvpUrl": "https://www.eventbrite.com/e/2026-vcs-spring-symposium-tickets-1985450353454",
   "order": 7.5,
   "heroImages": [
     {
