@@ -87,7 +87,7 @@ const events = defineCollection({
     shortTitle: z.string(),
     type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase", "senior-exhibition", "open-studios", "symposium", "reception", "venture-showcase"]),
     degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
-    themeKey: z.string(),
+    themeKey: z.enum(['commencement', 'showcase']),
     date: z.string(),
     endDate: z.string().optional(),
     time: z.string().optional(),
