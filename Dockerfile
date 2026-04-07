@@ -6,6 +6,9 @@ WORKDIR /app
 COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 
+ARG PUBLIC_ENV
+ENV PUBLIC_ENV=$PUBLIC_ENV
+
 COPY . .
 RUN bun run build
 

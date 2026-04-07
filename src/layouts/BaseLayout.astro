@@ -19,6 +19,7 @@ interface Props {
 const { title, description, themeKey, minimalHeader = false, ogImage } = Astro.props;
 const pageTitle = `${title} | CCA 2026`;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://2026.cca.edu');
+const noindex = Astro.url.pathname.startsWith('/docs') || Astro.url.pathname.startsWith('/demo');
 const defaultDescription = "Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.";
 const metaDescription = description ?? defaultDescription;
 const siteRoot = Astro.site ?? 'https://2026.cca.edu';
@@ -39,6 +40,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={metaDescription} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonicalUrl.href} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

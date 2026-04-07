@@ -40,6 +40,12 @@ All commands are run from the root of the project:
 | `bun run preview` | Preview production build locally                 |
 | `bunx astro ...`  | Run Astro CLI commands (e.g. `astro check`)      |
 
+### Build arguments
+
+| Arg | Values | Description |
+|-----|--------|-------------|
+| `PUBLIC_ENV` | `production` \| `staging` | Controls `robots.txt` output. Required at Docker build time — missing or invalid values fail the build. Cloud Build triggers inject this automatically via `_ENV`. |
+
 ## Key Concepts
 
 | Concept | One-liner | Doc |

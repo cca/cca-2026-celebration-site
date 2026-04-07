@@ -61,4 +61,31 @@ Use semantic versioning. Tag on `main` after staging has been verified.
 
 ## Environment
 
-This site has no environment variables and no server-side secrets. Everything is static and public. The GTM container ID (`GTM-5CZR96`) is hardcoded in `BaseLayout.astro` — that's intentional and not a secret.
+There are no server-side secrets. The GTM container ID (`GTM-5CZR96`) is hardcoded in `BaseLayout.astro` — that's intentional and not a secret.
+
+## Build arguments
+
+One build argument controls environment-specific behavior:
+
+| Arg | Required | Valid values |
+|-----|----------|--------------|
+| `PUBLIC_ENV` | Yes | `production` or `staging` |
+
+`PUBLIC_ENV` is injected by the Docker build step and consumed at Astro build time to generate the correct `robots.txt`:
+
+- **`staging`** — `Disallow: /` (blocks all crawlers)
+- **`production`** — `Disallow: /docs/` and `Disallow: /demo/` only
+
+If `PUBLIC_ENV` is missing or set to any other value, `bun run build` throws a validation error and the build fails.
+
+The Cloud Build triggers inject this automatically via a `_ENV` substitution variable. After deploying, set it in the GCP Cloud Build console:
+
+- Staging trigger → Substitution variables → `_ENV = staging`
+- Production trigger → Substitution variables → `_ENV = production`
+
+To test locally:
+
+```sh
+PUBLIC_ENV=production bun run build
+PUBLIC_ENV=staging bun run build
+```

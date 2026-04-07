@@ -14,6 +14,10 @@ bunx astro check     # type-check .astro files
 
 There are no lint or test commands — the project relies on `astro check` for type safety.
 
+### Build arguments
+
+`PUBLIC_ENV` (`production` | `staging`) must be set at Docker build time — it controls the generated `robots.txt`. Cloud Build triggers inject this automatically via the `_ENV` substitution variable. For local builds: `PUBLIC_ENV=production bun run build`.
+
 ## Architecture
 
 This is an Astro 5 static site. All content lives in `src/content/` as JSON files, typed via Zod schemas in `src/content.config.ts`. There is no database, no server rendering, and no external CMS.

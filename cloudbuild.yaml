@@ -3,6 +3,7 @@ substitutions:
   _REGION: us-west1
   _SERVICE_ACCOUNT: ccaedu-sa
   _SERVICE_NAME: cca-2026-celebration
+  _ENV: ''   # Must be set per trigger: 'production' or 'staging'
 
 steps:
   # Build the Docker image
@@ -13,6 +14,8 @@ steps:
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REGISTRY}/${_SERVICE_NAME}:$COMMIT_SHA
       - -t
       - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REGISTRY}/${_SERVICE_NAME}:latest
+      - --build-arg
+      - PUBLIC_ENV=${_ENV}
       - .
 
   # Push the image to Artifact Registry
