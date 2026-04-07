@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { event, size, class: className } = Astro.props;
-const { title, shortTitle, slug, date, endDate, location, description, type, degreeLevel, themeKey, externalUrl, image } = event.data;
+const { title, shortTitle, slug, date, endDate, location, description, type, degreeLevel, externalUrl, image } = event.data;
 
 function getEventUrl(type: string, degreeLevel: string, slug: string): string {
   if (type === "commencement") return degreeLevel === "all" ? "/commencement/" : `/commencement/${degreeLevel}/`;

@@ -54,7 +54,7 @@ export async function ensureFontsLoaded(): Promise<void> {
 
 // --- Draw methods ---
 
-function drawBackground(ctx: CanvasRenderingContext2D, bg: Background, w: number, h: number, scale: number) {
+function drawBackground(ctx: CanvasRenderingContext2D, bg: Background, w: number, h: number, _scale: number) {
   if (bg.type === 'color' && bg.value) {
     ctx.fillStyle = bg.value;
     ctx.fillRect(0, 0, w, h);

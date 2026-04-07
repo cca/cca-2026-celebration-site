@@ -53,7 +53,7 @@ function weekLabel(n: number): string {
             </div>
 
             <ol class="week-list">
-              {seriesWeeks.map((week, i) => (
+              {seriesWeeks.map((week) => (
                 <li id={`week-${week.weekNumber}`}>
                   <a href={`/thesis/fine-arts-senior-exhibition/week-${week.weekNumber}/`} class="week-entry reveal">
                     <span class="week-entry__ghost" aria-hidden="true">{weekLabel(week.weekNumber)}</span>

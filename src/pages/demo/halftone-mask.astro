@@ -53,7 +53,7 @@ const halftones = [
       <div class="control-group">
         <label for="halftone-picker">Halftone Pattern</label>
         <select id="halftone-picker">
-          {halftones.map((name, i) => (
+          {halftones.map((name) => (
             <option value={name} selected={name === "halftone-full-03"}>
               {name}
             </option>

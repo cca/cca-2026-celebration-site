@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
 
@@ -9,8 +9,6 @@ import Button from '../components/ui/Button.astro';
 import FramedImage from '../components/ui/FramedImage.astro';
 import { getCurrentPhase } from '../lib/utils/phase';
 import { isPhaseAtLeast } from '../config/phases';
-
-const events = await getCollection('events');
 
 // Commencement data (use undergraduate entry for the shared ceremony info)
 const commencementEntry = await getEntry('events', 'commencement-undergraduate');

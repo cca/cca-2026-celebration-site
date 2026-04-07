@@ -27,7 +27,7 @@ const {
 
 const svgPath = `public/images/scanned-graphics/halftones/${pattern}.svg`;
 const rawSvg = fs.readFileSync(svgPath, "utf-8")
-  .replace(/<svg([^>]*)>/, (match, attrs) => {
+  .replace(/<svg([^>]*)>/, (_, attrs) => {
     // Strip fixed width/height and add preserveAspectRatio for full coverage
     const cleaned = attrs
       .replace(/\s*width="[^"]*"/g, '')
@@ -103,11 +103,6 @@ const filterId = `halftone-warp-bg`;
 
   function initHalftoneAnimation() {
     halftoneCleanup?.();
-
-    if (halftoneAnimId) {
-      cancelAnimationFrame(halftoneAnimId);
-      halftoneAnimId = undefined;
-    }
 
     const wrapper = document.querySelector('.halftone-displacement-bg') as HTMLElement | null;
     const turbulence = document.getElementById('hd-turbulence');

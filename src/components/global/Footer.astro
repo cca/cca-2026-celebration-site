@@ -1,9 +1,6 @@
 ---
 import CcaSeal from '../ui/CcaSeal.astro';
-import { getCurrentPhase, isContentVisible } from '../../lib/utils/phase';
 const year = new Date().getFullYear();
-const phase = getCurrentPhase(Astro.url);
-const showExhibitionLinks = isContentVisible(phase, undefined, ['save-the-date']);
 ---
 
 <footer class="site-footer">
@@ -23,9 +20,7 @@ const showExhibitionLinks = isContentVisible(phase, undefined, ['save-the-date']
         <div class="footer-col">
           <ul class="footer-links" role="list">
             <li><a href="/commencement/">Commencement</a></li>
-            {showExhibitionLinks && <li><a href="/thesis/all-campus-graduation-exhibition/">Graduation Exhibitions</a></li>}
             <li><a href="/thesis/">Graduation Exhibitions</a></li>
-            {showExhibitionLinks && <li><a href="/showcase/">Student Showcase</a></li>}
           </ul>
         </div>
 

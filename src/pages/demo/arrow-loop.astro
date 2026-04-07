@@ -371,14 +371,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   let paused = false;
   let arrowIndex = 0;
   let colorIndex = 0;
-  let animId = 0;
-
-  function easeOutBack(t: number) {
-    const c1 = 1.70158;
-    const c3 = c1 + 1;
-    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-  }
-
   function easeInOut(t: number) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
@@ -554,7 +546,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
       updateSlot(slots[0], now);
       updateSlot(slots[1], now);
     }
-    animId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
   // --- Controls ---
@@ -619,5 +611,5 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
 
   // --- Init ---
   startMaterialize(slots[0], performance.now());
-  animId = requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 </script>

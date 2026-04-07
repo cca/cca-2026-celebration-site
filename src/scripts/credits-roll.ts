@@ -199,7 +199,7 @@ function initCreditsRoll() {
       searchCount.textContent = matchCount > 0 ? `${matchCount} found` : 'No matches';
 
       if (firstMatch) {
-        const target = firstMatch;
+        const target: HTMLElement = firstMatch;
         searchTimer = setTimeout(() => {
           target.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, SEARCH_DEBOUNCE);
@@ -223,3 +223,5 @@ function initCreditsRoll() {
 }
 
 document.addEventListener('astro:page-load', initCreditsRoll);
+
+export {};

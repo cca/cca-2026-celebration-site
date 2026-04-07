@@ -159,3 +159,5 @@ initCursorTrack();
 
 // Re-run after Astro page transitions
 document.addEventListener('astro:page-load', initCursorTrack);
+
+export {};

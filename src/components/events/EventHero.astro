@@ -405,7 +405,6 @@ const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, loca
 
       try {
         await navigator.clipboard.writeText(url);
-        const original = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => {
           btn.textContent = '';

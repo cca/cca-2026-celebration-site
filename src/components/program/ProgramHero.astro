@@ -19,7 +19,7 @@ const dateDisplay = formatDate(date);
     <div class="hero-meta">
       <time class="hero-date">{dateDisplay}</time>
       <span class="hero-separator" aria-hidden="true">&#9670;</span>
-      <span class="hero-time">{formatTime(time)}</span>
+      {time && <span class="hero-time">{formatTime(time)}</span>}
     </div>
     <p class="hero-location">
       <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`} target="_blank" rel="noopener noreferrer">

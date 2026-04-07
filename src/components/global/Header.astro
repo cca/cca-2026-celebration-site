@@ -157,7 +157,7 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
                 <div class="mobile-group">
                   <a href={item.href} class="mobile-group-label" aria-current={currentPath === item.href ? "page" : undefined}>{item.label}</a>
                   <ul role="list">
-                    {item.children.map((child, i) => {
+                    {item.children.map((child) => {
                       staggerIndex++;
                       return (
                         <li class="mobile-nav-item" style={`--stagger-delay: ${staggerIndex * 60}ms`}>

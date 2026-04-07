@@ -412,8 +412,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     if ((canvas as any).__halftoneRunning) return;
     (canvas as any).__halftoneRunning = true;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas.getContext('2d')!;
 
     // --- Config ---
     let dotSpacing = 14;
@@ -427,7 +426,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     let dotColor = '#231f20';
     let glowColor = '#00BFB3';
     let glowOpacity = 0.4;
-    let bgColor = '#ffffff';
     let scanDirection: 'y' | 'x' | 'xy' | 'xyr' = 'y';
     let bidirectional = false;
 
@@ -830,7 +828,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
 
     wireSwatchPicker('dot-swatches', hex => { dotColor = hex; if (prefersReducedMotion.matches) renderStatic(); });
     wireSwatchPicker('glow-swatches', hex => { glowColor = hex; });
-    wireSwatchPicker('bg-swatches', hex => { bgColor = hex; canvas.style.background = hex; });
+    wireSwatchPicker('bg-swatches', hex => { canvas.style.background = hex; });
 
     // --- FPS counter ---
     const fpsVal = document.getElementById('fps-val')!;

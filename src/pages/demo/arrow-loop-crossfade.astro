@@ -337,7 +337,6 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   let spinDegrees = 360;
   let spinAxis: 'X' | 'Y' | 'random' = 'Y';
   let sizeVariance = 0.3;
-  let perspectiveVal = 800;
   let paused = false;
   let index = 0;
   let colorIdx = 0;
@@ -501,7 +500,7 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
     { id: 'scale-amount', valId: 'scale-amount-val', suffix: '', setter: v => { scaleAmount = v; } },
     { id: 'spin-degrees', valId: 'spin-degrees-val', suffix: '', setter: v => { spinDegrees = v; } },
     { id: 'size-variance', valId: 'size-variance-val', suffix: '', setter: v => { sizeVariance = v; } },
-    { id: 'perspective', valId: 'perspective-val', suffix: '', setter: v => { perspectiveVal = v; stage.style.perspective = `${v}px`; } },
+    { id: 'perspective', valId: 'perspective-val', suffix: '', setter: v => { stage.style.perspective = `${v}px`; } },
   ];
 
   for (const ctrl of rangeControls) {

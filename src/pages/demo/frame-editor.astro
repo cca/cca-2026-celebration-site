@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getFrameData } from "../../lib/utils/frame-data";
-import { ccaPhotography, photoCollections } from "../../data/cca-photography";
+import { photoCollections } from "../../data/cca-photography";
 
 const photoCollectionAttr = new Map<string, string>();
 for (const { id, photos } of photoCollections) {

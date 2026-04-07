@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import '../styles/fonts.css';
@@ -30,7 +30,7 @@ const metaImage = ogImage ?? new URL('/og-image.jpg', siteRoot).href;
   <head>
     <meta charset="utf-8" />
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <!-- Preload critical fonts -->
     <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/ChimeraDisplay-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body data-theme={themeKey}>
     <!-- Google Tag Manager (noscript) -->

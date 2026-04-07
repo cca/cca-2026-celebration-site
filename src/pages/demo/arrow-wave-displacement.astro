@@ -419,9 +419,9 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   });
 
   // Grid layout — 3 attribute updates instead of 672 DOM nodes
-  const arrowPattern = document.getElementById('arrow-pattern') as SVGPatternElement;
+  const arrowPattern = document.getElementById('arrow-pattern') as unknown as SVGPatternElement;
   const arrowUse = arrowPattern.querySelector('use') as SVGUseElement;
-  const arrowRect = document.getElementById('arrow-rect') as SVGRectElement;
+  const arrowRect = document.getElementById('arrow-rect') as unknown as SVGRectElement;
   const arrowBg = document.getElementById('arrow-bg') as HTMLElement;
 
   const ARROW_ASPECT = 54 / 30;
@@ -438,9 +438,9 @@ import DemoEffectLayout from "../../layouts/DemoEffectLayout.astro";
   setGridLayout();
 
   // SMIL-driven animation
-  const freqAnim = document.getElementById('freq-anim') as SVGAnimateElement;
-  const turbulence = document.getElementById('turbulence') as SVGFETurbulenceElement;
-  const displacement = document.getElementById('displacement') as SVGFEDisplacementMapElement;
+  const freqAnim = document.getElementById('freq-anim') as unknown as SVGAnimateElement;
+  const turbulence = document.getElementById('turbulence') as unknown as SVGFETurbulenceElement;
+  const displacement = document.getElementById('displacement') as unknown as SVGFEDisplacementMapElement;
 
   let baseFreq = 0.006;
   let speed = 0.002;

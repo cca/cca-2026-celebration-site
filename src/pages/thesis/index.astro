@@ -24,8 +24,6 @@ if (!event) throw new Error('Event all-campus-graduation-exhibition not found');
 
 const allEvents = await getCollection('events');
 const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
-// Phase-based logic replaces date-computed isPostEvent
-const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">

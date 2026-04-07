@@ -53,7 +53,7 @@ function getCeremonyHref(event: { data: { type: string; slug: string } }) {
           <li>
             <a href={getCeremonyHref(event!)} class="ceremony-link">
               <span class="ceremony-title">{event!.data.title}</span>
-              <span class="ceremony-meta">{formatDate(event!.data.date)} &middot; {formatTime(event!.data.time)}</span>
+              <span class="ceremony-meta">{formatDate(event!.data.date)} &middot; {event!.data.time ? formatTime(event!.data.time) : null}</span>
             </a>
           </li>
         ))}

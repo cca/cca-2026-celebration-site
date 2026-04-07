@@ -205,3 +205,5 @@ function init() {
 // Init on load and on Astro page transitions
 init();
 document.addEventListener('astro:page-load', init);
+
+export {};

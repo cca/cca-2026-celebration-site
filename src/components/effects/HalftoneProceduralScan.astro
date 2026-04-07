@@ -80,8 +80,7 @@ const {
     if ((canvas as any).__hpRunning) return;
     (canvas as any).__hpRunning = true;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx = canvas.getContext('2d')!
 
     // Read config from data attributes
     const dotColor      = canvas.dataset.dotColor     ?? '#005776';

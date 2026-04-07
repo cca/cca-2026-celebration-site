@@ -105,8 +105,8 @@ const doubledImages = [...images, ...images];
 
     function updatePauseBtn() {
       const stopped = paused || reducedMotion;
-      pauseBtn.textContent = stopped ? 'Play' : 'Pause';
-      pauseBtn.setAttribute('aria-label', stopped ? 'Play gallery animation' : 'Pause gallery animation');
+      pauseBtn!.textContent = stopped ? 'Play' : 'Pause';
+      pauseBtn!.setAttribute('aria-label', stopped ? 'Play gallery animation' : 'Pause gallery animation');
     }
 
     function recalcTarget() {
@@ -160,7 +160,7 @@ const doubledImages = [...images, ...images];
         position += halfWidth;
       }
 
-      track.style.transform = `translateX(${position}px)`;
+      track!.style.transform = `translateX(${position}px)`;
       rafId = requestAnimationFrame(animate);
     }
 

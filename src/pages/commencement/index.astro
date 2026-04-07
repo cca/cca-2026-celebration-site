@@ -2,7 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
-import { chimeraExpanded2026Paths, chimeraExpanded2026Colors } from '../../data/chimera-expanded-2026-paths';
+import { chimeraExpanded2026Paths } from '../../data/chimera-expanded-2026-paths';
 import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
@@ -13,7 +13,7 @@ import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
 import { formatDate, formatTime } from '../../lib/utils/format';
 import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
 import PhaseGate from '../../components/PhaseGate.astro';
-import { getCurrentPhase, isContentVisible } from '../../lib/utils/phase';
+import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
 
 const events = await getCollection('events');
@@ -59,9 +59,7 @@ const honorees = [
       };
     }),
 ];
-// Phase-based logic replaces date-computed isPostEvent
 const phase = getCurrentPhase(Astro.url);
-const isPostEvent = isPhaseAtLeast(phase, 'post-event');
 ---
 
 <BaseLayout title="Commencement" themeKey="commencement">
@@ -205,13 +203,13 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         {gradEvent && isPhaseBefore(phase, 'during-event') ? (
           <div class="ceremony-info reveal">
             <div class="ceremony-info__accent" aria-hidden="true"></div>
-            <span class="ceremony-info__badge">{formatTime(gradEvent.data.time)}</span>
+            <span class="ceremony-info__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
             <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
           </div>
         ) : gradEvent && (
           <a href="/commencement/graduate/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">{formatTime(gradEvent.data.time)}</span>
+            <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
             <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
             <span class="ceremony-card__cta">Details &rarr;</span>
           </a>
@@ -220,13 +218,13 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         {undergradEvent && isPhaseBefore(phase, 'during-event') ? (
           <div class="ceremony-info reveal">
             <div class="ceremony-info__accent" aria-hidden="true"></div>
-            <span class="ceremony-info__badge">{formatTime(undergradEvent.data.time)}</span>
+            <span class="ceremony-info__badge">{undergradEvent.data.time ? formatTime(undergradEvent.data.time) : null}</span>
             <h3 class="ceremony-info__title">{undergradEvent.data.title}</h3>
           </div>
         ) : undergradEvent && (
           <a href="/commencement/undergraduate/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
-            <span class="ceremony-card__badge">{formatTime(undergradEvent.data.time)}</span>
+            <span class="ceremony-card__badge">{undergradEvent.data.time ? formatTime(undergradEvent.data.time) : null}</span>
             <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
             <span class="ceremony-card__cta">Details &rarr;</span>
           </a>
@@ -350,7 +348,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
   function initLoop(
     container: HTMLElement,
     PRESETS: { image: string; shape: number }[],
-    startOffset: number,
+    _startOffset: number,
     config: { cycleDuration: number },
   ) {
     const CYCLE_DURATION = config.cycleDuration;

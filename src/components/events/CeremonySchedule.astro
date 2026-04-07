@@ -10,7 +10,7 @@ const { schedule } = Astro.props;
 
 <div class="ceremony-schedule reveal">
   <ol class="timeline" role="list">
-    {schedule.map((item, i) => (
+    {schedule.map((item) => (
       <li class="timeline-item">
         <span class="timeline-time">{formatTime(item.time)}</span>
         <span class="timeline-dot" aria-hidden="true" />
