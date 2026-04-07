@@ -71,7 +71,11 @@ const doubledImages = [...images, ...images];
 </section>
 
 <script>
+  let cleanupFn: (() => void) | undefined;
+
   function initPastGallery() {
+    cleanupFn?.();
+
   document.querySelectorAll<HTMLElement>('.past-gallery').forEach((section) => {
     // Skip already-initialized sections
     if (section.dataset.galleryInit) return;
@@ -140,6 +144,7 @@ const doubledImages = [...images, ...images];
     });
 
     // Animation loop
+    let rafId: number;
     function animate() {
       currentSpeed += (targetSpeed - currentSpeed) * lerpFactor;
 
@@ -156,10 +161,15 @@ const doubledImages = [...images, ...images];
       }
 
       track.style.transform = `translateX(${position}px)`;
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     }
 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+    cleanupFn = () => {
+      cancelAnimationFrame(rafId);
+      cleanupFn = undefined;
+    };
+    document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
 
     // Lightbox
     triggers.forEach((btn) => {

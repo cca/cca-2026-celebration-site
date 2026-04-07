@@ -99,8 +99,11 @@ const filterId = `halftone-warp-bg`;
 
 <script>
   let halftoneAnimId: number | undefined;
+  let halftoneCleanup: (() => void) | undefined;
 
   function initHalftoneAnimation() {
+    halftoneCleanup?.();
+
     if (halftoneAnimId) {
       cancelAnimationFrame(halftoneAnimId);
       halftoneAnimId = undefined;
@@ -115,6 +118,12 @@ const filterId = `halftone-warp-bg`;
     let time = 0;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+    function stop() {
+      if (halftoneAnimId) cancelAnimationFrame(halftoneAnimId);
+      halftoneAnimId = undefined;
+      turbulence!.setAttribute('baseFrequency', `${baseFreq} ${baseFreq}`);
+    }
+
     function animate() {
       time += animSpeed;
       const freq = baseFreq + Math.sin(time) * baseFreq * 0.5;
@@ -126,15 +135,21 @@ const filterId = `halftone-warp-bg`;
       animate();
     }
 
-    prefersReducedMotion.addEventListener('change', () => {
+    const onMotionChange = () => {
       if (prefersReducedMotion.matches) {
-        if (halftoneAnimId) cancelAnimationFrame(halftoneAnimId);
-        halftoneAnimId = undefined;
-        turbulence!.setAttribute('baseFrequency', `${baseFreq} ${baseFreq}`);
+        stop();
       } else {
         animate();
       }
-    });
+    };
+    prefersReducedMotion.addEventListener('change', onMotionChange);
+
+    halftoneCleanup = () => {
+      stop();
+      prefersReducedMotion.removeEventListener('change', onMotionChange);
+      halftoneCleanup = undefined;
+    };
+    document.addEventListener('astro:before-swap', () => halftoneCleanup?.(), { once: true });
   }
 
   initHalftoneAnimation();

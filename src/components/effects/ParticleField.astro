@@ -48,7 +48,11 @@ const {
 </style>
 
 <script>
+  let cleanupFn: (() => void) | undefined;
+
   function initParticleField() {
+    cleanupFn?.(); // cancel any previous instance before initializing
+
     const canvas = document.querySelector<HTMLCanvasElement>('.particle-field');
     if (!canvas) return;
 
@@ -206,6 +210,7 @@ const {
       resize();
       const particles = Array.from({ length: cfg.count }, () => createParticle(cfg));
       particles.forEach(drawParticle);
+      cleanupFn = undefined;
     } else {
       let particles = Array.from({ length: cfg.count }, () => createParticle(cfg));
       let time = 0;
@@ -213,7 +218,8 @@ const {
       let lastAppliedGeneration = 0;
 
       // Listen for config changes from demo controls
-      canvas.addEventListener('particle-field:update', () => { configGeneration++; });
+      const onUpdate = () => { configGeneration++; };
+      canvas.addEventListener('particle-field:update', onUpdate);
 
       // Scroll-reactive wind gust constants
       const SCROLL_SENSITIVITY = 0.08;
@@ -229,6 +235,8 @@ const {
 
       resize();
       window.addEventListener('resize', resize);
+
+      let rafId: number;
 
       function animate() {
         const w = window.innerWidth;
@@ -276,10 +284,19 @@ const {
           drawParticle(p);
         }
 
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
+      rafId = requestAnimationFrame(animate);
 
-      animate();
+      cleanupFn = () => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener('resize', resize);
+        canvas!.removeEventListener('particle-field:update', onUpdate);
+        (canvas as any).__pfRunning = false;
+        cleanupFn = undefined;
+      };
+
+      document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
     }
   }
 

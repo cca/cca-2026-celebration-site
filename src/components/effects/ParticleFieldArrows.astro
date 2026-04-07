@@ -41,6 +41,8 @@ const {
 </style>
 
 <script>
+  let cleanupFn: (() => void) | undefined;
+
   const ARROW_SRCS = [
     '/images/scanned-graphics/arrows/arrow-02.svg',
     '/images/scanned-graphics/arrows/arrow-03.svg',
@@ -57,6 +59,8 @@ const {
   ];
 
   function initParticleFieldArrows() {
+    cleanupFn?.(); // cancel any previous instance before initializing
+
     const canvas = document.querySelector<HTMLCanvasElement>('.particle-field-arrows');
     if (!canvas) return;
 
@@ -103,6 +107,7 @@ const {
         resize();
         const particles = Array.from({ length: cfg.count }, () => createParticle(cfg));
         particles.forEach(drawParticle);
+        cleanupFn = undefined;
       } else {
         startAnimation(cfg);
       }
@@ -218,7 +223,8 @@ const {
       let configGeneration = 0;
       let lastAppliedGeneration = 0;
 
-      canvas!.addEventListener('particle-field-arrows:update', () => { configGeneration++; });
+      const onUpdate = () => { configGeneration++; };
+      canvas!.addEventListener('particle-field-arrows:update', onUpdate);
 
       const SCROLL_SENSITIVITY = 0.08;
       const SCROLL_INFLUENCE_ATTACK = 0.15;
@@ -232,6 +238,8 @@ const {
 
       resize();
       window.addEventListener('resize', resize);
+
+      let rafId: number;
 
       function animate() {
         const w = window.innerWidth;
@@ -276,10 +284,19 @@ const {
           drawParticle(p);
         }
 
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
+      rafId = requestAnimationFrame(animate);
 
-      animate();
+      cleanupFn = () => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener('resize', resize);
+        canvas!.removeEventListener('particle-field-arrows:update', onUpdate);
+        (canvas as any).__pfaRunning = false;
+        cleanupFn = undefined;
+      };
+
+      document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
     }
   }
 

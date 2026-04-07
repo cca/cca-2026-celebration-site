@@ -70,7 +70,11 @@ const {
 </style>
 
 <script>
+  let cleanupFn: (() => void) | undefined;
+
   function initHalftoneProceduralScan() {
+    cleanupFn?.(); // cancel any previous instance before initializing
+
     const canvas = document.getElementById('halftone-proc-bg') as HTMLCanvasElement;
     if (!canvas) return;
     if ((canvas as any).__hpRunning) return;
@@ -338,12 +342,13 @@ const {
       renderStatic();
     }
 
-    prefersReducedMotion.addEventListener('change', () => {
+    const onMotionChange = () => {
       prefersReducedMotion.matches ? stop() : start();
-    });
+    };
+    prefersReducedMotion.addEventListener('change', onMotionChange);
 
     let resizeTimer: ReturnType<typeof setTimeout>;
-    window.addEventListener('resize', () => {
+    const onResize = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         tier = detectTier();
@@ -351,9 +356,21 @@ const {
         if (prefersReducedMotion.matches) renderStatic();
         else buildScanHeads();
       }, 200);
-    });
+    };
+    window.addEventListener('resize', onResize);
 
     prefersReducedMotion.matches ? stop() : start();
+
+    cleanupFn = () => {
+      cancelAnimationFrame(animId);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', onResize);
+      prefersReducedMotion.removeEventListener('change', onMotionChange);
+      (canvas as any).__hpRunning = false;
+      cleanupFn = undefined;
+    };
+
+    document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
   }
 
   initHalftoneProceduralScan();

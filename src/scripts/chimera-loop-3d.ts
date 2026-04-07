@@ -141,7 +141,11 @@ function updateSlot(inst: LoopInstance, slotIdx: 0 | 1, now: number) {
   }
 }
 
+let cancelLoop: (() => void) | undefined;
+
 function init() {
+  cancelLoop?.();
+
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const containers = document.querySelectorAll<HTMLElement>('[data-chimera-loop]');
   if (containers.length === 0) return;
@@ -196,6 +200,7 @@ function init() {
 
   const initTime = performance.now();
 
+  let rafId: number;
   function tick(now: number) {
     const elapsed = (now - initTime) / 1000;
     for (const inst of instances) {
@@ -206,13 +211,18 @@ function init() {
       updateSlot(inst, 0, now);
       updateSlot(inst, 1, now);
     }
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
   }
 
   if (!reducedMotion) {
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+    cancelLoop = () => {
+      cancelAnimationFrame(rafId);
+      cancelLoop = undefined;
+    };
+    document.addEventListener('astro:before-swap', () => cancelLoop?.(), { once: true });
   }
 }
 
 init();
-document.addEventListener('astro:after-swap', init);
+document.addEventListener('astro:page-load', init);
