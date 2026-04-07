@@ -9,14 +9,23 @@
   "time": "11:00 AM – 3:00 PM",
   "location": "CCA Timken Hall",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "The annual Visual + Critical Studies Spring Symposium, featuring student presentations and critical discourse.",
+  "description": "The annual Visual + Critical Studies Spring Symposium, featuring student presentations and critical discourse. Admission is free and open to the public.",
+  "schedule": [
+    { "time": "11:00 AM", "label": "Welcome and Opening Remarks" },
+    { "time": "11:10 AM", "label": "Panel 1" },
+    { "time": "12:00 PM", "label": "Panel 1 Q&A and Discussion" },
+    { "time": "12:30 PM", "label": "Panel 2" },
+    { "time": "1:00 PM", "label": "Panel 2 Q&A and Discussion" },
+    { "time": "1:30 PM", "label": "VCS Alumnx Award Presentation" },
+    { "time": "1:50 PM", "label": "Closing Remarks" },
+    { "time": "2:00 PM", "label": "Reception in the Nave Presentation Space" }
+  ],
   "rsvpUrl": "https://www.eventbrite.com/e/2026-vcs-spring-symposium-tickets-1985450353454",
   "order": 7.5,
-  "heroImages": [
-    {
-      "src": "/images/cca-photography/design-senior-show-fa25-54.jpg",
-      "alt": "Students and visitors at a CCA senior design show",
-      "frameId": "frame-16"
-    }
-  ]
+  "image": {
+    "src": "/images/cca-photography/vcs-spring-symposium-2026-poster.png",
+    "alt": "2026 VCS Spring Symposium poster featuring a halftone dog with a pirate eye patch",
+    "aspectRatio": "3/4",
+    "heroOnly": true
+  }
 }

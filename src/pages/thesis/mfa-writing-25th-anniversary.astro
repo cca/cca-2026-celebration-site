@@ -4,6 +4,7 @@ import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
 import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import CeremonySchedule from '../../components/events/CeremonySchedule.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
@@ -25,7 +26,7 @@ if (!event) throw new Error('Event mfa-writing-25th-anniversary not found');
     ]} />
   </div>
 
-  <EventHero event={event} heroImageSize="large" />
+  <EventHero event={event} />
 
   <div class="container">
     <div class="page-layout">
@@ -34,10 +35,17 @@ if (!event) throw new Error('Event mfa-writing-25th-anniversary not found');
           id="about"
           kicker="About the Celebration"
           paragraphs={[
-            "Celebrating 25 years of the MFA Writing program at CCA — an all-year reunion bringing together alumni, current students, and faculty to mark a quarter century of literary community.",
-            "More details coming soon.",
+            "Join us for a full day of readings, conversation, reunion, and celebration marking 25 years of the MFA in Writing Program at California College of the Arts.",
+            "Alumni, faculty, current students, and friends gather to reflect on the program's history and the many paths a writing life can take — from first pages to long careers, from CCA studios to the wider world.",
           ]}
         />
+
+        {event.data.schedule && (
+          <section id="schedule" class="content-section reveal">
+            <h2 class="section-heading">Program Schedule</h2>
+            <CeremonySchedule schedule={event.data.schedule} />
+          </section>
+        )}
       </div>
     </div>
   </div>
@@ -46,5 +54,15 @@ if (!event) throw new Error('Event mfa-writing-25th-anniversary not found');
 <style>
   .page-layout {
     padding-block: var(--space-8) var(--space-20);
+  }
+
+  .content-section {
+    margin-block-start: var(--space-12);
+  }
+
+  .section-heading {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin-block-end: var(--space-6);
   }
 </style>

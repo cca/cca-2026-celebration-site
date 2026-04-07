@@ -7,9 +7,27 @@
   "themeKey": "thesis-grad",
   "date": "2026-04-11",
   "time": "11:00 AM – 6:00 PM",
-  "location": "CCA DG – N402 (H&S Graduate Homeroom)",
+  "location": "Double Ground – N402 (H&S Graduate Homeroom)",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "Celebrating 25 years of the MFA Writing program at CCA — an all-year reunion and anniversary celebration.",
+  "description": "Celebrating 25 years of the MFA Writing program at CCA — an all-year reunion bringing together alumni, faculty, students, and friends for readings, conversation, and celebration.",
+  "longDescription": "Join us for a full day of readings, conversation, reunion, and celebration marking 25 years of the MFA in Writing Program at California College of the Arts. Alumni, faculty, current students, and friends gather to reflect on the program's history and the many paths a writing life can take.",
   "rsvpUrl": "https://www.eventbrite.com/e/cca-mfa-in-writing-25th-anniversary-celebration-all-year-reunion-tickets-1985402813260",
+  "schedule": [
+    { "time": "11:00–11:15 AM", "label": "Welcome & Opening Remarks" },
+    { "time": "11:15 AM–12:15 PM", "label": "Alumni Conversation — \"First Pages — Beginnings & Breakthroughs\"" },
+    { "time": "12:15–1:00 PM", "label": "Faculty Reading" },
+    { "time": "1:00–2:00 PM", "label": "Lunch & Merriment (catered)" },
+    { "time": "2:00–3:00 PM", "label": "Alumni Panel — \"The Long Work — Writing Lives & Writing Worlds\"" },
+    { "time": "3:00–3:30 PM", "label": "Coffee & Cookies Break" },
+    { "time": "3:30–4:15 PM", "label": "25 Voices Lightning Reading" },
+    { "time": "4:15–5:00 PM", "label": "Storytelling Hour — \"I Left My Heart at CCA\"" },
+    { "time": "5:00–6:00 PM", "label": "Closing Toast & Celebration" }
+  ],
+  "image": {
+    "src": "/images/cca-photography/mfa-writing-25th-anniversary-poster.png",
+    "alt": "I Left My Heart at CCA MFA Writing 25th Anniversary Celebration — collage poster",
+    "aspectRatio": "4/5",
+    "heroOnly": true
+  },
   "order": 6.7
 }
