@@ -9,9 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.8",
     "astro": "^5.17.1",
     "astro-sheet-loader": "^1.0.5",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "typescript": "^6.0.2"
   },
   "devDependencies": {
     "svgo": "^4.0.0",

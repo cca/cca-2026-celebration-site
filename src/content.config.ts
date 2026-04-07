@@ -1,6 +1,19 @@
 import { defineCollection, reference, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+const degreeType = z.enum([
+  "BFA",
+  "BA",
+  "MFA",
+  "MA",
+  "MBA",
+  "MArch",
+  "MDes",
+  "MDesign",
+  "BArch",
+  "MAAD",
+]);
+
 const programs = defineCollection({
   loader: glob({ pattern: "*.json", base: "src/content/programs" }),
   schema: z.object({
@@ -13,20 +26,7 @@ const programs = defineCollection({
       "humanities-sciences",
       "writing",
     ]),
-    degreeTypes: z.array(
-      z.enum([
-        "BFA",
-        "BA",
-        "MFA",
-        "MA",
-        "MBA",
-        "MArch",
-        "MDes",
-        "MDesign",
-        "BArch",
-        "MAAD",
-      ]),
-    ),
+    degreeTypes: z.array(degreeType),
     description: z.string(),
     url: z.string(),
   }),
@@ -45,18 +45,7 @@ const students = defineCollection({
     }),
     program: reference("programs"),
     degreeLevel: z.enum(["undergraduate", "graduate"]),
-    degreeType: z.enum([
-      "BFA",
-      "BA",
-      "MFA",
-      "MA",
-      "MBA",
-      "MArch",
-      "MDes",
-      "MDesign",
-      "BArch",
-      "MAAD",
-    ]),
+    degreeType,
     expectedGraduation: z.string(),
     bio: z.string().optional(),
     artistStatement: z.string().optional(),
