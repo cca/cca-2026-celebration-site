@@ -12,8 +12,8 @@ if (isPhaseBefore(phase, 'pre-event')) {
   return Astro.redirect('/');
 }
 
-const event = await getEntry('events', 'showcase');
-if (!event) throw new Error('Event showcase not found');
+const event = await getEntry('events', 'all-campus-graduation-exhibition');
+if (!event) throw new Error('Event all-campus-graduation-exhibition not found');
 ---
 
 <ThesisEventLayout event={event}>

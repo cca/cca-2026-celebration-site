@@ -16,7 +16,7 @@ const events = (await getCollection('events')).sort((a, b) => a.data.order - b.d
 const commencementEntry = await getEntry('events', 'commencement-undergraduate');
 
 // Showcase / Graduation Exhibitions data
-const showcaseEntry = await getEntry('events', 'showcase');
+const showcaseEntry = await getEntry('events', 'all-campus-graduation-exhibition');
 
 // Phase-based logic replaces date-computed isPostEvent
 const phase = getCurrentPhase(Astro.url);

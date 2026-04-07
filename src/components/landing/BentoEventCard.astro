@@ -16,16 +16,9 @@ const { event, size, class: className } = Astro.props;
 const { title, shortTitle, slug, date, endDate, location, description, type, degreeLevel, themeKey, externalUrl, image } = event.data;
 
 function getEventUrl(type: string, degreeLevel: string, slug: string): string {
+  if (type === "commencement") return degreeLevel === "all" ? "/commencement/" : `/commencement/${degreeLevel}/`;
   if (type === "celebration") return `/commencement/${slug}/`;
-  if (type === "senior-exhibition" || type === "thesis-exhibition") return `/thesis/${slug}/`;
-  if (type === "screening" || type === "game-showcase" || type === "studio-review" || type === "open-studios" || type === "symposium" || type === "reception" || type === "venture-showcase") return `/thesis/${slug}/`;
-  const typeMap: Record<string, string> = {
-    commencement: "/commencement/",
-    showcase: "/thesis/all-campus-graduation-exhibition/",
-  };
-  const base = typeMap[type] ?? "/";
-  if (degreeLevel === "all") return base;
-  return `${base}${degreeLevel}/`;
+  return `/thesis/${slug}/`;
 }
 
 const isExternal = !!externalUrl;

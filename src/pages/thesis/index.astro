@@ -19,8 +19,8 @@ const regAlt = (f: string, fb: string) => (altRegistry as Record<string, string>
 const phase = getCurrentPhase(Astro.url);
 
 
-const event = await getEntry('events', 'showcase');
-if (!event) throw new Error('Event showcase not found');
+const event = await getEntry('events', 'all-campus-graduation-exhibition');
+if (!event) throw new Error('Event all-campus-graduation-exhibition not found');
 
 const allEvents = (await getCollection('events')).sort((a, b) => a.data.order - b.data.order);
 const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
