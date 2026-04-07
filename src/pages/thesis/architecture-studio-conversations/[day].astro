@@ -6,6 +6,7 @@ import EventContextSection from '../../../components/events/EventContextSection.
 import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
 import { getCurrentPhase } from '../../../lib/utils/phase';
 import { isPhaseBefore } from '../../../config/phases';
+import { architectureConversationsGallery } from '../../../data/cca-photography';
 
 export async function getStaticPaths() {
   const event = await getEntry('events', 'architecture-studio-conversations');
@@ -36,14 +37,6 @@ const dayEventForHero = {
   },
 } as typeof event;
 
-const galleryImages = [
-  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: 'Architecture students present their final studio work at CCA' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: 'Architectural models and drawings on display during studio conversations' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: 'Faculty and students in discussion during Architecture Division final reviews' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: 'Students presenting large-format architectural drawings at CCA' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: 'Architecture studio model work displayed during final conversations' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: 'CCA Architecture Division final review presentations' },
-];
 ---
 
 <ThesisEventLayout event={event}>
@@ -84,7 +77,7 @@ const galleryImages = [
     <section id="gallery" class="gallery-section reveal">
       <span class="gallery-kicker">From Last Year's Reviews</span>
       <div class="gallery-grid">
-        {galleryImages.map((img, i) => (
+        {architectureConversationsGallery.map((img, i) => (
           <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
             <img src={img.src} alt={img.alt} loading="lazy" />
           </div>

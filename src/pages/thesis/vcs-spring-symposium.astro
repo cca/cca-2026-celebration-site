@@ -7,6 +7,8 @@ import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import CeremonySchedule from '../../components/events/CeremonySchedule.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
+import altRegistry from "../../data/photography-alt-text-registry.json";
+const regAlt = (f: string, fb: string) => (altRegistry as Record<string, string>)[f] ?? fb;
 
 const phase = getCurrentPhase(Astro.url);
 if (isPhaseBefore(phase, 'pre-event')) {
@@ -25,13 +27,13 @@ const presenters = [
 ];
 
 const galleryImages = [
-  { src: '/images/cca-photography/VCS-processed-images-001-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-002-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-003-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-004-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-005-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-006-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
-  { src: '/images/cca-photography/VCS-processed-images-007-04-2026.jpg', alt: 'VCS Spring Symposium 2025' },
+  { src: '/images/cca-photography/VCS-processed-images-001-04-2026.jpg', alt: regAlt('VCS-processed-images-001-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-002-04-2026.jpg', alt: regAlt('VCS-processed-images-002-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-003-04-2026.jpg', alt: regAlt('VCS-processed-images-003-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-004-04-2026.jpg', alt: regAlt('VCS-processed-images-004-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-005-04-2026.jpg', alt: regAlt('VCS-processed-images-005-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-006-04-2026.jpg', alt: regAlt('VCS-processed-images-006-04-2026.jpg', 'VCS Spring Symposium 2026') },
+  { src: '/images/cca-photography/VCS-processed-images-007-04-2026.jpg', alt: regAlt('VCS-processed-images-007-04-2026.jpg', 'VCS Spring Symposium 2026') },
 ];
 ---
 

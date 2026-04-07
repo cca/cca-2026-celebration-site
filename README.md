@@ -99,3 +99,40 @@ The site uses 4 content phases to progressively reveal information:
 | `post-event`    | Archive mode with full retrospective content |
 
 To change the active phase, edit `src/config/phases.ts`. A dev toolbar integration is available to test phase behavior locally without changing the config file.
+
+## Event Hero Images
+
+Two display modes are available, set in the event's JSON data file:
+
+| Mode | Field | Description |
+| :--- | :---- | :---------- |
+| **Poster** | `image` | Clean unmasked image. Supports `aspectRatio` and `heroOnly: true`. |
+| **Framed** | `heroImages` | SVG clip-masked wavy frame. Pass `frameId: "frame-01"` through `"frame-23"`. Use `heroImageSize="large"` on `EventHero` to scale up. |
+
+If neither field is set, the hero renders with no image. Both modes are handled by `src/components/events/EventHero.astro`.
+
+## Event Photo Galleries
+
+Thesis event pages can include a photo gallery section built directly into the page `.astro` file (see `src/pages/thesis/architecture-studio-conversations/index.astro` as a reference). The first image in the grid gets a featured (2-column, 16:9) treatment; remaining images use 4:3.
+
+New photos should be placed in `public/images/cca-photography/` and added to the `ccaPhotography` array in `src/pages/demo/photography.astro` to keep the asset inventory up to date.
+
+## Adding a New Event
+
+Adding an event requires three coordinated changes — all are necessary:
+
+1. **Data file** — create `src/content/events/{slug}.json` (model on an existing event)
+2. **Detail page** — create `src/pages/thesis/{slug}.astro` (copy the closest existing page)
+3. **Bento grid** — add the event to `src/components/landing/BentoEvents.astro`: add a `{ slug, size, area }` entry to the `layout` array, then add the `area` name to all three `grid-template-areas` blocks (mobile, tablet, desktop)
+
+The bento grid is manually laid out — confirm visually in the browser after adding a new event. See `CLAUDE.md` for more detail on the process.
+
+## Updating Event Details
+
+When new details arrive from the CCA portal (schedule, presenters, admission info), update two files:
+
+1. **`src/content/events/{slug}.json`** — update `description` and add any schema-supported fields. The `schedule` field (`{ time, label }` entries) is optional, so events without schedules are unaffected.
+
+2. **`src/pages/thesis/{slug}.astro`** — each page is custom-built, so add whatever sections the content warrants: `EventContextSection` for narrative text, `CeremonySchedule` for a timed program, an inline styled list for presenters or speakers, or an inline photo gallery. Content not supported by the schema (like presenter names) lives as a hardcoded array in the page frontmatter.
+
+See `CLAUDE.md` for the full list of building blocks and reference page examples.

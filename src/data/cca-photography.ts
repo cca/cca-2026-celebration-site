@@ -3,6 +3,10 @@
  * 35 images sourced from the GCP production bucket, local assets, and CCA photo downloads.
  */
 
+import altRegistry from "./photography-alt-text-registry.json";
+const alt = (filename: string, fallback: string): string =>
+  (altRegistry as Record<string, string>)[filename] ?? fallback;
+
 export interface CCAPhoto {
   src: string;
   alt: string;
@@ -16,45 +20,45 @@ export interface PhotoCollection {
 
 export const ccaPhotography: CCAPhoto[] = [
   // GCP bucket + existing local assets
-  { src: '/images/cca-photography/eoy-show-sp25.jpg', alt: 'End of Year Show, Spring 2025' },
-  { src: '/images/cca-photography/commencement-masters24.jpg', alt: 'Commencement, Masters 2024' },
-  { src: '/images/cca-photography/mfa-fine-arts-studio-fa22.jpg', alt: 'MFA Fine Arts Open Studio, Fall 2022' },
-  { src: '/images/cca-photography/gala-event-2023.jpg', alt: 'CCA Gala Event, 2023' },
-  { src: '/images/cca-photography/fashion-materevolve-sp25.png', alt: 'Fashion Materevolve, Spring 2025' },
-  { src: '/images/cca-photography/pole-banners-fa25.jpg', alt: 'CCA Pole Banners, Fall 2025' },
-  { src: '/images/cca-photography/student-work-unnamed.jpg', alt: 'Student Work' },
-  { src: '/images/cca-photography/headshot-arr.png', alt: 'Student Portrait' },
-  { src: '/images/cca-photography/game-arts-showcase.png', alt: 'Game Arts Showcase' },
-  { src: '/images/cca-photography/mfa-thesis.jpg', alt: 'MFA Thesis' },
-  { src: '/images/cca-photography/roxie.jpg', alt: 'Roxie Theater Event' },
-  { src: '/images/cca-photography/thesis-poster.png', alt: 'Thesis Poster' },
+  { src: '/images/cca-photography/eoy-show-sp25.jpg', alt: alt('eoy-show-sp25.jpg', 'End of Year Show, Spring 2025') },
+  { src: '/images/cca-photography/commencement-masters24.jpg', alt: alt('commencement-masters24.jpg', 'Commencement, Masters 2024') },
+  { src: '/images/cca-photography/mfa-fine-arts-studio-fa22.jpg', alt: alt('mfa-fine-arts-studio-fa22.jpg', 'MFA Fine Arts Open Studio, Fall 2022') },
+  { src: '/images/cca-photography/gala-event-2023.jpg', alt: alt('gala-event-2023.jpg', 'CCA Gala Event, 2023') },
+  { src: '/images/cca-photography/fashion-materevolve-sp25.png', alt: alt('fashion-materevolve-sp25.png', 'Fashion Materevolve, Spring 2025') },
+  { src: '/images/cca-photography/pole-banners-fa25.jpg', alt: alt('pole-banners-fa25.jpg', 'CCA Pole Banners, Fall 2025') },
+  { src: '/images/cca-photography/student-work-unnamed.jpg', alt: alt('student-work-unnamed.jpg', 'Student Work') },
+  { src: '/images/cca-photography/headshot-arr.png', alt: alt('headshot-arr.png', 'Student Portrait') },
+  { src: '/images/cca-photography/game-arts-showcase.png', alt: alt('game-arts-showcase.png', 'Game Arts Showcase') },
+  { src: '/images/cca-photography/mfa-thesis.jpg', alt: alt('mfa-thesis.jpg', 'MFA Thesis') },
+  { src: '/images/cca-photography/roxie.jpg', alt: alt('roxie.jpg', 'Roxie Theater Event') },
+  { src: '/images/cca-photography/thesis-poster.png', alt: alt('thesis-poster.png', 'Thesis Poster') },
   // Architecture — Final Conversations, Fall 2025
-  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
-  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: 'Architecture Final Conversations, Fall 2025' },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: alt('arch-final-conversations-fa25-022.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: alt('arch-final-conversations-fa25-026.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: alt('arch-final-conversations-fa25-083.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: alt('arch-final-conversations-fa25-084.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: alt('arch-final-conversations-fa25-150.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: alt('arch-final-conversations-fa25-152.jpg', 'Architecture Final Conversations, Fall 2025') },
   // Architecture — How Soon Is Now, Spring 2026
-  { src: '/images/cca-photography/arch-howsoon-sp26-59.jpg', alt: 'Architecture How Soon Is Now, Spring 2026' },
-  { src: '/images/cca-photography/arch-howsoon-sp26-68.jpg', alt: 'Architecture How Soon Is Now, Spring 2026' },
-  { src: '/images/cca-photography/arch-howsoon-sp26-77.jpg', alt: 'Architecture How Soon Is Now, Spring 2026' },
-  { src: '/images/cca-photography/arch-howsoon-sp26-79.jpg', alt: 'Architecture How Soon Is Now, Spring 2026' },
+  { src: '/images/cca-photography/arch-howsoon-sp26-59.jpg', alt: alt('arch-howsoon-sp26-59.jpg', 'Architecture How Soon Is Now, Spring 2026') },
+  { src: '/images/cca-photography/arch-howsoon-sp26-68.jpg', alt: alt('arch-howsoon-sp26-68.jpg', 'Architecture How Soon Is Now, Spring 2026') },
+  { src: '/images/cca-photography/arch-howsoon-sp26-77.jpg', alt: alt('arch-howsoon-sp26-77.jpg', 'Architecture How Soon Is Now, Spring 2026') },
+  { src: '/images/cca-photography/arch-howsoon-sp26-79.jpg', alt: alt('arch-howsoon-sp26-79.jpg', 'Architecture How Soon Is Now, Spring 2026') },
   // Core 2D, Fall 2025
-  { src: '/images/cca-photography/core-2d-perspective-collage-fa25.jpg', alt: 'Core 2D Perspective Collage, Fall 2025' },
+  { src: '/images/cca-photography/core-2d-perspective-collage-fa25.jpg', alt: alt('core-2d-perspective-collage-fa25.jpg', 'Core 2D Perspective Collage, Fall 2025') },
   // Design Senior Show, Fall 2025
-  { src: '/images/cca-photography/design-senior-show-fa25-39.jpg', alt: 'Design Senior Show, Fall 2025' },
-  { src: '/images/cca-photography/design-senior-show-fa25-54.jpg', alt: 'Design Senior Show, Fall 2025' },
-  { src: '/images/cca-photography/design-senior-show-fa25-67.jpg', alt: 'Design Senior Show, Fall 2025' },
+  { src: '/images/cca-photography/design-senior-show-fa25-39.jpg', alt: alt('design-senior-show-fa25-39.jpg', 'Design Senior Show, Fall 2025') },
+  { src: '/images/cca-photography/design-senior-show-fa25-54.jpg', alt: alt('design-senior-show-fa25-54.jpg', 'Design Senior Show, Fall 2025') },
+  { src: '/images/cca-photography/design-senior-show-fa25-67.jpg', alt: alt('design-senior-show-fa25-67.jpg', 'Design Senior Show, Fall 2025') },
   // Fashion x Roots Stereo Film Stills
-  { src: '/images/cca-photography/fashion-roots-stereo-film-01.jpg', alt: 'Fashion x Roots Stereo Film Still' },
-  { src: '/images/cca-photography/fashion-roots-stereo-film-08.jpg', alt: 'Fashion x Roots Stereo Film Still' },
-  { src: '/images/cca-photography/fashion-roots-stereo-film-12.jpg', alt: 'Fashion x Roots Stereo Film Still' },
-  { src: '/images/cca-photography/fashion-roots-stereo-film-46.jpg', alt: 'Fashion x Roots Stereo Film Still' },
+  { src: '/images/cca-photography/fashion-roots-stereo-film-01.jpg', alt: alt('fashion-roots-stereo-film-01.jpg', 'Fashion x Roots Stereo Film Still') },
+  { src: '/images/cca-photography/fashion-roots-stereo-film-08.jpg', alt: alt('fashion-roots-stereo-film-08.jpg', 'Fashion x Roots Stereo Film Still') },
+  { src: '/images/cca-photography/fashion-roots-stereo-film-12.jpg', alt: alt('fashion-roots-stereo-film-12.jpg', 'Fashion x Roots Stereo Film Still') },
+  { src: '/images/cca-photography/fashion-roots-stereo-film-46.jpg', alt: alt('fashion-roots-stereo-film-46.jpg', 'Fashion x Roots Stereo Film Still') },
   // HAAVC Tea Ceremony, Fall 2025
-  { src: '/images/cca-photography/haavc-tea-ceremony-fa25.jpg', alt: 'HAAVC Tea Ceremony, Fall 2025' },
+  { src: '/images/cca-photography/haavc-tea-ceremony-fa25.jpg', alt: alt('haavc-tea-ceremony-fa25.jpg', 'HAAVC Tea Ceremony, Fall 2025') },
   // Staff Show, Fall 2025
-  { src: '/images/cca-photography/staff-show-every-day-strange-fa25.jpg', alt: 'Staff Show: Every Day Strange, Fall 2025' },
+  { src: '/images/cca-photography/staff-show-every-day-strange-fa25.jpg', alt: alt('staff-show-every-day-strange-fa25.jpg', 'Staff Show: Every Day Strange, Fall 2025') },
 ];
 
 // --- Named subcollections for editor image panel ---
@@ -112,8 +116,18 @@ export const endOfYearShowPhotography: CCAPhoto[] = [
   { src: '/images/eoy-show-past/previousEOYShowPhotos-030-03-2026.jpg', alt: 'A wooden cross-shaped display structure holds leather-bound books and white pages with black and white photographic prints and imagery arranged in a contemplative studio setting.' },
 ];
 
+export const architectureConversationsGallery: CCAPhoto[] = [
+  { src: '/images/cca-photography/arch-final-conversations-fa25-022.jpg', alt: alt('arch-final-conversations-fa25-022.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-026.jpg', alt: alt('arch-final-conversations-fa25-026.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-083.jpg', alt: alt('arch-final-conversations-fa25-083.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-084.jpg', alt: alt('arch-final-conversations-fa25-084.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-150.jpg', alt: alt('arch-final-conversations-fa25-150.jpg', 'Architecture Final Conversations, Fall 2025') },
+  { src: '/images/cca-photography/arch-final-conversations-fa25-152.jpg', alt: alt('arch-final-conversations-fa25-152.jpg', 'Architecture Final Conversations, Fall 2025') },
+];
+
 export const photoCollections: PhotoCollection[] = [
   { id: 'cca', label: 'CCA Photography', photos: ccaPhotography },
   { id: 'commencement', label: 'Commencement', photos: commencementPhotography },
   { id: 'eoy-show', label: 'End of Year Show', photos: endOfYearShowPhotography },
+  { id: 'architecture', label: 'Architecture Studio Conversations', photos: architectureConversationsGallery },
 ];

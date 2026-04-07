@@ -1,15 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import altTextData from "../../data/photography-alt-text.json";
-import altTextEoy from "../../data/photography-alt-text-eoy.json";
-import altTextCommencement from "../../data/photography-alt-text-commencement.json";
-import altTextEvents from "../../data/photography-alt-text-events.json";
-import altTextThesis from "../../data/photography-alt-text-thesis.json";
-const altText = altTextData as Record<string, string>;
-const altTextEoyMap = altTextEoy as Record<string, string>;
-const altTextCommencementMap = altTextCommencement as Record<string, string>;
-const altTextEventsMap = altTextEvents as Record<string, string>;
-const altTextThesisMap = altTextThesis as Record<string, string>;
+import altRegistry from "../../data/photography-alt-text-registry.json";
+const altText = altRegistry as Record<string, string>;
 
 const ccaPhotography = [
   "arch-final-conversations-fa25-022.jpg",
@@ -122,12 +114,12 @@ function cardId(section: string, file: string) {
           <figure class="card" id={cardId("eoy-show-past", file)}>
             <img
               src={`/images/eoy-show-past/${file}`}
-              alt={altTextEoyMap[file] ?? file}
+              alt={altText[file] ?? file}
               loading="lazy"
             />
             <figcaption>{file}</figcaption>
-            {altTextEoyMap[file] && (
-              <p class="alt-text-preview">{altTextEoyMap[file]}</p>
+            {altText[file] && (
+              <p class="alt-text-preview">{altText[file]}</p>
             )}
           </figure>
         ))}
@@ -142,12 +134,12 @@ function cardId(section: string, file: string) {
           <figure class="card" id={cardId("commencement-past", file)}>
             <img
               src={`/images/commencement-past/${file}`}
-              alt={altTextCommencementMap[file] ?? file}
+              alt={altText[file] ?? file}
               loading="lazy"
             />
             <figcaption>{file}</figcaption>
-            {altTextCommencementMap[file] && (
-              <p class="alt-text-preview">{altTextCommencementMap[file]}</p>
+            {altText[file] && (
+              <p class="alt-text-preview">{altText[file]}</p>
             )}
           </figure>
         ))}
@@ -162,12 +154,12 @@ function cardId(section: string, file: string) {
           <figure class="card" id={cardId("events", file)}>
             <img
               src={`/images/events/${file}`}
-              alt={altTextEventsMap[file] ?? file}
+              alt={altText[file] ?? file}
               loading="lazy"
             />
             <figcaption>{file}</figcaption>
-            {altTextEventsMap[file] && (
-              <p class="alt-text-preview">{altTextEventsMap[file]}</p>
+            {altText[file] && (
+              <p class="alt-text-preview">{altText[file]}</p>
             )}
           </figure>
         ))}
@@ -182,12 +174,12 @@ function cardId(section: string, file: string) {
           <figure class="card" id={cardId("thesis", file)}>
             <img
               src={`/images/thesis/${file}`}
-              alt={altTextThesisMap[file] ?? file}
+              alt={altText[file] ?? file}
               loading="lazy"
             />
             <figcaption>{file}</figcaption>
-            {altTextThesisMap[file] && (
-              <p class="alt-text-preview">{altTextThesisMap[file]}</p>
+            {altText[file] && (
+              <p class="alt-text-preview">{altText[file]}</p>
             )}
           </figure>
         ))}

@@ -13,6 +13,8 @@ import HalftoneProceduralScan from '../../components/effects/HalftoneProceduralS
 import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
+import altRegistry from "../../data/photography-alt-text-registry.json";
+const regAlt = (f: string, fb: string) => (altRegistry as Record<string, string>)[f] ?? fb;
 
 const phase = getCurrentPhase(Astro.url);
 
@@ -54,7 +56,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         <FramedImage
           frameId="frame-04"
           src="/images/cca-photography/eoy-show-sp25.jpg"
-          alt="Students and visitors at the CCA end-of-year show"
+          alt={regAlt('eoy-show-sp25.jpg', 'Students and visitors at the CCA end-of-year show')}
           uid="thesis-hero-1"
         />
       </div>
@@ -69,7 +71,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         <FramedImage
           frameId="frame-11"
           src="/images/cca-photography/design-senior-show-fa25-54.jpg"
-          alt="Design senior show installation view"
+          alt={regAlt('design-senior-show-fa25-54.jpg', 'Design senior show installation view')}
           uid="thesis-hero-2"
         />
       </div>
@@ -84,7 +86,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         <FramedImage
           frameId="frame-07"
           src="/images/cca-photography/design-senior-show-fa25-39.jpg"
-          alt="Design senior show exhibition view"
+          alt={regAlt('design-senior-show-fa25-39.jpg', 'Design senior show exhibition view')}
           uid="thesis-hero-3"
         />
       </div>
