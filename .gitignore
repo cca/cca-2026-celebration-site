@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 # Claude Code
 .claude
+
+# Intermediate build artifacts
+tmp/
