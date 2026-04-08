@@ -144,9 +144,7 @@ const filterId = `halftone-warp-bg`;
       prefersReducedMotion.removeEventListener('change', onMotionChange);
       halftoneCleanup = undefined;
     };
-    document.addEventListener('astro:before-swap', () => halftoneCleanup?.(), { once: true });
   }
 
   initHalftoneAnimation();
-  document.addEventListener('astro:page-load', initHalftoneAnimation);
 </script>

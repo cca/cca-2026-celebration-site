@@ -169,8 +169,6 @@ const doubledImages = [...images, ...images];
       cancelAnimationFrame(rafId);
       cleanupFn = undefined;
     };
-    document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
-
     // Lightbox
     triggers.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -195,7 +193,6 @@ const doubledImages = [...images, ...images];
   }
 
   initPastGallery();
-  document.addEventListener('astro:page-load', initPastGallery);
 </script>
 
 <style>

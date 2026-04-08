@@ -219,9 +219,8 @@ function initCreditsRoll() {
     cleanup = null;
   };
 
-  document.addEventListener('astro:before-swap', () => cleanup?.(), { once: true });
 }
 
-document.addEventListener('astro:page-load', initCreditsRoll);
+document.addEventListener('DOMContentLoaded', initCreditsRoll);
 
 export {};

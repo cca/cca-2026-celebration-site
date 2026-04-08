@@ -198,12 +198,9 @@ function init() {
       cancelAnimationFrame(rafId);
       cancelLoop = undefined;
     };
-    document.addEventListener('astro:before-swap', () => cancelLoop?.(), { once: true });
   }
 }
 
-// Init on load and on Astro page transitions
 init();
-document.addEventListener('astro:page-load', init);
 
 export {};

@@ -337,12 +337,13 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     onScroll();
   }
 
-  document.addEventListener('astro:page-load', initHeaderNav);
+  initHeaderNav();
 </script>
 
 <style>
   /* ── Header shell ── */
   .site-header {
+    view-transition-name: site-header;
     position: sticky;
     top: 0;
     z-index: 100;

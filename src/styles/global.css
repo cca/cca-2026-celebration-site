@@ -2,6 +2,12 @@
    Global Reset & Base Typography
    ========================================================================== */
 
+/* Native cross-document View Transitions (Chrome 126+, Safari 18.2+)
+   Animates between page navigations without SPA routing — fixes iOS swipe-back. */
+@view-transition {
+  navigation: auto;
+}
+
 /* Modern CSS Reset */
 *,
 *::before,
@@ -19,12 +25,12 @@ html {
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
+  background-color: var(--color-bg);
 }
 
 /* Base Body Styles */
 body {
   min-height: 100dvh;
-  background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--text-base);

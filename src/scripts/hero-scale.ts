@@ -57,6 +57,3 @@ function initHeroScale() {
 
 // Run on initial load
 document.addEventListener('DOMContentLoaded', initHeroScale);
-
-// Re-run after Astro page transitions (View Transitions)
-document.addEventListener('astro:page-load', initHeroScale);

@@ -369,9 +369,7 @@ const {
       cleanupFn = undefined;
     };
 
-    document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
   }
 
   initHalftoneProceduralScan();
-  document.addEventListener('astro:page-load', initHalftoneProceduralScan);
 </script>

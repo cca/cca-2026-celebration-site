@@ -34,4 +34,3 @@ function assignArrows() {
 }
 
 assignArrows();
-document.addEventListener('astro:after-swap', assignArrows);

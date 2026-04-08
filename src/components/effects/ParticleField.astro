@@ -296,10 +296,8 @@ const {
         cleanupFn = undefined;
       };
 
-      document.addEventListener('astro:before-swap', () => cleanupFn?.(), { once: true });
     }
   }
 
   initParticleField();
-  document.addEventListener('astro:page-load', initParticleField);
 </script>

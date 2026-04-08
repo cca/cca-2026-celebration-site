@@ -220,11 +220,9 @@ function init() {
       cancelAnimationFrame(rafId);
       cancelLoop = undefined;
     };
-    document.addEventListener('astro:before-swap', () => cancelLoop?.(), { once: true });
   }
 }
 
 init();
-document.addEventListener('astro:page-load', init);
 
 export {};

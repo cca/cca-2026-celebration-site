@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/global/Header.astro';
 import '../styles/fonts.css';
 import '../styles/global.css';
@@ -30,11 +29,10 @@ const metaDescription = description ?? defaultDescription;
 
     <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/ChimeraDisplay-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <ClientRouter />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
-    <Header minimal={true} transition:animate="none" />
+    <Header minimal={true} />
     <slot />
 
     <script src="../scripts/header-scroll.ts"></script>

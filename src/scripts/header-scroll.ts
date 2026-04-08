@@ -31,4 +31,3 @@ function initHeaderScroll() {
 }
 
 document.addEventListener('DOMContentLoaded', initHeaderScroll);
-document.addEventListener('astro:page-load', initHeaderScroll);

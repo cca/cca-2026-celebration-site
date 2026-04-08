@@ -105,8 +105,6 @@ function initSpotlight() {
     const INTERVAL = 6000;
     let elapsed = 0;
     let lastTime = 0;
-    let rafId: number;
-
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     function goTo(index: number) {
@@ -156,10 +154,10 @@ function initSpotlight() {
         progressFill.style.transform = `scaleX(${pct})`;
       }
 
-      rafId = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     }
 
-    rafId = requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
 
     // Navigation clicks
     navItems.forEach((btn) => {
@@ -183,15 +181,10 @@ function initSpotlight() {
     stage?.addEventListener('mouseenter', () => { hovering = true; });
     stage?.addEventListener('mouseleave', () => { hovering = false; });
 
-    // Cleanup on page transition
-    document.addEventListener('astro:before-swap', () => {
-      cancelAnimationFrame(rafId);
-    }, { once: true });
   });
 }
 
 initSpotlight();
-document.addEventListener('astro:page-load', initSpotlight);
 </script>
 
 <style>

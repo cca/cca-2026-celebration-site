@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/global/Header.astro';
 import Footer from '../components/global/Footer.astro';
 import '../styles/fonts.css';
@@ -27,7 +26,7 @@ const metaImage = ogImage ?? new URL('/og-image.jpg', siteRoot).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={themeKey}>
   <head>
     <meta charset="utf-8" />
     <!-- Google Tag Manager -->
@@ -62,15 +61,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <!-- Preload critical fonts -->
     <link rel="preload" href="/fonts/lineto-brown-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/ChimeraDisplay-Regular.woff2" as="font" type="font/woff2" crossorigin />
-    <ClientRouter />
   </head>
-  <body data-theme={themeKey}>
+  <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5CZR96"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#main">Skip to main content</a>
-    <Header minimal={minimalHeader} transition:animate="none" />
+    <Header minimal={minimalHeader} />
     <main id="main">
       <slot />
     </main>
