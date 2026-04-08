@@ -416,7 +416,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
   }
 
   /* ── Shared nav link style ── */
-  .nav-link {
+  .nav-link,
+  .nav-link:visited {
     appearance: none;
     font-family: var(--font-body);
     font-size: var(--text-sm);
@@ -537,7 +538,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     gap: var(--space-2);
   }
 
-  .nav-dropdown ul a {
+  .nav-dropdown ul a,
+  .nav-dropdown ul a:visited {
     font-size: var(--text-xs);
     line-height: 1.2;
     white-space: nowrap;
@@ -674,7 +676,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     margin-bottom: var(--space-4);
   }
 
-  .mobile-group-label {
+  .mobile-group-label,
+  .mobile-group-label:visited {
     display: block;
     font-weight: 600;
     font-size: var(--text-sm);
@@ -685,7 +688,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
   }
 
   .mobile-group-label:hover,
-  .mobile-group-label[aria-current="page"] {
+  .mobile-group-label[aria-current="page"],
+  .mobile-group-label[data-active="true"] {
     color: var(--color-accent);
   }
 
@@ -699,7 +703,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     padding-left: var(--space-4);
   }
 
-  .mobile-group ul a {
+  .mobile-group ul a,
+  .mobile-group ul a:visited {
     font-size: var(--text-sm);
     line-height: 1.2;
     color: var(--color-text);
@@ -712,7 +717,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
     color: var(--color-accent);
   }
 
-  .mobile-top-link {
+  .mobile-top-link,
+  .mobile-top-link:visited {
     display: block;
     font-family: var(--font-heading);
     font-weight: 700;
@@ -725,7 +731,8 @@ const isSubscribeActive = currentPath.startsWith("/subscribe");
   }
 
   .mobile-top-link:hover,
-  .mobile-top-link[aria-current="page"] {
+  .mobile-top-link[aria-current="page"],
+  .mobile-top-link[data-active="true"] {
     color: var(--color-accent);
   }
 
