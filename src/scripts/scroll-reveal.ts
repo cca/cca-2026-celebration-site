@@ -49,26 +49,3 @@ function initScrollReveal() {
 
 document.addEventListener('DOMContentLoaded', initScrollReveal);
 
-// Cross-document view transitions capture the new page before JS runs,
-// so .reveal elements are at opacity:0 in the snapshot — they appear as
-// white holes when the old page fades away. Fix: immediately mark all
-// reveals visible for the transition, then reset below-fold ones after
-// so they still animate on scroll.
-document.addEventListener('pagereveal', (e) => {
-  // pagereveal.viewTransition is not yet in stable TS types
-  const vt = (e as Event & { viewTransition?: ViewTransition }).viewTransition;
-  if (!vt) return;
-
-  const reveals = document.querySelectorAll<HTMLElement>(REVEAL_SELECTOR);
-  reveals.forEach(el => el.classList.add('is-visible'));
-
-  vt.finished.then(() => {
-    reveals.forEach(el => {
-      // Keep visible if already in viewport; reset below-fold so they animate on scroll
-      if (el.getBoundingClientRect().top >= window.innerHeight) {
-        el.classList.remove('is-visible');
-      }
-    });
-    initScrollReveal();
-  });
-});

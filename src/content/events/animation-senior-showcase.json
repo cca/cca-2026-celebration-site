@@ -6,13 +6,13 @@
   "degreeLevel": "undergraduate",
   "themeKey": "showcase",
   "date": "2026-05-06",
-  "time": "6:00 PM – 9:00 PM",
+  "time": "6:00 PM \u2013 9:00 PM",
   "location": "Roxie Theater",
   "address": "3117 16th St, San Francisco, CA 94103",
   "description": "A screening of animated short films and senior projects by CCA's graduating Animation students.",
   "heroImages": [
     {
-      "src": "/images/cca-photography/roxie.jpg",
+      "src": "../../assets/images/cca-photography/roxie.jpg",
       "alt": "The Roxie Theater marquee in San Francisco's Mission District",
       "frameId": "frame-17"
     }

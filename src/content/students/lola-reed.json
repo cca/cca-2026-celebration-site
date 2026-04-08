@@ -3,7 +3,7 @@
   "lastName": "Reed",
   "slug": "lola-reed",
   "photo": {
-    "src": "/images/students/placeholder.jpg",
+    "src": "../../assets/images/students/placeholder.jpg",
     "alt": "Lola Reed"
   },
   "program": "painting-drawing",

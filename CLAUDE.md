@@ -69,7 +69,7 @@ Typography uses fluid sizing via `clamp()` on `--text-xs` through `--text-5xl`. 
 
 ### Scroll Animations
 
-Add `.reveal`, `.reveal-scale`, `.reveal-left`, `.reveal-right`, or `.reveal-clip` to any element. `src/scripts/scroll-reveal.ts` runs an `IntersectionObserver` that adds `.is-visible` on viewport entry. For staggered children, add `.stagger-1` through `.stagger-8`. The observer reinitializes on `astro:page-load` for View Transitions compatibility.
+Add `.reveal`, `.reveal-scale`, `.reveal-left`, `.reveal-right`, or `.reveal-clip` to any element. `src/scripts/scroll-reveal.ts` runs an `IntersectionObserver` that adds `.is-visible` on viewport entry. For staggered children, add `.stagger-1` through `.stagger-8`.
 
 ### Layout Hierarchy
 

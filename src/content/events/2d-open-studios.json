@@ -12,7 +12,7 @@
   "rsvpUrl": "https://www.eventbrite.com/e/1976504761949",
   "heroImages": [
     {
-      "src": "/images/cca-photography/core-2d-perspective-collage-fa25.jpg",
+      "src": "../../assets/images/cca-photography/core-2d-perspective-collage-fa25.jpg",
       "alt": "CCA 2D students working on perspective and collage projects",
       "frameId": "frame-11"
     }

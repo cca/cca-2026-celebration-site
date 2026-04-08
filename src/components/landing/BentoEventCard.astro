@@ -4,6 +4,7 @@
  * Supports large (2×2), tall (1×2), wide (2×1), and compact (1×1) variants.
  */
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 import { formatDate, formatDateRange } from "../../lib/utils/format";
 
 interface Props {
@@ -45,7 +46,14 @@ const hasImage = !!image && !image.heroOnly;
 <a href={href} class:list={['bento-card', `bento-card--${size}`, hasImage && 'bento-card--has-image', 'reveal', className]} {...isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>
   {hasImage && (
     <div class="bento-card__img-wrap">
-      <img src={image.src} alt={image.alt} class="bento-card__img" loading="lazy" />
+      <Image
+        src={image.src}
+        alt={image.alt}
+        class="bento-card__img"
+        loading="lazy"
+        widths={[400, 800]}
+        sizes="(min-width: 1200px) 560px, (min-width: 768px) 50vw, 95vw"
+      />
     </div>
   )}
   <article>

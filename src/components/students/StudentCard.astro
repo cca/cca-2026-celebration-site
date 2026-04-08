@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 
 interface Props {
   student: CollectionEntry<"students">;
@@ -14,7 +15,7 @@ const href = `/showcase/students/${slug}/`;
 <a href={href} class="student-card reveal">
   <article>
     <div class="student-photo">
-      <img src={photo.src} alt={photo.alt} loading="lazy" />
+      <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
     </div>
     <div class="student-info">
       <h3 class="student-name">{firstName} {lastName}</h3>

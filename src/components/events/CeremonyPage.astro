@@ -1,5 +1,6 @@
 ---
 import { getEntry, getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import EventLayout from '../../layouts/EventLayout.astro';
 import EventHero from './EventHero.astro';
 
@@ -58,13 +59,18 @@ if (ceremonyProgram?.studentSpeaker) {
   const studentEntry = sp.student
     ? await getEntry('students', sp.student.id)
     : null;
+  let speakerPhoto: { src: string; alt: string } | undefined;
+  if (studentEntry?.data.photo) {
+    const optimized = await getImage({ src: studentEntry.data.photo.src, format: 'webp', width: 280 });
+    speakerPhoto = { src: optimized.src, alt: studentEntry.data.photo.alt };
+  }
   speakerAsPerson = {
     name: sp.name,
     slug: `speaker-${sp.name.toLowerCase().replace(/\s+/g, '-')}`,
     role: 'student-speaker',
     title: sp.program,
     bio: sp.speechHighlights,
-    photo: studentEntry?.data.photo,
+    photo: speakerPhoto,
   };
 }
 

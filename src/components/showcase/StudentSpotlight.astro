@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 import { fullName } from "../../lib/utils/format";
 import Button from "../ui/Button.astro";
 
@@ -34,7 +35,7 @@ const excerpt = artistStatement || bio;
       </div>
       <div class="spotlight__portrait">
         <div class="spotlight__frame">
-          <img src={photo.src} alt={photo.alt} loading="lazy" />
+          <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
         </div>
       </div>
     </div>

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
   person: {
     name: string;
@@ -26,7 +28,7 @@ const roleLabel = roleLabels[person.role] ?? person.role;
 <article class="person-card reveal">
   <div class="person-photo">
     {person.photo ? (
-      <img src={person.photo.src} alt={person.photo.alt} loading="lazy" />
+      <Image src={person.photo.src} alt={person.photo.alt} loading="lazy" inferSize />
     ) : (
       <div class="photo-placeholder" />
     )}

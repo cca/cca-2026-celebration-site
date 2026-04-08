@@ -1,55 +1,17 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import altRegistry from "../../data/photography-alt-text-registry.json";
 const altText = altRegistry as Record<string, string>;
 
-const ccaPhotography = [
-  "arch-final-conversations-fa25-022.jpg",
-  "arch-final-conversations-fa25-026.jpg",
-  "arch-final-conversations-fa25-083.jpg",
-  "arch-final-conversations-fa25-084.jpg",
-  "arch-final-conversations-fa25-150.jpg",
-  "arch-final-conversations-fa25-152.jpg",
-  "arch-howsoon-sp26-59.jpg",
-  "arch-howsoon-sp26-68.jpg",
-  "arch-howsoon-sp26-77.jpg",
-  "arch-howsoon-sp26-79.jpg",
-  "commencement-masters24.jpg",
-  "core-2d-perspective-collage-fa25.jpg",
-  "design-senior-show-fa25-39.jpg",
-  "design-senior-show-fa25-54.jpg",
-  "design-senior-show-fa25-67.jpg",
-  "eoy-show-sp25.jpg",
-  "eventbrite-dice-macro-0811.jpg",
-  "fashion-materevolve-sp25.png",
-  "fashion-roots-stereo-film-01.jpg",
-  "fashion-roots-stereo-film-08.jpg",
-  "fashion-roots-stereo-film-12.jpg",
-  "fashion-roots-stereo-film-46.jpg",
-  "fine-arts-senior-exhibition-sp26.png",
-  "gala-event-2023.jpg",
-  "game-arts-showcase.png",
-  "gamearts-2026.png",
-  "haavc-tea-ceremony-fa25.jpg",
-  "headshot-arr.png",
-  "mfa-2026-thesis-banner.png",
-  "mfa-fine-arts-studio-fa22.jpg",
-  "mfa-thesis.jpg",
-  "pole-banners-fa25.jpg",
-  "roxie.jpg",
-  "staff-show-every-day-strange-fa25.jpg",
-  "student-work-unnamed.jpg",
-  "thesis-poster.png",
-  "mfa-writing-25th-anniversary-poster.png",
-  "vcs-spring-symposium-2026-poster.png",
-  "VCS-processed-images-001-04-2026.jpg",
-  "VCS-processed-images-002-04-2026.jpg",
-  "VCS-processed-images-003-04-2026.jpg",
-  "VCS-processed-images-004-04-2026.jpg",
-  "VCS-processed-images-005-04-2026.jpg",
-  "VCS-processed-images-006-04-2026.jpg",
-  "VCS-processed-images-007-04-2026.jpg",
-];
+const ccaPhotographyGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/cca-photography/*.{jpg,jpeg,png}',
+  { eager: true }
+);
+const ccaPhotography = Object.entries(ccaPhotographyGlob)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([path, mod]) => ({ file: path.split('/').pop()!, src: mod.default }));
 
 const eoyShowPast = Array.from({ length: 30 }, (_, i) => {
   const n = String(i + 1).padStart(3, "0");
@@ -88,14 +50,16 @@ function cardId(section: string, file: string) {
 
     <section id="cca-photography">
       <h2>CCA Photography <span class="count">({ccaPhotography.length})</span></h2>
-      <p class="section-note"><code>/public/images/cca-photography/</code></p>
+      <p class="section-note"><code>/src/assets/images/cca-photography/</code></p>
       <div class="grid">
-        {ccaPhotography.map((file) => (
+        {ccaPhotography.map(({ file, src }) => (
           <figure class="card" id={cardId("cca-photography", file)}>
-            <img
-              src={`/images/cca-photography/${file}`}
+            <Image
+              src={src}
               alt={altText[file] ?? file}
               loading="lazy"
+              width={400}
+              height={300}
             />
             <figcaption>{file}</figcaption>
             {altText[file] && (

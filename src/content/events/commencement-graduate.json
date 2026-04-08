@@ -10,11 +10,11 @@
   "location": "Sydney Goldstein Theater",
   "address": "275 Hayes St, San Francisco, CA 94102",
   "description": "Celebrate with our graduate students as they complete their advanced degrees and embark on the next chapter.",
-  "longDescription": "The morning ceremony of CCA's 119th Commencement honors our graduate Class of 2026 — scholars, researchers, and practitioners who have pushed the boundaries of art, design, architecture, and writing at the highest level. This celebration recognizes their dedication to advanced study and the impact their work will have on communities worldwide.",
+  "longDescription": "The morning ceremony of CCA's 119th Commencement honors our graduate Class of 2026 \u2014 scholars, researchers, and practitioners who have pushed the boundaries of art, design, architecture, and writing at the highest level. This celebration recognizes their dedication to advanced study and the impact their work will have on communities worldwide.",
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg",
+    "src": "../../assets/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg",
     "alt": "Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them."
   },
   "schedule": [

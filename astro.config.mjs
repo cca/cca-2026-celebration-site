@@ -13,10 +13,11 @@ export default defineConfig({
   },
   image: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**.cca.edu",
-      },
+      { protocol: "https", hostname: "**.cca.edu" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "storage.googleapis.com" },
+      { protocol: "https", hostname: "i.ytimg.com" },
+      { protocol: "https", hostname: "i.vimeocdn.com" },
     ],
   },
 });

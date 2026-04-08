@@ -3,7 +3,7 @@
   "lastName": "Zhang",
   "slug": "luochen-zhang",
   "photo": {
-    "src": "/images/students/placeholder.jpg",
+    "src": "../../assets/images/students/placeholder.jpg",
     "alt": "Luochen Zhang"
   },
   "program": "painting-drawing",

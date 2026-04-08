@@ -7,13 +7,13 @@
   "themeKey": "showcase",
   "date": "2026-05-01",
   "endDate": "2026-05-16",
-  "time": "12:00 PM – 6:00 PM",
+  "time": "12:00 PM \u2013 6:00 PM",
   "location": "Wattis Institute / Novack Gallery",
   "address": "360 Kansas St, San Francisco, CA 94107",
   "description": "The culminating exhibition of MFA thesis work by CCA's 2026 graduate candidates, featuring works across all fine arts disciplines.",
   "rsvpUrl": "https://www.eventbrite.com/e/1978199560136",
   "image": {
-    "src": "/images/cca-photography/mfa-2026-thesis-banner.png",
+    "src": "../../assets/images/cca-photography/mfa-2026-thesis-banner.png",
     "alt": "MFA thesis exhibition at CCA's Wattis Institute",
     "heroOnly": true
   }

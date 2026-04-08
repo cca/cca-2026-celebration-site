@@ -3,7 +3,7 @@
   "lastName": "Zamora",
   "slug": "angela-zamora",
   "photo": {
-    "src": "/images/students/placeholder.jpg",
+    "src": "../../assets/images/students/placeholder.jpg",
     "alt": "Angela Zamora"
   },
   "program": "animation",

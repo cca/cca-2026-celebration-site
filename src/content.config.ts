@@ -34,13 +34,13 @@ const programs = defineCollection({
 
 const students = defineCollection({
   loader: glob({ pattern: "*.json", base: "src/content/students" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     firstName: z.string(),
     lastName: z.string(),
     slug: z.string(),
     pronouns: z.string().optional(),
     photo: z.object({
-      src: z.string(),
+      src: image(),
       alt: z.string(),
     }),
     program: reference("programs"),
@@ -81,7 +81,7 @@ const students = defineCollection({
 
 const events = defineCollection({
   loader: glob({ pattern: "*.json", base: "src/content/events" }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     slug: z.string(),
     shortTitle: z.string(),
@@ -100,7 +100,7 @@ const events = defineCollection({
     livestreamUrl: z.string().optional(),
     image: z
       .object({
-        src: z.string(),
+        src: image(),
         alt: z.string(),
         aspectRatio: z.string().optional(),
         heroOnly: z.boolean().optional(),
@@ -109,7 +109,7 @@ const events = defineCollection({
     heroImages: z
       .array(
         z.object({
-          src: z.string(),
+          src: image(),
           alt: z.string(),
           frameId: z.string().optional(),
         }),

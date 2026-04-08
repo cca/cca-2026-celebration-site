@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 
 interface Props {
   speaker: {
@@ -17,7 +18,7 @@ const studentHref = student ? `/students/${student.data.slug}/` : null;
 <div class="speaker-feature reveal">
   {student?.data.photo && (
     <div class="speaker-photo">
-      <img src={student.data.photo.src} alt={student.data.photo.alt} loading="lazy" />
+      <Image src={student.data.photo.src} alt={student.data.photo.alt} loading="lazy" width={120} height={120} />
     </div>
   )}
   <div class="speaker-info">

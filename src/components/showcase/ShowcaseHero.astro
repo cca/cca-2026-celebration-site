@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getImage } from 'astro:assets';
 import Button from "../ui/Button.astro";
 
 interface Props {
@@ -13,8 +14,12 @@ const { students, fallbackImages = [] } = Astro.props;
 const portraits: Array<{ src: string; alt: string }> = [];
 for (const s of students) {
   if (portraits.length >= 4) break;
-  if (s.data.photo.src !== "/images/students/placeholder.jpg") {
-    portraits.push(s.data.photo);
+  // Skip placeholder images (identified by filename)
+  const imgSrc = s.data.photo.src;
+  const srcPath = typeof imgSrc === 'string' ? imgSrc : imgSrc.src;
+  if (!srcPath.includes('placeholder')) {
+    const optimized = await getImage({ src: imgSrc, format: 'webp', width: 640 });
+    portraits.push({ src: optimized.src, alt: s.data.photo.alt });
   }
 }
 // Fill remaining slots with fallback images

@@ -246,6 +246,3 @@ Children that are `.reveal` elements get `.stagger-1` through `.stagger-8` added
 
 The observer automatically checks `prefers-reduced-motion`. If the user has requested reduced motion, all reveal elements get `.is-visible` immediately — no animation plays.
 
-### View Transitions compatibility
-
-The observer runs on both `DOMContentLoaded` (initial load) and `astro:page-load` (after Astro View Transitions navigation). Reveal elements on navigated-to pages animate correctly without any extra setup.

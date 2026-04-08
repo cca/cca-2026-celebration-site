@@ -1,11 +1,13 @@
 ---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { getFrameData } from '../../lib/utils/frame-data';
 
 interface Props {
   /** Frame ID, e.g. "frame-01" */
   frameId: string;
-  /** Image URL */
-  src: string;
+  /** Image source — ImageMetadata (from image() schema or ESM import) or remote URL string */
+  src: string | ImageMetadata;
   /** Alt text (empty string for decorative) */
   alt?: string;
   /** CSS class for the wrapper */
@@ -23,6 +25,7 @@ const {
 } = Astro.props;
 
 const frame = getFrameData(frameId);
+const optimized = await getImage({ src, format: 'webp', quality: 80 });
 ---
 
 <div class:list={['framed-image', className]}>
@@ -41,7 +44,7 @@ const frame = getFrameData(frameId);
     </defs>
 
     <image
-      href={src}
+      href={optimized.src}
       x={frame.minX}
       y={frame.minY}
       width={frame.width}

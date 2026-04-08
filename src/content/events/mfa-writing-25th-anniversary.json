@@ -6,53 +6,53 @@
   "degreeLevel": "graduate",
   "themeKey": "showcase",
   "date": "2026-04-11",
-  "time": "11:00 AM – 6:00 PM",
-  "location": "Double Ground – N402 (H&S Graduate Homeroom)",
+  "time": "11:00 AM \u2013 6:00 PM",
+  "location": "Double Ground \u2013 N402 (H&S Graduate Homeroom)",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "Celebrating 25 years of the MFA Writing program at CCA — an all-year reunion bringing together alumni, faculty, students, and friends for readings, conversation, and celebration.",
+  "description": "Celebrating 25 years of the MFA Writing program at CCA \u2014 an all-year reunion bringing together alumni, faculty, students, and friends for readings, conversation, and celebration.",
   "longDescription": "Join us for a full day of readings, conversation, reunion, and celebration marking 25 years of the MFA in Writing Program at California College of the Arts. Alumni, faculty, current students, and friends gather to reflect on the program's history and the many paths a writing life can take.",
   "rsvpUrl": "https://www.eventbrite.com/e/cca-mfa-in-writing-25th-anniversary-celebration-all-year-reunion-tickets-1985402813260",
   "schedule": [
     {
-      "time": "11:00–11:15 AM",
+      "time": "11:00\u201311:15 AM",
       "label": "Welcome & Opening Remarks"
     },
     {
-      "time": "11:15 AM–12:15 PM",
-      "label": "Alumni Conversation — \"First Pages — Beginnings & Breakthroughs\""
+      "time": "11:15 AM\u201312:15 PM",
+      "label": "Alumni Conversation \u2014 \"First Pages \u2014 Beginnings & Breakthroughs\""
     },
     {
-      "time": "12:15–1:00 PM",
+      "time": "12:15\u20131:00 PM",
       "label": "Faculty Reading"
     },
     {
-      "time": "1:00–2:00 PM",
+      "time": "1:00\u20132:00 PM",
       "label": "Lunch & Merriment (catered)"
     },
     {
-      "time": "2:00–3:00 PM",
-      "label": "Alumni Panel — \"The Long Work — Writing Lives & Writing Worlds\""
+      "time": "2:00\u20133:00 PM",
+      "label": "Alumni Panel \u2014 \"The Long Work \u2014 Writing Lives & Writing Worlds\""
     },
     {
-      "time": "3:00–3:30 PM",
+      "time": "3:00\u20133:30 PM",
       "label": "Coffee & Cookies Break"
     },
     {
-      "time": "3:30–4:15 PM",
+      "time": "3:30\u20134:15 PM",
       "label": "25 Voices Lightning Reading"
     },
     {
-      "time": "4:15–5:00 PM",
-      "label": "Storytelling Hour — \"I Left My Heart at CCA\""
+      "time": "4:15\u20135:00 PM",
+      "label": "Storytelling Hour \u2014 \"I Left My Heart at CCA\""
     },
     {
-      "time": "5:00–6:00 PM",
+      "time": "5:00\u20136:00 PM",
       "label": "Closing Toast & Celebration"
     }
   ],
   "image": {
-    "src": "/images/cca-photography/mfa-writing-25th-anniversary-poster.png",
-    "alt": "I Left My Heart at CCA MFA Writing 25th Anniversary Celebration — collage poster",
+    "src": "../../assets/images/cca-photography/mfa-writing-25th-anniversary-poster.png",
+    "alt": "I Left My Heart at CCA MFA Writing 25th Anniversary Celebration \u2014 collage poster",
     "aspectRatio": "4/5",
     "heroOnly": true
   }

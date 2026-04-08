@@ -8,6 +8,9 @@ import EventViewToggle from '../../components/landing/EventViewToggle.astro';
 import Button from '../../components/ui/Button.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import FramedImage from '../../components/ui/FramedImage.astro';
+import eoyShow from '../../assets/images/cca-photography/eoy-show-sp25.jpg';
+import designShow54 from '../../assets/images/cca-photography/design-senior-show-fa25-54.jpg';
+import designShow39 from '../../assets/images/cca-photography/design-senior-show-fa25-39.jpg';
 import { formatDateRange, formatTime } from '../../lib/utils/format';
 import HalftoneProceduralScan from '../../components/effects/HalftoneProceduralScan.astro';
 import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
@@ -53,7 +56,7 @@ const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.ty
       >
         <FramedImage
           frameId="frame-04"
-          src="/images/cca-photography/eoy-show-sp25.jpg"
+          src={eoyShow}
           alt={regAlt('eoy-show-sp25.jpg', 'Students and visitors at the CCA end-of-year show')}
           uid="thesis-hero-1"
         />
@@ -68,7 +71,7 @@ const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.ty
       >
         <FramedImage
           frameId="frame-11"
-          src="/images/cca-photography/design-senior-show-fa25-54.jpg"
+          src={designShow54}
           alt={regAlt('design-senior-show-fa25-54.jpg', 'Design senior show installation view')}
           uid="thesis-hero-2"
         />
@@ -83,7 +86,7 @@ const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.ty
       >
         <FramedImage
           frameId="frame-07"
-          src="/images/cca-photography/design-senior-show-fa25-39.jpg"
+          src={designShow39}
           alt={regAlt('design-senior-show-fa25-39.jpg', 'Design senior show exhibition view')}
           uid="thesis-hero-3"
         />

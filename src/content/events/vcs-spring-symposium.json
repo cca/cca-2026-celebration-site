@@ -6,7 +6,7 @@
   "degreeLevel": "graduate",
   "themeKey": "showcase",
   "date": "2026-04-25",
-  "time": "11:00 AM – 3:00 PM",
+  "time": "11:00 AM \u2013 3:00 PM",
   "location": "CCA Timken Hall",
   "address": "145 Hooper Street, San Francisco, CA 94107",
   "description": "The annual Visual + Critical Studies Spring Symposium, featuring student presentations and critical discourse. Admission is free and open to the public.",
@@ -46,7 +46,7 @@
   ],
   "rsvpUrl": "https://www.eventbrite.com/e/2026-vcs-spring-symposium-tickets-1985450353454",
   "image": {
-    "src": "/images/cca-photography/vcs-spring-symposium-2026-poster.png",
+    "src": "../../assets/images/cca-photography/vcs-spring-symposium-2026-poster.png",
     "alt": "2026 VCS Spring Symposium poster featuring a halftone dog with a pirate eye patch",
     "aspectRatio": "3/4",
     "heroOnly": true

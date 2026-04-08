@@ -14,7 +14,7 @@
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
-    "src": "/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg",
+    "src": "../../assets/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg",
     "alt": "Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage."
   },
   "schedule": [

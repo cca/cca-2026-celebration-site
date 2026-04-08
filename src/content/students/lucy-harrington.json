@@ -3,7 +3,7 @@
   "lastName": "Harrington",
   "slug": "lucy-harrington",
   "photo": {
-    "src": "/images/students/placeholder.jpg",
+    "src": "../../assets/images/students/placeholder.jpg",
     "alt": "Lucy Harrington"
   },
   "program": "painting-drawing",

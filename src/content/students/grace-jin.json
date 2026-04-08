@@ -3,7 +3,7 @@
   "lastName": "Jin",
   "slug": "grace-jin",
   "photo": {
-    "src": "/images/students/placeholder.jpg",
+    "src": "../../assets/images/students/placeholder.jpg",
     "alt": "Grace Jin"
   },
   "program": "fine-arts",

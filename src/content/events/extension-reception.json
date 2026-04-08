@@ -6,13 +6,13 @@
   "degreeLevel": "all",
   "themeKey": "showcase",
   "date": "2026-05-08",
-  "time": "5:00 PM – 7:00 PM",
+  "time": "5:00 PM \u2013 7:00 PM",
   "location": "California College of the Arts",
   "address": "145 Hooper Street, San Francisco, CA 94107",
   "description": "A reception celebrating the achievements of CCA Extension Nights + Weekends students.",
   "heroImages": [
     {
-      "src": "/images/eoy-show-past/previousEOYShowPhotos-012-03-2026.jpg",
+      "src": "../../assets/images/eoy-show-past/previousEOYShowPhotos-012-03-2026.jpg",
       "alt": "CCA students celebrate at the end of year show",
       "frameId": "frame-03"
     }

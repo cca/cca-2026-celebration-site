@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Story {
   title: string;
   url: string;
@@ -35,7 +37,7 @@ function formatStoryDate(dateStr?: string): string {
             <article>
               {featured.image && (
                 <div class="news-card__image">
-                  <img src={featured.image.src} alt={featured.image.alt} loading="lazy" />
+                  <Image src={featured.image.src} alt={featured.image.alt} loading="lazy" inferSize />
                 </div>
               )}
               <div class="news-card__body">
@@ -70,7 +72,7 @@ function formatStoryDate(dateStr?: string): string {
             <article>
               {story.image && (
                 <div class="news-card__image">
-                  <img src={story.image.src} alt={story.image.alt} loading="lazy" />
+                  <Image src={story.image.src} alt={story.image.alt} loading="lazy" inferSize />
                 </div>
               )}
               <div class="news-card__body">

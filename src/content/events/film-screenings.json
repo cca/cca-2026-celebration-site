@@ -11,7 +11,7 @@
   "description": "Screenings of graduating BFA and MFA Film students' thesis and capstone films.",
   "heroImages": [
     {
-      "src": "/images/cca-photography/fashion-roots-stereo-film-46.jpg",
+      "src": "../../assets/images/cca-photography/fashion-roots-stereo-film-46.jpg",
       "alt": "Scenes from a CCA student film production",
       "frameId": "frame-02"
     }

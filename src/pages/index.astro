@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ParticleField from '../components/effects/ParticleField.astro';
+import { getImage } from 'astro:assets';
 
 import EmailSignup from '../components/sections/EmailSignup.astro';
 
@@ -9,6 +10,9 @@ import Button from '../components/ui/Button.astro';
 import FramedImage from '../components/ui/FramedImage.astro';
 import { getCurrentPhase } from '../lib/utils/phase';
 import { isPhaseAtLeast } from '../config/phases';
+
+import commencement24 from '../assets/images/cca-photography/commencement-masters24.jpg';
+import eoyShowSrc from '../assets/images/cca-photography/eoy-show-sp25.jpg';
 
 // Commencement data (use undergraduate entry for the shared ceremony info)
 const commencementEntry = await getEntry('events', 'commencement-undergraduate');
@@ -19,6 +23,8 @@ const showcaseEntry = await getEntry('events', 'all-campus-graduation-exhibition
 // Phase-based logic replaces date-computed isPostEvent
 const phase = getCurrentPhase(Astro.url);
 const isPostEvent = isPhaseAtLeast(phase, 'post-event');
+
+const bgImage = await getImage({ src: eoyShowSrc, format: 'webp', width: 1440 });
 ---
 
 <BaseLayout title="2026 Celebrations" description="Celebrate the achievements of CCA's Class of 2026 at commencement ceremonies, exhibitions, and showcases.">
@@ -43,7 +49,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
       >
         <FramedImage
           frameId="frame-23"
-          src="/images/cca-photography/commencement-masters24.jpg"
+          src={commencement24}
           alt=""
           uid="home-hero-1"
         />
@@ -54,7 +60,7 @@ const isPostEvent = isPhaseAtLeast(phase, 'post-event');
         data-cursor-strength="0.02"
         data-cursor-max="24"
         data-cursor-lerp="0.05"
-        style="background-image: url('/images/cca-photography/eoy-show-sp25.jpg'); mask-image: url('/images/chimera-expanded-2026/shape-040.svg'); -webkit-mask-image: url('/images/chimera-expanded-2026/shape-040.svg');"
+        style={`background-image: url('${bgImage.src}'); mask-image: url('/images/chimera-expanded-2026/shape-040.svg'); -webkit-mask-image: url('/images/chimera-expanded-2026/shape-040.svg');`}
       ></div>
     </div>
     <div class="hero__content" id="hero-content">

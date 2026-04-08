@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 
 interface Props {
   interviews: CollectionEntry<"video-interviews">[];
@@ -23,7 +24,7 @@ const rest = sortedInterviews.slice(1);
           <div class="video-facade" data-video-facade data-video-url={featured.data.videoUrl} data-video-active="true">
             <div class="video-facade__thumb">
               {featured.data.thumbnail ? (
-                <img src={featured.data.thumbnail} alt={featured.data.title} loading="lazy" />
+                <Image src={featured.data.thumbnail} alt={featured.data.title} loading="lazy" inferSize />
               ) : (
                 <div class="video-facade__placeholder"></div>
               )}

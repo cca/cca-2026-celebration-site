@@ -13,7 +13,7 @@
   "description": "Final studio conversations for the Architecture Division, showcasing student work and design research across all degree levels.",
   "heroImages": [
     {
-      "src": "/images/cca-photography/arch-final-conversations-fa25-022.jpg",
+      "src": "../../assets/images/cca-photography/arch-final-conversations-fa25-022.jpg",
       "alt": "Architecture students present their final studio work at CCA",
       "frameId": "frame-04"
     }
@@ -23,7 +23,7 @@
     {
       "dayNumber": 1,
       "date": "2026-04-30",
-      "time": "12:00 – 6:00 PM",
+      "time": "12:00 \u2013 6:00 PM",
       "studio": "Architecture Core Studios",
       "programs": [
         "BArch"
@@ -32,7 +32,7 @@
     {
       "dayNumber": 2,
       "date": "2026-05-01",
-      "time": "12:00 – 4:00 PM",
+      "time": "12:00 \u2013 4:00 PM",
       "studio": "Interior Design Studios",
       "programs": [
         "Interior Design"
@@ -41,7 +41,7 @@
     {
       "dayNumber": 3,
       "date": "2026-05-02",
-      "time": "10:00 AM – 5:00 PM",
+      "time": "10:00 AM \u2013 5:00 PM",
       "studio": "Advanced & Integrated Architecture Studios",
       "programs": [
         "MArch",
@@ -51,7 +51,7 @@
     {
       "dayNumber": 4,
       "date": "2026-05-03",
-      "time": "10:00 AM – 5:00 PM",
+      "time": "10:00 AM \u2013 5:00 PM",
       "studio": "Graduate Thesis Studio",
       "programs": [
         "MArch",

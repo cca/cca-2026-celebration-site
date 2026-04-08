@@ -9,10 +9,10 @@
   "endDate": "2026-04-24",
   "location": "Deborah and Kenneth Novack Gallery",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "A four-week rotating exhibition series featuring capstone work by graduating Fine Arts seniors — a different cohort each week, with opening receptions every Wednesday evening.",
+  "description": "A four-week rotating exhibition series featuring capstone work by graduating Fine Arts seniors \u2014 a different cohort each week, with opening receptions every Wednesday evening.",
   "longDescription": "The Fine Arts Senior Exhibition features capstone work by students reaching course completion in Spring 2026. The goal is to grow each student's professional practice through planning, installing, and presenting work in a gallery space where they receive in-person critique from faculty and students, document their work professionally, and celebrate accomplishments with friends and family.",
   "image": {
-    "src": "/images/cca-photography/fine-arts-senior-exhibition-sp26.png",
+    "src": "../../assets/images/cca-photography/fine-arts-senior-exhibition-sp26.png",
     "alt": "Fine Arts senior exhibition installation view",
     "aspectRatio": "4/5",
     "heroOnly": true
@@ -22,7 +22,7 @@
       "weekNumber": 1,
       "date": "2026-04-01",
       "endDate": "2026-04-03",
-      "openingReception": "Wednesday, April 1 · 5–7 PM",
+      "openingReception": "Wednesday, April 1 \u00b7 5\u20137 PM",
       "artists": [
         "Amylee Rachael",
         "Bunny",
@@ -40,7 +40,7 @@
       "weekNumber": 2,
       "date": "2026-04-08",
       "endDate": "2026-04-10",
-      "openingReception": "Wednesday, April 8 · 5–7 PM",
+      "openingReception": "Wednesday, April 8 \u00b7 5\u20137 PM",
       "artists": [
         "Devon",
         "Faye Tagen",
@@ -59,7 +59,7 @@
       "weekNumber": 3,
       "date": "2026-04-15",
       "endDate": "2026-04-17",
-      "openingReception": "Wednesday, April 15 · 5–7 PM",
+      "openingReception": "Wednesday, April 15 \u00b7 5\u20137 PM",
       "artists": [
         "Aki Yoshie",
         "Alexandra Guthrie",
@@ -77,7 +77,7 @@
       "weekNumber": 4,
       "date": "2026-04-22",
       "endDate": "2026-04-24",
-      "openingReception": "Wednesday, April 22 · 5–7 PM",
+      "openingReception": "Wednesday, April 22 \u00b7 5\u20137 PM",
       "artists": [
         "D Galvez",
         "Fortune Fechtor",

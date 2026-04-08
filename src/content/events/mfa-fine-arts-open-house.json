@@ -12,7 +12,7 @@
   "rsvpUrl": "https://www.eventbrite.com/e/1975346151514",
   "heroImages": [
     {
-      "src": "/images/cca-photography/staff-show-every-day-strange-fa25.jpg",
+      "src": "../../assets/images/cca-photography/staff-show-every-day-strange-fa25.jpg",
       "alt": "Artwork on view at a CCA fine arts exhibition",
       "frameId": "frame-19"
     }
