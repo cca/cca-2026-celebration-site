@@ -2,12 +2,6 @@
    Global Reset & Base Typography
    ========================================================================== */
 
-/* Native cross-document View Transitions (Chrome 126+, Safari 18.2+)
-   Animates between page navigations without SPA routing — fixes iOS swipe-back. */
-@view-transition {
-  navigation: auto;
-}
-
 /* Modern CSS Reset */
 *,
 *::before,

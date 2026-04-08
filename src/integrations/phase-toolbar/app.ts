@@ -113,12 +113,6 @@ export default {
     // Initial DOM build
     buildUI();
 
-    // Rebuild DOM after View Transitions navigation wipes the shadow root.
-    // Use requestAnimationFrame to ensure canvas shadow root has been reset.
-    document.addEventListener('astro:after-swap', () => {
-      requestAnimationFrame(() => buildUI());
-    });
-
     // When the server confirms the phase change, reload the page from the client
     // side. This is more reliable than server-initiated full-reload because
     // it avoids potential issues with Vite HMR event delivery after View

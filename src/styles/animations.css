@@ -37,46 +37,6 @@
   50% { transform: translateY(6px); opacity: 1; }
 }
 
-/* View Transition keyframes */
-@keyframes page-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes page-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-::view-transition {
-  background-color: var(--color-bg);
-}
-
-/* Linear easing ensures old + new opacity always sums to 1,
-   so the background behind never shows through. No translateY
-   means no viewport coverage gap that would expose the background. */
-::view-transition-old(root) {
-  animation: 200ms linear both page-fade-out;
-}
-
-::view-transition-new(root) {
-  animation: 200ms linear both page-fade-in;
-}
-
-/* Header persists across navigations — no fade, no jump */
-::view-transition-old(site-header),
-::view-transition-new(site-header) {
-  animation: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.01ms;
-    animation-delay: 0ms;
-  }
-}
-
 /* CCA Seal breathing animation */
 @keyframes seal-breathe {
   0%, 100% { transform: scale(1); }
