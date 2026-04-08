@@ -24,13 +24,11 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
   { slug: "game-arts-showcase",                size: "compact", area: "game" },
   { slug: "architecture-studio-conversations", size: "tall",    area: "arch" },
   { slug: "fine-arts-senior-exhibition",       size: "tall",    area: "fase" },
-  { slug: "2d-open-studios",                   size: "compact", area: "twod" },
-  { slug: "film-screenings",                   size: "compact", area: "film" },
-  { slug: "mfa-fine-arts-open-house",          size: "wide",    area: "mopen" },
+  { slug: "film-screenings",                   size: "wide",    area: "mwrit" },
   { slug: "vcs-spring-symposium",              size: "compact", area: "vcs" },
   { slug: "extension-reception",               size: "wide",    area: "ext" },
-  { slug: "dmba-venture-showcase",             size: "wide",    area: "dmba" },
-  { slug: "mfa-writing-25th-anniversary",      size: "wide",    area: "mwrit" },
+  { slug: "dmba-venture-showcase",             size: "compact", area: "dmba" },
+  { slug: "mfa-writing-25th-anniversary",      size: "tall",    area: "film" },
 ];
 ---
 
@@ -124,12 +122,10 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       "anim"
       "game"
       "film"
-      "twod"
-      "mopen"
       "vcs"
-      "ext"
       "dmba"
-      "mwrit";
+      "mwrit"
+      "ext";
   }
 
   .bento-grid__cell {
@@ -153,10 +149,8 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
         "anim       arch"
         "fase       fase"
         "film       game"
-        "twod       mopen"
-        "vcs        ext"
-        "dmba       dmba"
-        "mwrit      mwrit";
+        "vcs        dmba"
+        "mwrit      ext";
     }
   }
 
@@ -168,11 +162,10 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       grid-template-areas:
         "show   show   deco-1  mfa"
         "show   show   arch    mfa"
-        "twod   deco-2 arch    fase"
+        "film   deco-2 arch    fase"
         "film   anim   anim    fase"
-        "mopen  mopen  game    deco-4"
-        "deco-3 vcs    ext     ext"
-        "dmba   dmba   mwrit   mwrit";
+        "vcs    dmba   deco-3  game"
+        "mwrit  mwrit  ext     ext";
     }
 
     .bento-grid__deco {
@@ -183,7 +176,7 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     .bento-grid__deco--1 { grid-area: deco-1; }
     .bento-grid__deco--2 { grid-area: deco-2; }
     .bento-grid__deco--3 { grid-area: deco-3; }
-    .bento-grid__deco--4 { grid-area: deco-4; }
+    .bento-grid__deco--4 { display: none; }
   }
 
   /* Arrow wrapper sizing within decorative cells */
