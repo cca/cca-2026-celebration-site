@@ -1,0 +1,74 @@
+{
+  "title": "Grad Lab: MFA First Year Exhibition",
+  "slug": "grad-lab-mfa-first-year-exhibition",
+  "shortTitle": "Grad Lab: MFA First Year",
+  "type": "thesis-exhibition",
+  "degreeLevel": "graduate",
+  "themeKey": "showcase",
+  "date": "2026-04-08",
+  "endDate": "2026-05-02",
+  "time": "12\u20136 PM, Wednesday\u2013Saturday",
+  "location": "1275 Minnesota Street",
+  "address": "1275 Minnesota Street, San Francisco, CA 94107",
+  "description": "A four-week rotating exhibition series presenting work by CCA\u2019s final MFA first-year cohort \u2014 a different group of students each week, open to the public.",
+  "longDescription": "As part of their Dialogues and Practices 2 coursework, first-year MFA students present finished works and works-in-progress for classroom critique and public viewing. This is the final MFA first-year cohort in CCA\u2019s history.",
+  "seriesWeeks": [
+    {
+      "weekNumber": 1,
+      "date": "2026-04-08",
+      "endDate": "2026-04-11",
+      "artists": [
+        "Eva Birhanu",
+        "Alex Ehmer",
+        "Khadijah Morley",
+        "Drew Price",
+        "Collin Sample",
+        "Melissa Wang"
+      ],
+      "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/the-last-first-show-mfa-first-year-exhibition/"
+    },
+    {
+      "weekNumber": 2,
+      "date": "2026-04-15",
+      "endDate": "2026-04-18",
+      "artists": [
+        "Dzigbodi Djugba",
+        "Boyang Fan",
+        "Jacqueline Garrity",
+        "Jensen Laine",
+        "Lian Morales",
+        "Celia Zhang"
+      ],
+      "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/grad-lab-first-show-mfa-first-year-exhibition-week-2/"
+    },
+    {
+      "weekNumber": 3,
+      "date": "2026-04-22",
+      "endDate": "2026-04-25",
+      "artists": [
+        "Isaac Armendariz",
+        "Joaquin Cenciceros",
+        "Malcolm Christie",
+        "Jasmine Matthews",
+        "Kit Rennie",
+        "Sandra Vargas"
+      ],
+      "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/grad-lab-first-show-mfa-first-year-exhibition-week-3/"
+    },
+    {
+      "weekNumber": 4,
+      "date": "2026-04-29",
+      "endDate": "2026-05-02",
+      "artists": [
+        "Yuyu Huang",
+        "Samuel Jayne",
+        "Leah Lozano",
+        "Minggi Ma",
+        "Kamyar Mohsenin",
+        "Zoe Oliver-Grey",
+        "Mello Wilsted"
+      ],
+      "externalUrl": "https://portal.cca.edu/events-calendar/fine-arts-division-spring-2026-opportunities-connection/grad-lab-first-show-mfa-first-year-exhibition-week-4/"
+    }
+  ]
+}
