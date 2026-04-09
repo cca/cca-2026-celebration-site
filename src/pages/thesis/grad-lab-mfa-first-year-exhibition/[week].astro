@@ -3,13 +3,12 @@ import { getEntry } from 'astro:content';
 import ThesisEventLayout from '../../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../../components/events/EventHero.astro';
 import Breadcrumb from '../../../components/ui/Breadcrumb.astro';
-import BFASeniorExhibitionsEntryDetails from '../../../components/events/BFASeniorExhibitionsEntryDetails.astro';
 import { getCurrentPhase } from '../../../lib/utils/phase';
 import { isPhaseBefore } from '../../../config/phases';
 
 export async function getStaticPaths() {
-  const event = await getEntry('events', 'fine-arts-senior-exhibition');
-  if (!event) throw new Error('Event fine-arts-senior-exhibition not found');
+  const event = await getEntry('events', 'grad-lab-mfa-first-year-exhibition');
+  if (!event) throw new Error('Event grad-lab-mfa-first-year-exhibition not found');
   return event.data.seriesWeeks!.map((week) => ({
     params: { week: `week-${week.weekNumber}` },
     props: { week, event },
@@ -25,17 +24,14 @@ const { week, event } = Astro.props;
 const prevWeek = event.data.seriesWeeks!.find((w) => w.weekNumber === week.weekNumber - 1) ?? null;
 const nextWeek = event.data.seriesWeeks!.find((w) => w.weekNumber === week.weekNumber + 1) ?? null;
 
-// Extract time portion from opening reception (e.g. "5–7 PM" from "Wednesday, April 1 · 5–7 PM")
-const receptionTimePart = week.openingReception?.split('·').at(-1)?.trim();
-
-// Override with week-specific dates and reception time so the hero is accurate
+// Override with week-specific dates so the hero is accurate
 const weekEventForHero = {
   ...event,
   data: {
     ...event.data,
     date: week.date,
     endDate: week.endDate,
-    time: receptionTimePart,
+    time: '12–6 PM',
   },
 } as typeof event;
 
@@ -49,12 +45,13 @@ function addDays(dateStr: string, n: number): string {
   d.setDate(d.getDate() + n);
   return d.toISOString().split('T')[0];
 }
-const receptionDayLabel = week.openingReception?.split('·')[0]?.trim() ?? '';
+
+// Gallery open Wed–Sat, 12–6 PM
 const weekSchedule = [
-  { label: 'Opening Reception', day: receptionDayLabel,             time: receptionTimePart ?? '' },
-  { label: 'Gallery Open',      day: fmtDay(week.date),             time: '11:00 AM – 7:00 PM' },
-  { label: 'Gallery Open',      day: fmtDay(addDays(week.date, 1)), time: '11:00 AM – 4:00 PM' },
-  { label: 'Gallery Open',      day: fmtDay(addDays(week.date, 2)), time: '11:00 AM – 4:00 PM' },
+  { label: 'Gallery Open', day: fmtDay(week.date),             time: '12–6 PM' },
+  { label: 'Gallery Open', day: fmtDay(addDays(week.date, 1)), time: '12–6 PM' },
+  { label: 'Gallery Open', day: fmtDay(addDays(week.date, 2)), time: '12–6 PM' },
+  { label: 'Gallery Open', day: fmtDay(addDays(week.date, 3)), time: '12–6 PM' },
 ];
 ---
 
@@ -63,7 +60,7 @@ const weekSchedule = [
     <Breadcrumb items={[
       { label: 'Home', href: '/' },
       { label: 'Graduation Exhibitions', href: '/thesis/' },
-      { label: 'Fine Arts Senior Exhibition', href: '/thesis/fine-arts-senior-exhibition/' },
+      { label: 'Grad Lab: MFA First Year Exhibition', href: '/thesis/grad-lab-mfa-first-year-exhibition/' },
       { label: `Week ${week.weekNumber}` },
     ]} />
   </div>
@@ -83,7 +80,7 @@ const weekSchedule = [
 
     {/* ── Schedule ── */}
     <section class="schedule-section reveal">
-      <span class="schedule-kicker">Exhibition Schedule</span>
+      <span class="schedule-kicker">Gallery Hours</span>
       <ol class="schedule-list">
         {weekSchedule.map((entry, i) => (
           <li class="schedule-entry">
@@ -98,14 +95,18 @@ const weekSchedule = [
       </ol>
     </section>
 
-    <BFASeniorExhibitionsEntryDetails />
+    {/* ── Admission ── */}
+    <section class="admission-section reveal">
+      <span class="admission-kicker">Admission</span>
+      <p class="admission-text">Free and open to the public. Walk-ins welcome.</p>
+    </section>
 
     {/* ── Week Navigation ── */}
     <nav class="week-nav" aria-label="Week navigation">
       <div class="week-nav__inner">
         <div class="week-nav__prev">
           {prevWeek && (
-            <a href={`/thesis/fine-arts-senior-exhibition/week-${prevWeek.weekNumber}/`} class="week-nav__link">
+            <a href={`/thesis/grad-lab-mfa-first-year-exhibition/week-${prevWeek.weekNumber}/`} class="week-nav__link">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <path d="M10 3L5 8l5 5"/>
               </svg>
@@ -114,13 +115,13 @@ const weekSchedule = [
           )}
         </div>
 
-        <a href="/thesis/fine-arts-senior-exhibition/" class="week-nav__series">
+        <a href="/thesis/grad-lab-mfa-first-year-exhibition/" class="week-nav__series">
           Back to Exhibition Series
         </a>
 
         <div class="week-nav__next">
           {nextWeek && (
-            <a href={`/thesis/fine-arts-senior-exhibition/week-${nextWeek.weekNumber}/`} class="week-nav__link">
+            <a href={`/thesis/grad-lab-mfa-first-year-exhibition/week-${nextWeek.weekNumber}/`} class="week-nav__link">
               Week {nextWeek.weekNumber}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <path d="M6 3l5 5-5 5"/>
@@ -266,6 +267,27 @@ const weekSchedule = [
     right: 0;
     color: var(--color-text);
     font-weight: normal;
+  }
+
+  /* ── Admission ── */
+  .admission-section {
+    padding-block: var(--space-8) var(--space-12);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .admission-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .admission-text {
+    font-size: var(--text-base);
+    color: var(--color-text);
   }
 
   /* ── Week nav ── */

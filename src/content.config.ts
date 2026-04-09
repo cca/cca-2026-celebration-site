@@ -170,7 +170,7 @@ const events = defineCollection({
       weekNumber: z.number(),
       date: z.string(),
       endDate: z.string(),
-      openingReception: z.string(),
+      openingReception: z.string().optional(),
       artists: z.array(z.string()),
       externalUrl: z.string().optional(),
     })).optional(),
