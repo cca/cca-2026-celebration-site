@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content';
 import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
-import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
@@ -26,25 +25,4 @@ if (!event) throw new Error('Event dmba-venture-showcase not found');
   </div>
 
   <EventHero event={event} heroImageSize="large" />
-
-  <div class="container">
-    <div class="page-layout">
-      <div class="page-main">
-        <EventContextSection
-          id="about"
-          kicker="About the Showcase"
-          paragraphs={[
-            "The DMBA Venture Studio Showcase presents the culminating business ventures and design innovation projects of CCA's Design MBA graduating class.",
-            "More details coming soon.",
-          ]}
-        />
-      </div>
-    </div>
-  </div>
 </ThesisEventLayout>
-
-<style>
-  .page-layout {
-    padding-block: var(--space-8) var(--space-20);
-  }
-</style>
