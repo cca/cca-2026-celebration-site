@@ -13,6 +13,14 @@ if (isPhaseBefore(phase, 'pre-event')) {
 
 const event = await getEntry('events', 'illustration-senior-show');
 if (!event) throw new Error('Event illustration-senior-show not found');
+
+const gallery = [
+  { src: '/images/eoy-show-past/previousEOYShowPhotos-004-03-2026.jpg', alt: 'A smiling student artist holds a vibrant bouquet of flowers while standing in front of her colorful paintings featuring warm tones and figurative subjects.' },
+  { src: '/images/eoy-show-past/previousEOYShowPhotos-010-03-2026.jpg', alt: 'Two visitors view a digital display showing vibrant floral imagery mounted on a dark wall, with water glasses placed on a shelf below.' },
+  { src: '/images/eoy-show-past/previousEOYShowPhotos-016-03-2026.jpg', alt: 'Two visitors view a gallery wall covered with colorful patterned wallpaper and displaying various framed artworks in mixed media.' },
+  { src: '/images/eoy-show-past/previousEOYShowPhotos-020-03-2026.jpg', alt: 'A vibrant portrait painting featuring a young figure with decorative face patterns wearing a bright green jacket against a pink background with orange flame-like motifs.' },
+  { src: '/images/eoy-show-past/previousEOYShowPhotos-027-03-2026.jpg', alt: 'A student stands before their artwork featuring colorful geometric paintings with blue and white pottery imagery and a sculptural black form emerging from the white gallery floor.' },
+];
 ---
 
 <ThesisEventLayout event={event}>
@@ -25,4 +33,61 @@ if (!event) throw new Error('Event illustration-senior-show not found');
   </div>
 
   <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <section id="gallery" class="gallery-section reveal">
+          <span class="gallery-kicker">From Last Year's Graduation Exhibition</span>
+          <div class="gallery-grid">
+            {gallery.map((img, i) => (
+              <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
+                <img src={img.src} alt={img.alt} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
 </ThesisEventLayout>
+
+<style>
+  .page-layout { padding-block: var(--space-8) var(--space-20); }
+
+  .gallery-section { margin-block-start: var(--space-12); }
+
+  .gallery-kicker {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-block-end: var(--space-4);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .gallery-item { overflow: hidden; border-radius: 2px; }
+
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .gallery-item:hover img { transform: scale(1.04); }
+
+  .gallery-item--featured { grid-column: span 2; aspect-ratio: 16 / 9; }
+  .gallery-item:not(.gallery-item--featured) { aspect-ratio: 4 / 3; }
+
+  @media (min-width: 768px) {
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-item--featured { grid-column: span 3; }
+  }
+</style>
