@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content';
 import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
-import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
@@ -26,19 +25,4 @@ if (!event) throw new Error('Event graphic-design-senior-show not found');
   </div>
 
   <EventHero event={event} heroImageSize="large" />
-
-  <div class="container">
-    <div class="page-layout">
-      <div class="page-main">
-        <EventContextSection
-          id="about"
-          kicker="About the Show"
-          paragraphs={[
-            "Celebrate the 2026 graduating class of CCA\u2019s Graphic Design program. This semester, seven students created thesis projects responding to the word \u2018resist.\u2019",
-            "Resistance creates friction, stripping away expectation to reveal what lies beneath. The exhibition presents individual ideas and practices that assert small, deliberate acts of resistance\u2014wherever we are.",
-          ]}
-        />
-      </div>
-    </div>
-  </div>
 </ThesisEventLayout>

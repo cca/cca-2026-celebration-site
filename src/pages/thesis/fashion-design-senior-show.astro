@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content';
 import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
-import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
@@ -26,19 +25,4 @@ if (!event) throw new Error('Event fashion-design-senior-show not found');
   </div>
 
   <EventHero event={event} heroImageSize="large" />
-
-  <div class="container">
-    <div class="page-layout">
-      <div class="page-main">
-        <EventContextSection
-          id="about"
-          kicker="About the Show"
-          paragraphs={[
-            "Celebrate the graduating Fashion Design Class of 2026\u2014a cohort of nine emerging designers. The evening opens with a gallery-style presentation, where a single look from each designer previews their collection.",
-            "Guests can view the work up close before the program transitions outdoors, culminating in a runway show in the courtyard garden\u2014where each designer presents five original looks, offering a full expression of their vision, craft, and approach to contemporary fashion.",
-          ]}
-        />
-      </div>
-    </div>
-  </div>
 </ThesisEventLayout>

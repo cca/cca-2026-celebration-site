@@ -2,7 +2,6 @@
 import { getEntry } from 'astro:content';
 import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
-import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
@@ -26,19 +25,4 @@ if (!event) throw new Error('Event interaction-design-showcase not found');
   </div>
 
   <EventHero event={event} heroImageSize="large" />
-
-  <div class="container">
-    <div class="page-layout">
-      <div class="page-main">
-        <EventContextSection
-          id="about"
-          kicker="About the Showcase"
-          paragraphs={[
-            "Explore thesis projects from CCA\u2019s graduating Interaction Design seniors\u2014the culmination of each student\u2019s personal and collaborative work in the program.",
-            "This year, several students investigated designing with artificial intelligence, with projects that examine AI\u2019s impact on the future of work, its potential to conserve resources, and its influence on human relationships. Select projects from students, faculty, and the visiting artist are also on view in the Interactive Immersive Lab (Room 140).",
-          ]}
-        />
-      </div>
-    </div>
-  </div>
 </ThesisEventLayout>
