@@ -64,6 +64,7 @@ const hasImage = !!image && !image.heroOnly;
       <>
         <h3 class="bento-title">{shortTitle || title}</h3>
         <time class="bento-date">{dateDisplay}</time>
+        {location && <p class="bento-location">{location}</p>}
       </>
     ) : size === 'wide' ? (
       <>
@@ -78,7 +79,6 @@ const hasImage = !!image && !image.heroOnly;
         <h3 class="bento-title">{title}</h3>
         <time class="bento-date">{dateDisplay}</time>
         <p class="bento-location">{location}</p>
-        {description && <p class="bento-desc">{description}</p>}
       </>
     )}
   </article>
