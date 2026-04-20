@@ -15,11 +15,11 @@ const event = await getEntry('events', 'illustration-senior-show');
 if (!event) throw new Error('Event illustration-senior-show not found');
 
 const gallery = [
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-004-03-2026.jpg', alt: 'A smiling student artist holds a vibrant bouquet of flowers while standing in front of her colorful paintings featuring warm tones and figurative subjects.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-010-03-2026.jpg', alt: 'Two visitors view a digital display showing vibrant floral imagery mounted on a dark wall, with water glasses placed on a shelf below.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-016-03-2026.jpg', alt: 'Two visitors view a gallery wall covered with colorful patterned wallpaper and displaying various framed artworks in mixed media.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-020-03-2026.jpg', alt: 'A vibrant portrait painting featuring a young figure with decorative face patterns wearing a bright green jacket against a pink background with orange flame-like motifs.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-027-03-2026.jpg', alt: 'A student stands before their artwork featuring colorful geometric paintings with blue and white pottery imagery and a sculptural black form emerging from the white gallery floor.' },
+  { src: '/images/illus-showcase-sp26/illus-sp26-001.jpg', alt: 'A large crowd of students, families, and guests fill the CCA Main Building gallery space during the BFA Illustration Senior Show opening, with colorful illustration work displayed on the walls.' },
+  { src: '/images/illus-showcase-sp26/illus-sp26-002.jpg', alt: 'A gallery wall displays "Welcome Home," a large triptych illustration by Wei Huang, alongside a grid of narrative paintings and mixed sculptural works at the BFA Illustration Senior Show.' },
+  { src: '/images/illus-showcase-sp26/illus-sp26-003.jpg', alt: 'An overhead view of the packed BFA Illustration Senior Show opening reception, with guests mingling around a central drinks table and illustration work covering every wall.' },
+  { src: '/images/illus-showcase-sp26/illus-sp26-004.jpg', alt: 'Students and faculty gather in a circle to celebrate during the BFA Illustration Senior Show, with an instructor holding a colorful printed illustration at the center.' },
+  { src: '/images/illus-showcase-sp26/illus-sp26-005.jpg', alt: 'Kaeli McLeod's illustrated booth at the BFA Illustration Senior Show features pink patterned wallpaper, framed prints, disco balls, and a hand-lettered display pedestal.' },
 ];
 ---
 
@@ -38,7 +38,7 @@ const gallery = [
     <div class="page-layout">
       <div class="page-main">
         <section id="gallery" class="gallery-section reveal">
-          <span class="gallery-kicker">From Last Year's Graduation Exhibition</span>
+          <span class="gallery-kicker">From the BFA Illustration Senior Show</span>
           <div class="gallery-grid">
             {gallery.map((img, i) => (
               <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>

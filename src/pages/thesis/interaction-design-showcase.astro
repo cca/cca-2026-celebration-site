@@ -15,11 +15,11 @@ const event = await getEntry('events', 'interaction-design-showcase');
 if (!event) throw new Error('Event interaction-design-showcase not found');
 
 const gallery = [
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-001-03-2026.jpg', alt: 'Gallery visitors interact with a colorful sculptural installation featuring turquoise and coral architectural forms with text reading \'SAINT SUSIE\' at a CCA End of Year Show exhibition.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-008-03-2026.jpg', alt: 'Overhead view of a bustling gallery space with multiple levels showing numerous visitors viewing diverse student artwork installations and displays.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-024-03-2026.jpg', alt: 'A student presents their work beside a monitor displaying brain imaging scans and a blue sculptural form with spikes mounted on the white gallery wall.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-025-03-2026.jpg', alt: 'A large-scale installation of accordion-folded yellow panels with illustrated figures and handwritten text arranged in an industrial gallery space.' },
-  { src: '/images/eoy-show-past/previousEOYShowPhotos-028-03-2026.jpg', alt: 'A vibrant large-scale digital projection displays abstract fiery patterns of reds, blues, and yellows on a curved screen in a modern gallery with visitors viewing the installation.' },
+  { src: '/images/ixd-showcase-sp26/ixd-sp26-001.jpg', alt: 'Two students examine the OwnWay accessibility cane at the BFA Interaction Design showcase, with student project posters visible on the wall behind them.' },
+  { src: '/images/ixd-showcase-sp26/ixd-sp26-002.jpg', alt: 'Two students demonstrate the Revive CPR training device—an open equipment case containing a chest compression simulator and tablet display.' },
+  { src: '/images/ixd-showcase-sp26/ixd-sp26-003.jpg', alt: 'Three visitors lean in to explore a touchscreen coffee table displaying an experimental coffee education interface at the Interaction Design showcase.' },
+  { src: '/images/ixd-showcase-sp26/ixd-sp26-004.jpg', alt: 'A student presents her interactive fitness project in a purple-lit room, with dumbbells on a display shelf and neon floor elements as part of the installation.' },
+  { src: '/images/ixd-showcase-sp26/ixd-sp26-005.jpg', alt: 'A group of visitors interact with a large touchscreen table displaying space telescope imagery at the BFA Interaction Design senior showcase.' },
 ];
 ---
 
@@ -38,7 +38,7 @@ const gallery = [
     <div class="page-layout">
       <div class="page-main">
         <section id="gallery" class="gallery-section reveal">
-          <span class="gallery-kicker">From Last Year's Graduation Exhibition</span>
+          <span class="gallery-kicker">From the BFA Interaction Design Showcase</span>
           <div class="gallery-grid">
             {gallery.map((img, i) => (
               <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
