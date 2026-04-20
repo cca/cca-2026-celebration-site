@@ -30,6 +30,12 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
   { slug: "dmba-venture-showcase",             size: "compact", area: "dmba" },
   { slug: "mfa-writing-25th-anniversary",      size: "tall",    area: "film" },
   { slug: "grad-lab-mfa-first-year-exhibition", size: "compact", area: "grad" },
+  { slug: "illustration-senior-show",           size: "compact", area: "illus" },
+  { slug: "industrial-design-senior-show",      size: "compact", area: "id" },
+  { slug: "graphic-design-senior-show",         size: "compact", area: "gd" },
+  { slug: "fashion-design-senior-show",         size: "compact", area: "fashn" },
+  { slug: "interaction-design-showcase",        size: "compact", area: "ixd" },
+  { slug: "mfa-design-silver-linings",          size: "compact", area: "mfad" },
 ];
 ---
 
@@ -127,7 +133,13 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       "dmba"
       "grad"
       "mwrit"
-      "ext";
+      "ext"
+      "illus"
+      "id"
+      "gd"
+      "fashn"
+      "ixd"
+      "mfad";
   }
 
   .bento-grid__cell {
@@ -153,7 +165,10 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
         "film       game"
         "vcs        dmba"
         "grad       grad"
-        "mwrit      ext";
+        "mwrit      ext"
+        "illus      id"
+        "gd         fashn"
+        "ixd        mfad";
     }
   }
 
@@ -168,7 +183,9 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
         "film   deco-2 arch    fase"
         "film   anim   anim    fase"
         "vcs    dmba   grad    game"
-        "mwrit  mwrit  ext     ext";
+        "mwrit  mwrit  ext     ext"
+        "illus  id     gd      fashn"
+        "ixd    mfad   deco-3  deco-4";
     }
 
     .bento-grid__deco {
@@ -178,8 +195,8 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
 
     .bento-grid__deco--1 { grid-area: deco-1; }
     .bento-grid__deco--2 { grid-area: deco-2; }
-    .bento-grid__deco--3 { display: none; }
-    .bento-grid__deco--4 { display: none; }
+    .bento-grid__deco--3 { grid-area: deco-3; }
+    .bento-grid__deco--4 { grid-area: deco-4; }
   }
 
   /* Arrow wrapper sizing within decorative cells */

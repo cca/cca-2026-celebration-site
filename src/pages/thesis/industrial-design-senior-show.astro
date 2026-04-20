@@ -1,0 +1,44 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'industrial-design-senior-show');
+if (!event) throw new Error('Event industrial-design-senior-show not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'BFA Industrial Design Senior Show' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Show"
+          paragraphs={[
+            "Celebrate the graduating Industrial Design Class of 2026\u2014a cohort of 15 emerging designers. Their thesis projects reflect the range of industrial design today: medical devices, housewares, consumer electronics, furniture, and lighting.",
+            "Grounded in research and brought to life through prototyping, testing, and storytelling, this work reveals how emerging designers are rethinking the objects, systems, and experiences that shape everyday life.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>

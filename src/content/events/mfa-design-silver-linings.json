@@ -1,0 +1,18 @@
+{
+  "title": "MFA Design: Silver Linings",
+  "slug": "mfa-design-silver-linings",
+  "shortTitle": "MFA Design: Silver Linings",
+  "type": "thesis-exhibition",
+  "degreeLevel": "graduate",
+  "themeKey": "showcase",
+  "date": "2026-05-15",
+  "time": "5:00 PM \u2013 8:00 PM",
+  "location": "California College of the Arts",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "With the Class of 2026 representing the 25th graduating cohort of MFA Design, the Silver Linings exhibition celebrates the silver milestone while reflecting the current moment for the students and the community. Facing the sad reality of school closing, the MFA Design students supported each other and found ways to see the silver linings together. Our collected spirit of resilience and grit is on display at this group exhibition.",
+  "image": {
+    "src": "../../assets/images/cca-photography/mfa-design-silver-linings-hero-2026.jpg",
+    "alt": "MFA Design Silver Linings thesis exhibition poster listing student participants, Spring 2026",
+    "aspectRatio": "2/3"
+  }
+}

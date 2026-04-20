@@ -1,0 +1,44 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'mfa-design-silver-linings');
+if (!event) throw new Error('Event mfa-design-silver-linings not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'MFA Design: Silver Linings' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Exhibition"
+          paragraphs={[
+            "With the Class of 2026 representing the 25th graduating cohort of MFA Design, the Silver Linings exhibition celebrates the silver milestone while reflecting the current moment for the students and the community.",
+            "Facing the sad reality of school closing, the MFA Design students supported each other and found ways to see the silver linings together. Our collected spirit of resilience and grit is on display at this group exhibition.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>

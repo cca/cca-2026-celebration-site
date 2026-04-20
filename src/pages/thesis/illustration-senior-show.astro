@@ -1,0 +1,44 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import EventContextSection from '../../components/events/EventContextSection.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', 'illustration-senior-show');
+if (!event) throw new Error('Event illustration-senior-show not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: 'BFA Illustration Senior Show' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+
+  <div class="container">
+    <div class="page-layout">
+      <div class="page-main">
+        <EventContextSection
+          id="about"
+          kicker="About the Show"
+          paragraphs={[
+            "Celebrate the work of 31 graduating illustrators as they launch their professional careers. CCA\u2019s Illustration program prides itself on having no \u2018house style\u2019\u2014these collections are as individual as the students who made them.",
+            "Each piece is handcrafted, conceptually rich, and made with care. Expect editorial, books, game arts and visual development, comics, posters, conceptual objects, wallpaper, and fabric design.",
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</ThesisEventLayout>
