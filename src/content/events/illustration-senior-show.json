@@ -13,6 +13,7 @@
   "image": {
     "src": "../../assets/images/cca-photography/bfa-illustration-hero-2026.jpg",
     "alt": "BFA Illustration Senior Show poster featuring artwork by Ailin Wong, Spring 2026",
-    "aspectRatio": "4/5"
+    "aspectRatio": "4/5",
+    "heroOnly": true
   }
 }

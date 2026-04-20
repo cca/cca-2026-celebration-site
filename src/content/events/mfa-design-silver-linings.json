@@ -13,6 +13,7 @@
   "image": {
     "src": "../../assets/images/cca-photography/mfa-design-silver-linings-hero-2026.jpg",
     "alt": "MFA Design Silver Linings thesis exhibition poster listing student participants, Spring 2026",
-    "aspectRatio": "2/3"
+    "aspectRatio": "2/3",
+    "heroOnly": true
   }
 }
