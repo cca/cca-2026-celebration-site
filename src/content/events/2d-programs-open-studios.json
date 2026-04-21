@@ -1,0 +1,18 @@
+{
+  "title": "2D Programs Open Studios",
+  "slug": "2d-programs-open-studios",
+  "shortTitle": "2D Open Studios",
+  "type": "senior-show",
+  "degreeLevel": "undergraduate",
+  "themeKey": "showcase",
+  "date": "2026-04-30",
+  "time": "12:00 PM – 3:00 PM",
+  "location": "CCA Painting Studios",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "Celebrate the incredible work of CCA's Painting & Drawing students. Explore collections of artwork showcasing our students' creativity, passion, and drive.",
+  "image": {
+    "src": "../../assets/images/cca-photography/2d-open-studios-hero-2026.png",
+    "alt": "2D Programs Open Studios event poster, Spring 2026",
+    "heroOnly": true
+  }
+}

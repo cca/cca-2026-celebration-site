@@ -36,6 +36,7 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
   { slug: "fashion-design-senior-show",         size: "compact", area: "fashn" },
   { slug: "interaction-design-showcase",        size: "compact", area: "ixd" },
   { slug: "mfa-design-silver-linings",          size: "compact", area: "mfad" },
+  { slug: "2d-programs-open-studios",            size: "compact", area: "pdstudio" },
 ];
 ---
 
@@ -139,7 +140,8 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       "gd"
       "fashn"
       "ixd"
-      "mfad";
+      "mfad"
+      "pdstudio";
   }
 
   .bento-grid__cell {
@@ -168,7 +170,8 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
         "mwrit      ext"
         "illus      id"
         "gd         fashn"
-        "ixd        mfad";
+        "ixd        mfad"
+        "pdstudio   pdstudio";
     }
   }
 
@@ -185,7 +188,7 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
         "vcs    dmba   grad    game"
         "mwrit  mwrit  ext     ext"
         "illus  id     gd      fashn"
-        "ixd    mfad   deco-3  deco-4";
+        "ixd    mfad   pdstudio  deco-4";
     }
 
     .bento-grid__deco {
@@ -195,7 +198,7 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
 
     .bento-grid__deco--1 { grid-area: deco-1; }
     .bento-grid__deco--2 { grid-area: deco-2; }
-    .bento-grid__deco--3 { grid-area: deco-3; }
+    .bento-grid__deco--3 { display: none; }
     .bento-grid__deco--4 { grid-area: deco-4; }
   }
 
