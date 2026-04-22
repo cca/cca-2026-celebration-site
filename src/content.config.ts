@@ -189,6 +189,7 @@ const events = defineCollection({
       alt: z.string(),
     })).optional(),
     galleryKicker: z.string().optional(),
+    galleryEqualGrid: z.boolean().optional(),
   }),
 });
 

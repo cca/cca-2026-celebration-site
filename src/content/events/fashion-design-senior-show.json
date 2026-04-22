@@ -11,12 +11,10 @@
   "address": "145 Hooper Street, San Francisco, CA 94107",
   "description": "Celebrate the graduating Fashion Design Class of 2026—a cohort of nine emerging designers. The evening opens with a gallery-style presentation, where a single look from each designer previews their collection. Guests can view the work up close before the program transitions outdoors, culminating in a runway show in the courtyard garden—where each designer presents five original looks, offering a full expression of their vision, craft, and approach to contemporary fashion.",
   "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
-  "galleryKicker": "From Last Year's Graduation Exhibition",
+  "galleryKicker": "From the BFA Fashion Design Senior Show",
+  "galleryEqualGrid": true,
   "gallery": [
-    { "src": "/images/eoy-show-past/previousEOYShowPhotos-006-03-2026.jpg", "alt": "Four student artists pose together in front of their large-scale white exhibition display in a gallery space." },
-    { "src": "/images/eoy-show-past/previousEOYShowPhotos-013-03-2026.jpg", "alt": "A large crowd of visitors gathers outside a contemporary building with distinctive wooden architectural framework and white flowers in the landscaping." },
-    { "src": "/images/eoy-show-past/previousEOYShowPhotos-014-03-2026.jpg", "alt": "A performer wearing a bright yellow jacket and pink wings stands on a paved outdoor plaza surrounded by spectators and tall wooden pillars with colorful artwork." },
-    { "src": "/images/eoy-show-past/previousEOYShowPhotos-019-03-2026.jpg", "alt": "A bright gallery space with industrial ceilings displays multiple large-scale installations including colorful panels and a dark sculptural structure with mixed media elements." },
-    { "src": "/images/eoy-show-past/previousEOYShowPhotos-021-03-2026.jpg", "alt": "A student sits on a wooden bench in a minimalist studio space with green plants, shelving with decorative objects, and mood boards pinned to the wall behind him." }
+    { "src": "/images/fashn-showcase-sp26/fashn-sp26-001.jpg", "alt": "A model walks the runway at the BFA Fashion Design Senior Show, wearing an original collection look by a graduating CCA designer, Spring 2026." },
+    { "src": "/images/fashn-showcase-sp26/fashn-sp26-002.png", "alt": "A model presents a look from the BFA Fashion Design Senior Show runway presentation in the Gensler Courtyard, Spring 2026." }
   ]
 }

@@ -27,7 +27,7 @@ if (isPhaseBefore(phase, 'pre-event')) {
 const event = await getEntry('events', slug);
 if (!event) throw new Error(`Event ${slug} not found`);
 
-const { gallery, galleryKicker = "From Last Year's Graduation Exhibition" } = event.data;
+const { gallery, galleryKicker = "From Last Year's Graduation Exhibition", galleryEqualGrid } = event.data;
 ---
 
 <ThesisEventLayout event={event}>
@@ -49,7 +49,7 @@ const { gallery, galleryKicker = "From Last Year's Graduation Exhibition" } = ev
             <span class="gallery-kicker">{galleryKicker}</span>
             <div class="gallery-grid">
               {gallery.map((img, i) => (
-                <div class:list={['gallery-item', i === 0 && 'gallery-item--featured']}>
+                <div class:list={['gallery-item', !galleryEqualGrid && i === 0 && 'gallery-item--featured']}>
                   <img src={img.src} alt={img.alt} loading="lazy" />
                 </div>
               ))}
