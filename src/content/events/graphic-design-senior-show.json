@@ -12,6 +12,7 @@
   "description": "Celebrate the 2026 graduating class of CCA's Graphic Design program. This semester, seven students created thesis projects responding to the word 'resist.' Resistance creates friction, stripping away expectation to reveal what lies beneath. The exhibition presents individual ideas and practices that assert small, deliberate acts of resistance—wherever we are.",
   "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
   "galleryKicker": "From the Resist: BFA Graphic Design Senior Show",
+  "galleryEqualGrid": true,
   "gallery": [
     { "src": "/images/gd-showcase-sp26/gd-sp26-001.jpg", "alt": "Student thesis work by William Choi on display at the Resist: BFA Graphic Design Senior Show, Spring 2026." },
     { "src": "/images/gd-showcase-sp26/gd-sp26-002.jpg", "alt": "A typographic grid composition exploring trans identity and visibility, displayed at the Resist: BFA Graphic Design Senior Show, Spring 2026." }
