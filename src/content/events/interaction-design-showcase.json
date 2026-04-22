@@ -12,11 +12,15 @@
   "description": "Explore thesis projects from CCA's graduating Interaction Design seniors—the culmination of each student's personal and collaborative work in the program. This year, several students investigated designing with artificial intelligence, with projects that examine AI's impact on the future of work, its potential to conserve resources, and its influence on human relationships. Select projects from students, faculty, and the visiting artist are also on view in the Interactive Immersive Lab (Room 140).",
   "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
   "galleryKicker": "From the BFA Interaction Design Showcase",
+  "galleryEqualGrid": true,
   "gallery": [
-    { "src": "/images/ixd-showcase-sp26/ixd-sp26-001.jpg", "alt": "Two students examine the OwnWay accessibility cane at the BFA Interaction Design showcase, with student project posters visible on the wall behind them." },
-    { "src": "/images/ixd-showcase-sp26/ixd-sp26-002.jpg", "alt": "Two students demonstrate the Revive CPR training device—an open equipment case containing a chest compression simulator and tablet display." },
-    { "src": "/images/ixd-showcase-sp26/ixd-sp26-003.jpg", "alt": "Three visitors lean in to explore a touchscreen coffee table displaying an experimental coffee education interface at the Interaction Design showcase." },
-    { "src": "/images/ixd-showcase-sp26/ixd-sp26-004.jpg", "alt": "A student presents her interactive fitness project in a purple-lit room, with dumbbells on a display shelf and neon floor elements as part of the installation." },
-    { "src": "/images/ixd-showcase-sp26/ixd-sp26-005.jpg", "alt": "A group of visitors interact with a large touchscreen table displaying space telescope imagery at the BFA Interaction Design senior showcase." }
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-001.jpg", "alt": "Visitors browse student thesis projects at the BFA Interaction Design showcase, with the OwnWay accessibility cane and Soteria health projects on display." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-002.jpg", "alt": "A student demonstrates the Revive CPR training device, which uses a sensor-equipped chest compression simulator and real-time tablet feedback." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-003.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-004.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-005.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-006.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-007.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." },
+    { "src": "/images/ixd-showcase-sp26/ixd-sp26-008.jpg", "alt": "Visitors engage with a student thesis project at the BFA Interaction Design showcase, Spring 2026." }
   ]
 }
