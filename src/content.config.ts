@@ -184,6 +184,11 @@ const events = defineCollection({
     })).optional(),
     videoUrl: z.string().optional(),
     videoCaption: z.string().optional(),
+    gallery: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+    })).optional(),
+    galleryKicker: z.string().optional(),
   }),
 });
 
