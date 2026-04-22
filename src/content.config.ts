@@ -187,6 +187,7 @@ const events = defineCollection({
     gallery: z.array(z.object({
       src: z.string(),
       alt: z.string(),
+      objectPosition: z.string().optional(),
     })).optional(),
     galleryKicker: z.string().optional(),
     galleryEqualGrid: z.boolean().optional(),
