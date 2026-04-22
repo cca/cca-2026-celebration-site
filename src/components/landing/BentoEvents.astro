@@ -18,25 +18,25 @@ const bySlug = Object.fromEntries(events.map(e => [e.data.slug, e]));
 
 // Grid layout definition: slug → { size, gridArea }
 const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area: string }[] = [
-  { slug: "all-campus-graduation-exhibition",  size: "large",   area: "show" },
-  { slug: "mfa-exhibition",                    size: "tall",    area: "mfa" },
-  { slug: "animation-senior-showcase",         size: "wide",    area: "anim" },
-  { slug: "game-arts-showcase",                size: "compact", area: "game" },
-  { slug: "architecture-studio-conversations", size: "tall",    area: "arch" },
-  { slug: "fine-arts-senior-exhibition",       size: "tall",    area: "fase" },
-  { slug: "film-screenings",                   size: "wide",    area: "mwrit" },
-  { slug: "vcs-spring-symposium",              size: "compact", area: "vcs" },
-  { slug: "extension-reception",               size: "wide",    area: "ext" },
-  { slug: "dmba-venture-showcase",             size: "compact", area: "dmba" },
-  { slug: "mfa-writing-25th-anniversary",      size: "tall",    area: "film" },
-  { slug: "grad-lab-mfa-first-year-exhibition", size: "compact", area: "grad" },
-  { slug: "illustration-senior-show",           size: "compact", area: "illus" },
-  { slug: "industrial-design-senior-show",      size: "compact", area: "id" },
-  { slug: "graphic-design-senior-show",         size: "compact", area: "gd" },
-  { slug: "fashion-design-senior-show",         size: "compact", area: "fashn" },
-  { slug: "interaction-design-showcase",        size: "compact", area: "ixd" },
-  { slug: "mfa-design-silver-linings",          size: "compact", area: "mfad" },
-  { slug: "2d-programs-open-studios",            size: "compact", area: "pdstudio" },
+  { slug: "fine-arts-senior-exhibition",        size: "tall",    area: "fase" },     // Apr 1
+  { slug: "grad-lab-mfa-first-year-exhibition", size: "compact", area: "grad" },     // Apr 8
+  { slug: "mfa-writing-25th-anniversary",       size: "tall",    area: "film" },     // Apr 11
+  { slug: "vcs-spring-symposium",               size: "compact", area: "vcs" },      // Apr 25
+  { slug: "2d-programs-open-studios",           size: "compact", area: "pdstudio" }, // Apr 30
+  { slug: "architecture-studio-conversations",  size: "tall",    area: "arch" },     // Apr 30
+  { slug: "mfa-exhibition",                     size: "tall",    area: "mfa" },      // May 1
+  { slug: "film-screenings",                    size: "wide",    area: "mwrit" },    // May 5
+  { slug: "animation-senior-showcase",          size: "wide",    area: "anim" },     // May 6
+  { slug: "game-arts-showcase",                 size: "compact", area: "game" },     // May 7
+  { slug: "dmba-venture-showcase",              size: "compact", area: "dmba" },     // May 8
+  { slug: "extension-reception",                size: "wide",    area: "ext" },      // May 8
+  { slug: "all-campus-graduation-exhibition",   size: "large",   area: "show" },     // May 15
+  { slug: "illustration-senior-show",           size: "compact", area: "illus" },    // May 15
+  { slug: "industrial-design-senior-show",      size: "compact", area: "id" },       // May 15
+  { slug: "graphic-design-senior-show",         size: "compact", area: "gd" },       // May 15
+  { slug: "fashion-design-senior-show",         size: "compact", area: "fashn" },    // May 15
+  { slug: "interaction-design-showcase",        size: "compact", area: "ixd" },      // May 15
+  { slug: "mfa-design-silver-linings",          size: "compact", area: "mfad" },     // May 15
 ];
 ---
 
@@ -123,25 +123,25 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     gap: var(--grid-gutter);
     grid-template-columns: 1fr;
     grid-template-areas:
-      "show"
-      "mfa"
       "fase"
-      "arch"
-      "anim"
-      "game"
+      "grad"
       "film"
       "vcs"
-      "dmba"
-      "grad"
+      "pdstudio"
+      "arch"
+      "mfa"
       "mwrit"
+      "anim"
+      "game"
+      "dmba"
       "ext"
+      "show"
       "illus"
       "id"
       "gd"
       "fashn"
       "ixd"
-      "mfad"
-      "pdstudio";
+      "mfad";
   }
 
   .bento-grid__cell {
@@ -160,18 +160,19 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     .bento-grid {
       grid-template-columns: repeat(2, 1fr);
       grid-template-areas:
-        "show       show"
-        "mfa        arch"
-        "anim       arch"
-        "fase       fase"
-        "film       game"
-        "vcs        dmba"
-        "grad       grad"
-        "mwrit      ext"
-        "illus      id"
-        "gd         fashn"
-        "ixd        mfad"
-        "pdstudio   pdstudio";
+        "fase      film"
+        "fase      film"
+        "grad      vcs"
+        "pdstudio  arch"
+        "mfa       arch"
+        "mfa       mwrit"
+        "anim      game"
+        "dmba      ext"
+        "show      show"
+        "show      show"
+        "illus     id"
+        "gd        fashn"
+        "ixd       mfad";
     }
   }
 
@@ -181,14 +182,14 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
       grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: minmax(180px, auto);
       grid-template-areas:
-        "show   show   deco-1  mfa"
-        "show   show   arch    mfa"
-        "film   deco-2 arch    fase"
-        "film   anim   anim    fase"
-        "vcs    dmba   grad    game"
-        "mwrit  mwrit  ext     ext"
-        "illus  id     gd      fashn"
-        "ixd    mfad   pdstudio  deco-4";
+        "fase   grad      film     vcs"
+        "fase   pdstudio  film     arch"
+        "mfa    mwrit     mwrit    arch"
+        "mfa    anim      anim     game"
+        "dmba   ext       ext      deco-1"
+        "show   show      illus    id"
+        "show   show      gd       fashn"
+        "ixd    mfad      deco-2   deco-4";
     }
 
     .bento-grid__deco {
