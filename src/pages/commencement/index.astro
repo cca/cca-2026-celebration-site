@@ -244,7 +244,7 @@ const phase = getCurrentPhase(Astro.url);
   </PhaseGate>
 
   {/* ── Special Celebrations ── */}
-  <PhaseGate hiddenIn={['save-the-date', 'pre-event']}>
+  <PhaseGate hiddenIn={['save-the-date']}>
     {celebrations.length > 0 && (
       <section class="celebrations-section">
         <div class="container">
