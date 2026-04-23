@@ -15,7 +15,7 @@ const dateDisplay = formatDate(date);
 <div class="celebration-card reveal">
   <article>
     <span class="celebration-badge">CELEBRATION</span>
-    <h3 class="celebration-title"><a href={href}>{title}</a></h3>
+    <h3 class="celebration-title">{title}</h3>
     <time class="celebration-date">{dateDisplay}</time>
     {time && <p class="celebration-time">{formatTime(time)}</p>}
     <p class="celebration-location">{location}</p>
@@ -86,15 +86,6 @@ const dateDisplay = formatDate(date);
   .celebration-title {
     font-size: var(--text-xl);
     margin-bottom: var(--space-2);
-  }
-
-  .celebration-title a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .celebration-title a:hover {
-    text-decoration: underline;
   }
 
   .celebration-date {
