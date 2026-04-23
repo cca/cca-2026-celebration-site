@@ -1,37 +1,14 @@
 {
-  "title": "Lavender Celebration",
+  "title": "Lavender Commencement Celebration",
   "slug": "lavender-celebration",
-  "shortTitle": "Lavender",
+  "shortTitle": "Lavender Commencement",
   "type": "celebration",
   "degreeLevel": "all",
   "themeKey": "commencement",
-  "date": "2026-05-15",
-  "time": "4:00 PM",
-  "location": "California College of the Arts",
+  "date": "2026-04-30",
+  "time": "2:30 PM – 3:30 PM",
+  "location": "Gensler Courtyard",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "A celebration recognizing and honoring LGBTQIA+ graduates and their achievements. An affirming space to celebrate identity, community, and accomplishment.",
-  "longDescription": "The Lavender Celebration is a pre-commencement ceremony that recognizes and honors the achievements of CCA's LGBTQIA+ graduates. This affirming event celebrates the intersections of identity, creativity, and community. Graduates, allies, families, and friends are all welcome to join in this meaningful gathering.",
-  "rsvpUrl": "https://cca.edu/commencement/rsvp",
-  "schedule": [
-    {
-      "time": "4:00 PM",
-      "label": "Gathering & welcome"
-    },
-    {
-      "time": "4:30 PM",
-      "label": "Opening remarks"
-    },
-    {
-      "time": "5:00 PM",
-      "label": "Graduate recognition ceremony"
-    },
-    {
-      "time": "5:45 PM",
-      "label": "Keynote & reflections"
-    },
-    {
-      "time": "6:15 PM",
-      "label": "Reception & celebration"
-    }
-  ]
+  "description": "The annual celebration recognizes the excellence, achievements, and contributions of CCA's Lesbian, Gay, Bisexual, Transgender, Transsexual, Queer, Questioning, Intersex, Pansexual, Two-Spirited, and/or Asexual/Aromantic graduating students and their artistic achievements while recognizing their time at the college. This event is hosted by the Office of Student Belonging & Inclusion.",
+  "rsvpUrl": "https://portal.cca.edu/thriving/student-belonging-inclusion/lavender-ceremony/"
 }
