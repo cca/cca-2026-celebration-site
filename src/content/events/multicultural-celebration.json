@@ -1,37 +1,14 @@
 {
-  "title": "Multicultural Celebration",
+  "title": "Multicultural Commencement Celebration & Reception",
   "slug": "multicultural-celebration",
-  "shortTitle": "Multicultural",
+  "shortTitle": "Multicultural Commencement",
   "type": "celebration",
   "degreeLevel": "all",
   "themeKey": "commencement",
-  "date": "2026-05-14",
-  "time": "5:00 PM",
-  "location": "California College of the Arts",
+  "date": "2026-04-28",
+  "time": "2:30 PM – 3:30 PM",
+  "location": "Gensler Courtyard",
   "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "A vibrant celebration honoring the diverse cultural backgrounds and identities of CCA's graduating class. Join us for performances, food, and community.",
-  "longDescription": "The Multicultural Celebration is an annual tradition that honors the rich cultural diversity of CCA's graduating students. This joyful evening features performances, cultural presentations, and a communal meal. All graduates, their families, and the CCA community are welcome to attend this special pre-commencement gathering.",
-  "rsvpUrl": "https://cca.edu/commencement/rsvp",
-  "schedule": [
-    {
-      "time": "5:00 PM",
-      "label": "Doors open & reception"
-    },
-    {
-      "time": "5:30 PM",
-      "label": "Welcome & opening remarks"
-    },
-    {
-      "time": "6:00 PM",
-      "label": "Cultural performances & presentations"
-    },
-    {
-      "time": "7:00 PM",
-      "label": "Communal dinner"
-    },
-    {
-      "time": "8:00 PM",
-      "label": "Closing celebration"
-    }
-  ]
+  "description": "CCA's graduating BIPOC students who identify as members of communities of color/ethnicities (Black/African, Native/Indigenous, LatinX, Asian, Middle Eastern, North African, Mixed or Multiracial people), and international students, reflect the diverse world in which we live, work, and grow. The Multicultural Commencement Celebration and Reception is an opportunity to acknowledge and honor the valuable insights, ideas, and experiences these students contribute to classrooms and communities across campus. This event is hosted by the Office of Student Belonging & Inclusion.",
+  "rsvpUrl": "https://portal.cca.edu/thriving/student-belonging-inclusion/multicultural-commencement-celebration/"
 }
