@@ -17,14 +17,14 @@
     "heroOnly": true
   },
   "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
-  "galleryKicker": "From the MFA Design: Silver Linings Exhibition",
+  "galleryKicker": "From last year's Show Offs: Graduating Students Showcase",
   "galleryEqualGrid": true,
   "gallery": [
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-001.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2026." },
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-002.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2026." },
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-003.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2026." },
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-004.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2026." },
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-005.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2026." },
-    { "src": "/images/mfa-design-sp26/mfa-design-sp26-006.jpg", "alt": "Life Atlas, a thesis project exploring gentle navigation through uncertain life moments, on display at the MFA Design: Silver Linings exhibition, Spring 2026." }
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-001.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2025." },
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-002.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2025." },
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-003.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2025." },
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-004.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2025." },
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-005.jpg", "alt": "Student thesis work on display at the MFA Design: Silver Linings exhibition, Spring 2025." },
+    { "src": "/images/mfa-design-sp26/mfa-design-sp26-006.jpg", "alt": "Life Atlas, a thesis project exploring gentle navigation through uncertain life moments, on display at the MFA Design: Silver Linings exhibition, Spring 2025." }
   ]
 }
