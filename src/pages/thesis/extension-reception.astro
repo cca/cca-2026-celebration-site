@@ -32,12 +32,27 @@ if (!event) throw new Error('Event extension-reception not found');
       <div class="page-main">
         <EventContextSection
           id="about"
-          kicker="About the Reception"
+          kicker="About the Exhibition"
           paragraphs={[
-            "The CCA Extension Nights + Weekends Reception celebrates the achievements of students who pursued their education through CCA's continuing education programs — completing coursework, certifications, and degree pathways while balancing careers, families, and other commitments.",
-            "More details coming soon.",
+            "At CCA Extension, we know that some of the most profound creative breakthroughs happen after the traditional 9-to-5 ends. Whether it's a passion project sparked after dinner or a new technique mastered on a Sunday morning, we want to celebrate the work you cultivate in those dedicated “off-hours” moments when you are learning, practicing, and creating in community.",
+            "We are thrilled to announce NIGHTS & WEEKENDS, an upcoming studio exhibition dedicated to the hustle, heart, and creative output of our vibrant Extension community. We will be showcasing work from our current Fall 2025 and Winter/Spring 2026 faculty and students.",
+            "As we end our final season of adult programming, we gather to celebrate each other and our shared experiences at our opening reception in the Hubbell Street Galleries on Friday, May 8, 5–7 pm.",
           ]}
         />
+
+        <section id="hours" class="content-section reveal">
+          <h2 class="section-heading">Hours</h2>
+          <dl class="hours-list">
+            <div class="hours-list__row">
+              <dt>Public viewing hours</dt>
+              <dd>Noon &ndash; 6:30 pm, May 6&ndash;14</dd>
+            </div>
+            <div class="hours-list__row">
+              <dt>Opening reception</dt>
+              <dd>Friday, May 8, 5&ndash;7 pm</dd>
+            </div>
+          </dl>
+        </section>
       </div>
     </div>
   </div>
@@ -46,5 +61,45 @@ if (!event) throw new Error('Event extension-reception not found');
 <style>
   .page-layout {
     padding-block: var(--space-8) var(--space-20);
+  }
+
+  .content-section {
+    margin-block-start: var(--space-10);
+  }
+
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-block-end: var(--space-5);
+  }
+
+  .hours-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .hours-list__row {
+    display: grid;
+    grid-template-columns: minmax(8rem, 14rem) 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .hours-list__row:first-child {
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .hours-list dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+  }
+
+  .hours-list dd {
+    margin: 0;
+    font-size: var(--text-base);
   }
 </style>
