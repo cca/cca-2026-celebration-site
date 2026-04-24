@@ -5,10 +5,10 @@
   "type": "reception",
   "degreeLevel": "all",
   "themeKey": "showcase",
-  "date": "2026-05-08",
-  "time": "5:00 PM \u2013 7:00 PM",
-  "location": "California College of the Arts",
-  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "date": "2026-05-06",
+  "endDate": "2026-05-14",
+  "location": "Hubbell Street Galleries",
+  "address": "131-161 Hubbell Street, San Francisco, CA",
   "description": "A reception celebrating the achievements of CCA Extension Nights + Weekends students.",
   "heroImages": [
     {
