@@ -11,11 +11,10 @@
   "location": "Hubbell Street Galleries",
   "address": "131-161 Hubbell Street, San Francisco, CA",
   "description": "A studio exhibition showcasing work by CCA Extension faculty and students from the Fall 2025 and Winter/Spring 2026 terms.",
-  "heroImages": [
-    {
-      "src": "../../assets/images/eoy-show-past/previousEOYShowPhotos-012-03-2026.jpg",
-      "alt": "CCA students celebrate at the end of year show",
-      "frameId": "frame-03"
-    }
-  ]
+  "image": {
+    "src": "../../assets/images/cca-photography/nights-and-weekends.png",
+    "alt": "Neon-sign graphic reading \"Nights & Weekends\" with a glowing crescent moon on the left and a yellow sun on the right, over a deep blue background — the banner for CCA Extension's Nights + Weekends exhibition.",
+    "aspectRatio": "1800 / 555",
+    "heroOnly": true
+  }
 }
