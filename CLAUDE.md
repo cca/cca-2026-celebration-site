@@ -18,6 +18,25 @@ There are no lint or test commands — the project relies on `astro check` for t
 
 `PUBLIC_ENV` (`production` | `staging`) must be set at Docker build time — it controls the generated `robots.txt`. Cloud Build triggers inject this automatically via the `_ENV` substitution variable. For local builds: `PUBLIC_ENV=production bun run build`.
 
+## Deployment
+
+Two Cloud Build triggers fire automatically — no manual deploys needed.
+
+**Staging** (`https://2026-staging.cca.edu/`) — push to any branch matching `staging/*`:
+
+```sh
+git push origin HEAD:staging/my-branch
+```
+
+**Production** (`https://2026.cca.edu/`) — push a version tag after staging verification:
+
+```sh
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+`main` is a protected branch. All changes go through a PR (requires one approving review) — do not push directly to `main`. The staging branch is independent of `main`; you can push to `staging/*` from any feature branch to verify before the PR is approved.
+
 ## Architecture
 
 This is an Astro 5 static site. All content lives in `src/content/` as JSON files, typed via Zod schemas in `src/content.config.ts`. There is no database, no server rendering, and no external CMS.
