@@ -1,0 +1,23 @@
+{
+  "title": "BFA Industrial Design Senior Show",
+  "slug": "industrial-design-senior-show",
+  "shortTitle": "Industrial Design Show",
+  "type": "senior-show",
+  "degreeLevel": "undergraduate",
+  "themeKey": "showcase",
+  "date": "2026-05-15",
+  "time": "5:00 PM – 8:00 PM",
+  "location": "CCA Main Building",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "Celebrate the graduating Industrial Design Class of 2026—a cohort of 15 emerging designers. Their thesis projects reflect the range of industrial design today: medical devices, housewares, consumer electronics, furniture, and lighting. Grounded in research and brought to life through prototyping, testing, and storytelling, this work reveals how emerging designers are rethinking the objects, systems, and experiences that shape everyday life.",
+  "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
+  "galleryKicker": "From last year's Show Offs: Graduating Students Showcase",
+  "galleryEqualGrid": true,
+  "gallery": [
+    { "src": "/images/id-showcase-sp26/id-sp26-001.jpg", "alt": "Student thesis work on display at the BFA Industrial Design Senior Show, with a product prototype and presentation board visible in the gallery space." },
+    { "src": "/images/id-showcase-sp26/id-sp26-002.jpg", "alt": "Jung Hoon Shin presents the Mosin knee brace—a rehabilitation device using pressure and BOA lacing to support ACL recovery—at the BFA Industrial Design Senior Show." },
+    { "src": "/images/id-showcase-sp26/id-sp26-003.jpg", "alt": "The Boron cycling shoe prototype by a BFA Industrial Design student, designed with a lightweight carbon-boron composite base and modular replaceable components for performance cyclists." },
+    { "src": "/images/id-showcase-sp26/id-sp26-004.jpg", "alt": "A student's industrial design thesis project displayed at the BFA Industrial Design Senior Show, with presentation materials and prototypes." },
+    { "src": "/images/id-showcase-sp26/id-sp26-005.jpg", "alt": "Chi-Sen Hou presents DRIP, a self-watering modular planter that collects atmospheric moisture and delivers it to plants, shown at the BFA Industrial Design Senior Show." }
+  ]
+}

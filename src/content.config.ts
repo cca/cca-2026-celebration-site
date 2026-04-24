@@ -85,7 +85,7 @@ const events = defineCollection({
     title: z.string(),
     slug: z.string(),
     shortTitle: z.string(),
-    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase", "senior-exhibition", "open-studios", "symposium", "reception", "venture-showcase"]),
+    type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase", "senior-exhibition", "senior-show", "open-studios", "symposium", "reception", "venture-showcase"]),
     degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
     themeKey: z.enum(['commencement', 'showcase']),
     date: z.string(),
@@ -184,6 +184,13 @@ const events = defineCollection({
     })).optional(),
     videoUrl: z.string().optional(),
     videoCaption: z.string().optional(),
+    gallery: z.array(z.object({
+      src: z.string(),
+      alt: z.string(),
+      objectPosition: z.string().optional(),
+    })).optional(),
+    galleryKicker: z.string().optional(),
+    galleryEqualGrid: z.boolean().optional(),
   }),
 });
 

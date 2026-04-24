@@ -1,0 +1,28 @@
+---
+import { getEntry } from 'astro:content';
+import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
+import EventHero from '../../components/events/EventHero.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'pre-event')) {
+  return Astro.redirect('/');
+}
+
+const event = await getEntry('events', '2d-programs-open-studios');
+if (!event) throw new Error('Event 2d-programs-open-studios not found');
+---
+
+<ThesisEventLayout event={event}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: 'Home', href: '/' },
+      { label: 'Graduation Exhibitions', href: '/thesis/' },
+      { label: '2D Programs Open Studios' },
+    ]} />
+  </div>
+
+  <EventHero event={event} heroImageSize="large" />
+</ThesisEventLayout>

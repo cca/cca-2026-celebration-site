@@ -14,7 +14,7 @@ interface Props {
 }
 
 const { event, size, class: className } = Astro.props;
-const { title, shortTitle, slug, date, endDate, location, description, type, degreeLevel, externalUrl, image } = event.data;
+const { title, shortTitle, slug, date, endDate, location, type, degreeLevel, externalUrl, image } = event.data;
 
 function getEventUrl(type: string, degreeLevel: string, slug: string): string {
   if (type === "commencement") return degreeLevel === "all" ? "/commencement/" : `/commencement/${degreeLevel}/`;
@@ -35,6 +35,7 @@ const badgeLabels: Record<string, string> = {
   screening: "SCREENING",
   "game-showcase": "GAME SHOWCASE",
   "senior-exhibition": "4-WEEK SERIES",
+  "senior-show": "SENIOR SHOW",
   "open-studios": "OPEN STUDIOS",
   "symposium": "SYMPOSIUM",
   "venture-showcase": "VENTURE SHOWCASE",
@@ -63,6 +64,7 @@ const hasImage = !!image && !image.heroOnly;
       <>
         <h3 class="bento-title">{shortTitle || title}</h3>
         <time class="bento-date">{dateDisplay}</time>
+        {location && <p class="bento-location">{location}</p>}
       </>
     ) : size === 'wide' ? (
       <>
@@ -77,7 +79,6 @@ const hasImage = !!image && !image.heroOnly;
         <h3 class="bento-title">{title}</h3>
         <time class="bento-date">{dateDisplay}</time>
         <p class="bento-location">{location}</p>
-        {description && <p class="bento-desc">{description}</p>}
       </>
     )}
   </article>

@@ -1,0 +1,29 @@
+{
+  "title": "BFA Illustration Senior Show",
+  "slug": "illustration-senior-show",
+  "shortTitle": "Illustration Senior Show",
+  "type": "senior-show",
+  "degreeLevel": "undergraduate",
+  "themeKey": "showcase",
+  "date": "2026-05-15",
+  "time": "5:00 PM – 8:00 PM",
+  "location": "CCA Main Building",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "Celebrate the work of 31 graduating illustrators as they launch their professional careers. CCA's Illustration program prides itself on having no 'house style'—these collections are as individual as the students who made them. Each piece is handcrafted, conceptually rich, and made with care. Expect editorial, books, game arts and visual development, comics, posters, conceptual objects, wallpaper, and fabric design.",
+  "image": {
+    "src": "../../assets/images/cca-photography/bfa-illustration-hero-2026.jpg",
+    "alt": "BFA Illustration Senior Show poster featuring artwork by Ailin Wong, Spring 2026",
+    "aspectRatio": "4/5",
+    "heroOnly": true
+  },
+  "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
+  "galleryKicker": "From last year's Show Offs: Graduating Students Showcase",
+  "galleryEqualGrid": true,
+  "gallery": [
+    { "src": "/images/illus-showcase-sp26/illus-sp26-001.jpg", "alt": "A large crowd of students, families, and guests fill the CCA Main Building gallery space during the BFA Illustration Senior Show opening, with colorful illustration work displayed on the walls." },
+    { "src": "/images/illus-showcase-sp26/illus-sp26-002.jpg", "alt": "A gallery wall displays \"Welcome Home,\" a large triptych illustration by Wei Huang, alongside a grid of narrative paintings and mixed sculptural works at the BFA Illustration Senior Show." },
+    { "src": "/images/illus-showcase-sp26/illus-sp26-003.jpg", "alt": "An overhead view of the packed BFA Illustration Senior Show opening reception, with guests mingling around a central drinks table and illustration work covering every wall." },
+    { "src": "/images/illus-showcase-sp26/illus-sp26-004.jpg", "alt": "Students and faculty gather in a circle to celebrate during the BFA Illustration Senior Show, with an instructor holding a colorful printed illustration at the center." },
+    { "src": "/images/illus-showcase-sp26/illus-sp26-005.jpg", "alt": "Kaeli McLeod's illustrated booth at the BFA Illustration Senior Show features pink patterned wallpaper, framed prints, disco balls, and a hand-lettered display pedestal." }
+  ]
+}

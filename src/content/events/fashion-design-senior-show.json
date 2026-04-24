@@ -1,0 +1,20 @@
+{
+  "title": "BFA Fashion Design Senior Show",
+  "slug": "fashion-design-senior-show",
+  "shortTitle": "Fashion Design Show",
+  "type": "senior-show",
+  "degreeLevel": "undergraduate",
+  "themeKey": "showcase",
+  "date": "2026-05-15",
+  "time": "5:00 PM – 8:00 PM",
+  "location": "CCA Gensler Courtyard",
+  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "description": "Celebrate the graduating Fashion Design Class of 2026—a cohort of nine emerging designers. The evening opens with a gallery-style presentation, where a single look from each designer previews their collection. Guests can view the work up close before the program transitions outdoors, culminating in a runway show in the courtyard garden—where each designer presents five original looks, offering a full expression of their vision, craft, and approach to contemporary fashion.",
+  "rsvpUrl": "https://www.eventbrite.com/e/cca-graduation-exhibitions-2026-tickets-1986927614983?aff=oddtdtcreator",
+  "galleryKicker": "From last year's Show Offs: Graduating Students Showcase",
+  "galleryEqualGrid": true,
+  "gallery": [
+    { "src": "/images/fashn-showcase-sp26/fashn-sp26-001.jpg", "alt": "A model walks the runway at the BFA Fashion Design Senior Show, wearing an original collection look by a graduating CCA designer, Spring 2025." },
+    { "src": "/images/fashn-showcase-sp26/fashn-sp26-002.png", "alt": "A model presents a look from the BFA Fashion Design Senior Show runway presentation in the Gensler Courtyard, Spring 2025." }
+  ]
+}
