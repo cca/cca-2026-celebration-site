@@ -1,20 +1,20 @@
 {
-  "title": "CCA Extension Nights + Weekends Reception",
+  "title": "CCA Extension Nights + Weekends",
   "slug": "extension-reception",
-  "shortTitle": "Extension Nights + Weekends Reception",
+  "shortTitle": "Extension Nights + Weekends",
   "type": "reception",
   "degreeLevel": "all",
   "themeKey": "showcase",
-  "date": "2026-05-08",
-  "time": "5:00 PM \u2013 7:00 PM",
-  "location": "California College of the Arts",
-  "address": "145 Hooper Street, San Francisco, CA 94107",
-  "description": "A reception celebrating the achievements of CCA Extension Nights + Weekends students.",
-  "heroImages": [
-    {
-      "src": "../../assets/images/eoy-show-past/previousEOYShowPhotos-012-03-2026.jpg",
-      "alt": "CCA students celebrate at the end of year show",
-      "frameId": "frame-03"
-    }
-  ]
+  "date": "2026-05-06",
+  "endDate": "2026-05-14",
+  "time": "12:00 PM – 6:30 PM",
+  "location": "Hubbell Street Galleries",
+  "address": "131-161 Hubbell Street, San Francisco, CA",
+  "description": "A studio exhibition showcasing work by CCA Extension faculty and students from the Fall 2025 and Winter/Spring 2026 terms.",
+  "image": {
+    "src": "../../assets/images/cca-photography/nights-and-weekends.png",
+    "alt": "Neon-sign graphic reading \"Nights & Weekends\" with a glowing crescent moon on the left and a yellow sun on the right, over a deep blue background — the banner for CCA Extension's Nights + Weekends exhibition.",
+    "aspectRatio": "1800 / 555",
+    "heroOnly": true
+  }
 }
