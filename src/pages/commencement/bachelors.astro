@@ -1,22 +1,21 @@
 ---
 import { getEntry } from "astro:content";
-import { getCurrentPhase } from '../../../lib/utils/phase';
-import { isPhaseBefore } from '../../../config/phases';
-import EventLayout from "../../../layouts/EventLayout.astro";
-import Breadcrumb from "../../../components/ui/Breadcrumb.astro";
-import TableOfContents from "../../../components/ui/TableOfContents.astro";
-import ProgramHero from "../../../components/program/ProgramHero.astro";
-import ProgramAgenda from "../../../components/program/ProgramAgenda.astro";
-import ProgramDisclaimer from "../../../components/program/ProgramDisclaimer.astro";
-import CandidatesList from "../../../components/program/CandidatesList.astro";
-import SpeakerFeature from "../../../components/events/SpeakerFeature.astro";
-import InMemoriam from "../../../components/sections/InMemoriam.astro";
-import Button from "../../../components/ui/Button.astro";
-import DownloadLink from "../../../components/ui/DownloadLink.astro";
-import { getCandidatesGroupedByDivision } from "../../../lib/utils/collections";
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+import EventLayout from "../../layouts/EventLayout.astro";
+import Breadcrumb from "../../components/ui/Breadcrumb.astro";
+import TableOfContents from "../../components/ui/TableOfContents.astro";
+import ProgramHero from "../../components/program/ProgramHero.astro";
+import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
+import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
+import CandidatesList from "../../components/program/CandidatesList.astro";
+import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
+import InMemoriam from "../../components/sections/InMemoriam.astro";
+import DownloadLink from "../../components/ui/DownloadLink.astro";
+import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
 
 const phase = getCurrentPhase(Astro.url);
-if (isPhaseBefore(phase, 'pre-event')) {
+if (isPhaseBefore(phase, 'during-event')) {
   return Astro.redirect('/commencement/');
 }
 
@@ -26,23 +25,19 @@ if (!event) throw new Error(`Event ${eventId} not found`);
 
 const { ceremonyProgram } = event.data;
 
-// Resolve student speaker reference
 let studentSpeakerEntry = null;
 if (ceremonyProgram?.studentSpeaker?.student) {
   studentSpeakerEntry = await getEntry("students", ceremonyProgram.studentSpeaker.student.id);
 }
 
-// Get in memoriam and program booklet from commencement-info
 const commencementInfo = await getEntry("commencement-info", "current");
 const inMemoriam = commencementInfo?.data.inMemoriam ?? [];
 const programBooklet = commencementInfo?.data.downloadableAssets?.find(
   (a: { label: string }) => a.label === "Commencement Program"
 );
 
-// Get candidates grouped by division
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
 
-// Build TOC
 const tocItems: Array<{ label: string; href: string }> = [];
 if (ceremonyProgram?.programItems?.length) tocItems.push({ label: "Order of Ceremony", href: "#program" });
 if (ceremonyProgram?.landAcknowledgment) tocItems.push({ label: "Land Acknowledgment", href: "#land-acknowledgment" });
@@ -52,13 +47,12 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
 if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#disclaimer" });
 ---
 
-<EventLayout event={event} title={`Digital Program — ${event.data.title}`}>
+<EventLayout event={event} title={event.data.title}>
   <div class="container">
     <Breadcrumb items={[
       { label: "Home", href: "/" },
       { label: "Commencement", href: "/commencement/" },
-      { label: "Bachelor's Ceremony", href: "/commencement/undergraduate/" },
-      { label: "Program" },
+      { label: "Bachelor's Ceremony" },
     ]} />
   </div>
 
@@ -68,7 +62,6 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
     <div class="program-layout">
       <div class="program-main">
 
-        {/* Order of Ceremony */}
         {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
           <section id="program" class="program-section">
             <h2 class="section-heading">Order of Ceremony</h2>
@@ -85,7 +78,6 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
           </section>
         )}
 
-        {/* Land Acknowledgment */}
         {ceremonyProgram?.landAcknowledgment && (
           <section id="land-acknowledgment" class="program-section">
             <h2 class="section-heading">Land Acknowledgment</h2>
@@ -93,7 +85,6 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
           </section>
         )}
 
-        {/* Student Speaker */}
         {ceremonyProgram?.studentSpeaker && (
           <section id="student-speaker" class="program-section">
             <h2 class="section-heading">Student Speaker</h2>
@@ -104,14 +95,12 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
           </section>
         )}
 
-        {/* In Memoriam */}
         {inMemoriam.length > 0 && (
           <section id="in-memoriam" class="program-section">
             <InMemoriam entries={inMemoriam} />
           </section>
         )}
 
-        {/* Degree Candidates */}
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
             <h2 class="section-heading">Degree Candidates</h2>
@@ -128,19 +117,11 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
           </section>
         )}
 
-        {/* Disclaimer */}
         {ceremonyProgram?.disclaimer && (
           <section id="disclaimer" class="program-section">
             <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
           </section>
         )}
-
-        {/* Back link */}
-        <div class="program-back">
-          <Button href="/commencement/undergraduate/" variant="outline">
-            &larr; Back to Bachelor's Ceremony
-          </Button>
-        </div>
 
       </div>
 
@@ -217,10 +198,5 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
 
   .candidates-download {
     margin-bottom: var(--space-6);
-  }
-
-  .program-back {
-    padding-block: var(--space-8);
-    text-align: center;
   }
 </style>

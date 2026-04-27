@@ -207,7 +207,7 @@ const phase = getCurrentPhase(Astro.url);
             <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
           </div>
         ) : gradEvent && (
-          <a href="/commencement/graduate/" class="ceremony-card reveal">
+          <a href="/commencement/masters/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
             <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
             <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
@@ -222,7 +222,7 @@ const phase = getCurrentPhase(Astro.url);
             <h3 class="ceremony-info__title">{undergradEvent.data.title}</h3>
           </div>
         ) : undergradEvent && (
-          <a href="/commencement/undergraduate/" class="ceremony-card reveal">
+          <a href="/commencement/bachelors/" class="ceremony-card reveal">
             <div class="ceremony-card__accent" aria-hidden="true"></div>
             <span class="ceremony-card__badge">{undergradEvent.data.time ? formatTime(undergradEvent.data.time) : null}</span>
             <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
