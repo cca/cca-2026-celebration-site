@@ -4,6 +4,7 @@ import ThesisEventLayout from '../../layouts/ThesisEventLayout.astro';
 import EventHero from '../../components/events/EventHero.astro';
 import EventContextSection from '../../components/events/EventContextSection.astro';
 import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import CeremonySchedule from '../../components/events/CeremonySchedule.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
@@ -25,7 +26,7 @@ if (!event) throw new Error('Event film-screenings not found');
     ]} />
   </div>
 
-  <EventHero event={event} heroImageSize="large" />
+  <EventHero event={event} />
 
   <div class="container">
     <div class="page-layout">
@@ -35,9 +36,15 @@ if (!event) throw new Error('Event film-screenings not found');
           kicker="About the Screenings"
           paragraphs={[
             "Join us for an evening of graduating BFA and MFA Film students' thesis and capstone films — a showcase of new voices in cinema and moving image.",
-            "Screening schedule and ticketing details coming soon.",
           ]}
         />
+
+        {event.data.schedule && (
+          <section id="schedule" class="content-section reveal">
+            <h2 class="section-heading">Program Schedule</h2>
+            <CeremonySchedule schedule={event.data.schedule} />
+          </section>
+        )}
       </div>
     </div>
   </div>
@@ -46,5 +53,15 @@ if (!event) throw new Error('Event film-screenings not found');
 <style>
   .page-layout {
     padding-block: var(--space-8) var(--space-20);
+  }
+
+  .content-section {
+    margin-block-start: var(--space-12);
+  }
+
+  .section-heading {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin-block-end: var(--space-6);
   }
 </style>
