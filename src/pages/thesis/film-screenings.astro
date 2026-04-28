@@ -26,37 +26,33 @@ if (!event) throw new Error('Event film-screenings not found');
     ]} />
   </div>
 
-  <EventHero event={event} />
+  <EventHero event={event} hideDescription>
+    <div slot="after-actions" class="hero-extras">
+      <EventContextSection
+        id="screenings"
+        kicker="About the Screenings"
+        paragraphs={[
+          "Join us for an evening of graduating BFA and MFA Film students' thesis and capstone films — a showcase of new voices in cinema and moving image.",
+        ]}
+      />
 
-  <div class="container">
-    <div class="page-layout">
-      <div class="page-main">
-        <EventContextSection
-          id="screenings"
-          kicker="About the Screenings"
-          paragraphs={[
-            "Join us for an evening of graduating BFA and MFA Film students' thesis and capstone films — a showcase of new voices in cinema and moving image.",
-          ]}
-        />
-
-        {event.data.schedule && (
-          <section id="schedule" class="content-section reveal">
-            <h2 class="section-heading">Program Schedule</h2>
-            <CeremonySchedule schedule={event.data.schedule} />
-          </section>
-        )}
-      </div>
+      {event.data.schedule && (
+        <section id="schedule" class="content-section reveal">
+          <h2 class="section-heading">Program Schedule</h2>
+          <CeremonySchedule schedule={event.data.schedule} />
+        </section>
+      )}
     </div>
-  </div>
+  </EventHero>
 </ThesisEventLayout>
 
 <style>
-  .page-layout {
-    padding-block: var(--space-8) var(--space-20);
+  .hero-extras {
+    margin-block-start: var(--space-10);
   }
 
   .content-section {
-    margin-block-start: var(--space-12);
+    margin-block-start: var(--space-10);
   }
 
   .section-heading {
