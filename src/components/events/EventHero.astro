@@ -11,9 +11,10 @@ const FALLBACK_FRAMES = ['frame-04', 'frame-11', 'frame-07'];
 interface Props {
   event: CollectionEntry<"events">;
   heroImageSize?: 'default' | 'large';
+  hideDescription?: boolean;
 }
 
-const { event, heroImageSize = 'default' } = Astro.props;
+const { event, heroImageSize = 'default', hideDescription = false } = Astro.props;
 const { title, date, endDate, time, location, address, description, image, heroImages, rsvpUrl, livestreamUrl } = event.data;
 const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
 const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, location, address, description });
@@ -35,7 +36,7 @@ const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, loca
         <span class="hero-separator" aria-hidden="true">&#9670;</span>
         <span class="hero-location">{location}</span>
       </div>
-      {description && (
+      {description && !hideDescription && (
         <p class="hero-description stagger-3">{description}</p>
       )}
       <div class="hero-actions stagger-4">
@@ -66,6 +67,7 @@ const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, loca
           Share
         </button>
       </div>
+      <slot name="after-actions" />
     </div>
     {heroImages && heroImages.length > 0 ? (
       <div class={`hero-framed-images hero-framed-images--${heroImages.length > 1 ? 'multi' : 'single'} stagger-3`}>

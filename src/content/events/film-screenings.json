@@ -6,15 +6,18 @@
   "degreeLevel": "all",
   "themeKey": "showcase",
   "date": "2026-05-05",
-  "time": "6:00 PM – 9:00 PM",
-  "location": "California College of the Arts",
-  "address": "145 Hooper Street, San Francisco, CA 94107",
+  "time": "5:30 PM – 9:00 PM",
+  "location": "The Roxie",
+  "address": "3117 16th St, San Francisco, CA 94103",
   "description": "Screenings of graduating BFA and MFA Film students' thesis and capstone films.",
-  "heroImages": [
-    {
-      "src": "../../assets/images/cca-photography/fashion-roots-stereo-film-46.jpg",
-      "alt": "Scenes from a CCA student film production",
-      "frameId": "frame-02"
-    }
+  "image": {
+    "src": "../../assets/images/cca-photography/film-senior-screenings-2026.png",
+    "alt": "BFA & MFA Film Senior Screenings event poster, Spring 2026",
+    "heroOnly": true
+  },
+  "schedule": [
+    { "time": "5:30 PM", "label": "Doors open" },
+    { "time": "5:45 PM", "label": "Introductions" },
+    { "time": "6:00 PM", "label": "Screenings begin" }
   ]
 }
