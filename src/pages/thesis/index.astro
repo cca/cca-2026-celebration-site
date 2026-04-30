@@ -27,6 +27,11 @@ if (!event) throw new Error('Event all-campus-graduation-exhibition not found');
 
 const allEvents = await getCollection('events');
 const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
+
+const today = new Date().toISOString().slice(0, 10);
+const ongoingEvents = events
+  .filter(e => e.data.endDate && e.data.endDate > today)
+  .sort((a, b) => a.data.endDate!.localeCompare(b.data.endDate!));
 ---
 
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">
@@ -215,6 +220,20 @@ const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.ty
           <div class="view-bento"><BentoEvents events={events} /></div>
           <div class="view-list"><EventListView events={events} /></div>
         </div>
+      </div>
+    </section>
+  )}
+
+  {/* ── Still on View ── */}
+  {ongoingEvents.length > 0 && (
+    <section class="ongoing-events-section">
+      <div class="container">
+        <span class="section-label reveal">Still on view</span>
+        <h2 class="section-heading reveal">Exhibitions continuing past today</h2>
+        <p class="ongoing-events-desc reveal">
+          These exhibitions and showcases are still on view — catch them before they close.
+        </p>
+        <EventListView events={ongoingEvents} />
       </div>
     </section>
   )}
@@ -542,4 +561,18 @@ const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.ty
   /* ── View toggling ── */
   #events-view-container[data-view="list"] .view-bento { display: none; }
   #events-view-container[data-view="bento"] .view-list { display: none; }
+
+  /* ── Still on View ── */
+  .ongoing-events-section {
+    padding-block: var(--space-20);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ongoing-events-desc {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    max-width: 60ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-10);
+  }
 </style>
