@@ -11,9 +11,10 @@ interface Props {
   event: CollectionEntry<"events">;
   size: "large" | "tall" | "wide" | "compact";
   class?: string;
+  badgeOverride?: string;
 }
 
-const { event, size, class: className } = Astro.props;
+const { event, size, class: className, badgeOverride } = Astro.props;
 const { title, shortTitle, slug, date, endDate, location, type, degreeLevel, externalUrl, image } = event.data;
 
 function getEventUrl(type: string, degreeLevel: string, slug: string): string {
@@ -40,7 +41,7 @@ const badgeLabels: Record<string, string> = {
   "symposium": "SYMPOSIUM",
   "venture-showcase": "VENTURE SHOWCASE",
 };
-const badgeLabel = badgeLabels[type] ?? type.toUpperCase();
+const badgeLabel = badgeOverride ?? badgeLabels[type] ?? type.toUpperCase();
 const hasImage = !!image && !image.heroOnly;
 ---
 

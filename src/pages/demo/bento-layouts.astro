@@ -77,6 +77,21 @@ const autoFlowItems = upcomingEvents.map(e => ({
   event: e,
   size: sizeBySlug[e.data.slug] ?? 'compact',
 }));
+
+// Option 4 — keep all events, sort upcoming-first / past-last, override past badge
+const isPast = (e: CollectionEntry<'events'>) => effectiveEnd(e) < today;
+const allWithPast = [...events]
+  .sort((a, b) => {
+    const aPast = isPast(a) ? 1 : 0;
+    const bPast = isPast(b) ? 1 : 0;
+    if (aPast !== bPast) return aPast - bPast;
+    return a.data.date.localeCompare(b.data.date);
+  })
+  .map(e => ({
+    event: e,
+    size: sizeBySlug[e.data.slug] ?? 'compact',
+    past: isPast(e),
+  }));
 ---
 
 <BaseLayout title="Bento layout options" themeKey="showcase" minimalHeader={true}>
@@ -95,6 +110,7 @@ const autoFlowItems = upcomingEvents.map(e => ({
         <a href="#option-1">Option 1 — auto-flow</a>
         <a href="#option-2">Option 2 — list default</a>
         <a href="#option-3">Option 3 — second layout</a>
+        <a href="#option-4">Option 4 — past at bottom + badge</a>
       </nav>
     </header>
 
@@ -185,6 +201,31 @@ const autoFlowItems = upcomingEvents.map(e => ({
             />
           </div>
         </div>
+      </div>
+    </section>
+
+    {/* ─── Option 4 ─── */}
+    <section id="option-4" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag">Option 4</span>
+        <h2>Past events at the bottom, badge overridden to "PAST EVENT"</h2>
+        <p>
+          Keep every event in the bento — no filtering. Sort upcoming-first,
+          past-last (chronological within each group), and replace the type badge
+          on past events with <code>PAST EVENT</code>. Auto-flow handles the
+          packing so the layout adapts continuously as more events conclude. The
+          separate "Past events" section becomes redundant and goes away.
+        </p>
+      </div>
+      <div class="autoflow-grid">
+        {allWithPast.map(({ event, size, past }) => {
+          const { col, row } = spanFor(size);
+          return (
+            <div class="autoflow-grid__cell" style={`grid-column: span ${col}; grid-row: span ${row};`}>
+              <BentoEventCard event={event} size={size} badgeOverride={past ? 'PAST EVENT' : undefined} />
+            </div>
+          );
+        })}
       </div>
     </section>
   </main>
