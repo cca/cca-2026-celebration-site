@@ -53,7 +53,7 @@ const doubledImages = [...images, ...images];
     >
       {doubledImages.map(({ src, alt, caption, credit }) => (
         <button class={`past-gallery__item ${hasCaption ? 'past-gallery__item--captioned' : ''}`} type="button" data-lightbox-trigger>
-          <img src={src} alt={alt} loading="lazy" />
+          <img src={src} alt={alt} loading="lazy" width="800" height="600" />
           {(caption || credit) && (
             <span class="past-gallery__caption">
               {caption && <span class="past-gallery__caption-title">{caption}</span>}
