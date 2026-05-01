@@ -29,9 +29,11 @@ const allEvents = await getCollection('events');
 const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
 
 const today = new Date().toISOString().slice(0, 10);
-const ongoingEvents = events
-  .filter(e => e.data.endDate && e.data.endDate > today)
-  .sort((a, b) => a.data.endDate!.localeCompare(b.data.endDate!));
+const effectiveEnd = (e: typeof events[number]) => e.data.endDate ?? e.data.date;
+const upcomingEvents = events.filter(e => effectiveEnd(e) >= today);
+const pastEvents = events
+  .filter(e => effectiveEnd(e) < today)
+  .sort((a, b) => effectiveEnd(b).localeCompare(effectiveEnd(a)));
 ---
 
 <BaseLayout title="Graduation Exhibitions" themeKey="showcase">
@@ -217,23 +219,23 @@ const ongoingEvents = events
           <EventViewToggle />
         </div>
         <div id="events-view-container" data-view="bento">
-          <div class="view-bento"><BentoEvents events={events} /></div>
-          <div class="view-list"><EventListView events={events} /></div>
+          <div class="view-bento"><BentoEvents events={upcomingEvents} /></div>
+          <div class="view-list"><EventListView events={upcomingEvents} /></div>
         </div>
       </div>
     </section>
   )}
 
-  {/* ── Still on View ── */}
-  {ongoingEvents.length > 0 && (
-    <section class="ongoing-events-section">
+  {/* ── Past Events ── */}
+  {pastEvents.length > 0 && (
+    <section class="past-events-section">
       <div class="container">
-        <span class="section-label reveal">Still on view</span>
-        <h2 class="section-heading reveal">Exhibitions continuing past today</h2>
-        <p class="ongoing-events-desc reveal">
-          These exhibitions and showcases are still on view — catch them before they close.
+        <span class="section-label reveal">Past events</span>
+        <h2 class="section-heading reveal">Recently wrapped</h2>
+        <p class="past-events-desc reveal">
+          These celebrations have already taken place. Browse the archive to revisit highlights from the season.
         </p>
-        <EventListView events={ongoingEvents} />
+        <EventListView events={pastEvents} />
       </div>
     </section>
   )}
@@ -562,13 +564,13 @@ const ongoingEvents = events
   #events-view-container[data-view="list"] .view-bento { display: none; }
   #events-view-container[data-view="bento"] .view-list { display: none; }
 
-  /* ── Still on View ── */
-  .ongoing-events-section {
+  /* ── Past Events ── */
+  .past-events-section {
     padding-block: var(--space-20);
     border-top: 1px solid var(--color-border);
   }
 
-  .ongoing-events-desc {
+  .past-events-desc {
     font-size: var(--text-lg);
     color: var(--color-text);
     max-width: 60ch;
