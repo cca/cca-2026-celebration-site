@@ -8,7 +8,6 @@ import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
 import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
 import CandidatesList from "../../components/program/CandidatesList.astro";
 import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
-import InMemoriam from "../../components/sections/InMemoriam.astro";
 import DownloadLink from "../../components/ui/DownloadLink.astro";
 import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
 
@@ -24,20 +23,20 @@ if (ceremonyProgram?.studentSpeaker?.student) {
 }
 
 const commencementInfo = await getEntry("commencement-info", "current");
-const inMemoriam = commencementInfo?.data.inMemoriam ?? [];
 const programBooklet = commencementInfo?.data.downloadableAssets?.find(
   (a: { label: string }) => a.label === "Commencement Program"
 );
 
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
 
+const hasProgramSection =
+  !!ceremonyProgram?.programItems?.length ||
+  !!ceremonyProgram?.landAcknowledgment ||
+  !!ceremonyProgram?.studentSpeaker;
+
 const tocItems: Array<{ label: string; href: string }> = [];
-if (ceremonyProgram?.programItems?.length) tocItems.push({ label: "Order of Ceremony", href: "#program" });
-if (ceremonyProgram?.landAcknowledgment) tocItems.push({ label: "Land Acknowledgment", href: "#land-acknowledgment" });
-if (ceremonyProgram?.studentSpeaker) tocItems.push({ label: "Student Speaker", href: "#student-speaker" });
-if (inMemoriam.length > 0) tocItems.push({ label: "In Memoriam", href: "#in-memoriam" });
+if (hasProgramSection) tocItems.push({ label: "Ceremony Program", href: "#program" });
 if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href: "#candidates" });
-if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#disclaimer" });
 ---
 
 <div class="demo-banner">
@@ -60,64 +59,54 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
     <div class="program-layout">
       <div class="program-main">
 
-        {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
+        {hasProgramSection && (
           <section id="program" class="program-section">
-            <h2 class="section-heading">Order of Ceremony</h2>
-            <ProgramAgenda items={ceremonyProgram.programItems} />
-            {programBooklet && (
-              <div class="program-booklet-download">
-                <DownloadLink
-                  label={programBooklet.label}
-                  url={programBooklet.url}
-                  description={programBooklet.description}
+            <h2 class="section-heading">Ceremony Program</h2>
+
+            {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Order of Ceremony</h3>
+                <ProgramAgenda items={ceremonyProgram.programItems} />
+                {programBooklet && (
+                  <div class="program-booklet-download">
+                    <DownloadLink
+                      label={programBooklet.label}
+                      url={programBooklet.url}
+                      description={programBooklet.description}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {ceremonyProgram?.landAcknowledgment && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Land Acknowledgment</h3>
+                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
+              </div>
+            )}
+
+            {ceremonyProgram?.studentSpeaker && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Student Speaker</h3>
+                <SpeakerFeature
+                  speaker={ceremonyProgram.studentSpeaker}
+                  student={studentSpeakerEntry}
                 />
               </div>
             )}
-          </section>
-        )}
-
-        {ceremonyProgram?.landAcknowledgment && (
-          <section id="land-acknowledgment" class="program-section">
-            <h2 class="section-heading">Land Acknowledgment</h2>
-            <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
-          </section>
-        )}
-
-        {ceremonyProgram?.studentSpeaker && (
-          <section id="student-speaker" class="program-section">
-            <h2 class="section-heading">Student Speaker</h2>
-            <SpeakerFeature
-              speaker={ceremonyProgram.studentSpeaker}
-              student={studentSpeakerEntry}
-            />
-          </section>
-        )}
-
-        {inMemoriam.length > 0 && (
-          <section id="in-memoriam" class="program-section">
-            <InMemoriam entries={inMemoriam} />
           </section>
         )}
 
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
             <h2 class="section-heading">Degree Candidates</h2>
-            {ceremonyProgram?.candidatesListUrl && (
-              <div class="candidates-download">
-                <DownloadLink
-                  label="List of Candidates (PDF)"
-                  url={ceremonyProgram.candidatesListUrl}
-                  description="Printable list of all degree candidates"
-                />
+            <CandidatesList groups={candidateGroups} />
+            {ceremonyProgram?.disclaimer && (
+              <div class="subsection subsection--disclaimer">
+                <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
               </div>
             )}
-            <CandidatesList groups={candidateGroups} />
-          </section>
-        )}
-
-        {ceremonyProgram?.disclaimer && (
-          <section id="disclaimer" class="program-section">
-            <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
           </section>
         )}
 
@@ -225,7 +214,20 @@ if (ceremonyProgram?.disclaimer) tocItems.push({ label: "Disclaimer", href: "#di
     margin-top: var(--space-6);
   }
 
-  .candidates-download {
-    margin-bottom: var(--space-6);
+  .subsection + .subsection {
+    margin-top: var(--space-8);
+  }
+
+  .subsection-heading {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .subsection--disclaimer {
+    margin-top: var(--space-6);
   }
 </style>
