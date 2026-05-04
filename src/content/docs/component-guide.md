@@ -45,7 +45,6 @@ Use these everywhere. They're the lowest-level building blocks.
 - `EventDetails.astro` — date, time, location, RSVP link display
 - `EventContextSection.astro` — narrative text section, accepts a `paragraphs` array
 - `CeremonySchedule.astro` — vertical timeline card from a `{ time, label }[]` array
-- `CeremonyPage.astro` — full commencement ceremony page wrapper
 - `CelebrationCard.astro` — card component for celebration-type events
 - `SpeakerFeature.astro` — featured speaker/honoree display
 - `BFASeniorExhibitionsEntryDetails.astro` — specialized entry details for BFA senior exhibitions

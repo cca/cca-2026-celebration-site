@@ -7,7 +7,12 @@ import phaseToolbar from './src/integrations/phase-toolbar/integration.ts';
 export default defineConfig({
   integrations: [mdx(), phaseToolbar()],
   output: "static",
-  redirects: {},
+  redirects: {
+    '/commencement/undergraduate': '/commencement/bachelors',
+    '/commencement/undergraduate/program': '/commencement/bachelors',
+    '/commencement/graduate': '/commencement/masters',
+    '/commencement/graduate/program': '/commencement/masters',
+  },
   build: {
     format: "directory",
   },

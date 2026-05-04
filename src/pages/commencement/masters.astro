@@ -1,0 +1,204 @@
+---
+import { getEntry } from "astro:content";
+import { getCurrentPhase } from '../../lib/utils/phase';
+import { isPhaseBefore } from '../../config/phases';
+import EventLayout from "../../layouts/EventLayout.astro";
+import Breadcrumb from "../../components/ui/Breadcrumb.astro";
+import TableOfContents from "../../components/ui/TableOfContents.astro";
+import ProgramHero from "../../components/program/ProgramHero.astro";
+import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
+import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
+import CandidatesList from "../../components/program/CandidatesList.astro";
+import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
+import DownloadLink from "../../components/ui/DownloadLink.astro";
+import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
+
+const phase = getCurrentPhase(Astro.url);
+if (isPhaseBefore(phase, 'during-event')) {
+  return Astro.redirect('/commencement/');
+}
+
+const eventId = "commencement-graduate";
+const event = await getEntry("events", eventId);
+if (!event) throw new Error(`Event ${eventId} not found`);
+
+const { ceremonyProgram } = event.data;
+
+let studentSpeakerEntry = null;
+if (ceremonyProgram?.studentSpeaker?.student) {
+  studentSpeakerEntry = await getEntry("students", ceremonyProgram.studentSpeaker.student.id);
+}
+
+const commencementInfo = await getEntry("commencement-info", "current");
+const programBooklet = commencementInfo?.data.downloadableAssets?.find(
+  (a: { label: string }) => a.label === "Commencement Program"
+);
+
+const candidateGroups = await getCandidatesGroupedByDivision(eventId);
+
+const hasProgramSection =
+  !!ceremonyProgram?.programItems?.length ||
+  !!ceremonyProgram?.landAcknowledgment ||
+  !!ceremonyProgram?.studentSpeaker;
+
+const tocItems: Array<{ label: string; href: string }> = [];
+if (hasProgramSection) tocItems.push({ label: "Ceremony Program", href: "#program" });
+if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href: "#candidates" });
+---
+
+<EventLayout event={event} title={event.data.title}>
+  <div class="container">
+    <Breadcrumb items={[
+      { label: "Home", href: "/" },
+      { label: "Commencement", href: "/commencement/" },
+      { label: "Master's Ceremony" },
+    ]} />
+  </div>
+
+  <ProgramHero event={event} />
+
+  <div class="container">
+    <div class="program-layout">
+      <div class="program-main">
+
+        {hasProgramSection && (
+          <section id="program" class="program-section">
+            <h2 class="section-heading">Ceremony Program</h2>
+
+            {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Order of Ceremony</h3>
+                <ProgramAgenda items={ceremonyProgram.programItems} />
+                {programBooklet && (
+                  <div class="program-booklet-download">
+                    <DownloadLink
+                      label={programBooklet.label}
+                      url={programBooklet.url}
+                      description={programBooklet.description}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {ceremonyProgram?.landAcknowledgment && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Land Acknowledgment</h3>
+                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
+              </div>
+            )}
+
+            {ceremonyProgram?.studentSpeaker && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Student Speaker</h3>
+                <SpeakerFeature
+                  speaker={ceremonyProgram.studentSpeaker}
+                  student={studentSpeakerEntry}
+                />
+              </div>
+            )}
+          </section>
+        )}
+
+        {candidateGroups.length > 0 && (
+          <section id="candidates" class="program-section">
+            <h2 class="section-heading">Degree Candidates</h2>
+            <CandidatesList groups={candidateGroups} />
+            {ceremonyProgram?.disclaimer && (
+              <div class="subsection subsection--disclaimer">
+                <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
+              </div>
+            )}
+          </section>
+        )}
+
+      </div>
+
+      <aside class="program-sidebar">
+        <TableOfContents items={tocItems} />
+      </aside>
+    </div>
+  </div>
+</EventLayout>
+
+<style>
+  .program-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .program-sidebar {
+    order: -1;
+  }
+
+  .program-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .program-layout {
+      flex-direction: row;
+      gap: var(--space-10);
+    }
+
+    .program-sidebar {
+      order: 0;
+      flex: 0 0 220px;
+      position: sticky;
+      top: calc(60px + var(--space-8));
+      align-self: flex-start;
+    }
+  }
+
+  .program-section {
+    padding-block: var(--space-6);
+    scroll-margin-top: calc(60px + var(--space-4));
+  }
+
+  .section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-6);
+    position: relative;
+    display: inline-block;
+  }
+
+  :global([data-theme^="commencement"]) .section-heading::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--color-gold, var(--color-accent));
+    margin-top: var(--space-2);
+  }
+
+  .acknowledgment-text {
+    font-size: var(--text-base);
+    line-height: 1.8;
+    color: var(--color-text);
+    max-width: 65ch;
+    font-style: italic;
+  }
+
+  .program-booklet-download {
+    margin-top: var(--space-6);
+  }
+
+  .subsection + .subsection {
+    margin-top: var(--space-8);
+  }
+
+  .subsection-heading {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .subsection--disclaimer {
+    margin-top: var(--space-6);
+  }
+</style>
