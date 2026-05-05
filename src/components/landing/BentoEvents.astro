@@ -1,11 +1,10 @@
 ---
 /**
- * BentoEvents — Asymmetric bento box grid for homepage events section.
- * Mixes sized event cards with decorative shape cells.
+ * BentoEvents — Auto-flow bento grid for celebration events.
+ * Past events sort to the end and render with a "PAST EVENT" badge.
  */
 import type { CollectionEntry } from "astro:content";
 import BentoEventCard from "./BentoEventCard.astro";
-import ArrowLoop3D from "../effects/ArrowLoop3D.astro";
 
 interface Props {
   events: CollectionEntry<"events">[];
@@ -13,135 +12,74 @@ interface Props {
 
 const { events } = Astro.props;
 
-// Map events by slug for explicit grid placement
-const bySlug = Object.fromEntries(events.map(e => [e.data.slug, e]));
+type Size = "large" | "tall" | "wide" | "compact";
 
-// Grid layout definition: slug → { size, gridArea }
-const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area: string }[] = [
-  { slug: "fine-arts-senior-exhibition",        size: "tall",    area: "fase" },     // Apr 1
-  { slug: "grad-lab-mfa-first-year-exhibition", size: "compact", area: "grad" },     // Apr 8
-  { slug: "mfa-writing-25th-anniversary",       size: "tall",    area: "film" },     // Apr 11
-  { slug: "vcs-spring-symposium",               size: "compact", area: "vcs" },      // Apr 25
-  { slug: "2d-programs-open-studios",           size: "compact", area: "pdstudio" }, // Apr 30
-  { slug: "architecture-studio-conversations",  size: "tall",    area: "arch" },     // Apr 30
-  { slug: "mfa-exhibition",                     size: "tall",    area: "mfa" },      // May 1
-  { slug: "film-screenings",                    size: "wide",    area: "mwrit" },    // May 5
-  { slug: "animation-senior-showcase",          size: "wide",    area: "anim" },     // May 6
-  { slug: "game-arts-showcase",                 size: "compact", area: "game" },     // May 7
-  { slug: "dmba-venture-showcase",              size: "compact", area: "dmba" },     // May 8
-  { slug: "extension-reception",                size: "wide",    area: "ext" },      // May 6–14
-  { slug: "all-campus-graduation-exhibition",   size: "large",   area: "show" },     // May 15
-  { slug: "illustration-senior-show",           size: "compact", area: "illus" },    // May 15
-  { slug: "industrial-design-senior-show",      size: "compact", area: "id" },       // May 15
-  { slug: "graphic-design-senior-show",         size: "compact", area: "gd" },       // May 15
-  { slug: "fashion-design-senior-show",         size: "compact", area: "fashn" },    // May 15
-  { slug: "interaction-design-showcase",        size: "compact", area: "ixd" },      // May 15
-  { slug: "mfa-design-silver-linings",          size: "compact", area: "mfad" },     // May 15
-];
+// Per-event size in the bento. Unlisted events fall back to "compact".
+const sizeBySlug: Record<string, Size> = {
+  "fine-arts-senior-exhibition":        "tall",
+  "grad-lab-mfa-first-year-exhibition": "compact",
+  "mfa-writing-25th-anniversary":       "tall",
+  "vcs-spring-symposium":               "compact",
+  "2d-programs-open-studios":           "compact",
+  "architecture-studio-conversations":  "tall",
+  "mfa-exhibition":                     "tall",
+  "film-screenings":                    "wide",
+  "animation-senior-showcase":          "wide",
+  "game-arts-showcase":                 "compact",
+  "dmba-venture-showcase":              "compact",
+  "extension-reception":                "wide",
+  "all-campus-graduation-exhibition":   "large",
+  "illustration-senior-show":           "compact",
+  "industrial-design-senior-show":      "compact",
+  "graphic-design-senior-show":         "compact",
+  "fashion-design-senior-show":         "compact",
+  "interaction-design-showcase":        "compact",
+  "mfa-design-silver-linings":          "compact",
+};
+
+function spanFor(size: Size) {
+  if (size === "large") return { col: 2, row: 2 };
+  if (size === "tall")  return { col: 1, row: 2 };
+  if (size === "wide")  return { col: 2, row: 1 };
+  return { col: 1, row: 1 };
+}
+
+const today = new Date().toISOString().slice(0, 10);
+const effectiveEnd = (e: CollectionEntry<"events">) => e.data.endDate ?? e.data.date;
+const isPast = (e: CollectionEntry<"events">) => effectiveEnd(e) < today;
+
+const items = [...events]
+  .sort((a, b) => {
+    const aPast = isPast(a) ? 1 : 0;
+    const bPast = isPast(b) ? 1 : 0;
+    if (aPast !== bPast) return aPast - bPast;
+    return a.data.date.localeCompare(b.data.date);
+  })
+  .map(e => ({
+    event: e,
+    size: sizeBySlug[e.data.slug] ?? "compact",
+    past: isPast(e),
+  }));
 ---
 
 <div class="bento-grid">
-  {layout.map(({ slug, size, area }) => {
-    const event = bySlug[slug];
-    return event ? (
-      <div class="bento-grid__cell" style={`grid-area: ${area}`}>
-        <BentoEventCard event={event} size={size} />
+  {items.map(({ event, size, past }) => {
+    const { col, row } = spanFor(size);
+    return (
+      <div class="bento-grid__cell" style={`grid-column: span ${col}; grid-row: span ${row};`}>
+        <BentoEventCard event={event} size={size} badgeOverride={past ? "PAST EVENT" : undefined} />
       </div>
-    ) : null;
+    );
   })}
-
-  {/* Decorative arrow cells — visible on desktop only */}
-  <div class="bento-grid__deco bento-grid__deco--1" aria-hidden="true">
-    <div class="deco-arrow-wrap">
-      <ArrowLoop3D
-        id="bento-arrow-1"
-        cycleDuration={3}
-        fadeOverlap={0.15}
-        scaleAmount={0.04}
-        spinDegrees={180}
-        spinAxis="Y"
-        perspective={300}
-        sizeVariance={0.3}
-        color="#00BFB3"
-      />
-    </div>
-  </div>
-  <div class="bento-grid__deco bento-grid__deco--2" aria-hidden="true">
-    <div class="deco-arrow-wrap">
-      <ArrowLoop3D
-        id="bento-arrow-2"
-        cycleDuration={3}
-        fadeOverlap={0.15}
-        scaleAmount={0.04}
-        spinDegrees={180}
-        spinAxis="Y"
-        perspective={300}
-        sizeVariance={0.3}
-        color="#B7BF10"
-        startDelay={1}
-      />
-    </div>
-  </div>
-<div class="bento-grid__deco bento-grid__deco--3" aria-hidden="true">
-    <div class="deco-arrow-wrap">
-      <ArrowLoop3D
-        id="bento-arrow-3"
-        cycleDuration={3}
-        fadeOverlap={0.15}
-        scaleAmount={0.04}
-        spinDegrees={180}
-        spinAxis="Y"
-        perspective={300}
-        sizeVariance={0.3}
-        color="#00BFB3"
-        startDelay={0.5}
-      />
-    </div>
-  </div>
-  <div class="bento-grid__deco bento-grid__deco--4" aria-hidden="true">
-    <div class="deco-arrow-wrap">
-      <ArrowLoop3D
-        id="bento-arrow-4"
-        cycleDuration={3}
-        fadeOverlap={0.15}
-        scaleAmount={0.04}
-        spinDegrees={180}
-        spinAxis="X"
-        perspective={300}
-        sizeVariance={0.3}
-        color="#B7BF10"
-        startDelay={1.5}
-      />
-    </div>
-  </div>
 </div>
 
 <style>
-  /* ---- Mobile: single column stack ---- */
   .bento-grid {
     display: grid;
     gap: var(--grid-gutter);
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "fase"
-      "grad"
-      "film"
-      "vcs"
-      "pdstudio"
-      "arch"
-      "mfa"
-      "mwrit"
-      "anim"
-      "game"
-      "dmba"
-      "ext"
-      "show"
-      "illus"
-      "id"
-      "gd"
-      "fashn"
-      "ixd"
-      "mfad";
+    grid-auto-rows: minmax(180px, auto);
+    grid-auto-flow: dense;
   }
 
   .bento-grid__cell {
@@ -149,65 +87,11 @@ const layout: { slug: string; size: "large" | "tall" | "wide" | "compact"; area:
     overflow: visible;
   }
 
-  /* Decorative cells hidden below desktop */
-  .bento-grid__deco {
-    display: none;
-    pointer-events: none;
-  }
-
-  /* ---- Tablet: 2 columns ---- */
   @media (min-width: 768px) {
-    .bento-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-areas:
-        "fase      film"
-        "fase      film"
-        "grad      vcs"
-        "pdstudio  arch"
-        "mfa       arch"
-        "mfa       mwrit"
-        "anim      game"
-        "dmba      ext"
-        "show      show"
-        "show      show"
-        "illus     id"
-        "gd        fashn"
-        "ixd       mfad";
-    }
+    .bento-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* ---- Desktop: 4 columns, explicit bento layout ---- */
   @media (min-width: 1024px) {
-    .bento-grid {
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: minmax(180px, auto);
-      grid-template-areas:
-        "fase   grad      film     vcs"
-        "fase   pdstudio  film     arch"
-        "mfa    mwrit     mwrit    arch"
-        "mfa    anim      anim     game"
-        "dmba   ext       ext      deco-1"
-        "show   show      illus    id"
-        "show   show      gd       fashn"
-        "ixd    mfad      deco-2   deco-4";
-    }
-
-    .bento-grid__deco {
-      display: grid;
-      place-items: center;
-    }
-
-    .bento-grid__deco--1 { grid-area: deco-1; }
-    .bento-grid__deco--2 { grid-area: deco-2; }
-    .bento-grid__deco--3 { display: none; }
-    .bento-grid__deco--4 { grid-area: deco-4; }
-  }
-
-  /* Arrow wrapper sizing within decorative cells */
-  .deco-arrow-wrap {
-    width: clamp(70px, 9vw, 130px);
-    height: clamp(70px, 9vw, 130px);
+    .bento-grid { grid-template-columns: repeat(4, 1fr); }
   }
 </style>
-
-<script src="../../scripts/arrow-loop-3d.ts"></script>

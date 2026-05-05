@@ -12,8 +12,17 @@ interface Props {
 
 const { events } = Astro.props;
 
-// Sort chronologically by start date for "what's coming up" utility
-const sorted = [...events].sort((a, b) => a.data.date.localeCompare(b.data.date));
+const today = new Date().toISOString().slice(0, 10);
+const effectiveEnd = (e: CollectionEntry<"events">) => e.data.endDate ?? e.data.date;
+const isPast = (e: CollectionEntry<"events">) => effectiveEnd(e) < today;
+
+// Upcoming first (chronological), then past (chronological)
+const sorted = [...events].sort((a, b) => {
+  const aPast = isPast(a) ? 1 : 0;
+  const bPast = isPast(b) ? 1 : 0;
+  if (aPast !== bPast) return aPast - bPast;
+  return a.data.date.localeCompare(b.data.date);
+});
 
 function getEventUrl(type: string, degreeLevel: string, slug: string): string {
   if (type === "commencement") return degreeLevel === "all" ? "/commencement/" : `/commencement/${degreeLevel}/`;
@@ -43,13 +52,14 @@ const badgeLabels: Record<string, string> = {
     const isExternal = !!externalUrl;
     const href = externalUrl ?? getEventUrl(type, degreeLevel, slug);
     const dateDisplay = endDate ? formatDateRange(date, endDate) : formatDate(date);
-    const badge = badgeLabels[type] ?? type.toUpperCase();
+    const past = isPast(event);
+    const badge = past ? "PAST EVENT" : (badgeLabels[type] ?? type.toUpperCase());
 
     return (
       <li class="event-list__item">
         <a
           href={href}
-          class="event-row reveal"
+          class:list={["event-row", "reveal", past && "event-row--past"]}
           {...isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {}}
         >
           <span class="event-row__badge">{badge}</span>
@@ -146,6 +156,11 @@ const badgeLabels: Record<string, string> = {
     border-radius: 3px;
     white-space: nowrap;
     flex-shrink: 0;
+  }
+
+  /* Past rows expose the badge to signal "PAST EVENT" */
+  .event-row--past .event-row__badge {
+    display: inline-block;
   }
 
   /* ---- Title ---- */

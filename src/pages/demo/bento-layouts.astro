@@ -1,0 +1,426 @@
+---
+/**
+ * Demo page comparing four ways to handle past events in the bento grid.
+ * Visualizes the gap problem (current) and three proposed fixes.
+ */
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BentoEvents from '../../components/landing/BentoEvents.astro';
+import BentoEventCard from '../../components/landing/BentoEventCard.astro';
+import EventListView from '../../components/landing/EventListView.astro';
+import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
+
+const allEvents = await getCollection('events');
+const events = allEvents.filter(e => e.data.type !== 'commencement' && e.data.type !== 'celebration');
+
+// Hardcoded "today" so the demo always shows post-April gap behavior
+const today = '2026-05-01';
+const effectiveEnd = (e: CollectionEntry<'events'>) => e.data.endDate ?? e.data.date;
+const upcomingEvents = events
+  .filter(e => effectiveEnd(e) >= today)
+  .sort((a, b) => a.data.date.localeCompare(b.data.date));
+const pastEvents = events.filter(e => effectiveEnd(e) < today);
+
+type Size = 'large' | 'tall' | 'wide' | 'compact';
+
+// Slug → size, mirroring the production layout
+const sizeBySlug: Record<string, Size> = {
+  'fine-arts-senior-exhibition':        'tall',
+  'grad-lab-mfa-first-year-exhibition': 'compact',
+  'mfa-writing-25th-anniversary':       'tall',
+  'vcs-spring-symposium':               'compact',
+  '2d-programs-open-studios':           'compact',
+  'architecture-studio-conversations':  'tall',
+  'mfa-exhibition':                     'tall',
+  'film-screenings':                    'wide',
+  'animation-senior-showcase':          'wide',
+  'game-arts-showcase':                 'compact',
+  'dmba-venture-showcase':              'compact',
+  'extension-reception':                'wide',
+  'all-campus-graduation-exhibition':   'large',
+  'illustration-senior-show':           'compact',
+  'industrial-design-senior-show':      'compact',
+  'graphic-design-senior-show':         'compact',
+  'fashion-design-senior-show':         'compact',
+  'interaction-design-showcase':        'compact',
+  'mfa-design-silver-linings':          'compact',
+};
+
+// Option 3 — hand-authored layout for the post-April set
+const postLayout: { slug: string; size: Size; area: string }[] = [
+  { slug: 'architecture-studio-conversations', size: 'tall',    area: 'arch'  },
+  { slug: 'mfa-exhibition',                    size: 'tall',    area: 'mfa'   },
+  { slug: 'film-screenings',                   size: 'wide',    area: 'films' },
+  { slug: 'animation-senior-showcase',         size: 'wide',    area: 'anim'  },
+  { slug: 'all-campus-graduation-exhibition',  size: 'large',   area: 'show'  },
+  { slug: 'extension-reception',               size: 'wide',    area: 'ext'   },
+  { slug: 'game-arts-showcase',                size: 'compact', area: 'game'  },
+  { slug: 'dmba-venture-showcase',             size: 'compact', area: 'dmba'  },
+  { slug: 'grad-lab-mfa-first-year-exhibition',size: 'compact', area: 'grad'  },
+  { slug: 'illustration-senior-show',          size: 'compact', area: 'illus' },
+  { slug: 'industrial-design-senior-show',     size: 'compact', area: 'id'    },
+  { slug: 'graphic-design-senior-show',        size: 'compact', area: 'gd'    },
+  { slug: 'fashion-design-senior-show',        size: 'compact', area: 'fashn' },
+  { slug: 'interaction-design-showcase',       size: 'compact', area: 'ixd'   },
+  { slug: 'mfa-design-silver-linings',         size: 'compact', area: 'mfad'  },
+];
+const upcomingBySlug = Object.fromEntries(upcomingEvents.map(e => [e.data.slug, e]));
+
+// Option 1 — auto-flow: spans derived from size
+function spanFor(size: Size) {
+  if (size === 'large') return { col: 2, row: 2 };
+  if (size === 'tall')  return { col: 1, row: 2 };
+  if (size === 'wide')  return { col: 2, row: 1 };
+  return { col: 1, row: 1 };
+}
+const autoFlowItems = upcomingEvents.map(e => ({
+  event: e,
+  size: sizeBySlug[e.data.slug] ?? 'compact',
+}));
+
+// Option 4 — keep all events, sort upcoming-first / past-last, override past badge
+const isPast = (e: CollectionEntry<'events'>) => effectiveEnd(e) < today;
+const allWithPast = [...events]
+  .sort((a, b) => {
+    const aPast = isPast(a) ? 1 : 0;
+    const bPast = isPast(b) ? 1 : 0;
+    if (aPast !== bPast) return aPast - bPast;
+    return a.data.date.localeCompare(b.data.date);
+  })
+  .map(e => ({
+    event: e,
+    size: sizeBySlug[e.data.slug] ?? 'compact',
+    past: isPast(e),
+  }));
+---
+
+<BaseLayout title="Bento layout options" themeKey="showcase" minimalHeader={true}>
+  <main class="demo-bento">
+    <a href="/demo/" class="back-link">&larr; Demo Pages</a>
+    <header class="demo-header">
+      <h1>Bento layout — past-events gap</h1>
+      <p class="subtitle">
+        Comparing four ways to handle the layout when past events are filtered out
+        of the all-events block. <strong>Today is hardcoded to {today}</strong> for
+        this demo, so April events are filtered out:
+        <code>{pastEvents.map(e => e.data.slug).join(', ')}</code>.
+      </p>
+      <nav class="jump-nav">
+        <a href="#current">Current (gaps)</a>
+        <a href="#option-1">Option 1 — auto-flow</a>
+        <a href="#option-2">Option 2 — list default</a>
+        <a href="#option-3">Option 3 — second layout</a>
+        <a href="#option-4">Option 4 — past at bottom + badge</a>
+      </nav>
+    </header>
+
+    {/* ─── Current state ─── */}
+    <section id="current" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag demo-section__tag--warn">Current</span>
+        <h2>Production today — gaps where past events used to sit</h2>
+        <p>
+          The bento renders the filtered <code>upcomingEvents</code> array, but
+          <code>grid-template-areas</code> still reserves the named regions for
+          April events. Result: holes in the upper-left of the grid.
+        </p>
+      </div>
+      <BentoEvents events={upcomingEvents} />
+    </section>
+
+    {/* ─── Option 1 ─── */}
+    <section id="option-1" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag">Option 1</span>
+        <h2>Auto-flow — cells pack themselves</h2>
+        <p>
+          Drop <code>grid-template-areas</code>; each cell sets a
+          <code>grid-column</code> / <code>grid-row</code> span based on its size,
+          and <code>grid-auto-flow: dense</code> tries to fill any holes. Source
+          order is date-sorted. The hand-tuned visual composition is gone.
+        </p>
+      </div>
+      <div class="autoflow-grid">
+        {autoFlowItems.map(({ event, size }) => {
+          const { col, row } = spanFor(size);
+          return (
+            <div class="autoflow-grid__cell" style={`grid-column: span ${col}; grid-row: span ${row};`}>
+              <BentoEventCard event={event} size={size} />
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    {/* ─── Option 2 ─── */}
+    <section id="option-2" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag">Option 2</span>
+        <h2>List view as the default</h2>
+        <p>
+          Hide the bento and render <code>EventListView</code>. The
+          <code>EventViewToggle</code> still lets visitors opt into bento. The
+          marquee bento visual is demoted to a secondary view.
+        </p>
+      </div>
+      <EventListView events={upcomingEvents} />
+    </section>
+
+    {/* ─── Option 3 ─── */}
+    <section id="option-3" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag">Option 3</span>
+        <h2>Hand-authored second layout for the post-April set</h2>
+        <p>
+          Same hand-tuned composition philosophy as the original, but a fresh
+          set of <code>grid-template-areas</code> for the 14 remaining events.
+          You'd maintain two layouts and switch based on which events remain.
+        </p>
+      </div>
+      <div class="post-bento-grid">
+        {postLayout.map(({ slug, size, area }) => {
+          const event = upcomingBySlug[slug];
+          return event ? (
+            <div class="post-bento-grid__cell" style={`grid-area: ${area}`}>
+              <BentoEventCard event={event} size={size} />
+            </div>
+          ) : null;
+        })}
+        <div class="post-bento-grid__deco" aria-hidden="true">
+          <div class="deco-arrow-wrap">
+            <ArrowLoop3D
+              id="post-bento-arrow-1"
+              cycleDuration={3}
+              fadeOverlap={0.15}
+              scaleAmount={0.04}
+              spinDegrees={180}
+              spinAxis="Y"
+              perspective={300}
+              sizeVariance={0.3}
+              color="#00BFB3"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ─── Option 4 ─── */}
+    <section id="option-4" class="demo-section">
+      <div class="demo-section__header">
+        <span class="demo-section__tag">Option 4</span>
+        <h2>Past events at the bottom, badge overridden to "PAST EVENT"</h2>
+        <p>
+          Keep every event in the bento — no filtering. Sort upcoming-first,
+          past-last (chronological within each group), and replace the type badge
+          on past events with <code>PAST EVENT</code>. Auto-flow handles the
+          packing so the layout adapts continuously as more events conclude. The
+          separate "Past events" section becomes redundant and goes away.
+        </p>
+      </div>
+      <div class="autoflow-grid">
+        {allWithPast.map(({ event, size, past }) => {
+          const { col, row } = spanFor(size);
+          return (
+            <div class="autoflow-grid__cell" style={`grid-column: span ${col}; grid-row: span ${row};`}>
+              <BentoEventCard event={event} size={size} badgeOverride={past ? 'PAST EVENT' : undefined} />
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script src="../../scripts/arrow-loop-3d.ts"></script>
+
+<style>
+  .demo-bento {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-6) var(--space-20);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: var(--space-4);
+    color: var(--color-text);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .back-link:hover { color: var(--color-accent); }
+
+  .demo-header {
+    margin-bottom: var(--space-12);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .demo-header h1 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    margin: 0 0 var(--space-3);
+  }
+
+  .subtitle {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    max-width: 75ch;
+  }
+
+  .subtitle code {
+    font-size: 0.85em;
+    word-break: break-word;
+  }
+
+  .jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .jump-nav a {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+  }
+  .jump-nav a:hover {
+    background: var(--color-accent-tint);
+  }
+
+  .demo-section {
+    margin-block: var(--space-16);
+    padding-top: var(--space-12);
+    border-top: 1px dashed var(--color-border);
+  }
+
+  .demo-section:first-of-type { border-top: none; padding-top: 0; }
+
+  .demo-section__header {
+    margin-bottom: var(--space-8);
+    max-width: 75ch;
+  }
+
+  .demo-section__header h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    margin: var(--space-2) 0 var(--space-3);
+  }
+
+  .demo-section__header p {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .demo-section__tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--color-accent-tint);
+    color: var(--color-accent);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 3px;
+  }
+
+  .demo-section__tag--warn {
+    background: rgba(255, 80, 80, 0.12);
+    color: #c8341e;
+  }
+
+  /* ── Option 1: auto-flow grid ── */
+  .autoflow-grid {
+    display: grid;
+    gap: var(--grid-gutter);
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(180px, auto);
+    grid-auto-flow: dense;
+  }
+
+  .autoflow-grid__cell { min-width: 0; overflow: visible; }
+
+  @media (min-width: 768px) {
+    .autoflow-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .autoflow-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* ── Option 3: post-event hand-authored layout ── */
+  .post-bento-grid {
+    display: grid;
+    gap: var(--grid-gutter);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "arch"
+      "mfa"
+      "films"
+      "anim"
+      "show"
+      "ext"
+      "grad"
+      "game"
+      "dmba"
+      "illus"
+      "id"
+      "gd"
+      "fashn"
+      "ixd"
+      "mfad";
+  }
+
+  .post-bento-grid__cell { min-width: 0; overflow: visible; }
+  .post-bento-grid__deco { display: none; pointer-events: none; }
+
+  @media (min-width: 768px) {
+    .post-bento-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-areas:
+        "arch  mfa"
+        "arch  mfa"
+        "films films"
+        "anim  anim"
+        "show  show"
+        "show  show"
+        "ext   ext"
+        "grad  game"
+        "dmba  illus"
+        "id    gd"
+        "fashn ixd"
+        "mfad  mfad";
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .post-bento-grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(180px, auto);
+      grid-template-areas:
+        "arch  mfa   films films"
+        "arch  mfa   anim  anim"
+        "show  show  ext   ext"
+        "show  show  game  dmba"
+        "grad  illus id    gd"
+        "fashn ixd   mfad  deco";
+    }
+
+    .post-bento-grid__deco {
+      grid-area: deco;
+      display: grid;
+      place-items: center;
+    }
+  }
+
+  .deco-arrow-wrap {
+    width: clamp(70px, 9vw, 130px);
+    height: clamp(70px, 9vw, 130px);
+  }
+</style>
