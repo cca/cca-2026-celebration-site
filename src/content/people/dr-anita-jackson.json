@@ -2,10 +2,6 @@
   "name": "Dr. Anita Jackson",
   "slug": "dr-anita-jackson",
   "role": "honorary-doctorate",
-  "photo": {
-    "src": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=600&fit=crop&crop=face",
-    "alt": "Dr. Anita Jackson"
-  },
   "title": "Sculptor and Public Art Advocate",
   "bio": "Dr. Anita Jackson is a celebrated sculptor whose large-scale public installations have transformed urban landscapes across the United States. Her work explores the intersection of community, memory, and place.",
   "ccaConnection": "BFA Sculpture 1985",

@@ -43,17 +43,13 @@ const honorees = [
     bio: p.data.bio,
     detail: p.data.ccaConnection,
   })),
-  ...[
-    { event: undergradEvent, placeholder: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg' },
-    { event: gradEvent, placeholder: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg' },
-  ]
-    .filter(({ event }) => event?.data.ceremonyProgram?.studentSpeaker)
-    .map(({ event, placeholder }) => {
+  ...[undergradEvent, gradEvent]
+    .filter((event) => event?.data.ceremonyProgram?.studentSpeaker)
+    .map((event) => {
       const sp = event!.data.ceremonyProgram!.studentSpeaker!;
       return {
         name: sp.name,
         role: 'Student Speaker',
-        photo: { src: placeholder, alt: sp.name },
         title: sp.program,
         bio: sp.speechHighlights,
       };
