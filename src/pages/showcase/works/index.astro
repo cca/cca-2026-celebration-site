@@ -10,7 +10,7 @@ import { getCurrentPhase } from '../../../lib/utils/phase';
 import { isPhaseBefore } from '../../../config/phases';
 
 const phase = getCurrentPhase(Astro.url);
-if (isPhaseBefore(phase, 'pre-event')) {
+if (isPhaseBefore(phase, 'pre-event') || phase === 'during-event') {
   return Astro.redirect('/');
 }
 

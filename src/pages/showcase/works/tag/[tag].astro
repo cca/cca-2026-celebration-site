@@ -9,7 +9,7 @@ import { getAllTags, getWorksByTag } from '../../../../lib/utils/collections';
 import { CURRENT_PHASE, isPhaseBefore } from '../../../../config/phases';
 
 export async function getStaticPaths() {
-  if (isPhaseBefore(CURRENT_PHASE, 'pre-event')) return [];
+  if (isPhaseBefore(CURRENT_PHASE, 'pre-event') || CURRENT_PHASE === 'during-event') return [];
   const tags = await getAllTags();
   return tags.map(tag => ({
     params: { tag },
