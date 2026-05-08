@@ -11,7 +11,7 @@ import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 import PastGallery from '../../components/sections/PastGallery.astro';
 import HonoreeSpotlight from '../../components/sections/HonoreeSpotlight.astro';
 import { formatDate, formatTime } from '../../lib/utils/format';
-import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
+import { getCelebrationEvents } from '../../lib/utils/collections';
 import PhaseGate from '../../components/PhaseGate.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
@@ -29,32 +29,21 @@ const roleLabels: Record<string, string> = {
   'distinguished-alumni': 'Distinguished Alumni',
   'professor-emeritus': 'Professor Emeritus',
 };
-const allPeople = [
-  ...await getPeopleByRole('honorary-doctorate'),
-  ...await getPeopleByRole('distinguished-alumni'),
-  ...await getPeopleByRole('professor-emeritus'),
-];
-const honorees = [
-  ...allPeople.map(p => ({
-    name: p.data.name,
-    role: roleLabels[p.data.role] ?? p.data.role,
-    photo: p.data.photo,
-    title: p.data.title,
-    bio: p.data.bio,
-    detail: p.data.ccaConnection,
-  })),
-  ...[undergradEvent, gradEvent]
-    .filter((event) => event?.data.ceremonyProgram?.studentSpeaker)
-    .map((event) => {
-      const sp = event!.data.ceremonyProgram!.studentSpeaker!;
-      return {
-        name: sp.name,
-        role: 'Student Speaker',
-        title: sp.program,
-        bio: sp.speechHighlights,
-      };
-    }),
-];
+const honoreeEntries = await Promise.all([
+  getEntry('people', 'abby-chang-chen'),
+  getEntry('people', 'michael-james-vanderbyl'),
+]);
+const allPeople = honoreeEntries.filter(
+  (entry): entry is NonNullable<typeof entry> => entry !== undefined,
+);
+const honorees = allPeople.map((p) => ({
+  name: p.data.name,
+  role: roleLabels[p.data.role] ?? p.data.role,
+  photo: p.data.photo,
+  title: p.data.title,
+  bio: p.data.bio,
+  detail: p.data.ccaConnection,
+}));
 const phase = getCurrentPhase(Astro.url);
 ---
 
