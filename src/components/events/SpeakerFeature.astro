@@ -13,6 +13,9 @@ interface Props {
 
 const { speaker, student } = Astro.props;
 const studentHref = student ? `/students/${student.data.slug}/` : null;
+const speechParagraphs = speaker.speechHighlights
+  ? speaker.speechHighlights.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
+  : [];
 ---
 
 <div class="speaker-feature reveal">
@@ -31,8 +34,10 @@ const studentHref = student ? `/students/${student.data.slug}/` : null;
       )}
     </h3>
     <p class="speaker-program">{speaker.program}</p>
-    {speaker.speechHighlights && (
-      <p class="speaker-highlights">{speaker.speechHighlights}</p>
+    {speechParagraphs.length > 0 && (
+      <div class="speaker-highlights">
+        {speechParagraphs.map(p => <p>{p}</p>)}
+      </div>
     )}
   </div>
 </div>
@@ -106,6 +111,13 @@ const studentHref = student ? `/students/${student.data.slug}/` : null;
     color: var(--color-text);
     line-height: 1.6;
     margin-top: var(--space-1);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .speaker-highlights p {
+    margin: 0;
   }
 
   @media (max-width: 600px) {

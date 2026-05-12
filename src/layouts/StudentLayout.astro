@@ -56,7 +56,7 @@ const name = fullName(student);
             <li>
               <a class="story-card" href={`https://www.cca.edu${story.url}`} target="_blank" rel="noopener noreferrer">
                 {story.image && (
-                  <Image class="story-thumb" src={story.image.src} alt={story.image.alt} loading="lazy" inferSize />
+                  <img class="story-thumb" src={story.image.src} alt={story.image.alt} loading="lazy" width="160" height="120" />
                 )}
                 <div class="story-text">
                   <span class="story-title">{story.listingTitle || story.title}</span>
