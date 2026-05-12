@@ -1,0 +1,14 @@
+{
+  "firstName": "Alana",
+  "lastName": "Abuchaibe",
+  "slug": "alana-abuchaibe",
+  "photo": {
+    "src": "../../assets/images/students/Alana Abuchaibe.jpg",
+    "alt": "Portrait of Alana Abuchaibe."
+  },
+  "program": "architecture",
+  "degreeLevel": "undergraduate",
+  "degreeType": "BArch",
+  "expectedGraduation": "Spring 2026",
+  "ceremonies": ["commencement-undergraduate"]
+}
