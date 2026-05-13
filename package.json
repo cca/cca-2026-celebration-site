@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "prebuild": "bun run check:images",
     "preview": "astro preview",
+    "check:images": "bun scripts/check-images.ts",
     "astro": "astro"
   },
   "dependencies": {
