@@ -131,6 +131,7 @@ const events = defineCollection({
             name: z.string(),
             program: z.string(),
             speechHighlights: z.string().optional(),
+            attribution: z.string().optional(),
           })
           .optional(),
         distinguishedAlumni: reference("people").optional(),
@@ -141,7 +142,16 @@ const events = defineCollection({
               order: z.number(),
               label: z.string(),
               presenter: z.string().optional(),
+              presenters: z
+                .array(
+                  z.object({
+                    name: z.string(),
+                    title: z.string().optional(),
+                  }),
+                )
+                .optional(),
               description: z.string().optional(),
+              descriptionItems: z.array(z.string()).optional(),
               type: z.enum([
                 "processional",
                 "welcome",

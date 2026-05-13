@@ -1,9 +1,16 @@
 ---
+interface PresenterBlock {
+  name: string;
+  title?: string;
+}
+
 interface ProgramItem {
   order: number;
   label: string;
   presenter?: string;
+  presenters?: PresenterBlock[];
   description?: string;
+  descriptionItems?: string[];
   type: string;
 }
 
@@ -22,9 +29,28 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
     {sorted.map((item) => (
       <li class:list={["agenda-item", { "agenda-highlight": highlightTypes.has(item.type) }]}>
         <span class="agenda-label">{item.label}</span>
+
+        {item.presenters && item.presenters.length > 0 && (
+          <div class="agenda-presenters">
+            {item.presenters.map((p) => (
+              <div class="agenda-presenter-block">
+                <span class="agenda-presenter-name">{p.name}</span>
+                {p.title && <span class="agenda-presenter-title">{p.title}</span>}
+              </div>
+            ))}
+          </div>
+        )}
+
         {item.presenter && (
           <span class="agenda-presenter">{item.presenter}</span>
         )}
+
+        {item.descriptionItems && item.descriptionItems.length > 0 && (
+          <ul class="agenda-description-list" role="list">
+            {item.descriptionItems.map((d) => <li>{d}</li>)}
+          </ul>
+        )}
+
         {item.description && (
           <span class="agenda-description">{item.description}</span>
         )}
@@ -51,7 +77,7 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
   .agenda-item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
     padding-block: var(--space-4);
     border-bottom: 1px solid var(--color-border);
   }
@@ -76,9 +102,48 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
     color: var(--color-gold, var(--color-accent));
   }
 
+  .agenda-presenters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .agenda-presenter-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .agenda-presenter-name {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .agenda-presenter-title {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    opacity: 0.75;
+  }
+
   .agenda-presenter {
     font-size: var(--text-sm);
     color: var(--color-text);
+  }
+
+  .agenda-description-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .agenda-description-list li {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    opacity: 0.85;
   }
 
   .agenda-description {

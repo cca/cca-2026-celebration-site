@@ -1,31 +1,44 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { formatDate, formatTime } from "../../lib/utils/format";
+import { generateGoogleCalendarUrl } from "../../lib/utils/calendar";
 
 interface Props {
   event: CollectionEntry<"events">;
+  intro?: string;
 }
 
-const { event } = Astro.props;
-const { title, date, time, location, address } = event.data;
+const { event, intro } = Astro.props;
+const { title, date, endDate, time, location, address, description } = event.data;
 const dateDisplay = formatDate(date);
+const calendarUrl = generateGoogleCalendarUrl({ title, date, endDate, time, location, address, description });
 ---
 
 <section class="program-hero">
   <div class="container">
-    <p class="program-label">Digital Program</p>
     <h1 class="hero-title">{title}</h1>
     <p class="hero-subtitle">119th Commencement</p>
-    <div class="hero-meta">
-      <time class="hero-date">{dateDisplay}</time>
-      <span class="hero-separator" aria-hidden="true">&#9670;</span>
-      {time && <span class="hero-time">{formatTime(time)}</span>}
-    </div>
-    <p class="hero-location">
-      <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`} target="_blank" rel="noopener noreferrer">
-        {location}
-      </a>
+    <p class="hero-meta">
+      <time>{dateDisplay}</time>
+      <span class="hero-separator" aria-hidden="true">|</span>
+      {time && <span>{formatTime(time)}</span>}
+      <span class="hero-separator" aria-hidden="true">|</span>
+      <a
+        class="hero-location"
+        href={`https://maps.google.com/?q=${encodeURIComponent(address)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >{location}</a>
     </p>
+    {intro && <p class="hero-intro">{intro}</p>}
+    <div class="hero-ctas">
+      <a href={calendarUrl} target="_blank" rel="noopener noreferrer" class="cta cta--calendar">
+        Add to Calendar
+      </a>
+      <button class="cta cta--share share-link" data-share-title={title} data-share-url={Astro.url.pathname}>
+        Share
+      </button>
+    </div>
   </div>
 </section>
 
@@ -50,15 +63,6 @@ const dateDisplay = formatDate(date);
 
   .program-hero .container {
     position: relative;
-  }
-
-  .program-label {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-gold, var(--color-accent));
-    margin-bottom: var(--space-4);
   }
 
   .hero-title {
@@ -91,28 +95,92 @@ const dateDisplay = formatDate(date);
     margin-top: var(--space-6);
   }
 
-  .hero-date {
+  .hero-meta time {
     color: var(--color-accent);
   }
 
   .hero-separator {
     color: var(--color-accent);
     opacity: 0.5;
-    font-size: 0.6em;
   }
 
   .hero-location {
-    margin-top: var(--space-3);
-    font-size: var(--text-sm);
-  }
-
-  .hero-location a {
     color: var(--color-text);
     text-decoration: none;
     transition: color 0.2s ease;
   }
 
-  .hero-location a:hover {
+  .hero-location:hover {
+    color: var(--color-accent);
+  }
+
+  .hero-intro {
+    margin: var(--space-5) auto 0;
+    max-width: 60ch;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    min-height: 44px;
+  }
+
+  .cta:hover,
+  .cta:focus-visible {
+    border-color: var(--color-accent);
     color: var(--color-accent);
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.program-hero .share-link').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const title = btn.dataset.shareTitle ?? '';
+      const url = new URL(btn.dataset.shareUrl ?? '', window.location.origin).href;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+          return;
+        } catch {
+          // User cancelled or share failed — fall through to clipboard
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          btn.textContent = original;
+        }, 2000);
+      } catch {
+        // Clipboard not available
+      }
+    });
+  });
+</script>

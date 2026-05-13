@@ -3,9 +3,10 @@ import type { CandidateGroup } from "../../lib/utils/collections";
 
 interface Props {
   groups: CandidateGroup[];
+  heading?: string;
 }
 
-const { groups } = Astro.props;
+const { groups, heading } = Astro.props;
 const totalCandidates = groups.reduce(
   (sum, g) => sum + g.programs.reduce((ps, p) => ps + p.students.length, 0),
   0,
@@ -13,6 +14,7 @@ const totalCandidates = groups.reduce(
 ---
 
 <div class="candidates-list">
+  {heading && <h3 class="candidates-heading">{heading}</h3>}
   <p class="candidates-count">
     <span class="count-number">{totalCandidates}</span> degree candidates
   </p>
@@ -54,6 +56,13 @@ const totalCandidates = groups.reduce(
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+  }
+
+  .candidates-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: normal;
+    margin: 0;
   }
 
   .candidates-count {
