@@ -9,8 +9,11 @@ import ProgramHero from "../../components/program/ProgramHero.astro";
 import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
 import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
 import CandidatesList from "../../components/program/CandidatesList.astro";
+import CeremonySchedule from "../../components/events/CeremonySchedule.astro";
+import EventContextSection from "../../components/events/EventContextSection.astro";
 import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
 import DownloadLink from "../../components/ui/DownloadLink.astro";
+import { formatDate, formatTime } from "../../lib/utils/format";
 import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
 
 const phase = getCurrentPhase(Astro.url);
@@ -22,7 +25,7 @@ const eventId = "commencement-undergraduate";
 const event = await getEntry("events", eventId);
 if (!event) throw new Error(`Event ${eventId} not found`);
 
-const { ceremonyProgram } = event.data;
+const { ceremonyProgram, longDescription, description, date, time, location, address, livestreamUrl, schedule } = event.data;
 
 let studentSpeakerEntry = null;
 if (ceremonyProgram?.studentSpeaker?.student) {
@@ -36,12 +39,27 @@ const programBooklet = commencementInfo?.data.downloadableAssets?.find(
 
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
 
+const introParagraphs = (longDescription ?? description ?? "").split(/\n\n+/).filter(Boolean);
+
+const introMeta = [
+  { label: "Date", value: formatDate(date) },
+  ...(time ? [{ label: "Time", value: formatTime(time) }] : []),
+  {
+    label: "Venue",
+    value: location,
+    href: `https://maps.google.com/?q=${encodeURIComponent(address)}`,
+  },
+  ...(livestreamUrl ? [{ label: "Livestream", value: "Watch online", href: livestreamUrl }] : []),
+];
+
 const hasProgramSection =
   !!ceremonyProgram?.programItems?.length ||
   !!ceremonyProgram?.landAcknowledgment ||
   !!ceremonyProgram?.studentSpeaker;
 
 const tocItems: Array<{ label: string; href: string }> = [];
+if (introParagraphs.length > 0) tocItems.push({ label: "About", href: "#about" });
+if (schedule && schedule.length > 0) tocItems.push({ label: "Day-of Schedule", href: "#schedule" });
 if (hasProgramSection) tocItems.push({ label: "Ceremony Program", href: "#program" });
 if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href: "#candidates" });
 ---
@@ -60,6 +78,25 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
   <div class="container">
     <div class="program-layout">
       <div class="program-main">
+
+        {introParagraphs.length > 0 && (
+          <EventContextSection
+            id="about"
+            kicker="About the ceremony"
+            paragraphs={introParagraphs}
+            meta={introMeta}
+          />
+        )}
+
+        {schedule && schedule.length > 0 && (
+          <section id="schedule" class="program-section">
+            <h2 class="section-heading">Day-of Schedule</h2>
+            <p class="section-lede">
+              A guide to the afternoon's arrivals, processional, ceremony, and reception.
+            </p>
+            <CeremonySchedule schedule={schedule} />
+          </section>
+        )}
 
         {hasProgramSection && (
           <section id="program" class="program-section">
@@ -81,13 +118,6 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
               </div>
             )}
 
-            {ceremonyProgram?.landAcknowledgment && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Land Acknowledgment</h3>
-                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
-              </div>
-            )}
-
             {ceremonyProgram?.studentSpeaker && (
               <div class="subsection">
                 <h3 class="subsection-heading">Student Speaker</h3>
@@ -97,12 +127,23 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
                 />
               </div>
             )}
+
+            {ceremonyProgram?.landAcknowledgment && (
+              <div class="subsection">
+                <h3 class="subsection-heading">Land Acknowledgment</h3>
+                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
+              </div>
+            )}
           </section>
         )}
 
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
             <h2 class="section-heading">Degree Candidates</h2>
+            <p class="section-lede">
+              Candidates listed by division. Recognition during the ceremony does not
+              constitute formal conferral of the degree.
+            </p>
             <CandidatesList groups={candidateGroups} />
             {ceremonyProgram?.disclaimer && (
               <div class="subsection subsection--disclaimer">
@@ -137,6 +178,10 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     min-width: 0;
   }
 
+  .program-main > * + * {
+    border-top: 1px solid var(--color-border);
+  }
+
   @media (min-width: 1024px) {
     .program-layout {
       flex-direction: row;
@@ -153,13 +198,16 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
   }
 
   .program-section {
-    padding-block: var(--space-6);
+    padding-block: var(--space-12);
     scroll-margin-top: calc(60px + var(--space-4));
   }
 
   .section-heading {
-    font-size: var(--text-2xl);
-    margin-bottom: var(--space-6);
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: normal;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
     position: relative;
     display: inline-block;
   }
@@ -171,6 +219,15 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     height: 2px;
     background: var(--color-gold, var(--color-accent));
     margin-top: var(--space-2);
+  }
+
+  .section-lede {
+    font-size: var(--text-base);
+    color: var(--color-text);
+    opacity: 0.85;
+    line-height: 1.6;
+    max-width: 60ch;
+    margin-bottom: var(--space-6);
   }
 
   .acknowledgment-text {
@@ -186,7 +243,7 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
   }
 
   .subsection + .subsection {
-    margin-top: var(--space-8);
+    margin-top: var(--space-10);
   }
 
   .subsection-heading {
@@ -199,6 +256,6 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
   }
 
   .subsection--disclaimer {
-    margin-top: var(--space-6);
+    margin-top: var(--space-8);
   }
 </style>

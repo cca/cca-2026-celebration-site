@@ -9,7 +9,7 @@
   "time": "3:00 PM",
   "location": "Sydney Goldstein Theater",
   "address": "275 Hayes St, San Francisco, CA 94102",
-  "description": "Join the commencement class of 2026 as they celebrate the culmination of their achievements at CCA.",
+  "description": "Celebrate the undergraduate Class of 2026 as they cross the stage at the Sydney Goldstein Theater.",
   "longDescription": "California College of the Arts proudly presents its 119th Commencement, honoring the extraordinary achievements of our undergraduate Class of 2026. This afternoon ceremony celebrates the artists, designers, architects, and writers who have shaped their creative voices over the past four years. Join family, friends, faculty, and fellow graduates for a memorable afternoon of recognition, reflection, and celebration.",
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
@@ -20,11 +20,7 @@
   "schedule": [
     {
       "time": "2:00 PM",
-      "label": "Doors open"
-    },
-    {
-      "time": "2:00 PM",
-      "label": "Guest seating begins"
+      "label": "Doors open and guest seating begins"
     },
     {
       "time": "2:30 PM",
@@ -108,6 +104,7 @@
       {
         "order": 9,
         "label": "Student remarks",
+        "presenter": "Alana Abuchaibe, BArch Architecture 2026",
         "type": "address"
       },
       {
