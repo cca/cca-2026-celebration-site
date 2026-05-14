@@ -74,7 +74,7 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Student Names", href: "#
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
             <h2 class="section-heading">Bachelor's Degree Candidates</h2>
-            <CandidatesList groups={candidateGroups} degreeLabel="bachelor's degree" />
+            <CandidatesList groups={candidateGroups} degreeLabel="bachelor's degree" totalCount={281} />
             {ceremonyProgram?.disclaimer && (
               <div class="subsection subsection--disclaimer">
                 <ProgramDisclaimer text={ceremonyProgram.disclaimer} />

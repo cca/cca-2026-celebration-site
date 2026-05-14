@@ -4,12 +4,13 @@ import type { CandidateGroup } from "../../lib/utils/collections";
 interface Props {
   groups: CandidateGroup[];
   degreeLabel?: string;
+  totalCount?: number;
 }
 
-const { groups, degreeLabel = "degree" } = Astro.props;
+const { groups, degreeLabel = "degree", totalCount } = Astro.props;
 const uniqueIds = new Set<string>();
 for (const g of groups) for (const p of g.programs) for (const s of p.students) uniqueIds.add(s.id);
-const totalCandidates = uniqueIds.size;
+const totalCandidates = totalCount ?? uniqueIds.size;
 ---
 
 <div class="candidates-list">
