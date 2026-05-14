@@ -30,11 +30,9 @@ const totalCandidates = totalCount ?? uniqueIds.size;
             <h4 class="program-name">{program.degreeType} {program.programName}</h4>
             <ul class="student-list" role="list">
               {program.students.map((student) => (
-                <li>
-                  <a href={`/students/${student.slug}/`} class="student-link">
-                    {student.lastName}, {student.firstName}
-                    {student.isDoubleMajor && <span class="student-note"> (double major)</span>}
-                  </a>
+                <li class="student-name">
+                  {student.firstName} {student.lastName}
+                  {student.isDoubleMajor && <span class="student-note"> (double major)</span>}
                 </li>
               ))}
             </ul>
@@ -162,17 +160,8 @@ const totalCandidates = totalCount ?? uniqueIds.size;
     padding-block: var(--space-1);
   }
 
-  .student-link {
+  .student-name {
     font-size: var(--text-sm);
     color: var(--color-text);
-    text-decoration: none;
-    transition: color 0.15s ease;
-    display: inline-block;
-    min-height: 44px;
-    line-height: 44px;
-  }
-
-  .student-link:hover {
-    color: var(--color-accent);
   }
 </style>
