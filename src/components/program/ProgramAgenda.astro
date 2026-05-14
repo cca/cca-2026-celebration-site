@@ -37,8 +37,8 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
           <ul class="agenda-presenters">
             {item.presenters.map((p) => (
               <li class="agenda-presenter">
-                <span class="agenda-presenter-name">{p.name}</span>
-                {p.role && <span class="agenda-presenter-role">, {p.role}</span>}
+                <span class="agenda-presenter-name">{p.name}{p.role ? "," : ""}</span>
+                {p.role && <span class="agenda-presenter-role"> {p.role}</span>}
               </li>
             ))}
           </ul>
