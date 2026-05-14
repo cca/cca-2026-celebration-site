@@ -10,11 +10,11 @@ interface Props {
       firstName: string;
       lastName: string;
       pronouns?: string;
-      photo: { src: ImageMetadata; alt: string };
+      photo?: { src: ImageMetadata; alt: string };
       program: { id: string };
       degreeLevel: string;
       degreeType: string;
-      expectedGraduation: string;
+      expectedGraduation?: string;
       bio?: string;
       links?: Array<{ label: string; url: string; type: string }>;
       newsroomStories?: Array<{ title: string; url: string; date?: string; summary?: string; listingTitle?: string; image?: { src: string; alt: string } }>;
@@ -30,13 +30,15 @@ const name = fullName(student);
   <article class="student-profile container">
     <slot name="breadcrumb" />
     <header class="student-header reveal">
-      <div class="student-photo">
-        <Image src={student.data.photo.src} alt={student.data.photo.alt} loading="lazy" width={280} height={280} />
-      </div>
+      {student.data.photo && (
+        <div class="student-photo">
+          <Image src={student.data.photo.src} alt={student.data.photo.alt} loading="lazy" width={280} height={280} />
+        </div>
+      )}
       <div class="student-info">
         <h1>{name}</h1>
         {student.data.pronouns && <p class="pronouns">{student.data.pronouns}</p>}
-        <p class="degree">{student.data.degreeType} &middot; {student.data.expectedGraduation}</p>
+        <p class="degree">{student.data.degreeType}{student.data.expectedGraduation && <> &middot; {student.data.expectedGraduation}</>}</p>
         {student.data.bio && <p class="bio">{student.data.bio}</p>}
         {student.data.links && student.data.links.length > 0 && (
           <ul class="links">

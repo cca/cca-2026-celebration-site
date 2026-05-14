@@ -1,0 +1,147 @@
+{
+  "title": "Bachelor's Degree Candidates' Ceremony",
+  "slug": "commencement-bachelors",
+  "shortTitle": "Bachelor's Ceremony",
+  "type": "commencement",
+  "degreeLevel": "bachelors",
+  "themeKey": "commencement",
+  "date": "2026-05-16",
+  "time": "3:00 PM",
+  "location": "Sydney Goldstein Theater",
+  "address": "275 Hayes St, San Francisco, CA 94102",
+  "description": "Join us in celebrating CCA's commencement class of 2026 bachelor's degree candidates.",
+  "rsvpUrl": "https://cca.edu/commencement/rsvp",
+  "livestreamUrl": "https://cca.edu/commencement/livestream",
+  "image": {
+    "src": "../../assets/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg",
+    "alt": "Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage."
+  },
+  "ceremonyProgram": {
+    "studentSpeaker": {
+      "student": "alana-valentina-abuchaibe",
+      "name": "Alana Valentina Abuchaibe",
+      "program": "BArch Architecture 2026",
+      "speechHighlights": "So as we leave CCA, at a time when it's also coming to a close, I believe what matters most is not what we're leaving behind, but what we're taking with us. The ability to adapt. The ability to be present. And letting go of the fear of doing something 'correctly.'"
+    },
+    "programItems": [
+      {
+        "order": 1,
+        "label": "Grand Marshal Introduction",
+        "presenters": [
+          { "name": "Calvin Wheeler", "role": "Chair of the Board of Trustees" }
+        ],
+        "type": "processional"
+      },
+      {
+        "order": 2,
+        "label": "Academic Processional",
+        "subItems": [
+          { "label": "Candidates for the Bachelor of Architecture Degree" },
+          { "label": "Candidates for the Bachelor of Fine Arts Degree" },
+          { "label": "Candidates for the Bachelor of Arts Degree" }
+        ],
+        "type": "processional"
+      },
+      {
+        "order": 3,
+        "label": "Welcome from the President",
+        "presenters": [
+          { "name": "David C. Howse", "role": "President" }
+        ],
+        "type": "welcome"
+      },
+      {
+        "order": 4,
+        "label": "Land Acknowledgment",
+        "type": "acknowledgment"
+      },
+      {
+        "order": 5,
+        "label": "In Memoriam",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 6,
+        "label": "President's Address",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 7,
+        "label": "Professor Emeriti Announcement",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 8,
+        "label": "Conferring of Honorary Doctorate Candidate",
+        "presenters": [
+          { "name": "TT Takemoto", "role": "Interim Provost" },
+          { "name": "Helen Maria Nugent", "role": "Dean of Design" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 9,
+        "label": "Honorary Doctorate Commencement Address",
+        "presenters": [
+          { "name": "Michael James Vanderbyl", "role": "BFA Graphic Design 1968, Multidisciplinary Designer" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 10,
+        "label": "Student Remarks",
+        "presenters": [
+          { "name": "Alana Abuchaibe", "role": "BArch Architecture 2026" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 11,
+        "label": "Commencement Video",
+        "presenters": [
+          { "name": "Taro Hattori", "role": "Faculty Senate Vice President, Sculpture Assistant Professor" }
+        ],
+        "type": "performance"
+      },
+      {
+        "order": 12,
+        "label": "Conferring of Degrees",
+        "presenters": [
+          { "name": "Curtis Hidemasa Nickerson Arima", "role": "Dean of Fine Arts" }
+        ],
+        "subItems": [
+          { "label": "Bachelor of Architecture" },
+          { "label": "Bachelor of Fine Arts" },
+          { "label": "Bachelor of Arts" }
+        ],
+        "type": "conferring"
+      },
+      {
+        "order": 13,
+        "label": "Presentation of the Class of 2026",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "other"
+      },
+      {
+        "order": 14,
+        "label": "Recessional",
+        "description": "Members of the audience, please stand and remain standing until the academic procession has left the hall. Music provided by KLEZMANIA!.",
+        "type": "recessional"
+      }
+    ],
+    "presidentName": "David C. Howse",
+    "landAcknowledgment": "California College of the Arts current and historical campuses are located on the unceded territories of Chochenyo and Ramaytush Ohlone peoples, who have continuously lived upon this land since time immemorial. CCA honors Indigenous peoples—past, present, and future—here and around the world, and we wish to pay respect to local elders.",
+    "disclaimer": "CCA's 119th Commencement celebrates students who completed their degree requirements in fall 2025, as well as students anticipated to complete their degrees in spring and summer 2026. Degrees will officially be conferred upon successful completion of all degree requirements."
+  }
+}

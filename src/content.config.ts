@@ -42,11 +42,12 @@ const students = defineCollection({
     photo: z.object({
       src: image(),
       alt: z.string(),
-    }),
+    }).optional(),
     program: reference("programs"),
-    degreeLevel: z.enum(["undergraduate", "graduate"]),
+    additionalPrograms: z.array(reference("programs")).optional(),
+    degreeLevel: z.enum(["bachelors", "masters"]),
     degreeType,
-    expectedGraduation: z.string(),
+    expectedGraduation: z.string().optional(),
     bio: z.string().optional(),
     artistStatement: z.string().optional(),
     links: z
@@ -86,7 +87,7 @@ const events = defineCollection({
     slug: z.string(),
     shortTitle: z.string(),
     type: z.enum(["commencement", "showcase", "thesis-exhibition", "celebration", "studio-review", "screening", "game-showcase", "senior-exhibition", "senior-show", "open-studios", "symposium", "reception", "venture-showcase"]),
-    degreeLevel: z.enum(["undergraduate", "graduate", "all"]),
+    degreeLevel: z.enum(["bachelors", "masters", "all"]),
     themeKey: z.enum(['commencement', 'showcase']),
     date: z.string(),
     endDate: z.string().optional(),
@@ -140,7 +141,21 @@ const events = defineCollection({
             z.object({
               order: z.number(),
               label: z.string(),
-              presenter: z.string().optional(),
+              presenters: z
+                .array(
+                  z.object({
+                    name: z.string(),
+                    role: z.string().optional(),
+                  }),
+                )
+                .optional(),
+              subItems: z
+                .array(
+                  z.object({
+                    label: z.string(),
+                  }),
+                )
+                .optional(),
               description: z.string().optional(),
               type: z.enum([
                 "processional",
@@ -150,6 +165,7 @@ const events = defineCollection({
                 "performance",
                 "conferring",
                 "recessional",
+                "acknowledgment",
                 "other",
               ]),
             }),

@@ -1,0 +1,11 @@
+{
+  "firstName": "Finn",
+  "lastName": "Ghinn",
+  "slug": "finn-ghinn",
+  "program": "architecture",
+  "degreeLevel": "bachelors",
+  "degreeType": "BArch",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}

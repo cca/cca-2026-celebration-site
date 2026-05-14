@@ -1,17 +1,28 @@
 ---
+interface Presenter {
+  name: string;
+  role?: string;
+}
+
+interface SubItem {
+  label: string;
+}
+
 interface ProgramItem {
   order: number;
   label: string;
-  presenter?: string;
+  presenters?: Presenter[];
+  subItems?: SubItem[];
   description?: string;
   type: string;
 }
 
 interface Props {
   items: ProgramItem[];
+  landAcknowledgmentText?: string;
 }
 
-const { items } = Astro.props;
+const { items, landAcknowledgmentText } = Astro.props;
 const sorted = [...items].sort((a, b) => a.order - b.order);
 
 const highlightTypes = new Set(["processional", "recessional", "conferring"]);
@@ -22,8 +33,25 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
     {sorted.map((item) => (
       <li class:list={["agenda-item", { "agenda-highlight": highlightTypes.has(item.type) }]}>
         <span class="agenda-label">{item.label}</span>
-        {item.presenter && (
-          <span class="agenda-presenter">{item.presenter}</span>
+        {item.presenters && item.presenters.length > 0 && (
+          <ul class="agenda-presenters">
+            {item.presenters.map((p) => (
+              <li class="agenda-presenter">
+                <span class="agenda-presenter-name">{p.name}</span>
+                {p.role && <span class="agenda-presenter-role">, {p.role}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+        {item.subItems && item.subItems.length > 0 && (
+          <ul class="agenda-subitems">
+            {item.subItems.map((s) => (
+              <li>{s.label}</li>
+            ))}
+          </ul>
+        )}
+        {item.type === "acknowledgment" && landAcknowledgmentText && (
+          <p class="agenda-acknowledgment">{landAcknowledgmentText}</p>
         )}
         {item.description && (
           <span class="agenda-description">{item.description}</span>
@@ -51,7 +79,7 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
   .agenda-item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
     padding-block: var(--space-4);
     border-bottom: 1px solid var(--color-border);
   }
@@ -76,9 +104,48 @@ const highlightTypes = new Set(["processional", "recessional", "conferring"]);
     color: var(--color-gold, var(--color-accent));
   }
 
+  .agenda-presenters {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
   .agenda-presenter {
     font-size: var(--text-sm);
     color: var(--color-text);
+  }
+
+  .agenda-presenter-role {
+    color: var(--color-text);
+    opacity: 0.75;
+  }
+
+  .agenda-subitems {
+    list-style: none;
+    margin: 0;
+    padding-left: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .agenda-subitems li::before {
+    content: "—";
+    margin-right: var(--space-2);
+    color: var(--color-accent);
+    opacity: 0.6;
+  }
+
+  .agenda-acknowledgment {
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--color-text);
+    margin: 0;
   }
 
   .agenda-description {

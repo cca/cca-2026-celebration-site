@@ -84,19 +84,23 @@ const DIVISION_LABELS: Record<string, string> = {
   'writing': 'Writing',
 };
 
+export interface CandidateEntry {
+  id: string;
+  firstName: string;
+  lastName: string;
+  slug: string;
+  isDoubleMajor: boolean;
+}
+
 export interface CandidateGroup {
   division: string;
   divisionLabel: string;
   programs: Array<{
     programName: string;
     degreeType: string;
-    students: Array<{
-      id: string;
-      firstName: string;
-      lastName: string;
-      slug: string;
-    }>;
+    students: CandidateEntry[];
   }>;
+  uniqueStudentCount: number;
 }
 
 async function groupStudentsByDivision(
@@ -105,23 +109,35 @@ async function groupStudentsByDivision(
   const programs = await getCollection('programs');
   const programMap = new Map(programs.map(p => [p.id, p.data]));
 
-  const divisionMap = new Map<string, Map<string, typeof students>>();
+  // Map<division, Map<programKey, Array<{ student, isDoubleMajor }>>>
+  const divisionMap = new Map<string, Map<string, Array<{ student: typeof students[number]; isDoubleMajor: boolean }>>>();
+  const divisionUniqueIds = new Map<string, Set<string>>();
 
   for (const student of students) {
-    const programData = programMap.get(student.data.program.id);
-    if (!programData) continue;
+    const allProgramIds = [
+      student.data.program.id,
+      ...(student.data.additionalPrograms?.map((p: { id: string }) => p.id) ?? []),
+    ];
+    const isDoubleMajor = allProgramIds.length > 1;
 
-    const division = programData.division;
-    if (!divisionMap.has(division)) {
-      divisionMap.set(division, new Map());
-    }
+    for (const programId of allProgramIds) {
+      const programData = programMap.get(programId);
+      if (!programData) continue;
 
-    const programKey = `${programData.name}|||${student.data.degreeType}`;
-    const programStudents = divisionMap.get(division)!;
-    if (!programStudents.has(programKey)) {
-      programStudents.set(programKey, []);
+      const division = programData.division;
+      if (!divisionMap.has(division)) {
+        divisionMap.set(division, new Map());
+        divisionUniqueIds.set(division, new Set());
+      }
+      divisionUniqueIds.get(division)!.add(student.id);
+
+      const programKey = `${programData.name}|||${student.data.degreeType}`;
+      const programStudents = divisionMap.get(division)!;
+      if (!programStudents.has(programKey)) {
+        programStudents.set(programKey, []);
+      }
+      programStudents.get(programKey)!.push({ student, isDoubleMajor });
     }
-    programStudents.get(programKey)!.push(student);
   }
 
   const result: CandidateGroup[] = [];
@@ -140,11 +156,12 @@ async function groupStudentsByDivision(
           programName,
           degreeType,
           students: studs
-            .map(s => ({
-              id: s.id,
-              firstName: s.data.firstName,
-              lastName: s.data.lastName,
-              slug: s.data.slug,
+            .map(({ student, isDoubleMajor }) => ({
+              id: student.id,
+              firstName: student.data.firstName,
+              lastName: student.data.lastName,
+              slug: student.data.slug,
+              isDoubleMajor,
             }))
             .sort((a, b) => a.lastName.localeCompare(b.lastName)),
         };
@@ -154,6 +171,7 @@ async function groupStudentsByDivision(
       division,
       divisionLabel: DIVISION_LABELS[division] ?? division,
       programs: programEntries,
+      uniqueStudentCount: divisionUniqueIds.get(division)!.size,
     });
   }
 

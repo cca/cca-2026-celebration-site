@@ -3,27 +3,25 @@ import type { CandidateGroup } from "../../lib/utils/collections";
 
 interface Props {
   groups: CandidateGroup[];
+  degreeLabel?: string;
 }
 
-const { groups } = Astro.props;
-const totalCandidates = groups.reduce(
-  (sum, g) => sum + g.programs.reduce((ps, p) => ps + p.students.length, 0),
-  0,
-);
+const { groups, degreeLabel = "degree" } = Astro.props;
+const uniqueIds = new Set<string>();
+for (const g of groups) for (const p of g.programs) for (const s of p.students) uniqueIds.add(s.id);
+const totalCandidates = uniqueIds.size;
 ---
 
 <div class="candidates-list">
-  <p class="candidates-count">
-    <span class="count-number">{totalCandidates}</span> degree candidates
-  </p>
+  <h3 class="candidates-subhead">
+    Celebrating <span class="count-number">{totalCandidates}</span> {degreeLabel} candidates
+  </h3>
 
   {groups.map((group) => (
     <details class="division-group" open>
       <summary class="division-header">
         <span class="division-name">{group.divisionLabel}</span>
-        <span class="division-count">
-          {group.programs.reduce((s, p) => s + p.students.length, 0)}
-        </span>
+        <span class="division-count">{group.uniqueStudentCount}</span>
       </summary>
 
       <div class="division-content">
@@ -38,6 +36,7 @@ const totalCandidates = groups.reduce(
                 <li>
                   <a href={`/students/${student.slug}/`} class="student-link">
                     {student.lastName}, {student.firstName}
+                    {student.isDoubleMajor && <span class="student-note"> (double major)</span>}
                   </a>
                 </li>
               ))}
@@ -56,10 +55,19 @@ const totalCandidates = groups.reduce(
     gap: var(--space-4);
   }
 
-  .candidates-count {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
+  .candidates-subhead {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: normal;
     color: var(--color-text);
+    margin: 0;
+  }
+
+  .student-note {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    opacity: 0.7;
   }
 
   .count-number {

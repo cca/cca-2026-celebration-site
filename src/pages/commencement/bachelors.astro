@@ -9,11 +9,7 @@ import ProgramHero from "../../components/program/ProgramHero.astro";
 import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
 import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
 import CandidatesList from "../../components/program/CandidatesList.astro";
-import CeremonySchedule from "../../components/events/CeremonySchedule.astro";
-import EventContextSection from "../../components/events/EventContextSection.astro";
 import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
-import DownloadLink from "../../components/ui/DownloadLink.astro";
-import { formatDate, formatTime } from "../../lib/utils/format";
 import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
 
 const phase = getCurrentPhase(Astro.url);
@@ -21,47 +17,23 @@ if (isPhaseBefore(phase, 'during-event')) {
   return Astro.redirect('/commencement/');
 }
 
-const eventId = "commencement-undergraduate";
+const eventId = "commencement-bachelors";
 const event = await getEntry("events", eventId);
 if (!event) throw new Error(`Event ${eventId} not found`);
 
-const { ceremonyProgram, longDescription, description, date, time, location, address, livestreamUrl, schedule } = event.data;
+const { ceremonyProgram } = event.data;
 
 let studentSpeakerEntry = null;
 if (ceremonyProgram?.studentSpeaker?.student) {
   studentSpeakerEntry = await getEntry("students", ceremonyProgram.studentSpeaker.student.id);
 }
 
-const commencementInfo = await getEntry("commencement-info", "current");
-const programBooklet = commencementInfo?.data.downloadableAssets?.find(
-  (a: { label: string }) => a.label === "Commencement Program"
-);
-
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
 
-const introParagraphs = (longDescription ?? description ?? "").split(/\n\n+/).filter(Boolean);
-
-const introMeta = [
-  { label: "Date", value: formatDate(date) },
-  ...(time ? [{ label: "Time", value: formatTime(time) }] : []),
-  {
-    label: "Venue",
-    value: location,
-    href: `https://maps.google.com/?q=${encodeURIComponent(address)}`,
-  },
-  ...(livestreamUrl ? [{ label: "Livestream", value: "Watch online", href: livestreamUrl }] : []),
-];
-
-const hasProgramSection =
-  !!ceremonyProgram?.programItems?.length ||
-  !!ceremonyProgram?.landAcknowledgment ||
-  !!ceremonyProgram?.studentSpeaker;
-
 const tocItems: Array<{ label: string; href: string }> = [];
-if (introParagraphs.length > 0) tocItems.push({ label: "About", href: "#about" });
-if (schedule && schedule.length > 0) tocItems.push({ label: "Day-of Schedule", href: "#schedule" });
-if (hasProgramSection) tocItems.push({ label: "Ceremony Program", href: "#program" });
-if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href: "#candidates" });
+if (ceremonyProgram?.studentSpeaker) tocItems.push({ label: "Student Speaker", href: "#speaker" });
+if (ceremonyProgram?.programItems?.length) tocItems.push({ label: "Program", href: "#program" });
+if (candidateGroups.length > 0) tocItems.push({ label: "Student Names", href: "#candidates" });
 ---
 
 <EventLayout event={event} title={event.data.title}>
@@ -73,78 +45,36 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     ]} />
   </div>
 
-  <ProgramHero event={event} />
+  <ProgramHero event={event} titlePrefix="2026 " />
 
   <div class="container">
     <div class="program-layout">
       <div class="program-main">
 
-        {introParagraphs.length > 0 && (
-          <EventContextSection
-            id="about"
-            kicker="About the ceremony"
-            paragraphs={introParagraphs}
-            meta={introMeta}
-          />
-        )}
-
-        {schedule && schedule.length > 0 && (
-          <section id="schedule" class="program-section">
-            <h2 class="section-heading">Day-of Schedule</h2>
-            <p class="section-lede">
-              A guide to the afternoon's arrivals, processional, ceremony, and reception.
-            </p>
-            <CeremonySchedule schedule={schedule} />
+        {ceremonyProgram?.studentSpeaker && (
+          <section id="speaker" class="program-section">
+            <h2 class="section-heading">Student Speaker</h2>
+            <SpeakerFeature
+              speaker={ceremonyProgram.studentSpeaker}
+              student={studentSpeakerEntry}
+            />
           </section>
         )}
 
-        {hasProgramSection && (
+        {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
           <section id="program" class="program-section">
             <h2 class="section-heading">Ceremony Program</h2>
-
-            {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Order of Ceremony</h3>
-                <ProgramAgenda items={ceremonyProgram.programItems} />
-                {programBooklet && (
-                  <div class="program-booklet-download">
-                    <DownloadLink
-                      label={programBooklet.label}
-                      url={programBooklet.url}
-                      description={programBooklet.description}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {ceremonyProgram?.studentSpeaker && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Student Speaker</h3>
-                <SpeakerFeature
-                  speaker={ceremonyProgram.studentSpeaker}
-                  student={studentSpeakerEntry}
-                />
-              </div>
-            )}
-
-            {ceremonyProgram?.landAcknowledgment && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Land Acknowledgment</h3>
-                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
-              </div>
-            )}
+            <ProgramAgenda
+              items={ceremonyProgram.programItems}
+              landAcknowledgmentText={ceremonyProgram.landAcknowledgment}
+            />
           </section>
         )}
 
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
-            <h2 class="section-heading">Degree Candidates</h2>
-            <p class="section-lede">
-              Candidates listed by division. Recognition during the ceremony does not
-              constitute formal conferral of the degree.
-            </p>
-            <CandidatesList groups={candidateGroups} />
+            <h2 class="section-heading">Bachelor's Degree Candidates</h2>
+            <CandidatesList groups={candidateGroups} degreeLabel="bachelor's degree" />
             {ceremonyProgram?.disclaimer && (
               <div class="subsection subsection--disclaimer">
                 <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
@@ -219,40 +149,6 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     height: 2px;
     background: var(--color-gold, var(--color-accent));
     margin-top: var(--space-2);
-  }
-
-  .section-lede {
-    font-size: var(--text-base);
-    color: var(--color-text);
-    opacity: 0.85;
-    line-height: 1.6;
-    max-width: 60ch;
-    margin-bottom: var(--space-6);
-  }
-
-  .acknowledgment-text {
-    font-size: var(--text-base);
-    line-height: 1.8;
-    color: var(--color-text);
-    max-width: 65ch;
-    font-style: italic;
-  }
-
-  .program-booklet-download {
-    margin-top: var(--space-6);
-  }
-
-  .subsection + .subsection {
-    margin-top: var(--space-10);
-  }
-
-  .subsection-heading {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text);
-    margin-bottom: var(--space-4);
   }
 
   .subsection--disclaimer {

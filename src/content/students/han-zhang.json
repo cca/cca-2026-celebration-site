@@ -1,0 +1,11 @@
+{
+  "firstName": "Han",
+  "lastName": "Zhang",
+  "slug": "han-zhang",
+  "program": "interaction-design",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}
