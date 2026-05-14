@@ -1,22 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
 import { chimeraExpanded2026Paths } from '../../data/chimera-expanded-2026-paths';
-// TEMP: re-add tomorrow — import CelebrationCard from '../../components/events/CelebrationCard.astro';
+import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
 import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
 import PastGallery from '../../components/sections/PastGallery.astro';
-// TEMP: re-add tomorrow — import QuoteBlock from '../../components/ui/QuoteBlock.astro';
-// TEMP: re-add tomorrow — import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
-// TEMP: re-add tomorrow — import SocialFeed from '../../components/sections/SocialFeed.astro';
-// TEMP: re-add tomorrow — import TableOfContents from '../../components/ui/TableOfContents.astro';
-// TEMP: re-add tomorrow — import { Image } from 'astro:assets';
+import QuoteBlock from '../../components/ui/QuoteBlock.astro';
+import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
+import SocialFeed from '../../components/sections/SocialFeed.astro';
+import TableOfContents from '../../components/ui/TableOfContents.astro';
+import { Image } from 'astro:assets';
 import { formatDate, formatTime } from '../../lib/utils/format';
-// TEMP: re-add tomorrow — import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
-// TEMP: re-add tomorrow — import PhaseGate from '../../components/PhaseGate.astro';
+import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
+import PhaseGate from '../../components/PhaseGate.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
@@ -24,7 +24,6 @@ const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
 
-/* TEMP: content removed, re-added tomorrow
 const celebrations = await getCelebrationEvents();
 const info = await getEntry('commencement-info', 'current');
 const inMemoriam = info?.data.inMemoriam ?? [];
@@ -52,7 +51,6 @@ const tocItems = [
   { label: "Master's Ceremony", href: '#masters' },
   { label: 'In Memoriam', href: '#in-memoriam' },
 ];
-*/
 
 const phase = getCurrentPhase(Astro.url);
 ---
@@ -241,7 +239,6 @@ const phase = getCurrentPhase(Astro.url);
             <Button href="https://portal.cca.edu/thriving/student-engagement/commencement/#latest-updates--emails" variant="link">Up-to-date information, deadlines, and important links</Button>          </div>
         </section>
 
-        <!-- TEMP: sections removed, re-added tomorrow
         {/* ── Cause for Celebration ── */}
         <section id="cause-for-celebration" class="program-section">
           <span class="section-label reveal">Cause for Celebration</span>
@@ -421,19 +418,15 @@ const phase = getCurrentPhase(Astro.url);
             </ul>
           </section>
         )}
-        -->
 
       </div>
 
-      <!-- TEMP: TOC sidebar removed, re-added tomorrow
       <aside class="program-sidebar">
         <TableOfContents items={tocItems} />
       </aside>
-      -->
     </div>
   </div>
 
-  <!-- TEMP: Special Celebrations removed, re-added tomorrow
   {/* ── Special Celebrations ── */}
   <PhaseGate hiddenIn={['save-the-date']}>
     {celebrations.length > 0 && (
@@ -450,7 +443,6 @@ const phase = getCurrentPhase(Astro.url);
       </section>
     )}
   </PhaseGate>
-  -->
 
   {/* ── Past Commencement Gallery ── */}
   <PastGallery
@@ -477,7 +469,6 @@ const phase = getCurrentPhase(Astro.url);
     ]}
   />
 
-  <!-- TEMP: Social Feed removed, re-added tomorrow
   {/* ── Social Feed ── */}
   <section class="social-feed-section">
     <div class="container">
@@ -485,7 +476,6 @@ const phase = getCurrentPhase(Astro.url);
       <p class="social-footnote reveal">If you have questions about commencement, send us an email at <a href="mailto:commencement@cca.edu">commencement@cca.edu</a>.</p>
     </div>
   </section>
-  -->
 
   {/* ── Email Signup ── */}
   <EmailSignup doodleVariant="chimera" />
