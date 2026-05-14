@@ -1,6 +1,6 @@
 {
   "title": "Master's Degree Candidates' Ceremony",
-  "slug": "commencement-graduate",
+  "slug": "commencement-masters",
   "shortTitle": "Master's Ceremony",
   "type": "commencement",
   "degreeLevel": "masters",
@@ -17,48 +17,6 @@
     "src": "../../assets/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg",
     "alt": "Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them."
   },
-  "schedule": [
-    {
-      "time": "1:30 PM",
-      "label": "Doors open"
-    },
-    {
-      "time": "2:00 PM",
-      "label": "Guest seating begins"
-    },
-    {
-      "time": "2:30 PM",
-      "label": "Graduate processional line-up"
-    },
-    {
-      "time": "2:50 PM",
-      "label": "Academic processional"
-    },
-    {
-      "time": "3:00 PM",
-      "label": "Ceremony begins"
-    },
-    {
-      "time": "3:15 PM",
-      "label": "Welcome & opening remarks"
-    },
-    {
-      "time": "3:30 PM",
-      "label": "Distinguished alumni address"
-    },
-    {
-      "time": "3:45 PM",
-      "label": "Student speaker address"
-    },
-    {
-      "time": "4:15 PM",
-      "label": "Conferral of degrees"
-    },
-    {
-      "time": "5:00 PM",
-      "label": "Reception"
-    }
-  ],
   "ceremonyProgram": {
     "studentSpeaker": {
       "name": "Karen-Happuch Henneh",

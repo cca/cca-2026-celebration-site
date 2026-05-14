@@ -35,7 +35,7 @@ const people = readDir(join(CONTENT, 'people'));
 // Lookup helpers for specific events
 const eventBySlug = (slug: string) => events.find(e => e.name === slug)?.data;
 const undergradCommencement = eventBySlug('commencement-undergraduate');
-const gradCommencement = eventBySlug('commencement-graduate');
+const gradCommencement = eventBySlug('commencement-masters');
 const showcaseEvent = eventBySlug('showcase');
 
 // ── Build document ──

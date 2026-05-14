@@ -22,7 +22,7 @@ import { isPhaseBefore } from '../../config/phases';
 
 const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-bachelors');
-const gradEvent = events.find(e => e.id === 'commencement-graduate');
+const gradEvent = events.find(e => e.id === 'commencement-masters');
 
 /* TEMP: content removed, re-added tomorrow
 const celebrations = await getCelebrationEvents();
@@ -35,7 +35,7 @@ const honoraryDoctorates = await getPeopleByRole('honorary-doctorate');
 const professorsEmerit = await getPeopleByRole('professor-emeritus');
 
 const undergradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-bachelors');
-const gradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-graduate');
+const gradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-masters');
 
 const undergradSpeaker = undergradEvent?.data.ceremonyProgram?.studentSpeaker;
 const gradSpeaker = gradEvent?.data.ceremonyProgram?.studentSpeaker;
