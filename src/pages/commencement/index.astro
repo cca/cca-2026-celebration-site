@@ -1,28 +1,30 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
 import { chimeraExpanded2026Paths } from '../../data/chimera-expanded-2026-paths';
-import CelebrationCard from '../../components/events/CelebrationCard.astro';
+// TEMP: re-add tomorrow — import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
 import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
 import PastGallery from '../../components/sections/PastGallery.astro';
-import QuoteBlock from '../../components/ui/QuoteBlock.astro';
-import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
-import SocialFeed from '../../components/sections/SocialFeed.astro';
-import TableOfContents from '../../components/ui/TableOfContents.astro';
-import { Image } from 'astro:assets';
+// TEMP: re-add tomorrow — import QuoteBlock from '../../components/ui/QuoteBlock.astro';
+// TEMP: re-add tomorrow — import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
+// TEMP: re-add tomorrow — import SocialFeed from '../../components/sections/SocialFeed.astro';
+// TEMP: re-add tomorrow — import TableOfContents from '../../components/ui/TableOfContents.astro';
+// TEMP: re-add tomorrow — import { Image } from 'astro:assets';
 import { formatDate, formatTime } from '../../lib/utils/format';
-import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
-import PhaseGate from '../../components/PhaseGate.astro';
+// TEMP: re-add tomorrow — import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
+// TEMP: re-add tomorrow — import PhaseGate from '../../components/PhaseGate.astro';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
 const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
+
+/* TEMP: content removed, re-added tomorrow
 const celebrations = await getCelebrationEvents();
 const info = await getEntry('commencement-info', 'current');
 const inMemoriam = info?.data.inMemoriam ?? [];
@@ -50,6 +52,7 @@ const tocItems = [
   { label: "Master's Ceremony", href: '#masters' },
   { label: 'In Memoriam', href: '#in-memoriam' },
 ];
+*/
 
 const phase = getCurrentPhase(Astro.url);
 ---
@@ -177,7 +180,6 @@ const phase = getCurrentPhase(Astro.url);
   {/* ── Intro ── */}
   <section class="comm-intro">
     <div class="container container--narrow">
-      <h2 class="section-heading reveal">Begin with Commencement</h2>
       <p class="comm-intro__lead reveal">Join the commencement class of 2026 as they celebrate the culmination of their achievements at CCA. We mark this occasion together at this year's commencement ceremonies, thesis exhibitions, and capstone events.</p>
     </div>
   </section>
@@ -235,36 +237,11 @@ const phase = getCurrentPhase(Astro.url);
             )}
           </div>
 
-          <figure class="ceremony-figure reveal">
-            <img
-              src="/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg"
-              alt="Bachelor's students enter the theater to participate in CCA's Commencement Ceremony."
-              loading="lazy"
-              width="2560"
-              height="1707"
-            />
-          </figure>
-
-          <div class="ceremony-prose reveal">
-            <p>We look forward to celebrating CCA's 119th Commencement on <strong>Saturday, May 16, 2026</strong>.</p>
-            <p>
-              Sydney Goldstein Theater<br />
-              275 Hayes Street<br />
-              San Francisco, CA 94102
-            </p>
-            <p>Witness the commencement class of 2026 cross the stage during two ceremonies:</p>
-            <ul class="ceremony-prose__list">
-              <li><strong>Master's Degree Candidates' Ceremony:</strong> 11 am</li>
-              <li><strong>Bachelor's Degree Candidates' Ceremony:</strong> 3 pm</li>
-            </ul>
-          </div>
-
           <div class="ceremonies-cta reveal">
-            <Button href="https://portal.cca.edu/thriving/student-engagement/commencement/#latest-updates--emails" variant="link">Up-to-date information, deadlines, and important links</Button>
-            <Button href="mailto:commencement@cca.edu" variant="link">If you have questions, send us an email</Button>
-          </div>
+            <Button href="https://portal.cca.edu/thriving/student-engagement/commencement/#latest-updates--emails" variant="link">Up-to-date information, deadlines, and important links</Button>          </div>
         </section>
 
+        <!-- TEMP: sections removed, re-added tomorrow
         {/* ── Cause for Celebration ── */}
         <section id="cause-for-celebration" class="program-section">
           <span class="section-label reveal">Cause for Celebration</span>
@@ -444,15 +421,19 @@ const phase = getCurrentPhase(Astro.url);
             </ul>
           </section>
         )}
+        -->
 
       </div>
 
+      <!-- TEMP: TOC sidebar removed, re-added tomorrow
       <aside class="program-sidebar">
         <TableOfContents items={tocItems} />
       </aside>
+      -->
     </div>
   </div>
 
+  <!-- TEMP: Special Celebrations removed, re-added tomorrow
   {/* ── Special Celebrations ── */}
   <PhaseGate hiddenIn={['save-the-date']}>
     {celebrations.length > 0 && (
@@ -469,6 +450,7 @@ const phase = getCurrentPhase(Astro.url);
       </section>
     )}
   </PhaseGate>
+  -->
 
   {/* ── Past Commencement Gallery ── */}
   <PastGallery
@@ -476,7 +458,6 @@ const phase = getCurrentPhase(Astro.url);
     title="Celebrating generations of graduates"
     marqueeDuration={90}
     images={[
-      { src: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', alt: 'A graduate in a vibrant pink shawl stands next to colorful paper lanterns and rainbow streamers, smiling during a commencement celebration.' },
       { src: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', alt: 'A group of ten students dressed in casual clothing pose together in front of decorative purple lanterns and colorful ribbons at an indoor celebration.' },
       { src: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', alt: 'Three male graduates wearing black robes and colorful cultural sashes stand together outdoors on a brick plaza, smiling at the camera.' },
       { src: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', alt: 'Two graduates in formal attire pose together outdoors; one wears a green dress and the other a pink blazer, both smiling in front of a white building.' },
@@ -496,6 +477,7 @@ const phase = getCurrentPhase(Astro.url);
     ]}
   />
 
+  <!-- TEMP: Social Feed removed, re-added tomorrow
   {/* ── Social Feed ── */}
   <section class="social-feed-section">
     <div class="container">
@@ -503,6 +485,7 @@ const phase = getCurrentPhase(Astro.url);
       <p class="social-footnote reveal">If you have questions about commencement, send us an email at <a href="mailto:commencement@cca.edu">commencement@cca.edu</a>.</p>
     </div>
   </section>
+  -->
 
   {/* ── Email Signup ── */}
   <EmailSignup doodleVariant="chimera" />
@@ -514,7 +497,6 @@ const phase = getCurrentPhase(Astro.url);
 <script>
   function initCommChimera() {
     const PRESETS = [
-      { image: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', shape: 97 },
       { image: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', shape: 40 },
       { image: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', shape: 97 },
       { image: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', shape: 40 },

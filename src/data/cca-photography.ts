@@ -64,7 +64,6 @@ export const ccaPhotography: CCAPhoto[] = [
 // --- Named subcollections for editor image panel ---
 
 export const commencementPhotography: CCAPhoto[] = [
-  { src: '/images/commencement-past/previousCommencementPhotos-001-03-2026-JL.jpg', alt: 'A graduate in a vibrant pink shawl stands next to colorful paper lanterns and rainbow streamers, smiling during a commencement celebration.' },
   { src: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', alt: 'A group of ten students dressed in casual clothing pose together in front of decorative purple lanterns and colorful ribbons at an indoor celebration.' },
   { src: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', alt: 'Three male graduates wearing black robes and colorful cultural sashes stand together outdoors on a brick plaza, smiling at the camera.' },
   { src: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', alt: 'Two graduates in formal attire pose together outdoors; one wears a green dress and the other a pink blazer, both smiling in front of a white building.' },
