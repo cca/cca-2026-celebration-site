@@ -12,7 +12,6 @@ interface Props {
 }
 
 const { speaker, student } = Astro.props;
-const studentHref = student ? `/students/${student.data.slug}/` : null;
 const speechParagraphs = speaker.speechHighlights
   ? speaker.speechHighlights.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
   : [];
@@ -25,14 +24,7 @@ const speechParagraphs = speaker.speechHighlights
     </div>
   )}
   <div class="speaker-info">
-    <span class="speaker-label">Student Speaker</span>
-    <h3 class="speaker-name">
-      {studentHref ? (
-        <a href={studentHref}>{speaker.name}</a>
-      ) : (
-        speaker.name
-      )}
-    </h3>
+    <h3 class="speaker-name">{speaker.name}</h3>
     <p class="speaker-program">{speaker.program}</p>
     {speechParagraphs.length > 0 && (
       <div class="speaker-highlights">
@@ -75,28 +67,10 @@ const speechParagraphs = speaker.speechHighlights
     gap: var(--space-2);
   }
 
-  .speaker-label {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text);
-  }
-
   .speaker-name {
     font-family: var(--font-body);
     font-weight: 600;
     font-size: var(--text-xl);
-  }
-
-  .speaker-name a {
-    color: var(--color-text);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .speaker-name a:hover {
-    color: var(--color-accent);
   }
 
   .speaker-program {

@@ -3,14 +3,14 @@
   "slug": "commencement-graduate",
   "shortTitle": "Master's Ceremony",
   "type": "commencement",
-  "degreeLevel": "graduate",
+  "degreeLevel": "masters",
   "themeKey": "commencement",
   "date": "2026-05-16",
   "time": "11:00 AM",
   "location": "Sydney Goldstein Theater",
   "address": "275 Hayes St, San Francisco, CA 94102",
   "description": "Celebrate with our graduate students as they complete their advanced degrees and embark on the next chapter.",
-  "longDescription": "The morning ceremony of CCA's 119th Commencement honors our graduate Class of 2026 \u2014 scholars, researchers, and practitioners who have pushed the boundaries of art, design, architecture, and writing at the highest level. This celebration recognizes their dedication to advanced study and the impact their work will have on communities worldwide.",
+  "longDescription": "The morning ceremony of CCA's 119th Commencement honors our graduate Class of 2026 — scholars, researchers, and practitioners who have pushed the boundaries of art, design, architecture, and writing at the highest level. This celebration recognizes their dedication to advanced study and the impact their work will have on communities worldwide.",
   "rsvpUrl": "https://cca.edu/commencement/rsvp",
   "livestreamUrl": "https://cca.edu/commencement/livestream",
   "image": {
@@ -81,13 +81,18 @@
       {
         "order": 3,
         "label": "Welcome",
-        "presenter": "Tamara Maloney, Provost",
-        "type": "welcome"
+        "type": "welcome",
+        "presenters": [
+          {
+            "name": "Tamara Maloney",
+            "role": "Provost"
+          }
+        ]
       },
       {
         "order": 4,
         "label": "Land acknowledgment",
-        "type": "address"
+        "type": "acknowledgment"
       },
       {
         "order": 5,
@@ -97,8 +102,13 @@
       {
         "order": 6,
         "label": "President's address",
-        "presenter": "David C. Howse, President",
-        "type": "address"
+        "type": "address",
+        "presenters": [
+          {
+            "name": "David C. Howse",
+            "role": "President"
+          }
+        ]
       },
       {
         "order": 7,
@@ -108,8 +118,12 @@
       {
         "order": 8,
         "label": "Distinguished alumni address",
-        "presenter": "Abby Chang Chen",
-        "type": "recognition"
+        "type": "recognition",
+        "presenters": [
+          {
+            "name": "Abby Chang Chen"
+          }
+        ]
       },
       {
         "order": 9,
@@ -119,8 +133,13 @@
       {
         "order": 10,
         "label": "Student remarks",
-        "presenter": "Karen-Happuch Henneh, MDes Interaction Design",
-        "type": "address"
+        "type": "address",
+        "presenters": [
+          {
+            "name": "Karen-Happuch Henneh",
+            "role": "MDes Interaction Design"
+          }
+        ]
       },
       {
         "order": 11,
@@ -130,9 +149,14 @@
       {
         "order": 12,
         "label": "Conferring of degrees",
-        "presenter": "David C. Howse, President",
         "description": "Candidates presented by division chairs",
-        "type": "conferring"
+        "type": "conferring",
+        "presenters": [
+          {
+            "name": "David C. Howse",
+            "role": "President"
+          }
+        ]
       },
       {
         "order": 13,

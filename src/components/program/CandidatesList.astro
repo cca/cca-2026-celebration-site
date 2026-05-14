@@ -3,42 +3,36 @@ import type { CandidateGroup } from "../../lib/utils/collections";
 
 interface Props {
   groups: CandidateGroup[];
+  degreeLabel?: string;
+  totalCount?: number;
 }
 
-const { groups } = Astro.props;
-const totalCandidates = groups.reduce(
-  (sum, g) => sum + g.programs.reduce((ps, p) => ps + p.students.length, 0),
-  0,
-);
+const { groups, degreeLabel = "degree", totalCount } = Astro.props;
+const uniqueIds = new Set<string>();
+for (const g of groups) for (const p of g.programs) for (const s of p.students) uniqueIds.add(s.id);
+const totalCandidates = totalCount ?? uniqueIds.size;
 ---
 
 <div class="candidates-list">
-  <p class="candidates-count">
-    <span class="count-number">{totalCandidates}</span> degree candidates
-  </p>
+  <h3 class="candidates-subhead">
+    Celebrating <span class="count-number">{totalCandidates}</span> {degreeLabel} candidates
+  </h3>
 
   {groups.map((group) => (
     <details class="division-group" open>
       <summary class="division-header">
         <span class="division-name">{group.divisionLabel}</span>
-        <span class="division-count">
-          {group.programs.reduce((s, p) => s + p.students.length, 0)}
-        </span>
       </summary>
 
       <div class="division-content">
         {group.programs.map((program) => (
           <div class="program-block">
-            <h4 class="program-name">
-              {program.programName}
-              <span class="degree-type">{program.degreeType}</span>
-            </h4>
+            <h4 class="program-name">{program.degreeType} {program.programName}</h4>
             <ul class="student-list" role="list">
               {program.students.map((student) => (
-                <li>
-                  <a href={`/students/${student.slug}/`} class="student-link">
-                    {student.lastName}, {student.firstName}
-                  </a>
+                <li class="student-name">
+                  {student.firstName} {student.lastName}
+                  {student.isDoubleMajor && <span class="student-note"> (double major)</span>}
                 </li>
               ))}
             </ul>
@@ -56,10 +50,19 @@ const totalCandidates = groups.reduce(
     gap: var(--space-4);
   }
 
-  .candidates-count {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
+  .candidates-subhead {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: normal;
     color: var(--color-text);
+    margin: 0;
+  }
+
+  .student-note {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    opacity: 0.7;
   }
 
   .count-number {
@@ -117,27 +120,19 @@ const totalCandidates = groups.reduce(
     flex: 1;
   }
 
-  .division-count {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-text);
-    background: var(--color-border);
-    padding: var(--space-1) var(--space-2);
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-
   .division-content {
     padding: 0 var(--space-6) var(--space-6);
   }
 
   .program-block {
-    padding-top: var(--space-4);
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
     border-top: 1px solid var(--color-border);
   }
 
   .program-block:first-child {
     border-top: none;
+    margin-top: 0;
     padding-top: 0;
   }
 
@@ -146,17 +141,7 @@ const totalCandidates = groups.reduce(
     font-size: var(--text-base);
     font-weight: 600;
     margin-bottom: var(--space-2);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-2);
-  }
-
-  .degree-type {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
     color: var(--color-gold, var(--color-accent));
-    font-weight: 400;
   }
 
   .student-list {
@@ -173,22 +158,19 @@ const totalCandidates = groups.reduce(
     }
   }
 
+  @media (min-width: 900px) {
+    .student-list {
+      columns: 3;
+    }
+  }
+
   .student-list li {
     break-inside: avoid;
     padding-block: var(--space-1);
   }
 
-  .student-link {
+  .student-name {
     font-size: var(--text-sm);
     color: var(--color-text);
-    text-decoration: none;
-    transition: color 0.15s ease;
-    display: inline-block;
-    min-height: 44px;
-    line-height: 44px;
-  }
-
-  .student-link:hover {
-    color: var(--color-accent);
   }
 </style>

@@ -21,7 +21,7 @@ import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
 const events = await getCollection('events');
-const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
+const undergradEvent = events.find(e => e.id === 'commencement-bachelors');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
 
 /* TEMP: content removed, re-added tomorrow
@@ -34,7 +34,7 @@ const presidentQuote = info?.data.presidentQuote;
 const honoraryDoctorates = await getPeopleByRole('honorary-doctorate');
 const professorsEmerit = await getPeopleByRole('professor-emeritus');
 
-const undergradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-undergraduate');
+const undergradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-bachelors');
 const gradHonoree = honoraryDoctorates.find(p => p.data.ceremony?.id === 'commencement-graduate');
 
 const undergradSpeaker = undergradEvent?.data.ceremonyProgram?.studentSpeaker;

@@ -1,0 +1,11 @@
+{
+  "firstName": "Finn",
+  "lastName": "Banbury",
+  "slug": "finn-banbury",
+  "program": "graphic-design",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}

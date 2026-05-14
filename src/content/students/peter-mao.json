@@ -1,0 +1,14 @@
+{
+  "firstName": "Peter",
+  "lastName": "Mao",
+  "slug": "peter-mao",
+  "program": "illustration",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ],
+  "additionalPrograms": [
+    "game-arts"
+  ]
+}

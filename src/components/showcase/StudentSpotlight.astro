@@ -33,11 +33,13 @@ const excerpt = artistStatement || bio;
         )}
         <Button href={`/showcase/students/${slug}/`} variant="outline">View Profile</Button>
       </div>
-      <div class="spotlight__portrait">
-        <div class="spotlight__frame">
-          <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
+      {photo && (
+        <div class="spotlight__portrait">
+          <div class="spotlight__frame">
+            <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   </div>
 </section>

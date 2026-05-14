@@ -1,0 +1,11 @@
+{
+  "firstName": "Sara",
+  "lastName": "Govert",
+  "slug": "sara-govert",
+  "program": "painting-drawing",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}
