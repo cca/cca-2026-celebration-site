@@ -100,7 +100,7 @@
         "order": 10,
         "label": "Student Remarks",
         "presenters": [
-          { "name": "Alana Abuchaibe", "role": "BArch Architecture 2026" }
+          { "name": "Alana Abuchaibe", "role": "(BArch Architecture 2026)" }
         ],
         "type": "address"
       },
