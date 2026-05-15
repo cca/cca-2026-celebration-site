@@ -297,6 +297,10 @@ const phase = getCurrentPhase(Astro.url);
           <h2 class="section-heading reveal">Celebrating 281 bachelor's candidates</h2>
 
           {undergradHonoree && (
+            <p class="program-section__lead reveal">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
+          )}
+
+          {undergradHonoree && (
             <article class="ceremony-spotlight reveal">
               <div class="ceremony-spotlight__photo">
                 {undergradHonoree.data.photo ? (
@@ -317,7 +321,6 @@ const phase = getCurrentPhase(Astro.url);
                 <h3 class="ceremony-spotlight__name">{undergradHonoree.data.name}</h3>
                 {undergradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{undergradHonoree.data.ccaConnection}</p>}
                 {undergradHonoree.data.title && <p class="ceremony-spotlight__title">{undergradHonoree.data.title}</p>}
-                <p class="ceremony-spotlight__intro">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
                 {undergradHonoree.data.bio && (
                   <div class="ceremony-spotlight__bio">
                     {paragraphs(undergradHonoree.data.bio).map(p => <p>{p}</p>)}
