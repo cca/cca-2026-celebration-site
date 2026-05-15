@@ -3,7 +3,6 @@ import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
 import { chimeraExpanded2026Paths } from '../../data/chimera-expanded-2026-paths';
-import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
 import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
@@ -15,8 +14,7 @@ import SocialFeed from '../../components/sections/SocialFeed.astro';
 import TableOfContents from '../../components/ui/TableOfContents.astro';
 import { Image } from 'astro:assets';
 import { formatDate, formatTime } from '../../lib/utils/format';
-import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
-import PhaseGate from '../../components/PhaseGate.astro';
+import { getPeopleByRole } from '../../lib/utils/collections';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
@@ -24,7 +22,6 @@ const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-undergraduate');
 const gradEvent = events.find(e => e.id === 'commencement-graduate');
 
-const celebrations = await getCelebrationEvents();
 const info = await getEntry('commencement-info', 'current');
 const inMemoriam = info?.data.inMemoriam ?? [];
 const statistics = info?.data.statistics ?? [];
@@ -427,23 +424,6 @@ const phase = getCurrentPhase(Astro.url);
     </div>
   </div>
 
-  {/* ── Special Celebrations ── */}
-  <PhaseGate hiddenIn={['save-the-date']}>
-    {celebrations.length > 0 && (
-      <section class="celebrations-section">
-        <div class="container">
-          <h2 class="section-heading reveal">Special celebrations</h2>
-          <p class="section-desc reveal">Join us for celebrations honoring all graduating students before the main ceremonies. Hosted by the Office of Student Belonging &amp; Inclusion.</p>
-          <div class="celebrations-grid">
-            {celebrations.map((event) => (
-              <CelebrationCard event={event} />
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-  </PhaseGate>
-
   {/* ── Past Commencement Gallery ── */}
   <PastGallery
     label="Past commencements"
@@ -821,8 +801,7 @@ const phase = getCurrentPhase(Astro.url);
   }
 
   /* ── Section rhythm ── */
-  .ceremonies-section,
-  .celebrations-section {
+  .ceremonies-section {
     padding-block: var(--space-20);
   }
 
@@ -1009,13 +988,6 @@ const phase = getCurrentPhase(Astro.url);
     font-size: var(--text-2xl);
     line-height: 1.2;
     margin-bottom: 0;
-  }
-
-  /* ── Celebrations grid ── */
-  .celebrations-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
   }
 
   /* ── In Memoriam ── */
