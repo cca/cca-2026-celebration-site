@@ -16,12 +16,11 @@
     "attribution": "David C. Howse, President, California College of the Arts"
   },
   "statistics": [
-    { "label": "Bachelor's programs", "value": "21" },
-    { "label": "Master's programs", "value": "11" },
+    { "label": "Youngest graduate", "value": "20 years, 7 months" },
+    { "label": "Oldest graduate", "value": "81 years, 6 months" },
     { "label": "Countries represented", "value": "30" },
     { "label": "U.S. states represented", "value": "23" },
-    { "label": "First-generation graduates", "value": "102" },
-    { "label": "Age range", "value": "20–81", "detail": "Youngest 20y 7mo · oldest 81y 6mo" }
+    { "label": "First-generation college students", "value": "102" }
   ],
   "downloadableAssets": [
     {
