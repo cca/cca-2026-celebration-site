@@ -1,0 +1,18 @@
+{
+  "firstName": "You Jhen",
+  "lastName": "Lin",
+  "slug": "you-jhen-lin",
+  "program": "mfa-design",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "mba-design-strategy",
+      "degreeType": "MBA"
+    }
+  ],
+  "expectedGraduation": "June 2027"
+}

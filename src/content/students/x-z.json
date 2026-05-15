@@ -1,0 +1,11 @@
+{
+  "firstName": "X",
+  "lastName": "Z",
+  "slug": "x-z",
+  "program": "mfa-design",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ]
+}
