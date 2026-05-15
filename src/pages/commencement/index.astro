@@ -9,7 +9,6 @@ import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
 import QuoteBlock from '../../components/ui/QuoteBlock.astro';
 import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
-import SocialFeed from '../../components/sections/SocialFeed.astro';
 import TableOfContents from '../../components/ui/TableOfContents.astro';
 import { Image } from 'astro:assets';
 import { formatDate, formatTime } from '../../lib/utils/format';
@@ -445,14 +444,6 @@ const phase = getCurrentPhase(Astro.url);
       </aside>
     </div>
   </div>
-
-  {/* ── Social Feed ── */}
-  <section class="social-feed-section">
-    <div class="container">
-      <SocialFeed heading="Social media spotlights" />
-      <p class="social-footnote reveal">If you have questions about commencement, send us an email at <a href="mailto:commencement@cca.edu">commencement@cca.edu</a>.</p>
-    </div>
-  </section>
 
   {/* ── Email Signup ── */}
   <EmailSignup doodleVariant="chimera" />
@@ -1364,23 +1355,6 @@ const phase = getCurrentPhase(Astro.url);
     margin: 0;
     padding-left: var(--space-5);
     border-left: 3px solid var(--color-accent);
-  }
-
-  /* ── Social feed footnote ── */
-  .social-feed-section {
-    padding-block: var(--space-10);
-  }
-
-  .social-footnote {
-    font-size: var(--text-sm);
-    color: var(--color-text);
-    margin-top: var(--space-6);
-    text-align: center;
-    opacity: 0.85;
-  }
-
-  .social-footnote a {
-    color: var(--color-accent);
   }
 
   /* ── In Memoriam (now inside program-layout) ── */
