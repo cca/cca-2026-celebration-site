@@ -300,6 +300,10 @@ const phase = getCurrentPhase(Astro.url);
             <p class="program-section__lead reveal">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
           )}
 
+          <div class="ceremonies-cta reveal">
+            <Button href="/commencement/bachelors/" variant="link">View bachelor's degree program and candidates</Button>
+          </div>
+
           {undergradHonoree && (
             <article class="ceremony-spotlight reveal">
               <div class="ceremony-spotlight__photo">
@@ -348,16 +352,20 @@ const phase = getCurrentPhase(Astro.url);
               attribution={`${undergradSpeaker.name}, ${undergradSpeaker.program}`}
             />
           )}
-
-          <div class="ceremonies-cta reveal">
-            <Button href="/commencement/bachelors/" variant="link">View bachelor's degree program and candidates</Button>
-          </div>
         </section>
 
         {/* ── Master's Ceremony ── */}
         <section id="masters" class="program-section">
           <span class="section-label reveal">Master's Ceremony</span>
           <h2 class="section-heading reveal">Celebrating 139 master's candidates</h2>
+
+          {gradHonoree && (
+            <p class="program-section__lead reveal">{gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''} will deliver the Distinguished Alumni Address at the 2026 Master's Degree Candidates Ceremony.</p>
+          )}
+
+          <div class="ceremonies-cta reveal">
+            <Button href="/commencement/masters/" variant="link">View master's degree program and candidates</Button>
+          </div>
 
           {gradHonoree && (
             <article class="ceremony-spotlight reveal">
@@ -380,7 +388,6 @@ const phase = getCurrentPhase(Astro.url);
                 <h3 class="ceremony-spotlight__name">{gradHonoree.data.name}</h3>
                 {gradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{gradHonoree.data.ccaConnection}</p>}
                 {gradHonoree.data.title && <p class="ceremony-spotlight__title">{gradHonoree.data.title}</p>}
-                <p class="ceremony-spotlight__intro">{gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''} will deliver the Distinguished Alumni Address at the 2026 Master's Degree Candidates Ceremony.</p>
                 {gradHonoree.data.bio && (
                   <details class="ceremony-spotlight__bio-toggle">
                     <summary>Read more</summary>
@@ -408,10 +415,6 @@ const phase = getCurrentPhase(Astro.url);
               attribution={`${gradSpeaker.name}, ${gradSpeaker.program}`}
             />
           )}
-
-          <div class="ceremonies-cta reveal">
-            <Button href="/commencement/masters/" variant="link">View master's degree program and candidates</Button>
-          </div>
         </section>
 
         {/* ── In Memoriam ── */}
@@ -1300,12 +1303,6 @@ const phase = getCurrentPhase(Astro.url);
   .ceremony-spotlight__title {
     font-size: var(--text-sm);
     color: var(--color-text);
-    margin: 0 0 var(--space-4);
-  }
-
-  .ceremony-spotlight__intro {
-    font-size: var(--text-base);
-    line-height: 1.6;
     margin: 0 0 var(--space-4);
   }
 
