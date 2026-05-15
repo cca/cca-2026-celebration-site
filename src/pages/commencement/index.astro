@@ -1,22 +1,18 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ParticleField from '../../components/effects/ParticleField.astro';
 import { chimeraExpanded2026Paths } from '../../data/chimera-expanded-2026-paths';
-// TEMP: re-add tomorrow — import CelebrationCard from '../../components/events/CelebrationCard.astro';
 import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
 import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
-import PastGallery from '../../components/sections/PastGallery.astro';
-// TEMP: re-add tomorrow — import QuoteBlock from '../../components/ui/QuoteBlock.astro';
-// TEMP: re-add tomorrow — import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
-// TEMP: re-add tomorrow — import SocialFeed from '../../components/sections/SocialFeed.astro';
-// TEMP: re-add tomorrow — import TableOfContents from '../../components/ui/TableOfContents.astro';
-// TEMP: re-add tomorrow — import { Image } from 'astro:assets';
+import QuoteBlock from '../../components/ui/QuoteBlock.astro';
+import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
+import TableOfContents from '../../components/ui/TableOfContents.astro';
+import { Image } from 'astro:assets';
 import { formatDate, formatTime } from '../../lib/utils/format';
-// TEMP: re-add tomorrow — import { getCelebrationEvents, getPeopleByRole } from '../../lib/utils/collections';
-// TEMP: re-add tomorrow — import PhaseGate from '../../components/PhaseGate.astro';
+import { getPeopleByRole } from '../../lib/utils/collections';
 import { getCurrentPhase } from '../../lib/utils/phase';
 import { isPhaseBefore } from '../../config/phases';
 
@@ -24,8 +20,6 @@ const events = await getCollection('events');
 const undergradEvent = events.find(e => e.id === 'commencement-bachelors');
 const gradEvent = events.find(e => e.id === 'commencement-masters');
 
-/* TEMP: content removed, re-added tomorrow
-const celebrations = await getCelebrationEvents();
 const info = await getEntry('commencement-info', 'current');
 const inMemoriam = info?.data.inMemoriam ?? [];
 const statistics = info?.data.statistics ?? [];
@@ -52,7 +46,6 @@ const tocItems = [
   { label: "Master's Ceremony", href: '#masters' },
   { label: 'In Memoriam', href: '#in-memoriam' },
 ];
-*/
 
 const phase = getCurrentPhase(Astro.url);
 ---
@@ -193,34 +186,21 @@ const phase = getCurrentPhase(Astro.url);
         <section id="ceremonies" class="program-section">
           <span class="section-label reveal">Ceremonies</span>
           <h2 class="section-heading reveal">All together now</h2>
+          <p class="program-section__lead reveal">We look forward to celebrating CCA&rsquo;s 119th Commencement on Saturday, May 16, 2026.</p>
           {(gradEvent || undergradEvent) && (() => {
             const sharedEvent = (gradEvent || undergradEvent)!;
             return (
               <p class="ceremony-shared-meta reveal">
                 <time>{formatDate(sharedEvent.data.date)}</time>
                 {' · '}
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(sharedEvent.data.address)}`} target="_blank" rel="noopener noreferrer">
+                <a href="https://maps.app.goo.gl/EzMx1kDnNCpppUwS6" target="_blank" rel="noopener noreferrer">
                   {sharedEvent.data.location}
                 </a>
               </p>
             );
           })()}
+          <p class="program-section__lead reveal">Witness the commencement class of 2026 cross the stage during two ceremonies:</p>
           <div class="ceremony-cards">
-            {gradEvent && isPhaseBefore(phase, 'during-event') ? (
-              <div class="ceremony-info reveal">
-                <div class="ceremony-info__accent" aria-hidden="true"></div>
-                <span class="ceremony-info__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
-                <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
-              </div>
-            ) : gradEvent && (
-              <a href="/commencement/masters/" class="ceremony-card reveal">
-                <div class="ceremony-card__accent" aria-hidden="true"></div>
-                <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
-                <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
-                <span class="ceremony-card__cta">Details &rarr;</span>
-              </a>
-            )}
-
             {undergradEvent && isPhaseBefore(phase, 'during-event') ? (
               <div class="ceremony-info reveal">
                 <div class="ceremony-info__accent" aria-hidden="true"></div>
@@ -235,13 +215,28 @@ const phase = getCurrentPhase(Astro.url);
                 <span class="ceremony-card__cta">Details &rarr;</span>
               </a>
             )}
+
+            {gradEvent && isPhaseBefore(phase, 'during-event') ? (
+              <div class="ceremony-info reveal">
+                <div class="ceremony-info__accent" aria-hidden="true"></div>
+                <span class="ceremony-info__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
+                <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
+              </div>
+            ) : gradEvent && (
+              <a href="/commencement/masters/" class="ceremony-card reveal">
+                <div class="ceremony-card__accent" aria-hidden="true"></div>
+                <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
+                <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
+                <span class="ceremony-card__cta">Details &rarr;</span>
+              </a>
+            )}
           </div>
 
           <div class="ceremonies-cta reveal">
-            <Button href="https://portal.cca.edu/thriving/student-engagement/commencement/#latest-updates--emails" variant="link">Up-to-date information, deadlines, and important links</Button>          </div>
+            <Button href="mailto:commencement@cca.edu" variant="link" arrow="10">If you have questions, send us an email</Button>
+          </div>
         </section>
 
-        <!-- TEMP: sections removed, re-added tomorrow
         {/* ── Cause for Celebration ── */}
         <section id="cause-for-celebration" class="program-section">
           <span class="section-label reveal">Cause for Celebration</span>
@@ -257,11 +252,12 @@ const phase = getCurrentPhase(Astro.url);
           {statistics.length > 0 && <StatisticsGrid statistics={statistics} />}
 
           <h3 class="subsection-heading reveal">Honorary doctorates and professors emerit</h3>
-          <p class="program-section__lead reveal">CCA is proud to award an honorary doctorate degree to inspirational artists, designers, and thinkers each year at its Commencement Ceremony. The following tenured faculty members were awarded a professor emerit designation in 2026.</p>
+          <p class="program-section__lead reveal">CCA is proud to award an honorary doctorate degree to inspirational artists, designers, and thinkers each year at its Commencement Ceremony.</p>
 
           {honoraryDoctorates.length > 0 && (
             <div class="honor-list reveal">
               <span class="honor-list__label">Honorary Doctorates</span>
+              <p class="honor-list__intro">CCA is thrilled to announce the Honorary Doctorate recipients for the 119th Commencement Ceremony:</p>
               <ul class="honor-list__items">
                 {honoraryDoctorates.map(p => (
                   <li>
@@ -276,6 +272,7 @@ const phase = getCurrentPhase(Astro.url);
           {professorsEmerit.length > 0 && (
             <div class="honor-list reveal">
               <span class="honor-list__label">Professors Emerit</span>
+              <p class="honor-list__intro">The following tenured faculty members were awarded a professor emerit designation in 2026:</p>
               <ul class="honor-list__items">
                 {professorsEmerit.map(p => (
                   <li>
@@ -295,7 +292,15 @@ const phase = getCurrentPhase(Astro.url);
         {/* ── Bachelor's Ceremony ── */}
         <section id="bachelors" class="program-section">
           <span class="section-label reveal">Bachelor's Ceremony</span>
-          <h2 class="section-heading reveal">Celebrating 281 bachelor's candidates</h2>
+          <h2 class="section-heading reveal">Celebrating 281 undergraduate candidates</h2>
+
+          {undergradHonoree && (
+            <p class="program-section__lead reveal">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
+          )}
+
+          <div class="ceremonies-cta reveal">
+            <Button href="/commencement/bachelors/" variant="link">View bachelor's degree program and candidates</Button>
+          </div>
 
           {undergradHonoree && (
             <article class="ceremony-spotlight reveal">
@@ -318,38 +323,54 @@ const phase = getCurrentPhase(Astro.url);
                 <h3 class="ceremony-spotlight__name">{undergradHonoree.data.name}</h3>
                 {undergradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{undergradHonoree.data.ccaConnection}</p>}
                 {undergradHonoree.data.title && <p class="ceremony-spotlight__title">{undergradHonoree.data.title}</p>}
-                <p class="ceremony-spotlight__intro">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
                 {undergradHonoree.data.bio && (
-                  <div class="ceremony-spotlight__bio">
-                    {paragraphs(undergradHonoree.data.bio).map(p => <p>{p}</p>)}
-                  </div>
+                  <details class="ceremony-spotlight__bio-toggle">
+                    <summary>Read more</summary>
+                    <div class="ceremony-spotlight__bio">
+                      {paragraphs(undergradHonoree.data.bio).map(p => <p>{p}</p>)}
+                    </div>
+                  </details>
                 )}
               </div>
             </article>
           )}
 
           {undergradSpeaker && (
-            <div class="ceremony-speaker-intro reveal">
-              <p>Bachelor's speaker {undergradSpeaker.name} ({undergradSpeaker.program}) spoke to classmates about adaptation, presence, and the creative instincts they carry with them from CCA.</p>
+            <div class="speaker-card reveal">
+              <div class="speaker-card__header">
+                {undergradSpeaker.photo && (
+                  <div class="speaker-card__photo">
+                    <Image src={undergradSpeaker.photo.src} alt={undergradSpeaker.photo.alt} width={128} height={128} loading="lazy" />
+                  </div>
+                )}
+                <div class="speaker-card__id">
+                  <span class="speaker-card__label">Student speaker</span>
+                  <span class="speaker-card__name">{undergradSpeaker.name}</span>
+                  <span class="speaker-card__program">{undergradSpeaker.program}</span>
+                </div>
+              </div>
+              <p class="speaker-card__intro">Bachelor's speaker {undergradSpeaker.name} ({undergradSpeaker.program}) spoke to classmates about adaptation, presence, and the creative instincts they carry with them from CCA.</p>
+              {undergradSpeaker.speechHighlights && (
+                <blockquote class="speaker-card__quote">
+                  {paragraphs(undergradSpeaker.speechHighlights).map(p => <p>{p}</p>)}
+                </blockquote>
+              )}
             </div>
           )}
-
-          {undergradSpeaker?.speechHighlights && (
-            <QuoteBlock
-              text={undergradSpeaker.speechHighlights}
-              attribution={`${undergradSpeaker.name}, ${undergradSpeaker.program}`}
-            />
-          )}
-
-          <div class="ceremonies-cta reveal">
-            <Button href="/commencement/bachelors/" variant="link">View bachelor's degree program and candidates</Button>
-          </div>
         </section>
 
         {/* ── Master's Ceremony ── */}
         <section id="masters" class="program-section">
           <span class="section-label reveal">Master's Ceremony</span>
-          <h2 class="section-heading reveal">Celebrating 139 master's candidates</h2>
+          <h2 class="section-heading reveal">Celebrating 139 graduate candidates</h2>
+
+          {gradHonoree && (
+            <p class="program-section__lead reveal">The Master's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''}.</p>
+          )}
+
+          <div class="ceremonies-cta reveal">
+            <Button href="/commencement/masters/" variant="link">View master's degree program and candidates</Button>
+          </div>
 
           {gradHonoree && (
             <article class="ceremony-spotlight reveal">
@@ -368,36 +389,44 @@ const phase = getCurrentPhase(Astro.url);
                 )}
               </div>
               <div class="ceremony-spotlight__info">
-                <span class="ceremony-spotlight__role">Distinguished Alumni Address · Honorary Doctorate</span>
+                <span class="ceremony-spotlight__role">Honorary Doctorate</span>
                 <h3 class="ceremony-spotlight__name">{gradHonoree.data.name}</h3>
                 {gradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{gradHonoree.data.ccaConnection}</p>}
                 {gradHonoree.data.title && <p class="ceremony-spotlight__title">{gradHonoree.data.title}</p>}
-                <p class="ceremony-spotlight__intro">{gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''} will deliver the Distinguished Alumni Address at the 2026 Master's Degree Candidates Ceremony.</p>
                 {gradHonoree.data.bio && (
-                  <div class="ceremony-spotlight__bio">
-                    {paragraphs(gradHonoree.data.bio).map(p => <p>{p}</p>)}
-                  </div>
+                  <details class="ceremony-spotlight__bio-toggle">
+                    <summary>Read more</summary>
+                    <div class="ceremony-spotlight__bio">
+                      {paragraphs(gradHonoree.data.bio).map(p => <p>{p}</p>)}
+                    </div>
+                  </details>
                 )}
               </div>
             </article>
           )}
 
           {gradSpeaker && (
-            <div class="ceremony-speaker-intro reveal">
-              <p>Master's student speaker {gradSpeaker.name} ({gradSpeaker.program}) spoke to classmates about pride, resilience, and the belonging they built together at CCA — and what they carry with them from here.</p>
+            <div class="speaker-card reveal">
+              <div class="speaker-card__header">
+                {gradSpeaker.photo && (
+                  <div class="speaker-card__photo">
+                    <Image src={gradSpeaker.photo.src} alt={gradSpeaker.photo.alt} width={128} height={128} loading="lazy" />
+                  </div>
+                )}
+                <div class="speaker-card__id">
+                  <span class="speaker-card__label">Student speaker</span>
+                  <span class="speaker-card__name">{gradSpeaker.name}</span>
+                  <span class="speaker-card__program">{gradSpeaker.program}</span>
+                </div>
+              </div>
+              <p class="speaker-card__intro">Master's student speaker {gradSpeaker.name} ({gradSpeaker.program}) spoke to classmates about pride, resilience, and the belonging they built together at CCA — and what they carry with them from here.</p>
+              {gradSpeaker.speechHighlights && (
+                <blockquote class="speaker-card__quote">
+                  {paragraphs(gradSpeaker.speechHighlights).map(p => <p>{p}</p>)}
+                </blockquote>
+              )}
             </div>
           )}
-
-          {gradSpeaker?.speechHighlights && (
-            <QuoteBlock
-              text={gradSpeaker.speechHighlights}
-              attribution={`${gradSpeaker.name}, ${gradSpeaker.program}`}
-            />
-          )}
-
-          <div class="ceremonies-cta reveal">
-            <Button href="/commencement/masters/" variant="link">View master's degree program and candidates</Button>
-          </div>
         </section>
 
         {/* ── In Memoriam ── */}
@@ -421,71 +450,14 @@ const phase = getCurrentPhase(Astro.url);
             </ul>
           </section>
         )}
-        -->
 
       </div>
 
-      <!-- TEMP: TOC sidebar removed, re-added tomorrow
       <aside class="program-sidebar">
         <TableOfContents items={tocItems} />
       </aside>
-      -->
     </div>
   </div>
-
-  <!-- TEMP: Special Celebrations removed, re-added tomorrow
-  {/* ── Special Celebrations ── */}
-  <PhaseGate hiddenIn={['save-the-date']}>
-    {celebrations.length > 0 && (
-      <section class="celebrations-section">
-        <div class="container">
-          <h2 class="section-heading reveal">Special celebrations</h2>
-          <p class="section-desc reveal">Join us for celebrations honoring all graduating students before the main ceremonies. Hosted by the Office of Student Belonging &amp; Inclusion.</p>
-          <div class="celebrations-grid">
-            {celebrations.map((event) => (
-              <CelebrationCard event={event} />
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-  </PhaseGate>
-  -->
-
-  {/* ── Past Commencement Gallery ── */}
-  <PastGallery
-    label="Past commencements"
-    title="Celebrating generations of graduates"
-    marqueeDuration={90}
-    images={[
-      { src: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', alt: 'A group of ten students dressed in casual clothing pose together in front of decorative purple lanterns and colorful ribbons at an indoor celebration.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', alt: 'Three male graduates wearing black robes and colorful cultural sashes stand together outdoors on a brick plaza, smiling at the camera.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', alt: 'Two graduates in formal attire pose together outdoors; one wears a green dress and the other a pink blazer, both smiling in front of a white building.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-005-03-2026-JL.jpg', alt: 'Four graduates dressed in vibrant pink and purple outfits pose together in a parking lot during a bright, sunny commencement day.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-006-03-2026-JL.jpg', alt: 'Three graduates with colorful hair stand together on a white courtyard; one wears navy and black, another a gray dress, and the third a teal skirt with yellow sash.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-007-03-2026-JL.jpg', alt: 'Nine graduates in black academic robes and regalia pose together indoors, with two seated in front and seven standing behind them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-008-03-2026-JL.jpg', alt: 'Two graduates in black robes with colorful cultural sashes sit together on red auditorium seats, smiling during the commencement ceremony.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-009-03-2026-JL.jpg', alt: 'Four graduates pose together outdoors against a brick building; they wear a mix of casual and formal attire, including vibrant pink and maroon colors.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-010-03-2026-JL.jpg', alt: 'A group of graduates in black robes and mortarboards stand together in front of a brick building, celebrating with raised arms and smiling at the camera.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-011-03-2026-JL.jpg', alt: 'A diverse group of young graduates wearing leis and graduation regalia pose together outdoors in front of a modern building with colorful turquoise architectural elements.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-012-03-2026-JL.jpg', alt: 'Two graduates embrace in front of a celebration backdrop decorated with purple and white balloons, with a paved courtyard and building visible behind them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg', alt: 'Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-014-03-2026-JL.jpg', alt: 'Two speakers in academic regalia stand at a CCAlum podium during a commencement ceremony, with one holding a microphone as they address the audience.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-015-03-2026-JL.jpg', alt: 'A group of graduates in caps and gowns pose together indoors, smiling and posing for a photo in a hallway with windows and other attendees visible in the background.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg', alt: 'Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-017-03-2026-JL.jpg', alt: 'A group of graduates wearing black gowns and yellow sashes pose together in a brick courtyard, standing in front of historic buildings on the campus grounds.' },
-    ]}
-  />
-
-  <!-- TEMP: Social Feed removed, re-added tomorrow
-  {/* ── Social Feed ── */}
-  <section class="social-feed-section">
-    <div class="container">
-      <SocialFeed heading="Social media spotlights" />
-      <p class="social-footnote reveal">If you have questions about commencement, send us an email at <a href="mailto:commencement@cca.edu">commencement@cca.edu</a>.</p>
-    </div>
-  </section>
-  -->
 
   {/* ── Email Signup ── */}
   <EmailSignup doodleVariant="chimera" />
@@ -831,8 +803,7 @@ const phase = getCurrentPhase(Astro.url);
   }
 
   /* ── Section rhythm ── */
-  .ceremonies-section,
-  .celebrations-section {
+  .ceremonies-section {
     padding-block: var(--space-20);
   }
 
@@ -1021,16 +992,25 @@ const phase = getCurrentPhase(Astro.url);
     margin-bottom: 0;
   }
 
-  /* ── Celebrations grid ── */
-  .celebrations-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
+  /* ── In Memoriam ── */
+  /* Solid panel keeps the dynamic particle field from showing through —
+     a calmer, more solemn backdrop for this section. */
+  .memoriam-section {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-16) var(--space-8);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
   }
 
-  /* ── In Memoriam ── */
-  .memoriam-section {
-    padding-block: var(--space-20);
+  .program-section + .memoriam-section {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
+  }
+
+  .memoriam-section :global(.quote-block__text) {
+    font-size: 28px;
   }
 
   .memoriam-intro {
@@ -1203,6 +1183,14 @@ const phase = getCurrentPhase(Astro.url);
     margin-bottom: var(--space-2);
   }
 
+  .honor-list__intro {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--color-text);
+    max-width: 65ch;
+    margin: 0 0 var(--space-3);
+  }
+
   .honor-list__items {
     list-style: none;
     padding: 0;
@@ -1301,10 +1289,38 @@ const phase = getCurrentPhase(Astro.url);
     margin: 0 0 var(--space-4);
   }
 
-  .ceremony-spotlight__intro {
-    font-size: var(--text-base);
-    line-height: 1.6;
-    margin: 0 0 var(--space-4);
+  .ceremony-spotlight__bio-toggle > summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    user-select: none;
+  }
+
+  .ceremony-spotlight__bio-toggle > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ceremony-spotlight__bio-toggle > summary::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .ceremony-spotlight__bio-toggle[open] > summary::before {
+    transform: rotate(45deg);
   }
 
   .ceremony-spotlight__bio {
@@ -1314,34 +1330,116 @@ const phase = getCurrentPhase(Astro.url);
     font-size: var(--text-sm);
     line-height: 1.7;
     color: var(--color-text);
+    margin-top: var(--space-3);
   }
 
   .ceremony-spotlight__bio p {
     margin: 0;
   }
 
-  .ceremony-speaker-intro {
+  /* ── Student speaker card ── */
+  .speaker-card {
+    position: relative;
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .speaker-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .speaker-card__photo {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-border);
+    border: 2px solid var(--color-accent);
+  }
+
+  .speaker-card__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .speaker-card__id {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .speaker-card__label {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    background: var(--color-accent-tint);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 3px;
+    margin-bottom: var(--space-1);
+  }
+
+  .speaker-card__intro {
     font-size: var(--text-base);
     line-height: 1.7;
     color: var(--color-text);
     max-width: 65ch;
-    margin-block: var(--space-8) var(--space-4);
+    margin: 0;
   }
 
-  /* ── Social feed footnote ── */
-  .social-feed-section {
-    padding-block: var(--space-10);
+  .speaker-card__quote {
+    margin: var(--space-6) 0 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
   }
 
-  .social-footnote {
-    font-size: var(--text-sm);
+  .speaker-card__quote p {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    line-height: 1.7;
     color: var(--color-text);
-    margin-top: var(--space-6);
-    text-align: center;
-    opacity: 0.85;
+    margin: 0;
   }
 
-  .social-footnote a {
+  .speaker-card__quote p::before {
+    content: "\201C";
+  }
+
+  .speaker-card__quote p:last-of-type::after {
+    content: "\201D";
+  }
+
+  .speaker-card__quote p + p {
+    margin-top: var(--space-4);
+  }
+
+  .speaker-card__name {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+
+  .speaker-card__program {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--color-accent);
   }
 

@@ -139,6 +139,12 @@ const events = defineCollection({
             name: z.string(),
             program: z.string(),
             speechHighlights: z.string().optional(),
+            photo: z
+              .object({
+                src: image(),
+                alt: z.string(),
+              })
+              .optional(),
           })
           .optional(),
         distinguishedAlumni: reference("people").optional(),
