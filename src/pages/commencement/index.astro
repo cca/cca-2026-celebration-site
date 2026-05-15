@@ -322,9 +322,12 @@ const phase = getCurrentPhase(Astro.url);
                 {undergradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{undergradHonoree.data.ccaConnection}</p>}
                 {undergradHonoree.data.title && <p class="ceremony-spotlight__title">{undergradHonoree.data.title}</p>}
                 {undergradHonoree.data.bio && (
-                  <div class="ceremony-spotlight__bio">
-                    {paragraphs(undergradHonoree.data.bio).map(p => <p>{p}</p>)}
-                  </div>
+                  <details class="ceremony-spotlight__bio-toggle">
+                    <summary>Read more</summary>
+                    <div class="ceremony-spotlight__bio">
+                      {paragraphs(undergradHonoree.data.bio).map(p => <p>{p}</p>)}
+                    </div>
+                  </details>
                 )}
               </div>
             </article>
@@ -376,9 +379,12 @@ const phase = getCurrentPhase(Astro.url);
                 {gradHonoree.data.title && <p class="ceremony-spotlight__title">{gradHonoree.data.title}</p>}
                 <p class="ceremony-spotlight__intro">{gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''} will deliver the Distinguished Alumni Address at the 2026 Master's Degree Candidates Ceremony.</p>
                 {gradHonoree.data.bio && (
-                  <div class="ceremony-spotlight__bio">
-                    {paragraphs(gradHonoree.data.bio).map(p => <p>{p}</p>)}
-                  </div>
+                  <details class="ceremony-spotlight__bio-toggle">
+                    <summary>Read more</summary>
+                    <div class="ceremony-spotlight__bio">
+                      {paragraphs(gradHonoree.data.bio).map(p => <p>{p}</p>)}
+                    </div>
+                  </details>
                 )}
               </div>
             </article>
@@ -1285,6 +1291,40 @@ const phase = getCurrentPhase(Astro.url);
     margin: 0 0 var(--space-4);
   }
 
+  .ceremony-spotlight__bio-toggle > summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    user-select: none;
+  }
+
+  .ceremony-spotlight__bio-toggle > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ceremony-spotlight__bio-toggle > summary::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .ceremony-spotlight__bio-toggle[open] > summary::before {
+    transform: rotate(45deg);
+  }
+
   .ceremony-spotlight__bio {
     display: flex;
     flex-direction: column;
@@ -1292,6 +1332,7 @@ const phase = getCurrentPhase(Astro.url);
     font-size: var(--text-sm);
     line-height: 1.7;
     color: var(--color-text);
+    margin-top: var(--space-3);
   }
 
   .ceremony-spotlight__bio p {
