@@ -147,7 +147,7 @@ Always null-guard since `schedule` is optional in the schema.
   "name": "Dr. Example Person",
   "slug": "dr-example-person",
   "role": "honorary-doctorate",
-  "ceremony": "commencement-undergraduate",
+  "ceremony": "commencement-bachelors",
   "bio": "Dr. Example is..."
 }
 ```

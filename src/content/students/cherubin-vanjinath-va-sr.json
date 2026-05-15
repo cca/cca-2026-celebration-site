@@ -1,0 +1,14 @@
+{
+  "firstName": "Cherubin Vanjinath Va",
+  "lastName": "Sr",
+  "slug": "cherubin-vanjinath-va-sr",
+  "program": "interaction-design",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ],
+  "additionalPrograms": [
+    { "program": "individualized-studies" }
+  ]
+}

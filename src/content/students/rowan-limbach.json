@@ -1,0 +1,17 @@
+{
+  "firstName": "Rowan",
+  "lastName": "Limbach",
+  "slug": "rowan-limbach",
+  "program": "mfa-design",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "mba-design-strategy",
+      "degreeType": "MBA"
+    }
+  ]
+}

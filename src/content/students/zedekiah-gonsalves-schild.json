@@ -1,0 +1,17 @@
+{
+  "firstName": "Zedekiah",
+  "lastName": "Gonsalves-Schild",
+  "slug": "zedekiah-gonsalves-schild",
+  "program": "fine-arts",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "visual-critical-studies",
+      "degreeType": "MA"
+    }
+  ]
+}

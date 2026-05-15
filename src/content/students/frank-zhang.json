@@ -1,0 +1,11 @@
+{
+  "firstName": "Frank",
+  "lastName": "Zhang",
+  "slug": "frank-zhang",
+  "program": "graphic-design",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}

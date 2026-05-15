@@ -10,7 +10,6 @@ import ProgramAgenda from "../../components/program/ProgramAgenda.astro";
 import ProgramDisclaimer from "../../components/program/ProgramDisclaimer.astro";
 import CandidatesList from "../../components/program/CandidatesList.astro";
 import SpeakerFeature from "../../components/events/SpeakerFeature.astro";
-import DownloadLink from "../../components/ui/DownloadLink.astro";
 import { getCandidatesGroupedByDivision } from "../../lib/utils/collections";
 
 const phase = getCurrentPhase(Astro.url);
@@ -18,7 +17,7 @@ if (isPhaseBefore(phase, 'during-event')) {
   return Astro.redirect('/commencement/');
 }
 
-const eventId = "commencement-graduate";
+const eventId = "commencement-masters";
 const event = await getEntry("events", eventId);
 if (!event) throw new Error(`Event ${eventId} not found`);
 
@@ -29,21 +28,12 @@ if (ceremonyProgram?.studentSpeaker?.student) {
   studentSpeakerEntry = await getEntry("students", ceremonyProgram.studentSpeaker.student.id);
 }
 
-const commencementInfo = await getEntry("commencement-info", "current");
-const programBooklet = commencementInfo?.data.downloadableAssets?.find(
-  (a: { label: string }) => a.label === "Commencement Program"
-);
-
 const candidateGroups = await getCandidatesGroupedByDivision(eventId);
 
-const hasProgramSection =
-  !!ceremonyProgram?.programItems?.length ||
-  !!ceremonyProgram?.landAcknowledgment ||
-  !!ceremonyProgram?.studentSpeaker;
-
 const tocItems: Array<{ label: string; href: string }> = [];
-if (hasProgramSection) tocItems.push({ label: "Ceremony Program", href: "#program" });
-if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href: "#candidates" });
+if (ceremonyProgram?.studentSpeaker) tocItems.push({ label: "Student Speaker", href: "#speaker" });
+if (ceremonyProgram?.programItems?.length) tocItems.push({ label: "Program", href: "#program" });
+if (candidateGroups.length > 0) tocItems.push({ label: "Student Names", href: "#candidates" });
 ---
 
 <EventLayout event={event} title={event.data.title}>
@@ -55,55 +45,36 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     ]} />
   </div>
 
-  <ProgramHero event={event} />
+  <ProgramHero event={event} titlePrefix="2026 " />
 
   <div class="container">
     <div class="program-layout">
       <div class="program-main">
 
-        {hasProgramSection && (
+        {ceremonyProgram?.studentSpeaker && (
+          <section id="speaker" class="program-section">
+            <h2 class="section-heading">Student Speaker</h2>
+            <SpeakerFeature
+              speaker={ceremonyProgram.studentSpeaker}
+              student={studentSpeakerEntry}
+            />
+          </section>
+        )}
+
+        {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
           <section id="program" class="program-section">
             <h2 class="section-heading">Ceremony Program</h2>
-
-            {ceremonyProgram?.programItems && ceremonyProgram.programItems.length > 0 && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Order of Ceremony</h3>
-                <ProgramAgenda items={ceremonyProgram.programItems} />
-                {programBooklet && (
-                  <div class="program-booklet-download">
-                    <DownloadLink
-                      label={programBooklet.label}
-                      url={programBooklet.url}
-                      description={programBooklet.description}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {ceremonyProgram?.landAcknowledgment && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Land Acknowledgment</h3>
-                <p class="acknowledgment-text">{ceremonyProgram.landAcknowledgment}</p>
-              </div>
-            )}
-
-            {ceremonyProgram?.studentSpeaker && (
-              <div class="subsection">
-                <h3 class="subsection-heading">Student Speaker</h3>
-                <SpeakerFeature
-                  speaker={ceremonyProgram.studentSpeaker}
-                  student={studentSpeakerEntry}
-                />
-              </div>
-            )}
+            <ProgramAgenda
+              items={ceremonyProgram.programItems}
+              landAcknowledgmentText={ceremonyProgram.landAcknowledgment}
+            />
           </section>
         )}
 
         {candidateGroups.length > 0 && (
           <section id="candidates" class="program-section">
-            <h2 class="section-heading">Degree Candidates</h2>
-            <CandidatesList groups={candidateGroups} />
+            <h2 class="section-heading">Master's Degree Candidates</h2>
+            <CandidatesList groups={candidateGroups} degreeLabel="master's degree" totalCount={139} />
             {ceremonyProgram?.disclaimer && (
               <div class="subsection subsection--disclaimer">
                 <ProgramDisclaimer text={ceremonyProgram.disclaimer} />
@@ -137,6 +108,10 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     min-width: 0;
   }
 
+  .program-main > * + * {
+    border-top: 1px solid var(--color-border);
+  }
+
   @media (min-width: 1024px) {
     .program-layout {
       flex-direction: row;
@@ -153,13 +128,16 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
   }
 
   .program-section {
-    padding-block: var(--space-6);
+    padding-block: var(--space-12);
     scroll-margin-top: calc(60px + var(--space-4));
   }
 
   .section-heading {
-    font-size: var(--text-2xl);
-    margin-bottom: var(--space-6);
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: normal;
+    line-height: 1.2;
+    margin-bottom: var(--space-4);
     position: relative;
     display: inline-block;
   }
@@ -173,32 +151,7 @@ if (candidateGroups.length > 0) tocItems.push({ label: "Degree Candidates", href
     margin-top: var(--space-2);
   }
 
-  .acknowledgment-text {
-    font-size: var(--text-base);
-    line-height: 1.8;
-    color: var(--color-text);
-    max-width: 65ch;
-    font-style: italic;
-  }
-
-  .program-booklet-download {
-    margin-top: var(--space-6);
-  }
-
-  .subsection + .subsection {
-    margin-top: var(--space-8);
-  }
-
-  .subsection-heading {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text);
-    margin-bottom: var(--space-4);
-  }
-
   .subsection--disclaimer {
-    margin-top: var(--space-6);
+    margin-top: var(--space-8);
   }
 </style>

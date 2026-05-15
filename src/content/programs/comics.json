@@ -1,8 +1,9 @@
 {
   "name": "Comics",
   "slug": "comics",
-  "division": "fine-arts",
+  "division": "humanities-sciences",
   "degreeTypes": [
+    "BFA",
     "MFA"
   ],
   "description": "TODO: Add program description.",

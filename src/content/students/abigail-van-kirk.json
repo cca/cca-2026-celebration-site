@@ -1,0 +1,11 @@
+{
+  "firstName": "Abigail Van",
+  "lastName": "Kirk",
+  "slug": "abigail-van-kirk",
+  "program": "architecture",
+  "degreeLevel": "bachelors",
+  "degreeType": "BArch",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}

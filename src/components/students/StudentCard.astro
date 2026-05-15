@@ -14,9 +14,11 @@ const href = `/showcase/students/${slug}/`;
 
 <a href={href} class="student-card reveal">
   <article>
-    <div class="student-photo">
-      <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
-    </div>
+    {photo && (
+      <div class="student-photo">
+        <Image src={photo.src} alt={photo.alt} loading="lazy" width={280} height={280} />
+      </div>
+    )}
     <div class="student-info">
       <h3 class="student-name">{firstName} {lastName}</h3>
       {programName && <p class="student-program">{programName}</p>}

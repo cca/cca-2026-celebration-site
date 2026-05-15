@@ -1,0 +1,15 @@
+{
+  "firstName": "Alana Valentina",
+  "lastName": "Abuchaibe",
+  "slug": "alana-valentina-abuchaibe",
+  "photo": {
+    "src": "../../assets/images/students/placeholder.jpg",
+    "alt": "Portrait of Alana Valentina Abuchaibe."
+  },
+  "program": "architecture",
+  "degreeLevel": "bachelors",
+  "degreeType": "BArch",
+  "ceremonies": [
+    "commencement-bachelors"
+  ]
+}
