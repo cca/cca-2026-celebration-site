@@ -1,0 +1,17 @@
+{
+  "firstName": "Hannah Fhaye",
+  "lastName": "Oliver",
+  "slug": "hannah-fhaye-oliver",
+  "program": "fine-arts",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "visual-critical-studies",
+      "degreeType": "MA"
+    }
+  ]
+}

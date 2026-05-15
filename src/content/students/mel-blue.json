@@ -1,0 +1,11 @@
+{
+  "firstName": "Mel",
+  "lastName": "Blue",
+  "slug": "mel-blue",
+  "program": "fine-arts",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ]
+}

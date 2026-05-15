@@ -9,6 +9,6 @@
     "commencement-bachelors"
   ],
   "additionalPrograms": [
-    "sculpture"
+    { "program": "sculpture" }
   ]
 }

@@ -44,7 +44,14 @@ const students = defineCollection({
       alt: z.string(),
     }).optional(),
     program: reference("programs"),
-    additionalPrograms: z.array(reference("programs")).optional(),
+    additionalPrograms: z
+      .array(
+        z.object({
+          program: reference("programs"),
+          degreeType: degreeType.optional(),
+        }),
+      )
+      .optional(),
     degreeLevel: z.enum(["bachelors", "masters"]),
     degreeType,
     expectedGraduation: z.string().optional(),

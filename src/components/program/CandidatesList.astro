@@ -11,6 +11,17 @@ const { groups, degreeLabel = "degree", totalCount } = Astro.props;
 const uniqueIds = new Set<string>();
 for (const g of groups) for (const p of g.programs) for (const s of p.students) uniqueIds.add(s.id);
 const totalCandidates = totalCount ?? uniqueIds.size;
+
+// The ceremony's own graduation term — students expecting to graduate in a
+// later term are flagged with an asterisk and a footnote.
+const CEREMONY_TERM = "Spring 2026";
+const isAsterisked = (s: { expectedGraduation?: string }) =>
+  !!s.expectedGraduation && s.expectedGraduation !== CEREMONY_TERM;
+const expectedTerms = new Set<string>();
+for (const g of groups) for (const p of g.programs) for (const s of p.students) {
+  if (isAsterisked(s)) expectedTerms.add(s.expectedGraduation!);
+}
+const footnotes = [...expectedTerms].sort();
 ---
 
 <div class="candidates-list">
@@ -31,8 +42,8 @@ const totalCandidates = totalCount ?? uniqueIds.size;
             <ul class="student-list" role="list">
               {program.students.map((student) => (
                 <li class="student-name">
-                  {student.firstName} {student.lastName}
-                  {student.isDoubleMajor && <span class="student-note"> (double major)</span>}
+                  {student.firstName} {student.lastName}{isAsterisked(student) ? "*" : ""}
+                  {student.multiProgramNote && <span class="student-note"> ({student.multiProgramNote})</span>}
                 </li>
               ))}
             </ul>
@@ -41,6 +52,12 @@ const totalCandidates = totalCount ?? uniqueIds.size;
       </div>
     </details>
   ))}
+
+  {footnotes.length > 0 && (
+    <p class="candidates-footnote">
+      {footnotes.map((term) => <span>*Expected graduation {term}.</span>)}
+    </p>
+  )}
 </div>
 
 <style>
@@ -172,5 +189,16 @@ const totalCandidates = totalCount ?? uniqueIds.size;
   .student-name {
     font-size: var(--text-sm);
     color: var(--color-text);
+  }
+
+  .candidates-footnote {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    opacity: 0.7;
   }
 </style>
