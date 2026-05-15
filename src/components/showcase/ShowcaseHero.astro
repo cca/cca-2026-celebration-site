@@ -14,7 +14,8 @@ const { students, fallbackImages = [] } = Astro.props;
 const portraits: Array<{ src: string; alt: string }> = [];
 for (const s of students) {
   if (portraits.length >= 4) break;
-  // Skip placeholder images (identified by filename)
+  // Skip placeholder images (identified by filename) and students without photos
+  if (!s.data.photo) continue;
   const imgSrc = s.data.photo.src;
   const srcPath = typeof imgSrc === 'string' ? imgSrc : imgSrc.src;
   if (!srcPath.includes('placeholder')) {

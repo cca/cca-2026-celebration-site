@@ -1,0 +1,15 @@
+{
+  "firstName": "Karen-Happuch",
+  "lastName": "Henneh",
+  "slug": "karen-happuch-henneh",
+  "photo": {
+    "src": "../../assets/images/students/Karen-Happuch Henneh.jpg",
+    "alt": "Portrait of Karen-Happuch Henneh."
+  },
+  "program": "interaction-design",
+  "degreeLevel": "masters",
+  "degreeType": "MDes",
+  "ceremonies": [
+    "commencement-masters"
+  ]
+}

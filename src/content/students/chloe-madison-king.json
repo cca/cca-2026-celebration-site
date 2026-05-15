@@ -1,0 +1,17 @@
+{
+  "firstName": "Chloe Madison",
+  "lastName": "King",
+  "slug": "chloe-madison-king",
+  "program": "fine-arts",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "visual-critical-studies",
+      "degreeType": "MA"
+    }
+  ]
+}

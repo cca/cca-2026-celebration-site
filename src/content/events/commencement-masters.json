@@ -1,0 +1,153 @@
+{
+  "title": "Master's Degree Candidates' Ceremony",
+  "slug": "commencement-masters",
+  "shortTitle": "Master's Ceremony",
+  "type": "commencement",
+  "degreeLevel": "masters",
+  "themeKey": "commencement",
+  "date": "2026-05-16",
+  "time": "11:00 AM",
+  "location": "Sydney Goldstein Theater",
+  "address": "275 Hayes St, San Francisco, CA 94102",
+  "description": "Join us in celebrating CCA's commencement class of 2026 master's degree candidates.",
+  "rsvpUrl": "https://cca.edu/commencement/rsvp",
+  "livestreamUrl": "https://cca.edu/commencement/livestream",
+  "image": {
+    "src": "../../assets/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg",
+    "alt": "Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them."
+  },
+  "ceremonyProgram": {
+    "studentSpeaker": {
+      "student": "karen-happuch-henneh",
+      "name": "Karen-Happuch Henneh",
+      "program": "MDes Interaction Design 2026",
+      "speechHighlights": "The most powerful movements in history didn't start with grand declarations. They began with one person deciding to care. One voice refusing to stay silent. One step forward when it would have been easier to stand still. You have that power. The power to shape conversations, to stand up for what's right, to create beauty and meaning in the lives of others."
+    },
+    "programItems": [
+      {
+        "order": 1,
+        "label": "Grand Marshal Introduction",
+        "presenters": [
+          { "name": "Calvin Wheeler", "role": "Chair of the Board of Trustees" }
+        ],
+        "type": "processional"
+      },
+      {
+        "order": 2,
+        "label": "Academic Processional",
+        "subItems": [
+          { "label": "Candidates for the Master of Advanced Architecture Degree" },
+          { "label": "Candidates for the Master of Architecture Degree" },
+          { "label": "Candidates for the Master of Business Administration Degree" },
+          { "label": "Candidates for the Master of Design in Interaction Design Degree" },
+          { "label": "Candidates for the Master of Fine Arts Degree" },
+          { "label": "Candidates for the Master of Arts Degree" }
+        ],
+        "type": "processional"
+      },
+      {
+        "order": 3,
+        "label": "Welcome from the President",
+        "presenters": [
+          { "name": "David C. Howse", "role": "President" }
+        ],
+        "type": "welcome"
+      },
+      {
+        "order": 4,
+        "label": "Land Acknowledgment",
+        "type": "acknowledgment"
+      },
+      {
+        "order": 5,
+        "label": "In Memoriam",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 6,
+        "label": "President's Address",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 7,
+        "label": "Professor Emeriti Announcement",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 8,
+        "label": "Presentation of Honorary Doctoral Candidate",
+        "presenters": [
+          { "name": "TT Takemoto", "role": "Interim Provost" },
+          { "name": "Jacqueline Francis", "role": "Dean of Humanities and Sciences" }
+        ],
+        "type": "recognition"
+      },
+      {
+        "order": 9,
+        "label": "Honorary Doctorate Commencement Address",
+        "presenters": [
+          { "name": "Abby Chang Chen", "role": "(MA Visual and Critical Studies 2011), Curator and Culture Worker" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 10,
+        "label": "Student Remarks",
+        "presenters": [
+          { "name": "Karen-Happuch Henneh", "role": "(MDes Interaction Design 2026)" }
+        ],
+        "type": "address"
+      },
+      {
+        "order": 11,
+        "label": "Commencement Video",
+        "presenters": [
+          { "name": "Taro Hattori", "role": "Faculty Senate Vice President, Sculpture Assistant Professor" }
+        ],
+        "type": "performance"
+      },
+      {
+        "order": 12,
+        "label": "Conferring of Degrees",
+        "presenters": [
+          { "name": "Keith Krumwiede", "role": "Dean of Architecture" }
+        ],
+        "subItems": [
+          { "label": "Master of Advanced Architecture" },
+          { "label": "Master of Architecture" },
+          { "label": "Master of Business Administration" },
+          { "label": "Master of Design in Interaction Design" },
+          { "label": "Master of Arts" },
+          { "label": "Master of Fine Arts" }
+        ],
+        "type": "conferring"
+      },
+      {
+        "order": 13,
+        "label": "Presentation of the Class of 2026",
+        "presenters": [
+          { "name": "David C. Howse" }
+        ],
+        "type": "other"
+      },
+      {
+        "order": 14,
+        "label": "Recessional",
+        "description": "Members of the audience, please stand and remain standing until the academic procession has left the hall. Music provided by KLEZMANIA!.",
+        "type": "recessional"
+      }
+    ],
+    "presidentName": "David C. Howse",
+    "landAcknowledgment": "California College of the Arts current and historical campuses are located on the unceded territories of Chochenyo and Ramaytush Ohlone peoples, who have continuously lived upon this land since time immemorial. CCA honors Indigenous peoples—past, present, and future—here and around the world, and we wish to pay respect to local elders.",
+    "disclaimer": "CCA's 119th Commencement celebrates students who completed their degree requirements in fall 2025, as well as students anticipated to complete their degrees in spring and summer 2026. Degrees will officially be conferred upon successful completion of all degree requirements."
+  }
+}

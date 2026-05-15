@@ -1,0 +1,11 @@
+{
+  "firstName": "Tom",
+  "lastName": "Scott",
+  "slug": "tom-scott",
+  "program": "comics",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "firstName": "Lily",
+  "lastName": "Marylander",
+  "slug": "lily-marylander",
+  "program": "jewelry-metal-arts",
+  "degreeLevel": "bachelors",
+  "degreeType": "BFA",
+  "ceremonies": [
+    "commencement-bachelors"
+  ],
+  "additionalPrograms": [
+    { "program": "sculpture" }
+  ]
+}

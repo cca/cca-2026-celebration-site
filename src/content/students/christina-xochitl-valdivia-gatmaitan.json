@@ -1,0 +1,18 @@
+{
+  "firstName": "Christina Xochitl",
+  "lastName": "Valdivia-Gatmaitan",
+  "slug": "christina-xochitl-valdivia-gatmaitan",
+  "program": "mfa-design",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "fine-arts",
+      "degreeType": "MFA"
+    }
+  ],
+  "expectedGraduation": "June 2027"
+}

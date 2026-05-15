@@ -1,0 +1,17 @@
+{
+  "firstName": "Badri",
+  "lastName": "Valian",
+  "slug": "badri-valian",
+  "program": "fine-arts",
+  "degreeLevel": "masters",
+  "degreeType": "MFA",
+  "ceremonies": [
+    "commencement-masters"
+  ],
+  "additionalPrograms": [
+    {
+      "program": "visual-critical-studies",
+      "degreeType": "MA"
+    }
+  ]
+}
