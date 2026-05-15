@@ -358,7 +358,7 @@ const phase = getCurrentPhase(Astro.url);
           <h2 class="section-heading reveal">Celebrating 139 graduate candidates</h2>
 
           {gradHonoree && (
-            <p class="program-section__lead reveal">{gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''} will deliver the Distinguished Alumni Address at the 2026 Master's Degree Candidates Ceremony.</p>
+            <p class="program-section__lead reveal">The Master's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {gradHonoree.data.name} {gradHonoree.data.ccaConnection ?? ''}.</p>
           )}
 
           <div class="ceremonies-cta reveal">
@@ -382,7 +382,7 @@ const phase = getCurrentPhase(Astro.url);
                 )}
               </div>
               <div class="ceremony-spotlight__info">
-                <span class="ceremony-spotlight__role">Distinguished Alumni Address · Honorary Doctorate</span>
+                <span class="ceremony-spotlight__role">Honorary Doctorate</span>
                 <h3 class="ceremony-spotlight__name">{gradHonoree.data.name}</h3>
                 {gradHonoree.data.ccaConnection && <p class="ceremony-spotlight__cca">{gradHonoree.data.ccaConnection}</p>}
                 {gradHonoree.data.title && <p class="ceremony-spotlight__title">{gradHonoree.data.title}</p>}
