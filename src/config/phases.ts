@@ -6,7 +6,7 @@ export type Phase = (typeof PHASES)[number];
  * The single knob to change for deployment.
  * Update this value and rebuild to transition the entire site to the next phase.
  */
-export const CURRENT_PHASE: Phase = 'pre-event';
+export const CURRENT_PHASE: Phase = 'during-event';
 
 /** Returns true if `current` is at or after `minimum` in the phase order. */
 export function isPhaseAtLeast(current: Phase, minimum: Phase): boolean {
