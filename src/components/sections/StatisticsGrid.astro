@@ -4,53 +4,113 @@ interface Props {
 }
 
 const { statistics } = Astro.props;
+
+/** Split a value into a leading numeric figure and a trailing descriptor,
+ *  so "20 years, 7 months" emphasizes "20" while "30" stays whole. */
+function splitValue(value: string): { figure: string; suffix: string } {
+  const match = value.match(/^\s*([\d][\d.,–-]*)\s*(.*)$/);
+  if (match) return { figure: match[1], suffix: match[2].trim() };
+  return { figure: value, suffix: '' };
+}
+
+const stats = statistics.map((stat) => ({ ...stat, ...splitValue(stat.value) }));
 ---
 
-<div class="statistics-grid reveal">
-  {statistics.map((stat) => (
+<dl class="statistics-grid reveal">
+  {stats.map((stat) => (
     <div class="stat-card">
-      <span class="stat-value">{stat.value}</span>
-      <span class="stat-label">{stat.label}</span>
+      <span class="stat-card__accent" aria-hidden="true"></span>
+      <dd class="stat-value">
+        <span class="stat-value__figure">{stat.figure}</span>
+        {stat.suffix && <span class="stat-value__suffix">{stat.suffix}</span>}
+      </dd>
+      <dt class="stat-label">{stat.label}</dt>
       {stat.detail && <span class="stat-detail">{stat.detail}</span>}
     </div>
   ))}
-</div>
+</dl>
 
 <style>
   .statistics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
     gap: var(--grid-gutter);
+    margin: 0;
   }
 
   .stat-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-card);
     padding: var(--space-6);
+    overflow: hidden;
+    transition: transform 0.3s var(--ease-out-expo),
+                box-shadow 0.3s var(--ease-out-expo);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--color-accent) 14%, transparent);
+  }
+
+  .stat-card__accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-prismatic);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .stat-card__accent {
+      animation: prismatic-shift 6s linear infinite;
+    }
   }
 
   .stat-value {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: var(--space-2) 0 var(--space-3);
+  }
+
+  .stat-value__figure {
     font-family: var(--font-body);
+    font-weight: 700;
     font-size: var(--text-4xl);
+    line-height: 1;
     color: var(--color-accent);
-    line-height: 1.1;
-    margin-bottom: var(--space-2);
+  }
+
+  .stat-value__suffix {
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: 1.3;
+    color: var(--color-text);
+    opacity: 0.75;
   }
 
   .stat-label {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--color-text);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    width: 100%;
   }
 
   .stat-detail {
     font-size: var(--text-xs);
     color: var(--color-text);
-    margin-top: var(--space-1);
+    opacity: 0.75;
+    margin-top: var(--space-2);
   }
 </style>
