@@ -1011,8 +1011,20 @@ const phase = getCurrentPhase(Astro.url);
   }
 
   /* ── In Memoriam ── */
+  /* Solid panel keeps the dynamic particle field from showing through —
+     a calmer, more solemn backdrop for this section. */
   .memoriam-section {
-    padding-block: var(--space-20);
+    position: relative;
+    z-index: 1;
+    padding: var(--space-16) var(--space-8);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+  }
+
+  .program-section + .memoriam-section {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-12);
   }
 
   .memoriam-intro {
