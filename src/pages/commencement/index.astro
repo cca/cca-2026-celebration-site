@@ -234,7 +234,7 @@ const phase = getCurrentPhase(Astro.url);
           </div>
 
           <div class="ceremonies-cta reveal">
-            <Button href="mailto:commencement@cca.edu" variant="link">If you have questions, send us an email</Button>
+            <Button href="mailto:commencement@cca.edu" variant="link" arrow="10">If you have questions, send us an email</Button>
           </div>
         </section>
 
@@ -293,7 +293,7 @@ const phase = getCurrentPhase(Astro.url);
         {/* ── Bachelor's Ceremony ── */}
         <section id="bachelors" class="program-section">
           <span class="section-label reveal">Bachelor's Ceremony</span>
-          <h2 class="section-heading reveal">Celebrating 281 bachelor's candidates</h2>
+          <h2 class="section-heading reveal">Celebrating 281 undergraduate candidates</h2>
 
           {undergradHonoree && (
             <p class="program-section__lead reveal">The Bachelor's Degree Candidates Ceremony features the conferring of CCA's Honorary Doctorate of Fine Arts on {undergradHonoree.data.name} {undergradHonoree.data.ccaConnection ?? ''}.</p>
