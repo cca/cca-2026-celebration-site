@@ -204,21 +204,6 @@ const phase = getCurrentPhase(Astro.url);
             );
           })()}
           <div class="ceremony-cards">
-            {gradEvent && isPhaseBefore(phase, 'during-event') ? (
-              <div class="ceremony-info reveal">
-                <div class="ceremony-info__accent" aria-hidden="true"></div>
-                <span class="ceremony-info__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
-                <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
-              </div>
-            ) : gradEvent && (
-              <a href="/commencement/masters/" class="ceremony-card reveal">
-                <div class="ceremony-card__accent" aria-hidden="true"></div>
-                <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
-                <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
-                <span class="ceremony-card__cta">Details &rarr;</span>
-              </a>
-            )}
-
             {undergradEvent && isPhaseBefore(phase, 'during-event') ? (
               <div class="ceremony-info reveal">
                 <div class="ceremony-info__accent" aria-hidden="true"></div>
@@ -230,6 +215,21 @@ const phase = getCurrentPhase(Astro.url);
                 <div class="ceremony-card__accent" aria-hidden="true"></div>
                 <span class="ceremony-card__badge">{undergradEvent.data.time ? formatTime(undergradEvent.data.time) : null}</span>
                 <h3 class="ceremony-card__title">{undergradEvent.data.title}</h3>
+                <span class="ceremony-card__cta">Details &rarr;</span>
+              </a>
+            )}
+
+            {gradEvent && isPhaseBefore(phase, 'during-event') ? (
+              <div class="ceremony-info reveal">
+                <div class="ceremony-info__accent" aria-hidden="true"></div>
+                <span class="ceremony-info__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
+                <h3 class="ceremony-info__title">{gradEvent.data.title}</h3>
+              </div>
+            ) : gradEvent && (
+              <a href="/commencement/masters/" class="ceremony-card reveal">
+                <div class="ceremony-card__accent" aria-hidden="true"></div>
+                <span class="ceremony-card__badge">{gradEvent.data.time ? formatTime(gradEvent.data.time) : null}</span>
+                <h3 class="ceremony-card__title">{gradEvent.data.title}</h3>
                 <span class="ceremony-card__cta">Details &rarr;</span>
               </a>
             )}
