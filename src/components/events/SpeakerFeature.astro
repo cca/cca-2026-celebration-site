@@ -9,9 +9,10 @@ interface Props {
     speechHighlights?: string;
   };
   student?: CollectionEntry<"students"> | null;
+  focusArea?: "center" | "top";
 }
 
-const { speaker, student } = Astro.props;
+const { speaker, student, focusArea = "center" } = Astro.props;
 const speechParagraphs = speaker.speechHighlights
   ? speaker.speechHighlights.split(/\n\n+/).map(p => p.trim()).filter(Boolean)
   : [];
@@ -19,7 +20,7 @@ const speechParagraphs = speaker.speechHighlights
 
 <div class="speaker-feature reveal">
   {student?.data.photo && (
-    <div class="speaker-photo">
+    <div class="speaker-photo" data-focus={focusArea}>
       <Image src={student.data.photo.src} alt={student.data.photo.alt} loading="lazy" width={240} />
     </div>
   )}
@@ -59,6 +60,11 @@ const speechParagraphs = speaker.speechHighlights
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+  }
+
+  .speaker-photo[data-focus="top"] img {
+    object-position: center 20%;
   }
 
   .speaker-info {
