@@ -334,8 +334,11 @@ const phase = getCurrentPhase(Astro.url);
           )}
 
           {undergradSpeaker && (
-            <div class="ceremony-speaker-intro reveal">
-              <p>Bachelor's speaker {undergradSpeaker.name} ({undergradSpeaker.program}) spoke to classmates about adaptation, presence, and the creative instincts they carry with them from CCA.</p>
+            <div class="speaker-block reveal">
+              <h3 class="subsection-heading">Student speaker</h3>
+              <div class="ceremony-speaker-intro">
+                <p>Bachelor's speaker {undergradSpeaker.name} ({undergradSpeaker.program}) spoke to classmates about adaptation, presence, and the creative instincts they carry with them from CCA.</p>
+              </div>
             </div>
           )}
 
@@ -391,8 +394,11 @@ const phase = getCurrentPhase(Astro.url);
           )}
 
           {gradSpeaker && (
-            <div class="ceremony-speaker-intro reveal">
-              <p>Master's student speaker {gradSpeaker.name} ({gradSpeaker.program}) spoke to classmates about pride, resilience, and the belonging they built together at CCA — and what they carry with them from here.</p>
+            <div class="speaker-block reveal">
+              <h3 class="subsection-heading">Student speaker</h3>
+              <div class="ceremony-speaker-intro">
+                <p>Master's student speaker {gradSpeaker.name} ({gradSpeaker.program}) spoke to classmates about pride, resilience, and the belonging they built together at CCA — and what they carry with them from here.</p>
+              </div>
             </div>
           )}
 
@@ -1339,12 +1345,42 @@ const phase = getCurrentPhase(Astro.url);
     margin: 0;
   }
 
+  /* ── Student speaker block ── */
+  .speaker-block {
+    margin-top: var(--space-12);
+    padding-top: var(--space-10);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .speaker-block .subsection-heading {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .speaker-block .subsection-heading::before {
+    content: "";
+    flex-shrink: 0;
+    width: 28px;
+    height: 3px;
+    background: var(--gradient-prismatic);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .speaker-block .subsection-heading::before {
+      animation: prismatic-shift 6s linear infinite;
+    }
+  }
+
   .ceremony-speaker-intro {
-    font-size: var(--text-base);
+    font-size: var(--text-lg);
     line-height: 1.7;
     color: var(--color-text);
     max-width: 65ch;
-    margin-block: var(--space-8) var(--space-4);
+    margin: 0;
+    padding-left: var(--space-5);
+    border-left: 3px solid var(--color-accent);
   }
 
   /* ── Social feed footnote ── */
