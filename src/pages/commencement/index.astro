@@ -337,15 +337,22 @@ const phase = getCurrentPhase(Astro.url);
 
           {undergradSpeaker && (
             <div class="speaker-card reveal">
-              <span class="speaker-card__label">Student speaker</span>
+              <div class="speaker-card__header">
+                {undergradSpeaker.photo && (
+                  <div class="speaker-card__photo">
+                    <Image src={undergradSpeaker.photo.src} alt={undergradSpeaker.photo.alt} width={128} height={128} loading="lazy" />
+                  </div>
+                )}
+                <div class="speaker-card__id">
+                  <span class="speaker-card__label">Student speaker</span>
+                  <span class="speaker-card__name">{undergradSpeaker.name}</span>
+                  <span class="speaker-card__program">{undergradSpeaker.program}</span>
+                </div>
+              </div>
               <p class="speaker-card__intro">Bachelor's speaker {undergradSpeaker.name} ({undergradSpeaker.program}) spoke to classmates about adaptation, presence, and the creative instincts they carry with them from CCA.</p>
               {undergradSpeaker.speechHighlights && (
                 <blockquote class="speaker-card__quote">
                   {paragraphs(undergradSpeaker.speechHighlights).map(p => <p>{p}</p>)}
-                  <footer class="speaker-card__attribution">
-                    <span class="speaker-card__name">{undergradSpeaker.name}</span>
-                    <span class="speaker-card__program">{undergradSpeaker.program}</span>
-                  </footer>
                 </blockquote>
               )}
             </div>
@@ -400,15 +407,22 @@ const phase = getCurrentPhase(Astro.url);
 
           {gradSpeaker && (
             <div class="speaker-card reveal">
-              <span class="speaker-card__label">Student speaker</span>
+              <div class="speaker-card__header">
+                {gradSpeaker.photo && (
+                  <div class="speaker-card__photo">
+                    <Image src={gradSpeaker.photo.src} alt={gradSpeaker.photo.alt} width={128} height={128} loading="lazy" />
+                  </div>
+                )}
+                <div class="speaker-card__id">
+                  <span class="speaker-card__label">Student speaker</span>
+                  <span class="speaker-card__name">{gradSpeaker.name}</span>
+                  <span class="speaker-card__program">{gradSpeaker.program}</span>
+                </div>
+              </div>
               <p class="speaker-card__intro">Master's student speaker {gradSpeaker.name} ({gradSpeaker.program}) spoke to classmates about pride, resilience, and the belonging they built together at CCA — and what they carry with them from here.</p>
               {gradSpeaker.speechHighlights && (
                 <blockquote class="speaker-card__quote">
                   {paragraphs(gradSpeaker.speechHighlights).map(p => <p>{p}</p>)}
-                  <footer class="speaker-card__attribution">
-                    <span class="speaker-card__name">{gradSpeaker.name}</span>
-                    <span class="speaker-card__program">{gradSpeaker.program}</span>
-                  </footer>
                 </blockquote>
               )}
             </div>
@@ -995,6 +1009,10 @@ const phase = getCurrentPhase(Astro.url);
     margin-top: var(--space-12);
   }
 
+  .memoriam-section :global(.quote-block__text) {
+    font-size: 28px;
+  }
+
   .memoriam-intro {
     font-size: var(--text-base);
     color: var(--color-text);
@@ -1331,8 +1349,39 @@ const phase = getCurrentPhase(Astro.url);
     overflow: hidden;
   }
 
+  .speaker-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .speaker-card__photo {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-border);
+    border: 2px solid var(--color-accent);
+  }
+
+  .speaker-card__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .speaker-card__id {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
   .speaker-card__label {
-    display: inline-block;
+    align-self: flex-start;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     text-transform: uppercase;
@@ -1341,7 +1390,7 @@ const phase = getCurrentPhase(Astro.url);
     background: var(--color-accent-tint);
     padding: var(--space-1) var(--space-2);
     border-radius: 3px;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-1);
   }
 
   .speaker-card__intro {
@@ -1378,17 +1427,11 @@ const phase = getCurrentPhase(Astro.url);
     margin-top: var(--space-4);
   }
 
-  .speaker-card__attribution {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    margin-top: var(--space-5);
-  }
-
   .speaker-card__name {
-    font-family: var(--font-body);
-    font-size: var(--text-base);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
     font-weight: 700;
+    line-height: 1.2;
     color: var(--color-text);
   }
 

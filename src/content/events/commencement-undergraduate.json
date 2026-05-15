@@ -59,7 +59,11 @@
     "studentSpeaker": {
       "name": "Alana Abuchaibe",
       "program": "BArch Architecture 2026",
-      "speechHighlights": "So as we leave CCA, at a time when it's also coming to a close, I believe what matters most is not what we're leaving behind, but what we're taking with us. The ability to adapt. The ability to be present. And letting go of the fear of doing something 'correctly.'"
+      "speechHighlights": "So as we leave CCA, at a time when it's also coming to a close, I believe what matters most is not what we're leaving behind, but what we're taking with us. The ability to adapt. The ability to be present. And letting go of the fear of doing something 'correctly.'",
+      "photo": {
+        "src": "../../assets/images/students/Alana Abuchaibe.jpg",
+        "alt": "Portrait of Alana Abuchaibe, Bachelor's student speaker."
+      }
     },
     "candidatesListUrl": "/downloads/undergraduate-candidates-2026.pdf",
     "programItems": [
