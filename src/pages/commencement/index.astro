@@ -259,6 +259,7 @@ const phase = getCurrentPhase(Astro.url);
           {honoraryDoctorates.length > 0 && (
             <div class="honor-list reveal">
               <span class="honor-list__label">Honorary Doctorates</span>
+              <p class="honor-list__intro">CCA is thrilled to announce the Honorary Doctorate recipients for the 119th Commencement Ceremony:</p>
               <ul class="honor-list__items">
                 {honoraryDoctorates.map(p => (
                   <li>
@@ -273,6 +274,7 @@ const phase = getCurrentPhase(Astro.url);
           {professorsEmerit.length > 0 && (
             <div class="honor-list reveal">
               <span class="honor-list__label">Professors Emerit</span>
+              <p class="honor-list__intro">The following tenured faculty members were awarded a professor emerit designation in 2026:</p>
               <ul class="honor-list__items">
                 {professorsEmerit.map(p => (
                   <li>
@@ -1166,6 +1168,14 @@ const phase = getCurrentPhase(Astro.url);
     letter-spacing: 0.08em;
     color: var(--color-accent);
     margin-bottom: var(--space-2);
+  }
+
+  .honor-list__intro {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--color-text);
+    max-width: 65ch;
+    margin: 0 0 var(--space-3);
   }
 
   .honor-list__items {
