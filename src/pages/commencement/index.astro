@@ -7,7 +7,6 @@ import EmailSignup from '../../components/sections/EmailSignup.astro';
 import Button from '../../components/ui/Button.astro';
 import ChimeraLoop3D from '../../components/effects/ChimeraLoop3D.astro';
 
-import PastGallery from '../../components/sections/PastGallery.astro';
 import QuoteBlock from '../../components/ui/QuoteBlock.astro';
 import StatisticsGrid from '../../components/sections/StatisticsGrid.astro';
 import SocialFeed from '../../components/sections/SocialFeed.astro';
@@ -446,31 +445,6 @@ const phase = getCurrentPhase(Astro.url);
       </aside>
     </div>
   </div>
-
-  {/* ── Past Commencement Gallery ── */}
-  <PastGallery
-    label="Past commencements"
-    title="Celebrating generations of graduates"
-    marqueeDuration={90}
-    images={[
-      { src: '/images/commencement-past/previousCommencementPhotos-002-03-2026-JL.jpg', alt: 'A group of ten students dressed in casual clothing pose together in front of decorative purple lanterns and colorful ribbons at an indoor celebration.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-003-03-2026-JL.jpg', alt: 'Three male graduates wearing black robes and colorful cultural sashes stand together outdoors on a brick plaza, smiling at the camera.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-004-03-2026-JL.jpg', alt: 'Two graduates in formal attire pose together outdoors; one wears a green dress and the other a pink blazer, both smiling in front of a white building.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-005-03-2026-JL.jpg', alt: 'Four graduates dressed in vibrant pink and purple outfits pose together in a parking lot during a bright, sunny commencement day.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-006-03-2026-JL.jpg', alt: 'Three graduates with colorful hair stand together on a white courtyard; one wears navy and black, another a gray dress, and the third a teal skirt with yellow sash.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-007-03-2026-JL.jpg', alt: 'Nine graduates in black academic robes and regalia pose together indoors, with two seated in front and seven standing behind them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-008-03-2026-JL.jpg', alt: 'Two graduates in black robes with colorful cultural sashes sit together on red auditorium seats, smiling during the commencement ceremony.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-009-03-2026-JL.jpg', alt: 'Four graduates pose together outdoors against a brick building; they wear a mix of casual and formal attire, including vibrant pink and maroon colors.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-010-03-2026-JL.jpg', alt: 'A group of graduates in black robes and mortarboards stand together in front of a brick building, celebrating with raised arms and smiling at the camera.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-011-03-2026-JL.jpg', alt: 'A diverse group of young graduates wearing leis and graduation regalia pose together outdoors in front of a modern building with colorful turquoise architectural elements.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-012-03-2026-JL.jpg', alt: 'Two graduates embrace in front of a celebration backdrop decorated with purple and white balloons, with a paved courtyard and building visible behind them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-013-03-2026-JL.jpg', alt: 'Graduates in caps, gowns, and cultural regalia stand in an auditorium with red seats, many wearing decorative sashes and stoles representing their cultural heritage.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-014-03-2026-JL.jpg', alt: 'Two speakers in academic regalia stand at a CCAlum podium during a commencement ceremony, with one holding a microphone as they address the audience.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-015-03-2026-JL.jpg', alt: 'A group of graduates in caps and gowns pose together indoors, smiling and posing for a photo in a hallway with windows and other attendees visible in the background.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-016-03-2026-JL.jpg', alt: 'Graduates in academic regalia celebrate in a courtyard, some wearing colorful leis and sashes, with historic buildings featuring arched architecture surrounding them.' },
-      { src: '/images/commencement-past/previousCommencementPhotos-017-03-2026-JL.jpg', alt: 'A group of graduates wearing black gowns and yellow sashes pose together in a brick courtyard, standing in front of historic buildings on the campus grounds.' },
-    ]}
-  />
 
   {/* ── Social Feed ── */}
   <section class="social-feed-section">
