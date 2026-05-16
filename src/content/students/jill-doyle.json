@@ -1,0 +1,11 @@
+{
+  "firstName": "Jill",
+  "lastName": "Doyle",
+  "slug": "jill-doyle",
+  "program": "architecture",
+  "degreeLevel": "masters",
+  "degreeType": "MArch",
+  "ceremonies": [
+    "commencement-masters"
+  ]
+}
