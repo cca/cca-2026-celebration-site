@@ -14,12 +14,15 @@ import designShow39 from '../../assets/images/cca-photography/design-senior-show
 import { formatDateRange, formatTime } from '../../lib/utils/format';
 import HalftoneProceduralScan from '../../components/effects/HalftoneProceduralScan.astro';
 import ArrowLoop3D from '../../components/effects/ArrowLoop3D.astro';
-import { getCurrentPhase } from '../../lib/utils/phase';
-import { isPhaseAtLeast, isPhaseBefore } from '../../config/phases';
+import { isPhaseAtLeast, isPhaseBefore, type Phase } from '../../config/phases';
 import altRegistry from "../../data/photography-alt-text-registry.json";
 const regAlt = (f: string, fb: string) => (altRegistry as Record<string, string>)[f] ?? fb;
 
-const phase = getCurrentPhase(Astro.url);
+// Thesis landing is intentionally pinned to the pre-event presentation (poster
+// hidden, When/Where sidebar), independent of the global CURRENT_PHASE (post-event).
+// The event is over site-wide, but this page keeps its pre-event content. See
+// docs/THESIS-POSTER-TIMELINE.md.
+const phase: Phase = 'pre-event';
 
 
 const event = await getEntry('events', 'all-campus-graduation-exhibition');
